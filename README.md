@@ -56,6 +56,6 @@ The attribute will then contain the default language value and other language co
 
 This plugin activates a feature in the CMS that allows content files to use language suffixes, for example:
 
-* **welcome.htm** will display the content in the default language.
-* **welcome.ru.htm** will display the content in Russian.
-* **welcome.fr.htm** will display the content in French.
+* **welcome.htm** will contain the content in the default language.
+* **welcome.ru.htm** will contain the content in Russian.
+* **welcome.fr.htm** will contain the content in French.
