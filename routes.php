@@ -1,10 +1,11 @@
 <?php
 
-$languages = ['en', 'ru'];
+$languages = ['en', 'ru', 'fr'];
 $locale = Request::segment(1);
 
 if (in_array($locale, $languages)) {
     App::setLocale($locale);
+    RainLab\Translate\Classes\Translate::instance()->setLocale($locale);
 
     Route::group(['prefix' => $locale], function() use ($locale) {
         Route::any('{slug}', 'Cms\Classes\Controller@run')->where('slug', '(.*)?');

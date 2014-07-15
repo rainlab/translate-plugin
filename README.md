@@ -37,20 +37,37 @@ Models can have their attributes translated by using the `RainLab\Translate\Trai
         public $translatable = ['name'];
     }
 
-The attribute will then contain the default language value and other language code values can be created by using the `translationContext()` method.
+The attribute will then contain the default language value and other language code values can be created by using the `translateContext()` method.
 
     $user = User::first();
 
     // Outputs the name in the default language
     echo $user->name;
 
-    $user->translationContext('fr');
+    $user->translateContext('fr');
 
     // Sets the name in French
     $user->name = 'Giselle';
 
     // Outputs the name in French
     echo $user->name;
+
+The `lang()` method is a shorthand version of `translateContext()` and is also chainable.
+
+    // Outputs the name in French
+    echo $user->lang('fr')->name;
+
+This can be useful inside a Twig template.
+
+    {{ user.lang('fr').name }}
+
+There are ways to get and set attributes without changing the context.
+
+    // Gets a single translated attribute for a language
+    $user->getTranslateAttribute('name', 'fr');
+
+    // Sets a single translated attribute for a language
+    $user->setTranslateAttribute('name', 'Jean-Claude', 'fr');
 
 ## Content translation
 

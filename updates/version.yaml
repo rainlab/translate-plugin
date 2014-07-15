@@ -1,3 +1,6 @@
 1.0.1: 
   - First version of Translate
   - create_messages_table.php
+  - create_attributes_table.php
+  - create_locales_table.php
+  - seed_all_tables.php

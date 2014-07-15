@@ -5,6 +5,7 @@ use Lang;
 use Event;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
+use RainLab\Translate\Classes\Translate;
 
 /**
  * Translate Plugin Information File
@@ -30,10 +31,8 @@ class Plugin extends PluginBase
     public function boot()
     {
         Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) {
-            if (!$page)
-                return;
-
-            Message::setContext(App::getLocale(), $page->url);
+            if (!$page) return;
+            Message::setContext(Translate::instance()->getLocale(), $page->url);
         });
     }
 
@@ -54,9 +53,6 @@ class Plugin extends PluginBase
     public function translateString($string, $params = [])
     {
         return Message::trans($string, $params);
-        traceLog('translate: '.$string);
-        traceLog($params);
-        return Lang::get($string, $params);
     }
 
     public function translatePlural($string, $count = 0, $params = [])

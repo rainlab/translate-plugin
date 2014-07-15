@@ -1,0 +1,12 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    code:
+        label: Code
+        span: auto
+
+    name:
+        label: Name
+        span: auto
