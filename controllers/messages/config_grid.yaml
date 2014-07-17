@@ -1,0 +1,14 @@
+# ===================================
+#  Grid Widget Configuration
+# ===================================
+
+#showHeader: false
+allowInsert: false
+allowRemove: false
+columns:
+    from:
+        title: From
+        readOnly: false
+    to:
+        title: To
+        readOnly: false

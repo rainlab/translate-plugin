@@ -14,6 +14,8 @@ class CreateLocalesTable extends Migration
             $table->increments('id');
             $table->string('code')->index();
             $table->string('name')->index()->nullable();
+            $table->boolean('is_default')->default(0);
+            $table->boolean('is_enabled')->default(0);
         });
     }
 

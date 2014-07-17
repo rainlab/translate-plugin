@@ -3,10 +3,22 @@
 # ===================================
 
 fields:
+    name:
+        label: Name
+        span: auto
+
     code:
         label: Code
         span: auto
 
-    name:
-        label: Name
+    is_enabled:
+        label: Enabled
+        type: checkbox
+        comment: Disabled languages will not be available in the front-end.
+        span: auto
+
+    is_default:
+        label: Default
+        type: checkbox
+        comment: The default language represents the content before translation.
         span: auto

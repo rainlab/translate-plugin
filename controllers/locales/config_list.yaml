@@ -12,7 +12,9 @@ modelClass: RainLab\Translate\Models\Locale
 title: Manage languages
 
 # Link URL for each record
-# recordUrl: rainlab/translate/{{lower_name}}/update/:id
+# recordUrl: rainlab/translate/locale/update/:id
+
+recordOnClick: $.translateLocales.clickRecord(:id)
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

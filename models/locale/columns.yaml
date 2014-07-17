@@ -3,10 +3,19 @@
 # ===================================
 
 columns:
+    name:
+        label: Name
+        searchable: yes
+
     code:
         label: Code
         searchable: yes
 
-    name:
-        label: Name
-        searchable: yes
+    is_default:
+        label: Default
+        type: switch
+
+    is_enabled:
+        label: Enabled
+        type: switch
+        invisible: true

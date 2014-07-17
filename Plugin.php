@@ -3,6 +3,7 @@
 use App;
 use Lang;
 use Event;
+use Backend;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\Translate;
@@ -34,6 +35,28 @@ class Plugin extends PluginBase
             if (!$page) return;
             Message::setContext(Translate::instance()->getLocale(), $page->url);
         });
+    }
+
+    public function registerSettings()
+    {
+        return [
+            'messages' => [
+                'label'       => 'Messages',
+                'description' => 'Translate strings used throughout the front-end.',
+                'icon'        => 'icon-list-alt',
+                'url'         => Backend::url('rainlab/translate/messages'),
+                'order'       => 100,
+                'category'    => 'Translation',
+            ],
+            'locales' => [
+                'label'       => 'Languages',
+                'description' => 'Set up languages that can be used on the front-end.',
+                'icon'        => 'icon-language',
+                'url'         => Backend::url('rainlab/translate/locales'),
+                'order'       => 100,
+                'category'    => 'Translation',
+            ]
+        ];
     }
 
     /**

@@ -1,2 +1,30 @@
+<?php Block::put('breadcrumb') ?>
+    <ul>
+        <li><a href="<?= Backend::url('system/settings') ?>"><?= e(trans('system::lang.settings.menu_label')) ?></a></li>
+        <li><?= e($this->pageTitle) ?></li>
+    </ul>
+<?php Block::endPut() ?>
 
-<?= $this->listRender() ?>
+<?= Form::open(['id' => 'messagesForm', 'class'=>'layout-item stretch layout-column']) ?>
+
+    <!-- Passable fields -->
+    <input type="hidden" name="locale_from" value="<?= $selectedFrom ? $selectedFrom->code : '' ?>" />
+    <input type="hidden" name="locale_to" value="<?= $selectedTo ? $selectedTo->code : '' ?>" />
+
+    <div id="messagesContainer" class="loading-indicator-container">
+        <?= $this->makePartial('messages') ?>
+    </div>
+
+<?= Form::close() ?>
+
+<!-- Set the Header values in the Grid -->
+<script>
+$(document).render(function(){
+    var gridEl = $('#<?= $grid->getId() ?>')
+    gridEl.dataGrid('setHeaderValue', 0, $('#<?= $this->getId('fromTitle') ?>').html())
+    gridEl.dataGrid('setHeaderValue', 1, $('#<?= $this->getId('toTitle') ?>').html())
+    gridEl.dataGrid('updateUi')
+    $.translateMessages.setGridElement(gridEl)
+})
+</script>
+
