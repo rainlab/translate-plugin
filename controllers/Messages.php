@@ -19,6 +19,7 @@ class Messages extends Controller
         BackendMenu::setContext('October.System', 'system', 'settings');
 
         $this->addJs('/plugins/rainlab/translate/assets/js/messages.js');
+        $this->addCss('/plugins/rainlab/translate/assets/css/messages.css');
     }
 
     public function index()

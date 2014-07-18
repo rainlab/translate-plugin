@@ -73,6 +73,16 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function registerFormWidgets()
+    {
+        return [
+            'RainLab\Translate\FormWidgets\MLText' => [
+                'label' => 'Text (ML)',
+                'alias' => 'mltext'
+            ]
+        ];
+    }
+
     public function translateString($string, $params = [])
     {
         return Message::trans($string, $params);

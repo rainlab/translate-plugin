@@ -1,0 +1,50 @@
+.translate-messages {
+  position: relative;
+  margin-top: -20px;
+  margin-left: 20px;
+}
+.translate-messages .dropdown-button-placeholder {
+  display: block;
+  /*background: rgba(0,0,0,.05);*/
+  width: 1px;
+  height: 20px;
+}
+.translate-messages .dropdown-to,
+.translate-messages .dropdown-from {
+  position: absolute;
+  top: 25px;
+}
+.translate-messages .dropdown-to {
+  left: 50%;
+}
+.translate-messages .dropdown-from {
+  left: 0;
+}
+.translate-messages .no-other-languages {
+  text-align: center;
+  padding: 5px;
+}
+.translate-messages .header-language {
+  /*margin-left: 5px;*/
+  float: left;
+  cursor: pointer;
+}
+.translate-messages .header-swap-languages {
+  margin-right: 10px;
+  float: right;
+  font-size: 16px;
+  cursor: pointer;
+}
+.translate-messages .header-hide-translated {
+  float: right;
+  text-align: right;
+  line-height: 27px;
+}
+.translate-messages .header-hide-translated label {
+  font-weight: normal;
+  margin-bottom: 0;
+  margin-right: 10px;
+}
+.translate-messages .header-hide-translated label:before {
+  bottom: 6px;
+}
