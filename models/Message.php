@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Models;
 
+use Str;
 use Model;
 use Cache;
 
@@ -8,6 +9,8 @@ use Cache;
  */
 class Message extends Model
 {
+    const DEFAULT_LOCALE = 'x';
+
     /**
      * @var string The database table used by the model.
      */
@@ -17,6 +20,11 @@ class Message extends Model
      * @var array Guarded fields
      */
     protected $guarded = [];
+
+    /**
+     * @var array List of attribute names which are json encoded and decoded from the database.
+     */
+    protected $jsonable = ['message_data'];
 
     /**
      * @var bool Indicates if the model should be timestamped.
@@ -31,26 +39,92 @@ class Message extends Model
 
     public static $cache = [];
 
+    /**
+     * Gets a message for a given locale, or the default.
+     * @param  string $locale
+     * @return string
+     */
+    public function forLocale($locale = null, $default = null)
+    {
+        if ($locale === null)
+            $locale = self::DEFAULT_LOCALE;
+
+        if (array_key_exists($locale, $this->message_data))
+            return $this->message_data[$locale];
+
+        return $default;
+    }
+
+    /**
+     * Writes a translated message to a locale.
+     * @param  string $locale
+     * @param  string $message
+     * @return void
+     */
+    public function toLocale($locale = null, $message)
+    {
+        if ($locale === null)
+            return;
+
+        $data = $this->message_data;
+        $data[$locale] = $message;
+
+        if (!$message)
+            unset($data[$locale]);
+
+        $this->message_data = $data;
+        $this->save();
+    }
+
+    /**
+     * Creates or finds an untranslated message string.
+     * @param  string $messageId
+     * @return string
+     */
     public static function get($messageId)
     {
         if (!self::$locale)
             return $messageId;
 
-        if (array_key_exists($messageId, self::$cache)) {
-            return self::$cache[$messageId];
-        }
+        $messageCode = self::makeMessageCode($messageId);
 
-        $item = static::firstOrCreate([
-            'locale' => self::$locale,
-            'msg_id' => $messageId
+        /*
+         * Found in cache
+         */
+        if (array_key_exists($messageCode, self::$cache))
+            return self::$cache[$messageCode];
+
+        /*
+         * Uncached item
+         */
+        $item = static::firstOrNew([
+            'code' => $messageCode
         ]);
 
-        $msg = $item->msg_str ?: $item->msg_id;
-        self::$cache[$messageId] = $msg;
+        /*
+         * Create a default entry
+         */
+        if (!$item->exists) {
+            $data = [static::DEFAULT_LOCALE => $messageId];
+            $item->message_data = $data;
+            $item->save();
+        }
+
+        /*
+         * Schedule new cache and go
+         */
+        $msg = $item->forLocale(self::$locale, $messageId);
+        self::$cache[$messageCode] = $msg;
         self::$hasNew = true;
         return $msg;
     }
 
+    /**
+     * Looks up and translates a message by its string.
+     * @param  string $messageId
+     * @param  array  $params
+     * @return string
+     */
     public static function trans($messageId, $params)
     {
         $msg = static::get($messageId);
@@ -86,6 +160,11 @@ class Message extends Model
     protected static function makeCacheKey()
     {
         return 'translation.'.self::$locale.self::$url;
+    }
+
+    protected static function makeMessageCode($messageId)
+    {
+        return strtolower(str_replace('-', '.', Str::slug($messageId)));
     }
 
 }

@@ -12,9 +12,8 @@ class CreateMessagesTable extends Migration
         {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('locale')->index();
-            $table->string('msg_id')->index()->nullable();
-            $table->string('msg_str')->nullable();
+            $table->string('code')->index()->nullable();
+            $table->mediumText('message_data')->nullable();
         });
     }
 

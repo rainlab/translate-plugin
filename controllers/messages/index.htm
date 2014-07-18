@@ -5,15 +5,47 @@
     </ul>
 <?php Block::endPut() ?>
 
+<div class="padded-container">
+    <?= $this->makeHintPartial('translation_messages_hint', 'hint') ?>
+</div>
+
 <?= Form::open(['id' => 'messagesForm', 'class'=>'layout-item stretch layout-column']) ?>
+
+    <div class="form-buttons buttons-offset">
+        <div class="loading-indicator-container">
+            <a
+                href="javascript:;"
+                class="btn btn-default">
+                Clear cache
+            </a>
+            <a
+                href="javascript:;"
+                class="btn btn-default">
+                Scan for messages
+            </a>
+
+            
+            <a
+                href="javascript:;"
+                class="btn btn-default">
+                Export messages
+            </a>
+            <a
+                href="javascript:;"
+                class="btn btn-default">
+                Import messages
+            </a>
+            
+        </div>
+    </div>
+
+    <div id="messagesContainer">
+        <?= $this->makePartial('messages') ?>
+    </div>
 
     <!-- Passable fields -->
     <input type="hidden" name="locale_from" value="<?= $selectedFrom ? $selectedFrom->code : '' ?>" />
     <input type="hidden" name="locale_to" value="<?= $selectedTo ? $selectedTo->code : '' ?>" />
-
-    <div id="messagesContainer" class="loading-indicator-container">
-        <?= $this->makePartial('messages') ?>
-    </div>
 
 <?= Form::close() ?>
 

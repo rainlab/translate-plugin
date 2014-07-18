@@ -42,6 +42,7 @@
         }
 
         this.refreshGrid = function() {
+            this.gridElement.dataGrid('setData', [])
             this.$form.request('onRefresh')
         }
 

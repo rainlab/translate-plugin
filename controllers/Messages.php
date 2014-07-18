@@ -23,6 +23,7 @@ class Messages extends Controller
 
     public function index()
     {
+        $this->bodyClass = 'slim-container';
         $this->pageTitle = 'Translate Messages';
         $this->prepareGrid();
     }
@@ -52,50 +53,62 @@ class Messages extends Controller
          * Make grid config, make default column read only
          */
         $config = $this->makeConfig('config_grid.yaml');
+        $config->data = $this->getGridData($selectedFrom, $selectedTo);
         if (!$selectedFrom) $config->columns['from']['readOnly'] = true;
         if (!$selectedTo) $config->columns['to']['readOnly'] = true;
-
-        /*
-         * Set up the default grid data, splice in selected language
-         */
-        $data = $this->getGridData();
-        if ($selectedFrom) $data = $this->injectGridData($data, 'from', $selectedFrom->code);
-        if ($selectedTo) $data = $this->injectGridData($data, 'to', $selectedTo->code);
-        $config->data = array_values($data);
 
         /*
          * Make grid widget
          */
         $widget = new Grid($this, $config);
+        $widget->bindEvent('grid.dataChanged', [$this, 'updateGridData']);
         $widget->bindToController();
         $this->vars['grid'] = $widget;
     }
 
-    protected function getGridData()
+    protected function getGridData($from, $to)
     {
-        $defaultCode = Locale::getDefault()->code;
-        $messages = Message::whereLocale($defaultCode)->get();
+        $messages = Message::all();
+
+        $fromCode = $from ? $from->code : null;
+        $toCode = $to ? $to->code : null;
 
         $data = [];
         foreach ($messages as $message) {
-            $data[$message->msg_id] = ['from' => $message->msg_id, 'to' => $message->msg_id];
+            $data[] = [
+                'code' => $message->code,
+                'from' => $message->forLocale($fromCode),
+                'to' => $message->forLocale($toCode),
+            ];
         }
 
         return $data;
     }
 
-    protected function injectGridData($data, $type, $code)
+    public function updateGridData($changes)
     {
-        $messages = Message::whereLocale($code)->get();
+        if (!is_array($changes))
+            return;
 
-        foreach ($messages as $message) {
-            if (!isset($data[$message->msg_id]))
+        foreach ($changes as $change) {
+            if (!$code = array_get($change, 'rowData.code'))
                 continue;
 
-            $data[$message->msg_id][$type] = $message->msg_str ?: $message->msg_id;
-        }
+            if (!$columnType = array_get($change, 'keyName'))
+                continue;
 
-        return $data;
+            if ($columnType != 'to' && $columnType != 'from')
+                continue;
+
+            if (!$locale = post('locale_'.$columnType))
+                continue;
+
+            if (!$item = Message::whereCode($code)->first())
+                continue;
+
+            $newValue = array_get($change, 'newValue');
+            $item->toLocale($locale, $newValue);
+        }
     }
 
 }
