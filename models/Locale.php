@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Models;
 
+use Cache;
 use Model;
 use October\Rain\Support\ValidationException;
 
@@ -27,9 +28,19 @@ class Locale extends Model
     public $timestamps = false;
 
     /**
-     * @var array Object cache of self.
+     * @var array Object cache of self, by code.
      */
-    protected static $cache = [];
+    protected static $cacheByCode = [];
+
+    /**
+     * @var array A cache of enabled locales.
+     */
+    protected static $cacheListEnabled;
+
+    /**
+     * @var array A cache of available locales.
+     */
+    protected static $cacheListAvailable;
 
     /**
      * @var self Default locale cache.
@@ -79,10 +90,58 @@ class Locale extends Model
         if (!$code)
             return null;
 
-        if (isset(self::$cache[$code]))
-            return self::$cache[$code];
+        if (isset(self::$cacheByCode[$code]))
+            return self::$cacheByCode[$code];
 
-        return self::$cache[$code] = self::whereCode($code)->first();
+        return self::$cacheByCode[$code] = self::whereCode($code)->first();
+    }
+
+    public function scopeIsEnabled($query)
+    {
+        return $query
+            ->whereNotNull('is_enabled')
+            ->where('is_enabled', true)
+        ;
+    }
+
+    /**
+     * Returns true if there are at least 2 locales available.
+     * @return boolean
+     */
+    public static function isAvailable()
+    {
+        return count(self::listAvailable()) > 1;
+    }
+
+    /**
+     * Lists available locales, used on the back-end.
+     * @return array
+     */
+    public static function listAvailable()
+    {
+        if (self::$cacheListAvailable)
+            return self::$cacheListAvailable;
+
+        return self::$cacheListAvailable = self::lists('name', 'code');
+    }
+
+    /**
+     * Lists the enabled locales, used on the front-end.
+     * @return array
+     */
+    public static function listEnabled()
+    {
+        $cacheKey = 'translate.locales';
+
+        if (self::$cacheListEnabled)
+            return self::$cacheListEnabled;
+
+        if ($cached = Cache::get($cacheKey))
+            return self::$cacheListEnabled = (array) $cached;
+
+        $enabled = self::isEnabled()->lists('name', 'code');
+        Cache::put($cacheKey, $enabled, 1440);
+        return self::$cacheListEnabled = $enabled;
     }
 
 }

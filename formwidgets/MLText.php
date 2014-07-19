@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\FormWidgets;
 
+use RainLab\Translate\Models\Locale;
 use Backend\Classes\FormWidgetBase;
 
 /**
@@ -17,19 +18,19 @@ class MLText extends FormWidgetBase
     public $defaultAlias = 'mltext';
 
     /**
-     * @var boolean Determines whether content has HEAD and HTML tags.
+     * @var boolean Determines whether translation services are available
      */
-    // public $fullPage = false;
+    public $isAvailable;
 
     /**
      * {@inheritDoc}
      */
     public function render()
     {
-        // $this->fullPage = $this->getConfig('fullPage', $this->fullPage);
+        $this->isAvailable = Locale::isAvailable();
 
         $this->prepareVars();
-        return $this->makePartial('mltext');
+        return $this->makePartial($this->isAvailable ? 'mltext' : 'text');
     }
 
     /**
@@ -37,8 +38,21 @@ class MLText extends FormWidgetBase
      */
     public function prepareVars()
     {
-        // $this->vars['fullPage'] = $this->fullPage;
-        $this->vars['field'] = $this->formField;
+        $this->vars['locales'] = Locale::listAvailable();
+        $this->vars['field'] = $this->makeRenderFormField();
+    }
+
+    /**
+     * If translation is unavailable, render the original field type (text).
+     */
+    protected function makeRenderFormField()
+    {
+        if ($this->isAvailable)
+            return $this->formField;
+
+        $field = clone $this->formField;
+        $field->type = 'text';
+        return $field;
     }
 
     /**
@@ -47,10 +61,6 @@ class MLText extends FormWidgetBase
     public function loadAssets()
     {
         $this->addCss('/plugins/rainlab/translate/assets/css/forms.css', 'RainLab.Translate');
-        // $this->addCss('vendor/redactor/redactor.css', 'core');
-        // $this->addCss('css/richeditor.css', 'core');
-        // $this->addJs('vendor/redactor/redactor.js', 'core');
-        // $this->addJs('js/richeditor.js', 'core');
     }
 
 }
