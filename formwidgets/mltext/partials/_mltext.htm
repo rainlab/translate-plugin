@@ -26,7 +26,7 @@
             <input
                 type="text"
                 name="<?= $field->getName('RLTranslate['.$code.']') ?>"
-                value="<?= e($field->value) ?><?= $code ?>"
+                value="<?= e($this->getLocaleValue($code)) ?>"
                 data-locale-value="<?= $code ?>"
                 <?= HTML::attributes($field->attributes) ?>
             />

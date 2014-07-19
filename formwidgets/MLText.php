@@ -22,6 +22,11 @@ class MLText extends FormWidgetBase
      */
     public $isAvailable;
 
+    public function init()
+    {
+        // Validate if using behavior??
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -41,6 +46,14 @@ class MLText extends FormWidgetBase
         $this->vars['defaultLocale'] = Locale::getDefault();
         $this->vars['locales'] = Locale::listAvailable();
         $this->vars['field'] = $this->makeRenderFormField();
+    }
+
+    public function getLocaleValue($locale)
+    {
+        if ($this->model->methodExists('getTranslateAttribute'))
+            return $this->model->getTranslateAttribute($this->formField->columnName, $locale);
+        else
+            return $this->formField->value;
     }
 
     /**
