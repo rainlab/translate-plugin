@@ -5,13 +5,14 @@
     <div
         id="<?= $this->getId() ?>"
         data-control="multilingual"
-        data-default-field="<?= $field->getId('defaultField') ?>"
+        data-default-locale="<?= $defaultLocale->code ?>"
+        data-placeholder-field="#<?= $field->getId('placeholderField') ?>"
         class="field-multilingual field-multilingual-text dropdown">
 
         <input
             type="text"
-            name="RLTranslatePlaceholder"
-            id="<?= $field->getId('placeholder') ?>"
+            name="<?= $field->getName() ?>"
+            id="<?= $field->getId('placeholderField') ?>"
             value="<?= e($field->value) ?>"
             placeholder="<?= e(trans($field->placeholder)) ?>"
             class="form-control"
@@ -20,22 +21,13 @@
             <?= HTML::attributes($field->attributes) ?>
         />
 
-        <br />Main (<?= $field->getName() ?>):
-        <input
-            type="text"
-            name="<?= $field->getName() ?>"
-            id="<?= $field->getId('defaultField') ?>"
-            value="<?= e($field->value) ?>"
-            <?= HTML::attributes($field->attributes) ?>
-        />
-
         <?php foreach ($locales as $code => $name): ?>
             <br /><?=$name?> (<?= $field->getName('RLTranslate['.$code.']') ?>):
             <input
                 type="text"
                 name="<?= $field->getName('RLTranslate['.$code.']') ?>"
-                id="<?= $field->getId() ?>"
-                value="<?= e($field->value) ?>"
+                value="<?= e($field->value) ?><?= $code ?>"
+                data-locale-value="<?= $code ?>"
                 <?= HTML::attributes($field->attributes) ?>
             />
         <?php endforeach ?>
@@ -57,7 +49,7 @@
                     <a
                         role="menuitem"
                         tabindex="-1"
-                        data-switch-language="<?= $code ?>"
+                        data-switch-locale="<?= $code ?>"
                         href="javascript:;">
                         <?= $name ?>
                     </a>

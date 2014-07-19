@@ -3,7 +3,8 @@
  * 
  * Data attributes:
  * - data-control="multilingual" - enables the plugin on an element
- * - data-default-field="#defaultField" - an element that contains the default value
+ * - data-default-locale="en" - default locale code
+ * - data-placeholder-field="#placeholderField" - an element that contains the placeholder value
  *
  * JavaScript API:
  * $('a#someElement').multiLingual({ option: 'value' })
@@ -18,17 +19,44 @@
     // ============================
 
     var MultiLingual = function(element, options) {
-        var self       = this
-        this.options   = options
-        this.$el       = $(element)
+        var self          = this
+        this.options      = options
+        this.$el          = $(element)
+
+        this.activeLocale = this.options.defaultLocale
+        this.$activeField = this.getLocaleElement(this.activeLocale)
+        this.$placeholder = $(this.options.placeholderField)
+
+        this.$el.on('click', '[data-switch-locale]', function(){
+            var selectedLocale = $(this).data('switch-locale')
+            self.setLocale(selectedLocale)
+        })
+
+        this.$placeholder.on('keyup', function(){
+            self.$activeField.val(this.value)
+        })
     }
 
     MultiLingual.DEFAULTS = {
-        defaultField: null
+        defaultLocale: 'en',
+        defaultField: null,
+        placeholderField: null
     }
 
-    MultiLingual.prototype.xxx = function() {
+    MultiLingual.prototype.getLocaleElement = function(locale) {
+        var el = this.$el.find('[data-locale-value="'+locale+'"]')
+        return el.length ? el : null
+    }
 
+    MultiLingual.prototype.getLocaleValue = function(locale) {
+        var value = this.getLocaleElement(locale)
+        return value ? value.val() : null
+    }
+
+    MultiLingual.prototype.setLocale = function(locale) {
+        this.activeLocale = locale
+        this.$activeField = this.getLocaleElement(locale)
+        this.$placeholder.val(this.getLocaleValue(locale))
     }
 
     // MULTILINGUAL PLUGIN DEFINITION
@@ -67,4 +95,3 @@
     })
 
 }(window.jQuery);
-alert('wo')
