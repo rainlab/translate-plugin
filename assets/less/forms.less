@@ -1,0 +1,23 @@
+@import "../../../../../modules/backend/assets/less/core/boot.less";
+
+.field-mltext {
+    position: relative;
+    .form-control { }
+    .btn {
+        background: transparent;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -43px;
+        height: 88px;
+        width: 36px;
+        color: lighten(@btn-default-color, 15%);
+        text-transform: uppercase;
+        font-size: 11px;
+        letter-spacing: 1px;
+
+        &:hover {
+            color: @btn-default-color;
+        }
+    }
+}

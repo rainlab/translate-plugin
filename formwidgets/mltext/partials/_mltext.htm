@@ -2,25 +2,30 @@
 <?php if ($this->previewMode): ?>
     <span class="form-control"><?= $field->value ? e($field->value) : '&nbsp;' ?></span>
 <?php else: ?>
-    <input
-        type="text"
-        name="<?= $field->getName() ?>"
-        id="<?= $field->getId() ?>"
-        value="<?= e($field->value) ?>"
-        placeholder="<?= e(trans($field->placeholder)) ?>"
-        class="form-control"
-        autocomplete="off"
-        maxlength="255"
-        <?= HTML::attributes($field->attributes) ?>
-    />
+    <div class="field-mltext dropdown">
+        <input
+            type="text"
+            name="<?= $field->getName() ?>"
+            id="<?= $field->getId() ?>"
+            value="<?= e($field->value) ?>"
+            placeholder="<?= e(trans($field->placeholder)) ?>"
+            class="form-control"
+            autocomplete="off"
+            maxlength="255"
+            <?= HTML::attributes($field->attributes) ?>
+        />
 
-    <button
-        class="btn btn-default"
-        data-control="popup"
-        data-handler="<?= $this->getEventHandler('onFindRecord') ?>"
-        data-request-data="recordfinder_flag: 1"
-        type="button">
-        <i class="icon-th-list"></i>
-    </button>
+        <button
+            class="btn btn-default"
+            data-toggle="dropdown"
+            type="button">
+            en
+        </button>
 
+        <ul class="dropdown-menu pull-right" role="menu" data-dropdown-title="Select language">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="http://twitter.com/fat">English</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="http://twitter.com/fat">Russian</a></li>
+        </ul>
+
+    </div>
 <?php endif ?>

@@ -46,6 +46,7 @@ class MLText extends FormWidgetBase
      */
     public function loadAssets()
     {
+        $this->addCss('/plugins/rainlab/translate/assets/css/forms.css', 'RainLab.Translate');
         // $this->addCss('vendor/redactor/redactor.css', 'core');
         // $this->addCss('css/richeditor.css', 'core');
         // $this->addJs('vendor/redactor/redactor.js', 'core');
