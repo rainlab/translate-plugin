@@ -23,9 +23,8 @@
         this.options      = options
         this.$el          = $(element)
 
-        this.activeLocale = this.options.defaultLocale
-        this.$activeField = this.getLocaleElement(this.activeLocale)
-        this.$placeholder = $(this.options.placeholderField)
+        this.$placeholder  = $(this.options.placeholderField)
+        this.$activeButton = this.$el.find('[data-active-locale]')
 
         this.$el.on('click', '[data-switch-locale]', function(){
             var selectedLocale = $(this).data('switch-locale')
@@ -35,6 +34,8 @@
         this.$placeholder.on('keyup', function(){
             self.$activeField.val(this.value)
         })
+
+        this.setLocale(this.options.defaultLocale)
     }
 
     MultiLingual.DEFAULTS = {
@@ -57,6 +58,7 @@
         this.activeLocale = locale
         this.$activeField = this.getLocaleElement(locale)
         this.$placeholder.val(this.getLocaleValue(locale))
+        this.$activeButton.text(locale)
     }
 
     // MULTILINGUAL PLUGIN DEFINITION
