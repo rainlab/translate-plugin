@@ -96,7 +96,7 @@ class MLText extends FormWidgetBase
          */
         if ($this->model->methodExists('setTranslateAttribute')) {
             foreach ($localeData as $locale => $value) {
-                $this->model->setTranslateAttribute($this->columnName, $value);
+                $this->model->setTranslateAttribute($this->columnName, $value, $locale);
             }
         }
 
@@ -115,9 +115,7 @@ class MLText extends FormWidgetBase
 
         $values = [];
         foreach ($data as $locale => $_data) {
-            if ($value = array_get($_data, $this->columnName)) {
-                $values[$locale] = $value;
-            }
+            $values[$locale] = array_get($_data, $this->columnName);
         }
 
         return $values;

@@ -15,7 +15,7 @@ use Exception;
  *
  *   public $implement = ['RainLab.Translate.Behaviors.TranslatableModel'];
  *
- *   public $translatableFields = ['name', 'content'];
+ *   public $translatable = ['name', 'content'];
  *
  */
 class TranslatableModel extends ModelBehavior
@@ -34,12 +34,17 @@ class TranslatableModel extends ModelBehavior
     /**
      * @var array Data store for translated attributes.
      */
-    protected $translatableData = [];
+    protected $translatableAttributes = [];
+
+    /**
+     * @var array Data store for original translated attributes.
+     */
+    protected $translatableOriginals = [];
 
     /**
      * {@inheritDoc}
      */
-    protected $requiredProperties = ['translatableFields'];
+    protected $requiredProperties = ['translatable'];
 
     /**
      * Constructor
@@ -103,13 +108,13 @@ class TranslatableModel extends ModelBehavior
         if ($locale == $this->translatableDefault)
             return $this->model->getAttributeValue($key);
 
-        if (!array_key_exists($locale, $this->translatableData))
+        if (!array_key_exists($locale, $this->translatableAttributes))
             $this->loadTranslatableData($locale);
 
-        if (!isset($this->translatableData[$locale][$key]))
+        if (!isset($this->translatableAttributes[$locale][$key]))
             return null;
 
-        return $this->translatableData[$locale][$key];
+        return $this->translatableAttributes[$locale][$key];
     }
 
     /**
@@ -126,10 +131,10 @@ class TranslatableModel extends ModelBehavior
         if ($locale == $this->translatableDefault)
             return $this->attributes[$key] = $value;
 
-        if (!array_key_exists($locale, $this->translatableData))
+        if (!array_key_exists($locale, $this->translatableAttributes))
             $this->loadTranslatableData($locale);
 
-        return $this->translatableData[$locale][$key] = $value;
+        return $this->translatableAttributes[$locale][$key] = $value;
     }
 
     /**
@@ -139,6 +144,21 @@ class TranslatableModel extends ModelBehavior
      */
     public function syncTranslatableAttributes()
     {
+
+        /*
+         * Spin through the known locales, store the translations if necessary
+         */
+        $knownLocales = array_keys($this->translatableAttributes);
+        foreach ($knownLocales as $locale) {
+            if (!$this->isTranslateDirty(null, $locale))
+                continue;
+
+            $this->storeTranslatableData($locale);
+        }
+
+        /*
+         * Saving the default locale, no need to restore anything
+         */
         if ($this->translatableContext == $this->translatableDefault)
             return;
 
@@ -150,11 +170,6 @@ class TranslatableModel extends ModelBehavior
         $translatable = $this->model->getTranslatableAttributes();
         $originalValues = array_intersect_key($original, array_flip($translatable));
         $this->attributes = array_merge($attributes, $originalValues);
-
-        /*
-         * Store the translation data
-         */
-        $this->storeTranslatableData($this->translatableContext);
     }
 
     /**
@@ -203,7 +218,7 @@ class TranslatableModel extends ModelBehavior
         if (!$this->model->exists)
             return;
 
-        $data = json_encode($this->translatableData[$locale]);
+        $data = json_encode($this->translatableAttributes[$locale]);
 
         $obj = Db::table('rainlab_translate_attributes')
             ->where('locale', $locale)
@@ -232,7 +247,7 @@ class TranslatableModel extends ModelBehavior
             $locale = $this->translatableContext;
 
         if (!$this->model->exists)
-            return $this->translatableData[$locale] = [];
+            return $this->translatableAttributes[$locale] = [];
 
         $obj = Db::table('rainlab_translate_attributes')
             ->where('locale', $locale)
@@ -240,10 +255,54 @@ class TranslatableModel extends ModelBehavior
             ->where('model_type', get_class($this))
             ->first();
 
-        if (!$obj)
-            return $this->translatableData[$locale] = [];
+        $result = ($obj) ? json_decode($obj->attribute_data, true) : [];
 
-        return $this->translatableData[$locale] = json_decode($obj->attribute_data, true);
+        return $this->translatableOriginals[$locale] = $this->translatableAttributes[$locale] = $result;
+    }
+
+    /**
+     * Determine if the model or a given translated attribute has been modified.
+     * @param  string|null  $attribute
+     * @return bool
+     */
+    public function isTranslateDirty($attribute = null, $locale = null)
+    {
+        $dirty = $this->getTranslateDirty($locale);
+
+        if (is_null($attribute))
+            return count($dirty) > 0;
+        else
+            return array_key_exists($attribute, $dirty);
+    }
+
+    /**
+     * Get the translated attributes that have been changed since last sync.
+     * @return array
+     */
+    public function getTranslateDirty($locale = null)
+    {
+        if (!$locale)
+            $locale = $this->translatableContext;
+
+        if (!array_key_exists($locale, $this->translatableAttributes))
+            return [];
+
+        if (!array_key_exists($locale, $this->translatableOriginals))
+            return $this->translatableAttributes[$locale]; // All dirty
+
+        $dirty = [];
+
+        foreach ($this->translatableAttributes[$locale] as $key => $value) {
+
+            if (!array_key_exists($key, $this->translatableOriginals[$locale])) {
+                $dirty[$key] = $value;
+            }
+            elseif ($value != $this->translatableOriginals[$locale][$key]) {
+                $dirty[$key] = $value;
+            }
+        }
+
+        return $dirty;
     }
 
 }
