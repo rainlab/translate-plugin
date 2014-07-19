@@ -32,7 +32,7 @@ Models can have their attributes translated by using the `RainLab\Translate\Trai
 
     class User
     {
-        use RainLab\Translate\Traits\Translatable;
+        public $implement = ['RainLab.Translate.Behaviors.TranslatableModel'];
 
         public $translatable = ['name'];
     }
