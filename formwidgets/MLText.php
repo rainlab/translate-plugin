@@ -18,13 +18,19 @@ class MLText extends FormWidgetBase
     public $defaultAlias = 'mltext';
 
     /**
+     * @var string Form field column name.
+     */
+    public $columnName;
+
+    /**
      * @var boolean Determines whether translation services are available
      */
     public $isAvailable;
 
     public function init()
     {
-        // Validate if using behavior??
+        $this->columnName  = $this->formField->columnName;
+        $this->defaultLocale  = Locale::getDefault();
     }
 
     /**
@@ -43,7 +49,7 @@ class MLText extends FormWidgetBase
      */
     public function prepareVars()
     {
-        $this->vars['defaultLocale'] = Locale::getDefault();
+        $this->vars['defaultLocale'] = $this->defaultLocale;
         $this->vars['locales'] = Locale::listAvailable();
         $this->vars['field'] = $this->makeRenderFormField();
     }
@@ -51,7 +57,7 @@ class MLText extends FormWidgetBase
     public function getLocaleValue($locale)
     {
         if ($this->model->methodExists('getTranslateAttribute'))
-            return $this->model->getTranslateAttribute($this->formField->columnName, $locale);
+            return $this->model->getTranslateAttribute($this->columnName, $locale);
         else
             return $this->formField->value;
     }
@@ -76,6 +82,45 @@ class MLText extends FormWidgetBase
     {
         $this->addJs('/plugins/rainlab/translate/assets/js/multilingual.js', 'RainLab.Translate');
         $this->addCss('/plugins/rainlab/translate/assets/css/multilingual.css', 'RainLab.Translate');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSaveData($value)
+    {
+        $localeData = $this->getLocaleSaveData();
+
+        /*
+         * Set the translated values to the model
+         */
+        if ($this->model->methodExists('setTranslateAttribute')) {
+            foreach ($localeData as $locale => $value) {
+                $this->model->setTranslateAttribute($this->columnName, $value);
+            }
+        }
+
+        return array_get($localeData, $this->defaultLocale->code, $value);
+    }
+
+    /**
+     * Returns an array of translated values for this field
+     * @return array
+     */
+    public function getLocaleSaveData()
+    {
+        $data = post('RLTranslate');
+        if (!is_array($data))
+            return [];
+
+        $values = [];
+        foreach ($data as $locale => $_data) {
+            if ($value = array_get($_data, $this->columnName)) {
+                $values[$locale] = $value;
+            }
+        }
+
+        return $values;
     }
 
 }
