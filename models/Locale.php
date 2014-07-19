@@ -63,6 +63,10 @@ class Locale extends Model
         }
     }
 
+    /**
+     * Makes this model the default
+     * @return void
+     */
     public function makeDefault()
     {
         if (!$this->is_enabled)
@@ -72,12 +76,19 @@ class Locale extends Model
         $this->newQuery()->where('id', '<>', $this->id)->update(['is_default' => false]);
     }
 
+    /**
+     * Returns the default locale defined.
+     * @return self
+     */
     public static function getDefault()
     {
         if (self::$defaultLocale !== null)
             return self::$defaultLocale;
 
-        return self::$defaultLocale = self::where('is_default', true)->first();
+        return self::$defaultLocale = self::where('is_default', true)
+            ->remember(1440, 'rainlab.translate.defaultLocale')
+            ->first()
+        ;
     }
 
     /**
@@ -96,6 +107,11 @@ class Locale extends Model
         return self::$cacheByCode[$code] = self::whereCode($code)->first();
     }
 
+    /**
+     * Scope for checking if model is enabled
+     * @param  Builder $query
+     * @return Builder
+     */
     public function scopeIsEnabled($query)
     {
         return $query
@@ -131,17 +147,26 @@ class Locale extends Model
      */
     public static function listEnabled()
     {
-        $cacheKey = 'translate.locales';
-
         if (self::$cacheListEnabled)
             return self::$cacheListEnabled;
 
         if ($cached = Cache::get($cacheKey))
             return self::$cacheListEnabled = (array) $cached;
 
-        $enabled = self::isEnabled()->lists('name', 'code');
-        Cache::put($cacheKey, $enabled, 1440);
-        return self::$cacheListEnabled = $enabled;
+        return self::$cacheListEnabled = self::isEnabled()
+            ->remember(1440, 'rainlab.translate.locales')
+            ->lists('name', 'code')
+        ;
+    }
+
+    /**
+     * Clears all cache keys used by this model
+     * @return void
+     */
+    public static function clearCache()
+    {
+        Cache::forget('rainlab.translate.locales');
+        Cache::forget('rainlab.translate.defaultLocale');
     }
 
 }

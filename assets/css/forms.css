@@ -1,7 +1,7 @@
-.field-mltext {
+.field-multilingual-text {
   position: relative;
 }
-.field-mltext .btn {
+.field-multilingual-text .btn {
   background: transparent;
   position: absolute;
   right: 0;
@@ -14,6 +14,6 @@
   font-size: 11px;
   letter-spacing: 1px;
 }
-.field-mltext .btn:hover {
+.field-multilingual-text .btn:hover {
   color: #666666;
 }

@@ -38,6 +38,7 @@ class MLText extends FormWidgetBase
      */
     public function prepareVars()
     {
+        $this->vars['defaultLocale'] = Locale::getDefault();
         $this->vars['locales'] = Locale::listAvailable();
         $this->vars['field'] = $this->makeRenderFormField();
     }
@@ -60,7 +61,8 @@ class MLText extends FormWidgetBase
      */
     public function loadAssets()
     {
-        $this->addCss('/plugins/rainlab/translate/assets/css/forms.css', 'RainLab.Translate');
+        $this->addJs('/plugins/rainlab/translate/assets/js/multilingual.js', 'RainLab.Translate');
+        $this->addCss('/plugins/rainlab/translate/assets/css/multilingual.css', 'RainLab.Translate');
     }
 
 }
