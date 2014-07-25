@@ -45,7 +45,7 @@ class Plugin extends PluginBase
                 'description' => 'Translate strings used throughout the front-end.',
                 'icon'        => 'icon-list-alt',
                 'url'         => Backend::url('rainlab/translate/messages'),
-                'order'       => 100,
+                'order'       => 550,
                 'category'    => 'Translation',
             ],
             'locales' => [
@@ -53,7 +53,7 @@ class Plugin extends PluginBase
                 'description' => 'Set up languages that can be used on the front-end.',
                 'icon'        => 'icon-language',
                 'url'         => Backend::url('rainlab/translate/locales'),
-                'order'       => 100,
+                'order'       => 550,
                 'category'    => 'Translation',
             ]
         ];
