@@ -28,7 +28,7 @@ Themes can provide default values for these messages by including a `lang.yaml` 
 
 ## Model translation
 
-Models can have their attributes translated by using the `RainLab\Translate\Traits\Translatable` trait and specifying which attributes to translate in the class.
+Models can have their attributes translated by using the `RainLab.Translate.Behaviors.TranslatableModel` behavior and specifying which attributes to translate in the class.
 
     class User
     {

@@ -29,6 +29,9 @@
   float: left;
   cursor: pointer;
 }
+.translate-messages .header-language span.is-default {
+  text-transform: none;
+}
 .translate-messages .header-swap-languages {
   margin-right: 10px;
   float: right;

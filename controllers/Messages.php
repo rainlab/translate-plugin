@@ -1,11 +1,13 @@
 <?php namespace Rainlab\Translate\Controllers;
 
+use Flash;
 use Request;
 use BackendMenu;
 use Backend\Widgets\Grid;
 use Backend\Classes\Controller;
 use Rainlab\Translate\Models\Message;
 use Rainlab\Translate\Models\Locale;
+use System\Console\CacheClear;
 
 /**
  * Messages Back-end Controller
@@ -33,7 +35,17 @@ class Messages extends Controller
     {
         $this->prepareGrid();
         return ['#messagesContainer' => $this->makePartial('messages')];
-        return ['#gridHeaderContainer' => $this->makePartial('grid_header')];
+    }
+
+    public function onClearCache()
+    {
+        CacheClear::fireInternal();
+        Flash::success('Cleared the application cache successfully!');
+    }
+
+    public function onScanMessages()
+    {
+        Flash::info('Coming soon!');
     }
 
     public function prepareGrid()
@@ -79,7 +91,7 @@ class Messages extends Controller
             $data[] = [
                 'code' => $message->code,
                 'from' => $message->forLocale($fromCode),
-                'to' => $message->forLocale($toCode),
+                'to' => $message->forLocale($toCode)
             ];
         }
 

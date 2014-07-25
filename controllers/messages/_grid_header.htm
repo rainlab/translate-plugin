@@ -2,7 +2,7 @@
 <script type="text/template" id="<?= $this->getId('fromTitle') ?>">
     <div class="header-language" onclick="$.translateMessages.toggleDropdown('#fromTitleButton')">
         <?php if ($selectedFrom === null): ?>
-            <?= $defaultLocale->name ?> - default
+            <?= $defaultLocale->name ?> <span class="is-default">- default</span>
         <?php else: ?>
             <?= $selectedFrom->name ?>
         <?php endif ?>
@@ -51,16 +51,18 @@
 <script type="text/template" id="<?= $this->getId('toTitle') ?>">
     <div class="header-language" onclick="$.translateMessages.toggleDropdown('#toTitleButton')">
         <?php if ($selectedTo === null): ?>
-            <?= $defaultLocale->name ?> - default
+            <?= $defaultLocale->name ?> <span class="is-default">- default</span>
         <?php else: ?>
             <?= $selectedTo->name ?>
         <?php endif ?>
         <i class="icon-angle-down"></i>
     </div>
-    <div class="header-hide-translated custom-checkbox">
-        <input type="checkbox" id="hideTranslated" name="hide_translated" value="1" <?= $hideTranslated ? 'checked' : '' ?> />
-        <label for="hideTranslated">Hide translated</label>
-    </div>
+    <?php if ($selectedTo !== null): ?>
+        <div class="header-hide-translated custom-checkbox">
+            <input type="checkbox" id="hideTranslated" name="hide_translated" value="1" {{#hideTranslated}}checked{{/hideTranslated}} />
+            <label for="hideTranslated">Hide translated</label>
+        </div>
+    <?php endif ?>
 </script>
 
 <!-- To Language Picker -->

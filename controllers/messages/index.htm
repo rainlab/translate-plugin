@@ -15,16 +15,20 @@
         <div class="loading-indicator-container">
             <a
                 href="javascript:;"
+                data-request="onClearCache"
+                data-load-indicator="Clearing application cache..."
                 class="btn btn-default">
                 Clear cache
             </a>
             <a
                 href="javascript:;"
+                data-request="onScanMessages"
+                data-load-indicator="Scanning for new messages..."
                 class="btn btn-default">
                 Scan for messages
             </a>
 
-            
+            <!--
             <a
                 href="javascript:;"
                 class="btn btn-default">
@@ -35,7 +39,8 @@
                 class="btn btn-default">
                 Import messages
             </a>
-            
+            -->
+
         </div>
     </div>
 
@@ -52,11 +57,8 @@
 <!-- Set the Header values in the Grid -->
 <script>
 $(document).render(function(){
-    var gridEl = $('#<?= $grid->getId() ?>')
-    gridEl.dataGrid('setHeaderValue', 0, $('#<?= $this->getId('fromTitle') ?>').html())
-    gridEl.dataGrid('setHeaderValue', 1, $('#<?= $this->getId('toTitle') ?>').html())
-    gridEl.dataGrid('updateUi')
-    $.translateMessages.setGridElement(gridEl)
+    $.translateMessages.setGridElement('#<?= $grid->getId() ?>')
+    $.translateMessages.setTitleContents('#<?= $this->getId('fromTitle') ?>', '#<?= $this->getId('toTitle') ?>')
 })
 </script>
 
