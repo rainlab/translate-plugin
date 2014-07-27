@@ -8,6 +8,7 @@ use Backend\Classes\Controller;
 use Rainlab\Translate\Models\Message;
 use Rainlab\Translate\Models\Locale;
 use System\Console\CacheClear;
+use System\Classes\SettingsManager;
 
 /**
  * Messages Back-end Controller
@@ -19,6 +20,7 @@ class Messages extends Controller
         parent::__construct();
 
         BackendMenu::setContext('October.System', 'system', 'settings');
+        SettingsManager::setContext('RainLab.Translate', 'messages');
 
         $this->addJs('/plugins/rainlab/translate/assets/js/messages.js');
         $this->addCss('/plugins/rainlab/translate/assets/css/messages.css');
