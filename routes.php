@@ -4,20 +4,24 @@ use RainLab\Translate\Models\Locale;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\Translate;
 
-$languages = array_keys(Locale::listFromMetaCache());
-$locale = Request::segment(1);
+App::before(function($request) {
 
- if (in_array($locale, $languages)) {
-    App::setLocale($locale);
-    Translate::instance()->setLocale($locale);
+    $locale = Request::segment(1);
+    $languages = array_keys(Locale::listEnabled());
 
-    Route::group(['prefix' => $locale], function() use ($locale) {
-        Route::any('{slug}', 'Cms\Classes\Controller@run')->where('slug', '(.*)?');
-    });
+    if (in_array($locale, $languages)) {
+        Translate::instance()->setLocale($locale);
 
-    Route::any($locale, 'Cms\Classes\Controller@run');
-}
+        Route::group(['prefix' => $locale], function() use ($locale) {
+            Route::any('{slug}', 'Cms\Classes\Controller@run')->where('slug', '(.*)?');
+        });
+
+        Route::any($locale, 'Cms\Classes\Controller@run');
+    }
+
+});
 
 App::after(function($request) {
     Message::saveToCache();
 });
+
