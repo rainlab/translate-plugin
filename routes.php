@@ -1,9 +1,11 @@
 <?php
 
-$languages = ['en', 'ru', 'fr'];
+use RainLab\Translate\Models\Locale;
+
+$languages = array_keys(Locale::listFromMetaCache());
 $locale = Request::segment(1);
 
-if (in_array($locale, $languages)) {
+ if (in_array($locale, $languages)) {
     App::setLocale($locale);
     RainLab\Translate\Classes\Translate::instance()->setLocale($locale);
 
