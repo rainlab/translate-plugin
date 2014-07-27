@@ -26,6 +26,14 @@ A message can also be translated for a choice usage.
 
 Themes can provide default values for these messages by including a `lang.yaml` file in the theme directory.
 
+## Content translation
+
+This plugin activates a feature in the CMS that allows content files to use language suffixes, for example:
+
+* **welcome.htm** will contain the content in the default language.
+* **welcome.ru.htm** will contain the content in Russian.
+* **welcome.fr.htm** will contain the content in French.
+
 ## Model translation
 
 Models can have their attributes translated by using the `RainLab.Translate.Behaviors.TranslatableModel` behavior and specifying which attributes to translate in the class.
@@ -69,10 +77,29 @@ There are ways to get and set attributes without changing the context.
     // Sets a single translated attribute for a language
     $user->setTranslateAttribute('name', 'Jean-Claude', 'fr');
 
-## Content translation
+## Conditionally extending plugins
 
-This plugin activates a feature in the CMS that allows content files to use language suffixes, for example:
+It is possible to conditionally extend a plugin's models to support translation. First by checking for the presence of the translate plugin, then dynamically extending the model with the `TranslatableModel` behavior. For example, in a plugin `boot()` method:
 
-* **welcome.htm** will contain the content in the default language.
-* **welcome.ru.htm** will contain the content in Russian.
-* **welcome.fr.htm** will contain the content in French.
+    public function boot()
+    {
+        [...]
+
+        // Check the translate plugin is installed
+        if (class_exists('RainLab\Translate\Behaviors\TranslatableModel')) {
+
+            // Extend the constructor of the model "Channel"
+            Channel::extend(function($model){
+
+                // Implement the translatable behavior
+                $model->implement[] = 'RainLab.Translate.Behaviors.TranslatableModel';
+
+                // Define the translatable fields
+                $model->translatable = ['title'];
+
+            });
+
+        }
+    }
+
+The back-end forms will automatically detect the presence of translatable fields and replace their controls for multilingual equivalents.
