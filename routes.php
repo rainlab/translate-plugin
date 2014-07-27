@@ -1,13 +1,15 @@
 <?php
 
 use RainLab\Translate\Models\Locale;
+use RainLab\Translate\Models\Message;
+use RainLab\Translate\Classes\Translate;
 
 $languages = array_keys(Locale::listFromMetaCache());
 $locale = Request::segment(1);
 
  if (in_array($locale, $languages)) {
     App::setLocale($locale);
-    RainLab\Translate\Classes\Translate::instance()->setLocale($locale);
+    Translate::instance()->setLocale($locale);
 
     Route::group(['prefix' => $locale], function() use ($locale) {
         Route::any('{slug}', 'Cms\Classes\Controller@run')->where('slug', '(.*)?');
@@ -17,5 +19,5 @@ $locale = Request::segment(1);
 }
 
 App::after(function($request) {
-    RainLab\Translate\Models\Message::saveToCache();
+    Message::saveToCache();
 });

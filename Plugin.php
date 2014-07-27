@@ -4,6 +4,7 @@ use App;
 use Lang;
 use Event;
 use Backend;
+use Cms\Classes\Content;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\Translate;
@@ -23,17 +24,30 @@ class Plugin extends PluginBase
     {
         return [
             'name'        => 'Translate',
-            'description' => 'No description provided yet...',
+            'description' => 'Enables multi-lingual sites.',
             'author'      => 'RainLab',
-            'icon'        => 'icon-leaf'
+            'icon'        => 'icon-language'
         ];
     }
 
     public function boot()
     {
+        /*
+         * Set the page context for translation caching.
+         */
         Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) {
             if (!$page) return;
             Message::setContext(Translate::instance()->getLocale(), $page->url);
+        });
+
+        /*
+         * Adds language suffixes to content files.
+         */
+        Event::listen('cms.page.beforeRenderContent', function($controller, $name) {
+            $locale = Translate::instance()->getLocale();
+            $newName = substr_replace($name, '.'.$locale, strrpos($name, '.'), 0);
+            if (($content = Content::loadCached($controller->getTheme(), $newName)) !== null)
+                return $content;
         });
     }
 
