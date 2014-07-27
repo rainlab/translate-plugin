@@ -23,7 +23,7 @@ Alternatively a visitor can select their chosen language using the `LocalePicker
     <h3>{{ 'Please select your language:'|_ }}</h3>
     {% component 'localePicker' %}
 
-If translated, the text above will appear as whatever language is selected by the user. The dropdown basic and is designed to be restyled. A simpler example might be:
+If translated, the text above will appear as whatever language is selected by the user. The dropdown is very basic and is intended to be restyled. A simpler example might be:
 
     [...]
     ==
