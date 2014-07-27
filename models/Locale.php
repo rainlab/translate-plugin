@@ -49,11 +49,6 @@ class Locale extends Model
      */
     private static $defaultLocale;
 
-    // public function afterSave()
-    // {
-    //     static::writeMetaCache();
-    // }
-
     public function afterCreate()
     {
         if ($this->is_default)
@@ -171,53 +166,6 @@ class Locale extends Model
     {
         Cache::forget('rainlab.translate.locales');
         Cache::forget('rainlab.translate.defaultLocale');
-        // static::clearMetaCache();
-        // static::writeMetaCache();
     }
-
-    //
-    // Meta storage
-    //
-
-    // /**
-    //  * Deletes the meta file used for locales.
-    //  * @return void
-    //  */
-    // public static function clearMetaCache()
-    // {
-    //     File::delete(static::getMetaCachePath());
-    // }
-
-    // /**
-    //  * List the enabled locales from the meta file.
-    //  * @return array
-    //  */
-    // public static function listFromMetaCache()
-    // {
-    //     $path = static::getMetaCachePath();
-    //     if (File::exists($path))
-    //         return json_decode(File::get($path), true);
-
-    //     return [];
-    // }
-
-    // /**
-    //  * Write the enabled locales to a meta file.
-    //  * @return void
-    //  */
-    // protected static function writeMetaCache()
-    // {
-    //     $path = static::getMetaCachePath();
-    //     File::put($path, json_encode(static::listEnabled()));
-    // }
-
-    // /**
-    //  * Returns the file path for storing meta information.
-    //  * @return string
-    //  */
-    // protected static function getMetaCachePath()
-    // {
-    //     return Config::get('app.manifest').'/locales.json';
-    // }
 
 }
