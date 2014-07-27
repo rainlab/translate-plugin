@@ -79,27 +79,47 @@ There are ways to get and set attributes without changing the context.
 
 ## Conditionally extending plugins
 
-It is possible to conditionally extend a plugin's models to support translation. First by checking for the presence of the translate plugin, then dynamically extending the model with the `TranslatableModel` behavior. For example, in a plugin `boot()` method:
+It is possible to conditionally extend a plugin's models to support translation. First by checking for the presence of the translate plugin, then dynamically extending the model with the `TranslatableModel` behavior. For example, inside a Model class the check can be performed inside the `boot()` method:
 
-    public function boot()
+    /**
+     * Blog Post Model
+     */
+    class Post extends Model
     {
+
         [...]
 
-        // Check the translate plugin is installed
-        if (class_exists('RainLab\Translate\Behaviors\TranslatableModel')) {
+        /**
+         * @var array Attributes that support translation, if available.
+         */
+        public $translatable = ['title'];
 
-            // Extend the constructor of the model "Channel"
-            Channel::extend(function($model){
+        [...]
+
+        /**
+         * Add translation support to this model, if available.
+         * @return void
+         */
+        public static function boot()
+        {
+            // Call default functionality (required)
+            parent::boot();
+
+            // Check the translate plugin is installed
+            if (!class_exists('RainLab\Translate\Behaviors\TranslatableModel'))
+                return;
+
+            // Extend the constructor of the model
+            self::extend(function($model){
 
                 // Implement the translatable behavior
                 $model->implement[] = 'RainLab.Translate.Behaviors.TranslatableModel';
 
-                // Define the translatable fields
-                $model->translatable = ['title'];
-
             });
-
         }
+
+        [...]
+
     }
 
 The back-end forms will automatically detect the presence of translatable fields and replace their controls for multilingual equivalents.

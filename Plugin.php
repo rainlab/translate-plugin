@@ -49,6 +49,37 @@ class Plugin extends PluginBase
             if (($content = Content::loadCached($controller->getTheme(), $newName)) !== null)
                 return $content;
         });
+
+        /*
+         * Automatically replace form fields for multi lingual equivalents
+         */
+        Event::listen('backend.form.extendFieldsBefore', function($widget) {
+
+            if (!$model = $widget->model)
+                return;
+
+            if (!method_exists($model, 'isClassExtendedWith'))
+                return;
+
+            if (!$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableModel'))
+                return;
+
+            if (!is_array($model->translatable))
+                return;
+
+            if (!$fields = $widget->config->fields)
+                return;
+
+            foreach ($fields as $name => $config) {
+                if (!in_array($name, $model->translatable))
+                    continue;
+
+                $type = array_get($config, 'type', 'text');
+                if ($type == 'text')
+                    $widget->config->fields[$name]['type'] = 'mltext';
+            }
+
+        });
     }
 
     public function registerSettings()

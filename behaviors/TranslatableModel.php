@@ -92,7 +92,7 @@ class TranslatableModel extends ModelBehavior
         if ($this->translatableDefault == $this->translatableContext)
             return false;
 
-        return in_array($key, $this->getTranslatableAttributes());
+        return in_array($key, $this->model->getTranslatableAttributes());
     }
 
     /**
@@ -202,7 +202,7 @@ class TranslatableModel extends ModelBehavior
      */
     public function getTranslatableAttributes()
     {
-        return $this->translatable;
+        return $this->model->translatable;
     }
 
     /**
