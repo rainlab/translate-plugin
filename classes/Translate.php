@@ -2,6 +2,7 @@
 
 use App;
 use Session;
+use RainLab\Translate\Models\Locale;
 
 /**
  * Translate class
@@ -28,23 +29,16 @@ class Translate
 
     public function init()
     {
-        $this->defaultLocale = 'en';
-
-        if (Session::has(self::SESSION_LOCALE))
-            $this->activeLocale = Session::get(self::SESSION_LOCALE);
-        else
-            $this->activeLocale = $this->defaultLocale;
+        $this->activeLocale = $this->defaultLocale = Locale::getDefault();
     }
 
     public function setLocale($locale)
     {
         App::setLocale($locale);
-        Session::put(self::SESSION_LOCALE, $locale);
-
         $this->activeLocale = $locale;
     }
 
-    public function getLocale()
+    public function getLocale($fromSession = false)
     {
         return $this->activeLocale;
     }
@@ -52,6 +46,29 @@ class Translate
     public function getDefaultLocale()
     {
         return $this->defaultLocale;
+    }
+
+    //
+    // Session handling
+    //
+
+    public function getSessionLocale()
+    {
+        if (!Session::has(self::SESSION_LOCALE))
+            return null;
+
+        return Session::get(self::SESSION_LOCALE);
+    }
+
+    public function setSessionLocale($locale)
+    {
+        Session::put(self::SESSION_LOCALE, $locale);
+    }
+
+    public function loadLocaleFromSession()
+    {
+        if ($sessionLocale = $this->getSessionLocale())
+            $this->setLocale($sessionLocale);
     }
 
 }

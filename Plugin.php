@@ -37,7 +37,9 @@ class Plugin extends PluginBase
          */
         Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) {
             if (!$page) return;
-            Message::setContext(Translate::instance()->getLocale(), $page->url);
+            $translate = Translate::instance();
+            $translate->loadLocaleFromSession();
+            Message::setContext($translate->getLocale(), $page->url);
         });
 
         /*
