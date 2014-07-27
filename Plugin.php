@@ -25,7 +25,7 @@ class Plugin extends PluginBase
         return [
             'name'        => 'Translate',
             'description' => 'Enables multi-lingual sites.',
-            'author'      => 'RainLab',
+            'author'      => 'Alexey Bobkov, Samuel Georges',
             'icon'        => 'icon-language'
         ];
     }

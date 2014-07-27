@@ -6,11 +6,33 @@ Enables multi-lingual sites.
 
 Different languages can be set up in the back-end area, with a single default language selected. This activates the use of the language on the front-end and in the back-end UI.
 
-A visitor can select a language by prefixing the language code to the URL, for example:
+A visitor can select a language by prefixing the language code to the URL, this is then stored in the user's session as their chosen language. For example:
 
 * **http://localhost/ru/** will display the site in Russian
 * **http://localhost/fr/** will display the site in French
-* **http://localhost/** will display the site in the default language
+* **http://localhost/** will display the site in the default language or the user's chosen language.
+
+Alternatively a visitor can select their chosen language using the `LocalePicker` component. This component will display a simple dropdown that changes the page language depending on the selection.
+
+    title = "Home"
+    url = "/"
+
+    [localePicker]
+    ==
+
+    <h3>{{ 'Please select your language:'|_ }}</h3>
+    {% component 'localePicker' %}
+
+If translated, the text above will appear as whatever language is selected by the user. The dropdown basic and is designed to be restyled. A simpler example might be:
+
+    [...]
+    ==
+
+    <p>
+        Switch language to:
+        <a href="#" data-request="onSwitchLocale" data-request-data="locale: 'en'">English</a>,
+        <a href="#" data-request="onSwitchLocale" data-request-data="locale: 'ru'">Russian</a>
+    </p>
 
 ## Message translation
 
