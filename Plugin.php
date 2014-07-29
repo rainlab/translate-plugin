@@ -79,6 +79,8 @@ class Plugin extends PluginBase
                 $type = array_get($config, 'type', 'text');
                 if ($type == 'text')
                     $widget->config->fields[$name]['type'] = 'mltext';
+                elseif ($type == 'textarea')
+                    $widget->config->fields[$name]['type'] = 'mltextarea';
             }
 
         });
@@ -133,7 +135,11 @@ class Plugin extends PluginBase
             'RainLab\Translate\FormWidgets\MLText' => [
                 'label' => 'Text (ML)',
                 'alias' => 'mltext'
-            ]
+            ],
+            'RainLab\Translate\FormWidgets\MLTextarea' => [
+                'label' => 'Textarea (ML)',
+                'alias' => 'mltextarea'
+            ],
         ];
     }
 

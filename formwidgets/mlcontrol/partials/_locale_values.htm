@@ -1,0 +1,10 @@
+<!-- Individual values -->
+<?php foreach ($locales as $code => $name): ?>
+    <input
+        type="hidden"
+        name="<?= $field->getName('RLTranslate['.$code.']') ?>"
+        value="<?= e($this->getLocaleValue($code)) ?>"
+        data-locale-value="<?= $code ?>"
+        <?= HTML::attributes($field->attributes) ?>
+    />
+<?php endforeach ?>

@@ -3,19 +3,24 @@
 use RainLab\Translate\Models\Locale;
 
 /**
- * ML Text
- * Renders a multi-lingual text field.
+ * ML Textarea
+ * Renders a multi-lingual textarea field.
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
  */
-class MLText extends MLControl
+class MLTextarea extends MLControl
 {
 
     /**
      * {@inheritDoc}
      */
-    public $defaultAlias = 'mltext';
+    public $defaultAlias = 'mltextarea';
+
+    /**
+     * {@inheritDoc}
+     */
+    public $fallbackType = 'textarea';
 
     /**
      * {@inheritDoc}
@@ -27,7 +32,7 @@ class MLText extends MLControl
         $this->prepareVars();
 
         if ($this->isAvailable)
-            return $this->makePartial('mltext');
+            return $this->makePartial('mltextarea');
         else
             return parent::render();
     }

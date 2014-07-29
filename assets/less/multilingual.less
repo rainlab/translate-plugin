@@ -1,25 +1,47 @@
 @import "../../../../../modules/backend/assets/less/core/boot.less";
 
-.field-multilingual-text {
+.field-multilingual {
     position: relative;
-    .form-control {
-        padding-right: 44px;
-    }
+
     .btn {
         background: transparent;
         position: absolute;
-        right: 2px;
-        top: 50%;
-        margin-top: -44px;
-        height: 88px;
-        width: 44px;
         color: lighten(@btn-default-color, 15%);
         text-transform: uppercase;
         font-size: 11px;
         letter-spacing: 1px;
+        width: 44px;
+        padding-right: 0;
 
         &:hover {
             color: @btn-default-color;
         }
     }
+
+    &.field-multilingual-text {
+        .form-control {
+            padding-right: 44px;
+        }
+
+        .btn {
+            right: 2px;
+            top: 50%;
+            margin-top: -44px;
+            height: 88px;
+        }
+    }
+
+    &.field-multilingual-textarea {
+        .btn {
+            right: 15px;
+            top: 5px;
+            text-align: right;
+        }
+
+        .dropdown-menu {
+            top: 44px !important;
+            right: 1px;
+        }
+    }
+
 }

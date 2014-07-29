@@ -29,7 +29,7 @@ class Translate
 
     public function init()
     {
-        $this->activeLocale = $this->defaultLocale = Locale::getDefault();
+        $this->activeLocale = $this->defaultLocale = array_get(Locale::getDefault(), 'code', 'en');
     }
 
     public function setLocale($locale)
