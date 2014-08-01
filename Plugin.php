@@ -7,7 +7,7 @@ use Backend;
 use Cms\Classes\Content;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
-use RainLab\Translate\Classes\Translate;
+use RainLab\Translate\Classes\Translator;
 
 /**
  * Translate Plugin Information File
@@ -37,7 +37,7 @@ class Plugin extends PluginBase
          */
         Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) {
             if (!$page) return;
-            $translate = Translate::instance();
+            $translate = Translator::instance();
             $translate->loadLocaleFromSession();
             Message::setContext($translate->getLocale(), $page->url);
         });
@@ -46,7 +46,7 @@ class Plugin extends PluginBase
          * Adds language suffixes to content files.
          */
         Event::listen('cms.page.beforeRenderContent', function($controller, $name) {
-            $locale = Translate::instance()->getLocale();
+            $locale = Translator::instance()->getLocale();
             $newName = substr_replace($name, '.'.$locale, strrpos($name, '.'), 0);
             if (($content = Content::loadCached($controller->getTheme(), $newName)) !== null)
                 return $content;

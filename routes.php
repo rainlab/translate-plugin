@@ -2,7 +2,7 @@
 
 use RainLab\Translate\Models\Locale;
 use RainLab\Translate\Models\Message;
-use RainLab\Translate\Classes\Translate;
+use RainLab\Translate\Classes\Translator;
 
 App::before(function($request) {
 
@@ -10,7 +10,7 @@ App::before(function($request) {
     $languages = array_keys(Locale::listEnabled());
 
     if (in_array($locale, $languages)) {
-        Translate::instance()->setLocale($locale);
+        Translator::instance()->setLocale($locale);
 
         Route::group(['prefix' => $locale], function() use ($locale) {
             Route::any('{slug}', 'Cms\Classes\Controller@run')->where('slug', '(.*)?');

@@ -10,7 +10,7 @@ use RainLab\Translate\Models\Locale;
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
  */
-class Translate
+class Translator
 {
 
     use \October\Rain\Support\Traits\Singleton;

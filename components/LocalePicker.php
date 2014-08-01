@@ -2,7 +2,7 @@
 
 use Redirect;
 use RainLab\Translate\Models\Locale as LocaleModel;
-use RainLab\Translate\Classes\Translate;
+use RainLab\Translate\Classes\Translator;
 use Cms\Classes\ComponentBase;
 
 class LocalePicker extends ComponentBase
@@ -27,7 +27,7 @@ class LocalePicker extends ComponentBase
 
     public function init()
     {
-        $this->translator = Translate::instance();
+        $this->translator = Translator::instance();
     }
 
     public function onRun()

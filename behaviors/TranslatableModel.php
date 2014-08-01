@@ -3,7 +3,7 @@
 use DB as Db;
 use System\Classes\ModelBehavior;
 use System\Classes\ApplicationException;
-use RainLab\Translate\Classes\Translate;
+use RainLab\Translate\Classes\Translator;
 use Exception;
 
 /**
@@ -77,7 +77,7 @@ class TranslatableModel extends ModelBehavior
      */
     public function initTranslatableContext()
     {
-        $translate = Translate::instance();
+        $translate = Translator::instance();
         $this->translatableContext = $translate->getLocale();
         $this->translatableDefault = $translate->getDefaultLocale();
     }
