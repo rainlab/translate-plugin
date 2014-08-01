@@ -1,12 +1,13 @@
-<?php namespace Rainlab\Translate\Controllers;
+<?php namespace RainLab\Translate\Controllers;
 
 use Flash;
 use Request;
 use BackendMenu;
 use Backend\Widgets\Grid;
 use Backend\Classes\Controller;
-use Rainlab\Translate\Models\Message;
-use Rainlab\Translate\Models\Locale;
+use RainLab\Translate\Models\Message;
+use RainLab\Translate\Models\Locale;
+use RainLab\Translate\Classes\ThemeScanner;
 use System\Console\CacheClear;
 use System\Classes\SettingsManager;
 
@@ -47,7 +48,9 @@ class Messages extends Controller
 
     public function onScanMessages()
     {
-        Flash::info('Coming soon!');
+        ThemeScanner::scan();
+        Flash::success('Scanned theme template files successfully!');
+        return $this->onRefresh();
     }
 
     public function prepareGrid()

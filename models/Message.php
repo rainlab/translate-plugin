@@ -120,6 +120,36 @@ class Message extends Model
     }
 
     /**
+     * Import an array of messages. Only known messages are imported.
+     * @param  array $messages
+     * @param  string $locale
+     * @return void
+     */
+    public static function importMessages($messages, $locale = null)
+    {
+        if ($locale === null)
+            $locale = static::DEFAULT_LOCALE;
+
+        foreach ($messages as $message) {
+            $messageCode = self::makeMessageCode($message);
+
+            $item = static::firstOrNew([
+                'code' => $messageCode
+            ]);
+
+            // Do not import non-default messages that do not exist
+            if (!$item->exists && $locale != static::DEFAULT_LOCALE)
+                continue;
+
+            $messageData = $item->exists ? $item->message_data : [];
+            $messageData[$locale] = $message;
+
+            $item->message_data = $messageData;
+            $item->save();
+        }
+    }
+
+    /**
      * Looks up and translates a message by its string.
      * @param  string $messageId
      * @param  array  $params
@@ -137,6 +167,11 @@ class Message extends Model
         return $msg;
     }
 
+    /**
+     * Set the caching context, the page url.
+     * @param string $locale
+     * @param string $url
+     */
     public static function setContext($locale, $url = null)
     {
         if (!strlen($url))
@@ -149,6 +184,10 @@ class Message extends Model
             self::$cache = (array) $cached;
     }
 
+    /**
+     * Save context messages to cache.
+     * @return void
+     */
     public static function saveToCache()
     {
         if (!self::$hasNew || !self::$url || !self::$locale)
@@ -157,11 +196,20 @@ class Message extends Model
         Cache::put(self::makeCacheKey(), self::$cache, 1440);
     }
 
+    /**
+     * Creates a cache key for storing context messages.
+     * @return string
+     */
     protected static function makeCacheKey()
     {
         return 'translation.'.self::$locale.self::$url;
     }
 
+    /**
+     * Creates a sterile key for a message.
+     * @param  string $messageId
+     * @return string
+     */
     protected static function makeMessageCode($messageId)
     {
         return strtolower(str_replace('-', '.', Str::slug($messageId)));

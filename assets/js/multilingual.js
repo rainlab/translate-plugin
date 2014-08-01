@@ -26,9 +26,16 @@
         this.$placeholder  = $(this.options.placeholderField)
         this.$activeButton = this.$el.find('[data-active-locale]')
 
-        this.$el.on('click', '[data-switch-locale]', function(){
+        this.$el.on('click', '[data-switch-locale]', function(event){
             var selectedLocale = $(this).data('switch-locale')
             self.setLocale(selectedLocale)
+
+            /*
+             * If Ctrl/Cmd key is pressed, find other instances and switch
+             */
+            if (event.ctrlKey || event.metaKey) {
+                $('[data-switch-locale="'+selectedLocale+'"]').click()
+            }
         })
 
         this.$placeholder.on('keyup', function(){
