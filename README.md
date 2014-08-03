@@ -8,11 +8,13 @@ Different languages can be set up in the back-end area, with a single default la
 
 A visitor can select a language by prefixing the language code to the URL, this is then stored in the user's session as their chosen language. For example:
 
-* **http://localhost/ru/** will display the site in Russian
-* **http://localhost/fr/** will display the site in French
-* **http://localhost/** will display the site in the default language or the user's chosen language.
+* `http://website/ru/` will display the site in Russian
+* `http://website/fr/` will display the site in French
+* `http://website/` will display the site in the default language or the user's chosen language.
 
-Alternatively a visitor can select their chosen language using the `LocalePicker` component. This component will display a simple dropdown that changes the page language depending on the selection.
+## Language Picker Component
+
+A visitor can select their chosen language using the `LocalePicker` component. This component will display a simple dropdown that changes the page language depending on the selection.
 
     title = "Home"
     url = "/"
@@ -46,7 +48,7 @@ A message can also be translated for a choice usage.
 
     {{ 'There are no apples|There are :number applies!'|__(2, { number: 'two' }) }}
 
-Themes can provide default values for these messages by including a `lang.yaml` file in the theme directory.
+[comment]: <> (Themes can provide default values for these messages by including a `lang.yaml` file in the theme directory.)
 
 ## Content translation
 
