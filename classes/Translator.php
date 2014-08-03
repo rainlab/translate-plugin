@@ -1,7 +1,9 @@
 <?php namespace RainLab\Translate\Classes;
 
 use App;
+use Schema;
 use Session;
+use DbDongle;
 use RainLab\Translate\Models\Locale;
 
 /**
@@ -17,6 +19,8 @@ class Translator
 
     const SESSION_LOCALE = 'rainlab.translate.locale';
 
+    const SESSION_CONFIGURED = 'rainlab.translate.configured';
+
     /**
      * @var string The locale to use on the front end.
      */
@@ -26,10 +30,16 @@ class Translator
      * @var string The default locale if no active is set.
      */
     protected $defaultLocale;
+    
+    /**
+     * @var boolean Determine if translate plugin is configured and ready to be used.
+     */
+    protected $isConfigured;
 
     public function init()
     {
-        $this->activeLocale = $this->defaultLocale = array_get(Locale::getDefault(), 'code', 'en');
+        $this->defaultLocale = $this->isConfigured() ? array_get(Locale::getDefault(), 'code', 'en') : 'en';
+        $this->activeLocale = $this->defaultLocale;
     }
 
     public function setLocale($locale)
@@ -46,6 +56,25 @@ class Translator
     public function getDefaultLocale()
     {
         return $this->defaultLocale;
+    }
+
+    public function isConfigured()
+    {
+        if ($this->isConfigured !== null)
+            return $this->isConfigured;
+
+        if (Session::has(self::SESSION_CONFIGURED)) {
+            $result = true;
+        }
+        elseif (DbDongle::hasDatabase() && Schema::hasTable('rainlab_translate_locales')) {
+            Session::put(self::SESSION_CONFIGURED, true);
+            $result = true;
+        }
+        else {
+            $result = false;
+        }
+
+        return $this->isConfigured = $result;
     }
 
     //
