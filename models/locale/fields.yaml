@@ -4,21 +4,21 @@
 
 fields:
     name:
-        label: Name
+        label: rainlab.translate::lang.locale.name
         span: auto
 
     code:
-        label: Code
+        label: rainlab.translate::lang.locale.code
         span: auto
 
     is_enabled:
-        label: Enabled
+        label: rainlab.translate::lang.locale.is_enabled
         type: checkbox
-        comment: Disabled languages will not be available in the front-end.
+        comment: rainlab.translate::lang.locale.is_enabled_help
         span: auto
 
     is_default:
-        label: Default
+        label: rainlab.translate::lang.locale.is_default
         type: checkbox
-        comment: The default language represents the content before translation.
+        comment: rainlab.translate::lang.locale.is_default_help
         span: auto

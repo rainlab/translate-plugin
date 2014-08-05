@@ -2,7 +2,7 @@
 <script type="text/template" id="<?= $this->getId('fromTitle') ?>">
     <div class="header-language" onclick="$.translateMessages.toggleDropdown('#fromTitleButton')">
         <?php if ($selectedFrom === null): ?>
-            <?= $defaultLocale->name ?> <span class="is-default">- default</span>
+            <?= $defaultLocale->name ?> <span class="is-default">- <?= e(trans('rainlab.translate::lang.locale.default_suffix')) ?></span>
         <?php else: ?>
             <?= $selectedFrom->name ?>
         <?php endif ?>
@@ -24,7 +24,7 @@
                     tabindex="-1"
                     href="javascript:;"
                     onclick="return $.translateMessages.setLanguage('from', null)">
-                    <?= $defaultLocale->name ?> - default
+                    <?= $defaultLocale->name ?> - <?= e(trans('rainlab.translate::lang.locale.default_suffix')) ?>
                 </a>
             </li>
         <?php endif ?>
@@ -42,7 +42,7 @@
             </li>
         <?php endforeach ?>
         <?php if (count($locales) <= 1): ?>
-            <li class="no-other-languages text-muted"><small>There are no other languages set up.</small></li>
+            <li class="no-other-languages text-muted"><small><?= e(trans('rainlab.translate::lang.locale.not_available_help')) ?></small></li>
         <?php endif ?>
     </ul>
 </div>
@@ -51,7 +51,7 @@
 <script type="text/template" id="<?= $this->getId('toTitle') ?>">
     <div class="header-language" onclick="$.translateMessages.toggleDropdown('#toTitleButton')">
         <?php if ($selectedTo === null): ?>
-            <?= $defaultLocale->name ?> <span class="is-default">- default</span>
+            <?= $defaultLocale->name ?> <span class="is-default">- <?= e(trans('rainlab.translate::lang.locale.default_suffix')) ?></span>
         <?php else: ?>
             <?= $selectedTo->name ?>
         <?php endif ?>
@@ -60,7 +60,7 @@
     <?php if ($selectedTo !== null): ?>
         <div class="header-hide-translated custom-checkbox">
             <input type="checkbox" id="hideTranslated" name="hide_translated" value="1" {{#hideTranslated}}checked{{/hideTranslated}} />
-            <label for="hideTranslated">Hide translated</label>
+            <label for="hideTranslated"><?= e(trans('rainlab.translate::lang.messages.hide_translated')) ?></label>
         </div>
     <?php endif ?>
 </script>
@@ -76,7 +76,7 @@
                     tabindex="-1"
                     href="#"
                     onclick="return $.translateMessages.setLanguage('to', null)">
-                    <?= $defaultLocale->name ?> - default
+                    <?= $defaultLocale->name ?> - <?= e(trans('rainlab.translate::lang.locale.default_suffix')) ?>
                 </a>
             </li>
         <?php endif ?>
@@ -94,7 +94,7 @@
             </li>
         <?php endforeach ?>
         <?php if (count($locales) <= 1): ?>
-            <li class="no-other-languages text-muted"><small>There are no other languages set up.</small></li>
+            <li class="no-other-languages text-muted"><small><?= e(trans('rainlab.translate::lang.locale.not_available_help')) ?></small></li>
         <?php endif ?>
     </ul>
 </div>

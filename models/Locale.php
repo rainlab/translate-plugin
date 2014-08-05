@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Models;
 
+use Lang;
 use File;
 use Cache;
 use Model;
@@ -61,7 +62,7 @@ class Locale extends Model
             $this->makeDefault();
 
             if (!$this->is_default)
-                throw new ValidationException(['is_default' => sprintf('"%s" is already default and cannot be unset as default.', $this->name)]);
+                throw new ValidationException(['is_default' => Lang::get('rainlab.translate::lang.locale.unset_default', ['locale'=>$this->name])]);
         }
     }
 
@@ -72,7 +73,7 @@ class Locale extends Model
     public function makeDefault()
     {
         if (!$this->is_enabled)
-            throw new ValidationException(['is_enabled' => sprintf('"%s" is disabled and cannot be set as default.', $this->name)]);
+            throw new ValidationException(['is_enabled' => Lang::get('rainlab.translate::lang.locale.disabled_default', ['locale'=>$this->name])]);
 
         $this->newQuery()->where('id', $this->id)->update(['is_default' => true]);
         $this->newQuery()->where('id', '<>', $this->id)->update(['is_default' => false]);

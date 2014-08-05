@@ -11,39 +11,6 @@
 
 <?= Form::open(['id' => 'messagesForm', 'class'=>'layout-item stretch layout-column']) ?>
 
-    <div class="form-buttons buttons-offset">
-        <div class="loading-indicator-container">
-            <a
-                href="javascript:;"
-                data-request="onClearCache"
-                data-load-indicator="Clearing application cache..."
-                class="btn btn-default">
-                Clear cache
-            </a>
-            <a
-                href="javascript:;"
-                data-request="onScanMessages"
-                data-load-indicator="Scanning for new messages..."
-                class="btn btn-default">
-                Scan for messages
-            </a>
-
-            <!--
-            <a
-                href="javascript:;"
-                class="btn btn-default">
-                Export messages
-            </a>
-            <a
-                href="javascript:;"
-                class="btn btn-default">
-                Import messages
-            </a>
-            -->
-
-        </div>
-    </div>
-
     <div id="messagesContainer">
         <?= $this->makePartial('messages') ?>
     </div>

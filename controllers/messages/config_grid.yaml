@@ -3,8 +3,12 @@
 # ===================================
 
 #showHeader: false
+#disableToolbar: true
 allowInsert: false
-allowRemove: false
+allowRemove: true
+toolbar:
+    buttons: grid_toolbar
+
 columns:
     from:
         title: From

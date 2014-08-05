@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Controllers;
 
+use Lang;
 use Flash;
 use Request;
 use BackendMenu;
@@ -30,7 +31,7 @@ class Messages extends Controller
     public function index()
     {
         $this->bodyClass = 'slim-container';
-        $this->pageTitle = 'Translate Messages';
+        $this->pageTitle = Lang::get('rainlab.translate::lang.messages.title');
         $this->prepareGrid();
     }
 
@@ -43,13 +44,13 @@ class Messages extends Controller
     public function onClearCache()
     {
         CacheClear::fireInternal();
-        Flash::success('Cleared the application cache successfully!');
+        Flash::success(Lang::get('rainlab.translate::lang.messages.clear_cache_success'));
     }
 
     public function onScanMessages()
     {
         ThemeScanner::scan();
-        Flash::success('Scanned theme template files successfully!');
+        Flash::success(Lang::get('rainlab.translate::lang.messages.scan_messages_success'));
         return $this->onRefresh();
     }
 
@@ -79,7 +80,13 @@ class Messages extends Controller
          * Make grid widget
          */
         $widget = new Grid($this, $config);
-        $widget->bindEvent('grid.dataChanged', [$this, 'updateGridData']);
+        $widget->bindEvent('grid.dataChanged', function($action, $changes){
+            if ($action == 'remove')
+                $this->removeGridData($changes);
+            else
+                $this->updateGridData($changes);
+        });
+
         $widget->bindToController();
         $this->vars['grid'] = $widget;
     }
@@ -103,7 +110,23 @@ class Messages extends Controller
         return $data;
     }
 
-    public function updateGridData($changes)
+    protected function removeGridData($changes)
+    {
+        if (!is_array($changes))
+            return;
+
+        foreach ($changes as $change) {
+            if (!$code = array_get($change, 'rowData.code'))
+                continue;
+
+            if (!$item = Message::whereCode($code)->first())
+                continue;
+
+            $item->delete();
+        }
+    }
+
+    protected function updateGridData($changes)
     {
         if (!is_array($changes))
             return;

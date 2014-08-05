@@ -4,18 +4,18 @@
 
 columns:
     name:
-        label: Name
+        label: rainlab.translate::lang.locale.name
         searchable: yes
 
     code:
-        label: Code
+        label: rainlab.translate::lang.locale.code
         searchable: yes
 
     is_default:
-        label: Default
+        label: rainlab.translate::lang.locale.is_default
         type: switch
 
     is_enabled:
-        label: Enabled
+        label: rainlab.translate::lang.locale.is_enabled
         type: switch
         invisible: true

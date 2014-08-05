@@ -193,7 +193,7 @@ class TranslatableModel extends ModelBehavior
     public function lang($context = null)
     {
         $this->translateContext($context);
-        return $this;
+        return $this->model;
     }
 
     /**

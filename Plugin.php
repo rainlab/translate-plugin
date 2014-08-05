@@ -23,8 +23,8 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'Translate',
-            'description' => 'Enables multi-lingual sites.',
+            'name'        => 'rainlab.translate::lang.plugin.name',
+            'description' => 'rainlab.translate::lang.plugin.description',
             'author'      => 'Alexey Bobkov, Samuel Georges',
             'icon'        => 'icon-language'
         ];
@@ -69,20 +69,14 @@ class Plugin extends PluginBase
             if (!is_array($model->translatable))
                 return;
 
-            if (!$fields = $widget->config->fields)
-                return;
+            if (!empty($widget->config->fields))
+                $widget->config->fields = $this->processFormMLFields($widget->config->fields, $model);
 
-            foreach ($fields as $name => $config) {
-                if (!in_array($name, $model->translatable))
-                    continue;
+            if (!empty($widget->config->tabs['fields']))
+                $widget->config->tabs['fields'] = $this->processFormMLFields($widget->config->tabs['fields'], $model);
 
-                $type = array_get($config, 'type', 'text');
-                if ($type == 'text')
-                    $widget->config->fields[$name]['type'] = 'mltext';
-                elseif ($type == 'textarea')
-                    $widget->config->fields[$name]['type'] = 'mltextarea';
-            }
-
+            if (!empty($widget->config->secondaryTabs['fields']))
+                $widget->config->secondaryTabs['fields'] = $this->processFormMLFields($widget->config->secondaryTabs['fields'], $model);
         });
     }
 
@@ -151,6 +145,28 @@ class Plugin extends PluginBase
     public function translatePlural($string, $count = 0, $params = [])
     {
         return Lang::choice($string, $count, $params);
+    }
+
+    /**
+     * Helper function to replace standard fields with multi lingual equivalents
+     * @param  array $fields
+     * @param  Model $model
+     * @return array
+     */
+    protected function processFormMLFields($fields, $model)
+    {
+        foreach ($fields as $name => $config) {
+            if (!in_array($name, $model->translatable))
+                continue;
+
+            $type = array_get($config, 'type', 'text');
+            if ($type == 'text')
+                $fields[$name]['type'] = 'mltext';
+            elseif ($type == 'textarea')
+                $fields[$name]['type'] = 'mltextarea';
+        }
+
+        return $fields;
     }
 
 }

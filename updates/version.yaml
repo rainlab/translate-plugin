@@ -1,6 +1,7 @@
-1.0.1: 
+1.0.1:
   - First version of Translate
   - create_messages_table.php
   - create_attributes_table.php
   - create_locales_table.php
   - seed_all_tables.php
+1.0.2: Languages and Messages can now be deleted.

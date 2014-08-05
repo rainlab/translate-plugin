@@ -60,4 +60,10 @@ class Locales extends Controller
         $this->asExtension('FormController')->update_onSave(post('record_id'));
         return $this->listRefresh();
     }
+
+    public function onDelete()
+    {
+        $this->asExtension('FormController')->update_onDelete(post('record_id'));
+        return $this->listRefresh();
+    }
 }

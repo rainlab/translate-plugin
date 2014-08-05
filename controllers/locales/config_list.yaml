@@ -9,7 +9,7 @@ list: @/plugins/rainlab/translate/models/locale/columns.yaml
 modelClass: RainLab\Translate\Models\Locale
 
 # List Title
-title: Manage languages
+title: rainlab.translate::lang.locale.title
 
 # Link URL for each record
 # recordUrl: rainlab/translate/locale/update/:id

@@ -15,8 +15,8 @@ class LocalePicker extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'Locale Picker',
-            'description' => 'Shows a dropdown to select a front-end language.'
+            'name'         => 'rainlab.translate::lang.locale_picker.component_name',
+            'description'  => 'rainlab.translate::lang.locale_picker.component_description',
         ];
     }
 
