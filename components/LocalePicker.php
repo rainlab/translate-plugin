@@ -41,7 +41,7 @@ class LocalePicker extends ComponentBase
         if (!$locale = post('locale'))
             return;
 
-        $this->translator->setSessionLocale($locale);
+        $this->translator->setLocale($locale);
         return Redirect::to($this->currentPageUrl());
     }
 

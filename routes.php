@@ -1,9 +1,11 @@
 <?php
 
-use RainLab\Translate\Models\Locale;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\Translator;
 
+/*
+ * Adds a custom route to check for the locale prefix.
+ */
 App::before(function($request) {
 
     $translator = Translator::instance();
@@ -11,10 +13,7 @@ App::before(function($request) {
         return;
 
     $locale = Request::segment(1);
-    $languages = array_keys(Locale::listEnabled());
-
-    if (in_array($locale, $languages)) {
-        $translator->setLocale($locale);
+    if ($translator->setLocale($locale)) {
 
         Route::group(['prefix' => $locale], function() use ($locale) {
             Route::any('{slug}', 'Cms\Classes\Controller@run')->where('slug', '(.*)?');
@@ -25,7 +24,9 @@ App::before(function($request) {
 
 });
 
+/*
+ * Save any used messages to the contextual cache.
+ */
 App::after(function($request) {
     Message::saveToCache();
 });
-
