@@ -103,6 +103,8 @@ There are ways to get and set attributes without changing the context.
 
 ## Conditionally extending plugins
 
+#### Models
+
 It is possible to conditionally extend a plugin's models to support translation. First by checking for the presence of the translate plugin, then dynamically extending the model with the `TranslatableModel` behavior. For example, inside a Model class the check can be performed inside the `boot()` method:
 
     /**
@@ -147,3 +149,25 @@ It is possible to conditionally extend a plugin's models to support translation.
     }
 
 The back-end forms will automatically detect the presence of translatable fields and replace their controls for multilingual equivalents.
+
+#### Messages
+
+Since the Twig filter will not be available all the time, we can pipe them to the native Laravel translation methods instead. This ensures translated messages will always work on the front end.
+
+    /**
+     * Register new Twig variables
+     * @return array
+     */
+    public function registerMarkupTags()
+    {
+        // Check the translate plugin is installed
+        if (!class_exists('RainLab\Translate\Behaviors\TranslatableModel'))
+            return;
+
+        return [
+            'filters' => [
+                '_' => [Lang, 'get'],
+                '__' => [Lang, 'choice'],
+            ]
+        ];
+    }
