@@ -3,7 +3,7 @@
 return [
     'plugin' => [
         'name' => 'Traductions',
-        'description' => 'Permet de créer des sites Internet multi-langues',
+        'description' => 'Permet de créer des sites Internet multilingues',
     ],
     'locale_picker' => [
         'component_name' => 'Sélection de la langue',
@@ -15,8 +15,8 @@ return [
         'create_title' => 'Ajouter une langue',
         'select_label' => 'Sélectionner une langue',
         'default_suffix' => 'défaut',
-        'unset_default' => '":locale" est déjà la langue par défaut et ne peut être désactivé comme paramètre par défaut',
-        'disabled_default' => '":locale" est déasctivé et ne peut être utilisée comme paramètre par défaut.',
+        'unset_default' => '":locale" est déjà la langue par défaut et ne peut être désactivée',
+        'disabled_default' => '":locale" est désactivé et ne peut être utilisé comme paramètre par défaut.',
         'name' => 'Nom',
         'code' => 'Code',
         'is_default' => 'Défaut',
@@ -24,7 +24,7 @@ return [
         'is_enabled' => 'Activer',
         'is_enabled_help' => 'La langue par défaut représente le contenu avant la traduction.',
         'not_available_help' => 'Aucune autre langue n\'est définie.',
-        'hint_locales' => 'Vous pouvez ajouter de nouvelles langues et traduire les messages du site. La langue apr défaut est celle utilisée pour les contenus avant toute traduction.',
+        'hint_locales' => 'Vous pouvez ajouter de nouvelles langues et traduire les messages du site. La langue par défaut est celle utilisée pour les contenus avant toute traduction.',
     ],
     'messages' => [
         'title' => 'Traduction des Messages',
