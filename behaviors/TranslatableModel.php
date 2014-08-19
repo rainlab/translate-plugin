@@ -223,7 +223,7 @@ class TranslatableModel extends ModelBehavior
         $obj = Db::table('rainlab_translate_attributes')
             ->where('locale', $locale)
             ->where('model_id', $this->model->getKey())
-            ->where('model_type', get_class($this));
+            ->where('model_type', get_class($this->model));
 
         if ($obj->count() > 0)
             return $obj->update(['attribute_data' => $data]);
@@ -231,7 +231,7 @@ class TranslatableModel extends ModelBehavior
         Db::table('rainlab_translate_attributes')->insert([
             'locale' => $locale,
             'model_id' => $this->model->getKey(),
-            'model_type' => get_class($this),
+            'model_type' => get_class($this->model),
             'attribute_data' => $data
         ]);
     }
@@ -252,7 +252,7 @@ class TranslatableModel extends ModelBehavior
         $obj = Db::table('rainlab_translate_attributes')
             ->where('locale', $locale)
             ->where('model_id', $this->model->getKey())
-            ->where('model_type', get_class($this))
+            ->where('model_type', get_class($this->model))
             ->first();
 
         $result = ($obj) ? json_decode($obj->attribute_data, true) : [];
