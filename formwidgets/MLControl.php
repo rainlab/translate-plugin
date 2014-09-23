@@ -43,7 +43,7 @@ abstract class MLControl extends FormWidgetBase
      */
     public function init()
     {
-        $this->columnName  = $this->formField->columnName;
+        $this->columnName  = $this->formField->fieldName;
         $this->defaultLocale  = Locale::getDefault();
         $this->parentViewPath = $this->guessViewPathFrom(__CLASS__, '/partials');
     }
