@@ -16,7 +16,7 @@
             placeholder="<?= e(trans($field->placeholder)) ?>"
             class="form-control field-textarea size-<?= $field->size ?>"
             autocomplete="off"
-            <?= HTML::attributes($field->attributes) ?>></textarea>
+            <?= $field->getAttributes() ?>></textarea>
 
         <button
             class="btn btn-default"

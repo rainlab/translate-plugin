@@ -5,6 +5,6 @@
         name="<?= $field->getName('RLTranslate['.$code.']') ?>"
         value="<?= e($this->getLocaleValue($code)) ?>"
         data-locale-value="<?= $code ?>"
-        <?= HTML::attributes($field->attributes) ?>
+        <?= $field->getAttributes() ?>
     />
 <?php endforeach ?>

@@ -5,3 +5,4 @@
   - create_locales_table.php
   - seed_all_tables.php
 1.0.2: Languages and Messages can now be deleted.
+1.0.3: Minor updates for latest October release.
