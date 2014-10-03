@@ -166,8 +166,8 @@ Since the Twig filter will not be available all the time, we can pipe them to th
 
         return [
             'filters' => [
-                '_' => [Lang, 'get'],
-                '__' => [Lang, 'choice'],
+                '_' => ['Lang', 'get'],
+                '__' => ['Lang', 'choice'],
             ]
         ];
     }
