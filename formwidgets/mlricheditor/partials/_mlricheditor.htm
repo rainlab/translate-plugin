@@ -1,0 +1,14 @@
+<!-- Rich Editor -->
+<script>
+
+
+$(document).ready(function(){
+
+    // Trying to add a button from the outside...
+    var $textarea = $('#<?= $this->getId() ?>').find('>textarea:first')
+    var button = $textarea.redactor('button.add', 'my-button', 'MY button')
+    button.addClass('redactor_btn_quote').removeClass('redactor-btn-image')
+})
+
+</script>
+
