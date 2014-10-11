@@ -2,6 +2,7 @@
 
 use App;
 use Lang;
+use File;
 use Event;
 use Backend;
 use Cms\Classes\Content;
@@ -45,10 +46,18 @@ class Plugin extends PluginBase
         /*
          * Adds language suffixes to content files.
          */
-        Event::listen('cms.page.beforeRenderContent', function($controller, $name) {
+        Event::listen('cms.page.beforeRenderContent', function($controller, $fileName) {
+
+            if (!strlen(File::extension($fileName)))
+                $fileName .= '.htm';
+
+            /*
+             * Splice the active locale in to the filename
+             * - content.htm -> content.en.htm
+             */
             $locale = Translator::instance()->getLocale();
-            $newName = substr_replace($name, '.'.$locale, strrpos($name, '.'), 0);
-            if (($content = Content::loadCached($controller->getTheme(), $newName)) !== null)
+            $fileName = substr_replace($fileName, '.'.$locale, strrpos($fileName, '.'), 0);
+            if (($content = Content::loadCached($controller->getTheme(), $fileName)) !== null)
                 return $content;
         });
 
