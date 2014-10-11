@@ -3,6 +3,7 @@
 use BackendMenu;
 use Backend\Classes\Controller;
 use System\Classes\SettingsManager;
+use RainLab\Translate\Models\Locale as LocaleModel;
 
 /**
  * Locales Back-end Controller
@@ -44,6 +45,7 @@ class Locales extends Controller
 
     public function onCreate()
     {
+        LocaleModel::clearCache();
         $this->asExtension('FormController')->create_onSave();
         return $this->listRefresh();
     }
@@ -57,12 +59,14 @@ class Locales extends Controller
 
     public function onUpdate()
     {
+        LocaleModel::clearCache();
         $this->asExtension('FormController')->update_onSave(post('record_id'));
         return $this->listRefresh();
     }
 
     public function onDelete()
     {
+        LocaleModel::clearCache();
         $this->asExtension('FormController')->update_onDelete(post('record_id'));
         return $this->listRefresh();
     }
