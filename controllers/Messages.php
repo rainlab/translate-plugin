@@ -31,7 +31,7 @@ class Messages extends Controller
     public function index()
     {
         $this->bodyClass = 'slim-container';
-        $this->pageTitle = Lang::get('rainlab.translate::lang.messages.title');
+        $this->pageTitle = 'rainlab.translate::lang.messages.title';
         $this->prepareGrid();
     }
 
