@@ -137,11 +137,11 @@ class Plugin extends PluginBase
         return [
             'RainLab\Translate\FormWidgets\MLText' => [
                 'label' => 'Text (ML)',
-                'alias' => 'mltext'
+                'code'  => 'mltext'
             ],
             'RainLab\Translate\FormWidgets\MLTextarea' => [
                 'label' => 'Textarea (ML)',
-                'alias' => 'mltextarea'
+                'code'  => 'mltextarea'
             ],
         ];
     }
