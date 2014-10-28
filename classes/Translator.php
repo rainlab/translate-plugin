@@ -115,6 +115,18 @@ class Translator
         return $this->isConfigured = $result;
     }
 
+    /**
+     * Changes the locale in the application by browser language.
+     * @param   string  $languageString from accept-language value of client header
+     * @return  boolean Returns true if the locale exists and is set.
+     */
+    public function setBrowserLocal($languageString) {
+        $languages = explode(',', strtolower($languageString));
+        $langCode = explode('-', $languages[0]);
+        
+        return $this->setLocale($langCode[0]);
+    }
+
     //
     // Session handling
     //
@@ -123,6 +135,11 @@ class Translator
     {
         if ($sessionLocale = $this->getSessionLocale())
             $this->setLocale($sessionLocale);
+    }
+
+    public function isSessionLocal()
+    {
+        return $this->getSessionLocale()?true:false;
     }
 
     protected function getSessionLocale()

@@ -21,6 +21,9 @@ App::before(function($request) {
 
         Route::any($locale, 'Cms\Classes\Controller@run');
     }
+    else if (!$translator->isSessionLocal()) {
+        $translator->setBrowserLocal(Request::header('accept-language'));
+    }
 
 });
 
