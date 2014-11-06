@@ -6,10 +6,9 @@
  * http://www.carlosgonzalezgurrea.es
  */
 
- 
 return [
     'plugin' => [
-        'name' => 'Idiomas',
+        'name' => 'Multilenguaje',
         'description' => 'Permite sitios web multilingües',
     ],
     'locale_picker' => [
@@ -35,6 +34,7 @@ return [
     ],
     'messages' => [
         'title' => 'Traducir mensajes',
+		'description' => 'Editar mensajes',
         'clear_cache_link' => 'Limpiar cache',
         'clear_cache_loading' => 'Borrado de la memoria caché de aplicaciones ...',
         'clear_cache_success' => 'Se ha borrado la memoria cache dela aplicación con éxito',

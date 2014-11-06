@@ -28,6 +28,7 @@ return [
     ],
     'messages' => [
         'title' => 'Traduzir mensagens',
+		'description' => 'Atualizar mensagens',
         'clear_cache_link' => 'Limpar cache',
         'clear_cache_loading' => 'Limpando o cache da aplicação...',
         'clear_cache_success' => 'Cache da aplicação limpo com sucesso!',

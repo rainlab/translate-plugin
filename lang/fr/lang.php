@@ -28,6 +28,7 @@ return [
     ],
     'messages' => [
         'title' => 'Traduction des Messages',
+		'description' => 'Mettre à jour Messages',
         'clear_cache_link' => 'Supprimer le cache',
         'clear_cache_loading' => 'Suppression du cache de l\'application...',
         'clear_cache_success' => 'Le cache de l\'application a été supprimé !',
