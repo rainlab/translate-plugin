@@ -212,7 +212,7 @@ class Message extends Model
      */
     protected static function makeMessageCode($messageId)
     {
-        return Str::limit(strtolower(Str::slug($messageId, '.'), 250));
+        return Str::limit(strtolower(Str::slug($messageId, '.')), 250);
     }
 
 }
