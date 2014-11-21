@@ -28,6 +28,7 @@ return [
     ],
     'messages' => [
         'title' => 'Перевод сообщений',
+		'description' => 'Обновить сообщений',
         'clear_cache_link' => 'Очистить кэш',
         'clear_cache_loading' => 'Очистка кэша приложения...',
         'clear_cache_success' => 'Очистка кэша завершена успешно!',

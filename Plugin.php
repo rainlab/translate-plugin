@@ -98,22 +98,23 @@ class Plugin extends PluginBase
 
     public function registerSettings()
     {
+
         return [
             'locales' => [
-                'label'       => 'Languages',
-                'description' => 'Set up languages that can be used on the front-end.',
+                'label'       => 'rainlab.translate::lang.locale.title',
+                'description' => 'rainlab.translate::lang.plugin.description',
                 'icon'        => 'icon-language',
                 'url'         => Backend::url('rainlab/translate/locales'),
                 'order'       => 550,
-                'category'    => 'Translation',
+                'category'    => 'rainlab.translate::lang.plugin.name',
             ],
             'messages' => [
-                'label'       => 'Messages',
-                'description' => 'Translate strings used throughout the front-end.',
+                'label'       => 'rainlab.translate::lang.messages.title',
+                'description' => 'rainlab.translate::lang.messages.description',
                 'icon'        => 'icon-list-alt',
                 'url'         => Backend::url('rainlab/translate/messages'),
                 'order'       => 551,
-                'category'    => 'Translation',
+                'category'    => 'rainlab.translate::lang.plugin.name',
             ],
         ];
     }

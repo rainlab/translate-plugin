@@ -28,6 +28,7 @@ return [
     ],
     'messages' => [
         'title' => 'Translate Messages',
+		'description' => 'Update Messages',
         'clear_cache_link' => 'Clear cache',
         'clear_cache_loading' => 'Clearing application cache...',
         'clear_cache_success' => 'Cleared the application cache successfully!',

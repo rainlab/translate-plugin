@@ -28,6 +28,7 @@ return [
     ],
     'messages' => [
         'title' => 'Vertaal berichten',
+		'description' => 'Wijzig berichten',
         'clear_cache_link' => 'Leeg cache',
         'clear_cache_loading' => 'Applicatie cache legen...',
         'clear_cache_success' => 'De applicatie cache is succesvol geleegd.',
