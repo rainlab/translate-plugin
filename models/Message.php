@@ -212,7 +212,7 @@ class Message extends Model
      */
     protected static function makeMessageCode($messageId)
     {
-        return strtolower(str_replace('-', '.', Str::slug($messageId)));
+        return Str::limit(strtolower(Str::slug($messageId, '.')), 250);
     }
 
 }
