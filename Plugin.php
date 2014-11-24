@@ -44,6 +44,27 @@ class Plugin extends PluginBase
         });
 
         /*
+         * Adds language suffixes to page files.
+         */
+        Event::listen('cms.page.preInit', function($controller,\CMS\Classes\Page $page) {
+
+            $fileName = $page->getFileName();
+            if (!strlen(File::extension($fileName)))
+                $fileName .= '.htm';
+
+            /*
+             * Splice the active locale in to the filename
+             * - page.htm -> page.en.htm
+             */
+            $locale = Translator::instance()->getLocale();
+            $fileName = substr_replace($fileName, '.'.$locale, strrpos($fileName, '.'), 0);
+            $page->setFileName($fileName);
+            $page = \Cms\Classes\Page::loadCached($controller->getTheme(), $fileName);
+
+            return $page;
+        });
+
+        /*
          * Adds language suffixes to content files.
          */
         Event::listen('cms.page.beforeRenderContent', function($controller, $fileName) {
