@@ -49,6 +49,8 @@ class Plugin extends PluginBase
         Event::listen('cms.page.preInit', function($controller,\CMS\Classes\Page $page) {
 
             $fileName = $page->getFileName();
+            $fileName  = str_replace(strstr($fileName, "."),'',$fileName);
+            
             if (!strlen(File::extension($fileName)))
                 $fileName .= '.htm';
 
