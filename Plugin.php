@@ -46,11 +46,19 @@ class Plugin extends PluginBase
         /*
          * Adds language suffixes to page files.
          */
-        Event::listen('cms.page.preInit', function($controller,\CMS\Classes\Page $page) {
+        Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) {
+
+            if (!$page) return $page;
+
+            $translator = Translator::instance();
+            $translator->loadLocaleFromSession();
+            $defLocale = $translator->getDefaultLocale();
+            $locale = $translator->getLocale();
 
             $fileName = $page->getFileName();
+
             $fileName  = str_replace(strstr($fileName, "."),'',$fileName);
-            
+
             if (!strlen(File::extension($fileName)))
                 $fileName .= '.htm';
 
@@ -58,11 +66,13 @@ class Plugin extends PluginBase
              * Splice the active locale in to the filename
              * - page.htm -> page.en.htm
              */
-            $locale = Translator::instance()->getLocale();
-            $fileName = substr_replace($fileName, '.'.$locale, strrpos($fileName, '.'), 0);
-            $page->setFileName($fileName);
-            $page = \Cms\Classes\Page::loadCached($controller->getTheme(), $fileName);
 
+            if ($locale != $defLocale) {
+                $fileName = substr_replace($fileName, '.' . $locale, strrpos($fileName, '.'), 0);
+
+                $page->setFileName($fileName);
+            }
+            $page = \Cms\Classes\Page::loadCached($controller->getTheme(), $fileName);
             return $page;
         });
 
