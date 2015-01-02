@@ -28,6 +28,7 @@ return [
     ],
     'messages' => [
         'title' => 'Üzenetek lefordítása',
+        'description' => 'Üzenetek frissítése',
         'clear_cache_link' => 'Gyorsítótár kiürítése',
         'clear_cache_loading' => 'Az alkalmazás-gyorsítótár kiürítése...',
         'clear_cache_success' => 'Sikerült az alkalmazás-gyorsítótár kiürítése!',
