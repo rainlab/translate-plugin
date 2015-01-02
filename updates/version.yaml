@@ -7,4 +7,4 @@
 1.0.2: Languages and Messages can now be deleted.
 1.0.3: Minor updates for latest October release.
 1.0.4: Locale cache will clear when updating a language.
-1.0.5: Add spanish language and fix config plugin .
+1.0.5: Add Spanish language and fix plugin config.
