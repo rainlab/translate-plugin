@@ -26,6 +26,11 @@
   text-align: center;
   padding: 5px;
 }
+.translate-messages .header-language,
+.translate-messages .header-swap-languages,
+.translate-messages .header-hide-translated {
+  line-height: 27px;
+}
 .translate-messages .header-language {
   float: left;
   cursor: pointer;
@@ -42,7 +47,6 @@
 .translate-messages .header-hide-translated {
   float: right;
   text-align: right;
-  line-height: 27px;
 }
 .translate-messages .header-hide-translated label {
   font-weight: normal;

@@ -4,7 +4,7 @@ use Lang;
 use Flash;
 use Request;
 use BackendMenu;
-use Backend\Widgets\Grid;
+use Backend\Widgets\Table;
 use Backend\Classes\Controller;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\Locale;
@@ -32,12 +32,12 @@ class Messages extends Controller
     {
         $this->bodyClass = 'slim-container';
         $this->pageTitle = 'rainlab.translate::lang.messages.title';
-        $this->prepareGrid();
+        $this->prepareTable();
     }
 
     public function onRefresh()
     {
-        $this->prepareGrid();
+        $this->prepareTable();
         return ['#messagesContainer' => $this->makePartial('messages')];
     }
 
@@ -54,7 +54,22 @@ class Messages extends Controller
         return $this->onRefresh();
     }
 
-    public function prepareGrid()
+    public function onChange()
+    {
+
+        // Assuming that the widget was initialized in the 
+        // controller constructor with the "table" alias.
+        $dataSource = $this->widget->table->getDataSource();
+
+        while ($records = $dataSource->readRecords(5)) {
+            traceLog($records);
+        }
+
+        traceLog('hi');
+        traceLog(post());
+    }
+
+    public function prepareTable()
     {
         $fromCode = post('locale_from', null);
         $toCode = post('locale_to', Locale::getDefault()->code);
@@ -69,29 +84,36 @@ class Messages extends Controller
         $this->vars['selectedTo'] = $selectedTo = Locale::findByCode($toCode);
 
         /*
-         * Make grid config, make default column read only
+         * Make table config, make default column read only
          */
-        $config = $this->makeConfig('config_grid.yaml');
-        $config->data = $this->getGridData($selectedFrom, $selectedTo);
+        $config = $this->makeConfig('config_table.yaml');
         if (!$selectedFrom) $config->columns['from']['readOnly'] = true;
         if (!$selectedTo) $config->columns['to']['readOnly'] = true;
 
         /*
-         * Make grid widget
+         * Make table widget
          */
-        $widget = new Grid($this, $config);
-        $widget->bindEvent('grid.dataChanged', function($action, $changes){
-            if ($action == 'remove')
-                $this->removeGridData($changes);
-            else
-                $this->updateGridData($changes);
-        });
+        $widget = new Table($this, $config);
+        // $widget->bindEvent('table.dataChanged', function($action, $changes){
+        //     if ($action == 'remove')
+        //         $this->removeTableData($changes);
+        //     else
+        //         $this->updateTableData($changes);
+        // });
 
         $widget->bindToController();
-        $this->vars['grid'] = $widget;
+
+        /*
+         * Populate data
+         */
+        $dataSource = $widget->getDataSource();
+        $records = $this->getTableData($selectedFrom, $selectedTo);
+        $dataSource->initRecords($records);
+
+        $this->vars['table'] = $widget;
     }
 
-    protected function getGridData($from, $to)
+    protected function getTableData($from, $to)
     {
         $messages = Message::all();
 
@@ -110,7 +132,7 @@ class Messages extends Controller
         return $data;
     }
 
-    protected function removeGridData($changes)
+    protected function removeTableData($changes)
     {
         if (!is_array($changes))
             return;
@@ -126,7 +148,7 @@ class Messages extends Controller
         }
     }
 
-    protected function updateGridData($changes)
+    protected function updateTableData($changes)
     {
         if (!is_array($changes))
             return;

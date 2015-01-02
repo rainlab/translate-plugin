@@ -31,7 +31,7 @@
         /*
          * The element with .dataGrid() bound to it
          */
-        this.gridElement = null
+        this.tableElement = null
 
         /*
          * Hide translated strings (show only from the empty data set)
@@ -50,37 +50,37 @@
         });
 
         this.toggleTranslated = function(isHide) {
-            this.gridElement.dataGrid('deselect')
+            // this.tableElement.dataGrid('deselect')
             this.hideTranslated = isHide
             this.setTitleContents()
         }
 
         this.filterDataSet = function() {
             if (!this.hideTranslated) {
-                if (this.dataSet) this.gridElement.dataGrid('setData', this.dataSet)
+                if (this.dataSet) this.tableElement.dataGrid('setData', this.dataSet)
                 return
             }
 
-            this.dataSet = this.gridElement.dataGrid('getData')
+            this.dataSet = this.tableElement.dataGrid('getData')
             this.emptyDataSet = $.grep(this.dataSet, function(obj, index){
                 return !obj.to
             })
 
-            this.gridElement.dataGrid('setData', this.emptyDataSet)
+            this.tableElement.dataGrid('setData', this.emptyDataSet)
         }
 
         this.setTitleContents = function(fromEl, toEl) {
             if (fromEl) this.fromHeader = $(fromEl)
             if (toEl) this.toHeader = $(toEl)
-            if (!this.gridElement) return
+            if (!this.tableElement) return
 
-            this.gridElement.dataGrid('setHeaderValue', 0, this.fromHeader.html())
-            this.gridElement.dataGrid('setHeaderValue', 1, Mustache.render(this.toHeader.html(), { hideTranslated: this.hideTranslated } ))
-            this.gridElement.dataGrid('updateUi')
+            var $headers = $('table.headers th', this.tableElement)
+            $headers.eq(0).html(this.fromHeader.html())
+            $headers.eq(1).html(Mustache.render(this.toHeader.html(), { hideTranslated: this.hideTranslated } ))
         }
 
-        this.setGridElement = function(el) {
-            this.gridElement = $(el)
+        this.setTableElement = function(el) {
+            this.tableElement = $(el)
             this.$form = $('#messagesForm')
             this.fromInput = this.$form.find('input[name=locale_from]')
             this.toInput = this.$form.find('input[name=locale_to]')
@@ -112,7 +112,7 @@
         }
 
         this.refreshGrid = function() {
-            this.gridElement.dataGrid('setData', [])
+            // this.tableElement.dataGrid('setData', [])
             this.$form.request('onRefresh')
         }
 

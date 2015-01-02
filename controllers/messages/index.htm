@@ -23,9 +23,11 @@
 
 <!-- Set the Header values in the Grid -->
 <script>
+
 $(document).render(function(){
-    $.translateMessages.setGridElement('#<?= $grid->getId() ?>')
+    $.translateMessages.setTableElement('#<?= $table->getId() ?>')
     $.translateMessages.setTitleContents('#<?= $this->getId('fromTitle') ?>', '#<?= $this->getId('toTitle') ?>')
 })
+
 </script>
 
