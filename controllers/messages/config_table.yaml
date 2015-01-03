@@ -6,6 +6,7 @@ dataSource: client
 keyFrom: code
 recordsPerPage: 6
 handler: onChange
+adding: false
 
 # toolbar:
     # buttons: grid_toolbar
