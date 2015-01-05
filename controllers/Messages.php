@@ -4,7 +4,6 @@ use Lang;
 use Flash;
 use Request;
 use BackendMenu;
-use Backend\Widgets\Table;
 use Backend\Classes\Controller;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\Locale;
@@ -93,7 +92,8 @@ class Messages extends Controller
         /*
          * Make table widget
          */
-        $widget = new Table($this, $config);
+        $widget = $this->makeWidget('Backend\Widgets\Table', $config);
+
         // $widget->bindEvent('table.dataChanged', function($action, $changes){
         //     if ($action == 'remove')
         //         $this->removeTableData($changes);
