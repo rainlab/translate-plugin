@@ -1,0 +1,36 @@
+<!-- Rich Editor -->
+<?php if ($this->previewMode): ?>
+    <div class="form-control"><?= $value ?></div>
+<?php else: ?>
+        <div
+            id="<?= $this->getId() ?>"
+            class="field-richeditor size-<?= $size ?> <?= $stretch?'layout-relative stretch':'' ?>"
+            <?php if ($fullPage): ?>data-fullpage="true"<?php endif ?>
+            data-data-locker="#<?= $this->getId('dataLocker') ?>"
+            data-control="richeditor"
+            >
+            <textarea id="<?= $this->getId('textarea') ?>"></textarea>
+            <div
+                data-control="multilingual"
+                data-default-locale="<?= $defaultLocale->code ?>"
+                data-placeholder-field="#<?= $this->getId('textarea') ?>"
+                class="field-multilingual field-multilingual-textarea field-multilingual-richeditor dropdown"
+                >
+
+                <button
+                        class="btn btn-default"
+                        data-toggle="dropdown"
+                        data-active-locale
+                        type="button">
+                </button>
+
+                <?= $this->makeParentPartial('locale_values') ?>
+
+                <?= $this->makeParentPartial('locale_selector') ?>
+            </div>
+        </div>
+    <!-- Data locker -->
+    <div style="display: none">
+        <textarea name="<?= $name ?>" id="<?= $this->getId('dataLocker') ?>"><?= e($value) ?></textarea>
+    </div>
+<?php endif ?>

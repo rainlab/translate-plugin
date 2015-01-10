@@ -32,3 +32,8 @@
   top: 44px !important;
   right: 1px;
 }
+.field-multilingual.field-multilingual-richeditor {
+  position: absolute;
+  top: 33px;
+  right: 0;
+}
