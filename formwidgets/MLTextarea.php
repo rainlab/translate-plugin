@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\FormWidgets;
 
+use Backend\Classes\FormWidgetBase;
 use RainLab\Translate\Models\Locale;
 
 /**
@@ -9,8 +10,9 @@ use RainLab\Translate\Models\Locale;
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
  */
-class MLTextarea extends MLControl
+class MLTextarea extends FormWidgetBase
 {
+    use MLControl;
 
     /**
      * {@inheritDoc}
