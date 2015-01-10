@@ -1,21 +1,16 @@
 <?php namespace RainLab\Translate\FormWidgets;
 
 use RainLab\Translate\Models\Locale;
-use Backend\Classes\FormWidgetBase;
 
 /**
  * Generic ML Control
  * Renders a multi-lingual control.
  *
  * @package rainlab\translate
- * @author Alexey Bobkov, Samuel Georges
+ * @author Alexey Bobkov, Samuel Georges, Modest Machnicki
  */
-abstract class MLControl extends FormWidgetBase
+trait MLControl
 {
-    /**
-     * {@inheritDoc}
-     */
-    public $defaultAlias = 'mlcontrol';
 
     /**
      * @var string Form field column name.
@@ -30,7 +25,7 @@ abstract class MLControl extends FormWidgetBase
     /**
      * @var string If translation is unavailable, fall back to this standard field.
      */
-    public $fallbackType = 'text';
+    public $defaultFallbackType = 'text';
 
     /**
      * @var string Specifies a path to the views directory.
@@ -45,13 +40,13 @@ abstract class MLControl extends FormWidgetBase
     {
         $this->columnName  = $this->formField->fieldName;
         $this->defaultLocale  = Locale::getDefault();
-        $this->parentViewPath = $this->guessViewPathFrom(__CLASS__, '/partials');
+        $this->parentViewPath = $this->guessViewPathFrom(__TRAIT__, '/partials');
     }
 
     /**
      * {@inheritDoc}
      */
-    public function render()
+    public function renderFallbackWidget()
     {
         return $this->makeParentPartial('fallback_field');
     }
@@ -103,7 +98,7 @@ abstract class MLControl extends FormWidgetBase
             return $this->formField;
 
         $field = clone $this->formField;
-        $field->type = $this->fallbackType;
+        $field->type = $this->fallbackType?$this->fallbackType:$this->defaultFallbackType;
         return $field;
     }
 

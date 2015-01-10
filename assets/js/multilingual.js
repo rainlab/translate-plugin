@@ -41,6 +41,10 @@
         this.$placeholder.on('keyup', function(){
             self.$activeField.val(this.value)
         })
+        // RichEditor content's change event
+        .on('sanitize.oc.richeditor', function(){
+            self.$activeField.val(this.value);
+        });
 
         this.setLocale(this.options.defaultLocale)
     }
@@ -66,6 +70,8 @@
         this.$activeField = this.getLocaleElement(locale)
         this.$placeholder.val(this.getLocaleValue(locale))
         this.$activeButton.text(locale)
+        // Set text in Rich Editor
+        this.$placeholder.trigger('codeSet.oc.richeditor', this.getLocaleValue(locale));
     }
 
     // MULTILINGUAL PLUGIN DEFINITION
