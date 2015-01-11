@@ -212,7 +212,7 @@ class TranslatableModel extends ModelBehavior
      * Turns on empty translations replacement
      * @return self
      */
-    public function replaceEmpties()
+    public function replaceEmptyTranslations()
     {
         $this->isEmptyAttributesReplacingOn = true;
         return $this->model;
