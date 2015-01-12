@@ -177,6 +177,10 @@ class Plugin extends PluginBase
                 'label' => 'Textarea (ML)',
                 'code'  => 'mltextarea'
             ],
+            'RainLab\Translate\FormWidgets\MLRichEditor' => [
+                'label' => 'Rich Editor (ML)',
+                'alias' => 'mlricheditor'
+            ],
         ];
     }
 
@@ -207,6 +211,8 @@ class Plugin extends PluginBase
                 $fields[$name]['type'] = 'mltext';
             elseif ($type == 'textarea')
                 $fields[$name]['type'] = 'mltextarea';
+            elseif ($type == 'richeditor')
+                $fields[$name]['type'] = 'mlricheditor';
         }
 
         return $fields;
