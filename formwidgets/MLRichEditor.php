@@ -44,8 +44,8 @@ class MLRichEditor extends RichEditor
         if (!$this->isAvailable)
             return $parentContent;
 
-        $this->vars['defaultLocale'] = $this->defaultLocale;
-        return $parentContent.$this->makePartial('mlricheditor');
+        $this->vars['richeditor'] = $parentContent;
+        return $this->makePartial('mlricheditor');
     }
 
     public function prepareVars()
@@ -63,7 +63,7 @@ class MLRichEditor extends RichEditor
         parent::loadAssets();
         $this->actAsParent(false);
 
-        if ($this->isAvailable) {
+        if (Locale::isAvailable()) {
             $this->loadLocaleAssets();
             $this->addJs('js/mlswitcher.js');
         }

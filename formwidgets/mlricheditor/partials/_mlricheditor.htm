@@ -7,15 +7,18 @@
     class="field-multilingual field-multilingual-textarea field-multilingual-richeditor dropdown"
     >
 
+    <?= $richeditor ?>
+
     <button
-            class="btn btn-default"
-            data-toggle="dropdown"
-            data-active-locale
-            type="button">
+        class="btn btn-default"
+        data-toggle="dropdown"
+        data-active-locale
+        type="button">
     </button>
 
     <?= $this->makeParentPartial('locale_values') ?>
 
     <?= $this->makeParentPartial('locale_selector') ?>
 </div>
+
 <script> initMLRichEditor('#<?= $this->getId('mlControl') ?>', '#<?= $this->getId('textarea') ?>') </script>
