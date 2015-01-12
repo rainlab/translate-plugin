@@ -23,6 +23,7 @@
         this.options      = options
         this.$el          = $(element)
 
+        this.$activeField  = null
         this.$placeholder  = $(this.options.placeholderField)
         this.$activeButton = this.$el.find('[data-active-locale]')
 
@@ -59,6 +60,15 @@
     MultiLingual.prototype.getLocaleValue = function(locale) {
         var value = this.getLocaleElement(locale)
         return value ? value.val() : null
+    }
+
+    MultiLingual.prototype.setLocaleValue = function(value, locale) {
+        if (locale) {
+            this.getLocaleElement(locale).val(value)
+        }
+        else {
+            this.$activeField.val(value)
+        }
     }
 
     MultiLingual.prototype.setLocale = function(locale) {

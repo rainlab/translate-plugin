@@ -1,36 +1,56 @@
-(function ($) {
-    'use strict';
 
-    window.RedactorPlugins = window.RedactorPlugins || {}
+function initMLRichEditor(el, textarea) {
 
-    var MLSwitcher = function (redactor) {
-        this.redactor = redactor
-        this.init()
-    }
+    var $el = $(el),
+        $textarea = $(textarea)
 
-    MLSwitcher.prototype = {
-
-        init: function () {
-
+    $el.on('codeSet.oc.richeditor', function(e, locale, localeValue){
+        if (typeof localeValue === 'string') {
+            $textarea.redactor('code.set', localeValue);
         }
+    })
 
-    }
+    $textarea.on('keyup', function(){
+        $el.multiLingual('setLocaleValue', this.value)
+    })
 
-    window.RedactorPlugins.mlswitcher = {
-        init: function () {
-            this.mlswitcher = new MLSwitcher(this)
+}
 
-            // This is a work in progress
-            this.buttonAddBefore('video', 'image', 'MLSwitcher', $.proxy(function () {
 
-                alert('hi')
 
-            }, this))
+// (function ($) {
+//     'use strict';
 
-            this.buttonGet('mlswitcher')
-                .addClass('redactor_btn_image')
-                .removeClass('redactor-btn-image')
-        }
-    }
+//     window.RedactorPlugins = window.RedactorPlugins || {}
 
-}(jQuery));
+//     var MLSwitcher = function (redactor) {
+//         this.redactor = redactor
+//         this.init()
+//     }
+
+//     MLSwitcher.prototype = {
+
+//         init: function () {
+
+//         }
+
+//     }
+
+//     window.RedactorPlugins.mlswitcher = {
+//         init: function () {
+//             this.mlswitcher = new MLSwitcher(this)
+
+//             // This is a work in progress
+//             this.buttonAddBefore('video', 'image', 'MLSwitcher', $.proxy(function () {
+
+//                 alert('hi')
+
+//             }, this))
+
+//             this.buttonGet('mlswitcher')
+//                 .addClass('redactor_btn_image')
+//                 .removeClass('redactor-btn-image')
+//         }
+//     }
+
+// }(jQuery));

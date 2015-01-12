@@ -61,8 +61,8 @@ class MLRichEditor extends RichEditor
         $this->actAsParent(false);
 
         if ($this->isAvailable) {
+            $this->addJs('js/mlswitcher.js');
         }
-            // $this->addJs('js/mlswitcher.js');
     }
 
     protected function actAsParent($switch = true)
