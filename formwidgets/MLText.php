@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\FormWidgets;
 
+use Backend\Classes\FormWidgetBase;
 use RainLab\Translate\Models\Locale;
 
 /**
@@ -9,8 +10,10 @@ use RainLab\Translate\Models\Locale;
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
  */
-class MLText extends MLControl
+class MLText extends FormWidgetBase
 {
+
+    use \RainLab\Translate\Traits\MLControl;
 
     /**
      * {@inheritDoc}
@@ -20,16 +23,32 @@ class MLText extends MLControl
     /**
      * {@inheritDoc}
      */
+    public function init()
+    {
+        $this->initLocale();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function render()
     {
         $this->isAvailable = Locale::isAvailable();
 
-        $this->prepareVars();
+        $this->prepareLocaleVars();
 
         if ($this->isAvailable)
             return $this->makePartial('mltext');
         else
-            return parent::render();
+            return $this->renderFallbackField();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function loadAssets()
+    {
+        $this->loadLocaleAssets();
     }
 
 }

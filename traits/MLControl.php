@@ -1,4 +1,4 @@
-<?php namespace RainLab\Translate\FormWidgets;
+<?php namespace RainLab\Translate\Traits;
 
 use RainLab\Translate\Models\Locale;
 use Backend\Classes\FormWidgetBase;
@@ -10,12 +10,8 @@ use Backend\Classes\FormWidgetBase;
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
  */
-abstract class MLControl extends FormWidgetBase
+trait MLControl
 {
-    /**
-     * {@inheritDoc}
-     */
-    public $defaultAlias = 'mlcontrol';
 
     /**
      * @var string Form field column name.
@@ -28,11 +24,6 @@ abstract class MLControl extends FormWidgetBase
     public $isAvailable;
 
     /**
-     * @var string If translation is unavailable, fall back to this standard field.
-     */
-    public $fallbackType = 'text';
-
-    /**
      * @var string Specifies a path to the views directory.
      */
     protected $parentViewPath;
@@ -41,17 +32,18 @@ abstract class MLControl extends FormWidgetBase
      * Initialize control
      * @return void
      */
-    public function init()
+    public function initLocale()
     {
         $this->columnName  = $this->formField->fieldName;
         $this->defaultLocale  = Locale::getDefault();
-        $this->parentViewPath = $this->guessViewPathFrom(__CLASS__, '/partials');
+        $this->parentViewPath = $this->guessViewPathFrom(__TRAIT__, '/partials');
+        $this->isAvailable = Locale::isAvailable();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function render()
+    public function renderFallbackField()
     {
         return $this->makeParentPartial('fallback_field');
     }
@@ -74,11 +66,20 @@ abstract class MLControl extends FormWidgetBase
     /**
      * Prepares the list data
      */
-    public function prepareVars()
+    public function prepareLocaleVars()
     {
         $this->vars['defaultLocale'] = $this->defaultLocale;
         $this->vars['locales'] = Locale::listAvailable();
         $this->vars['field'] = $this->makeRenderFormField();
+    }
+
+    /**
+     * Loads assets specific to ML Controls
+     */
+    public function loadLocaleAssets()
+    {
+        $this->addJs('/plugins/rainlab/translate/assets/js/multilingual.js', 'RainLab.Translate');
+        $this->addCss('/plugins/rainlab/translate/assets/css/multilingual.css', 'RainLab.Translate');
     }
 
     /**
@@ -103,17 +104,8 @@ abstract class MLControl extends FormWidgetBase
             return $this->formField;
 
         $field = clone $this->formField;
-        $field->type = $this->fallbackType;
+        $field->type = $this->getFallbackType();
         return $field;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function loadAssets()
-    {
-        $this->addJs('/plugins/rainlab/translate/assets/js/multilingual.js', 'RainLab.Translate');
-        $this->addCss('/plugins/rainlab/translate/assets/css/multilingual.css', 'RainLab.Translate');
     }
 
     /**
@@ -151,6 +143,15 @@ abstract class MLControl extends FormWidgetBase
         }
 
         return $values;
+    }
+
+    /**
+     * Returns the fallback field type.
+     * @return string
+     */
+    public function getFallbackType()
+    {
+        return defined('static::FALLBACK_TYPE') ? static::FALLBACK_TYPE : 'text';
     }
 
 }

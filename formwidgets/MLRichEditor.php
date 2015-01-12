@@ -13,15 +13,12 @@ use RainLab\Translate\Models\Locale;
 class MLRichEditor extends RichEditor
 {
 
+    use \RainLab\Translate\Traits\MLControl;
+
     /**
      * {@inheritDoc}
      */
     public $defaultAlias = 'mlricheditor';
-
-    /**
-     * @var boolean Determines whether translation services are available
-     */
-    public $isAvailable;
 
     public $originalAssetPath;
     public $originalViewPath;
@@ -31,9 +28,8 @@ class MLRichEditor extends RichEditor
      */
     public function init()
     {
-        $this->isAvailable = Locale::isAvailable();
-
         parent::init();
+        $this->initLocale();
     }
 
     /**
@@ -48,7 +44,14 @@ class MLRichEditor extends RichEditor
         if (!$this->isAvailable)
             return $parentContent;
 
+        $this->vars['defaultLocale'] = $this->defaultLocale;
         return $parentContent.$this->makePartial('mlricheditor');
+    }
+
+    public function prepareVars()
+    {
+        parent::prepareVars();
+        $this->prepareLocaleVars();
     }
 
     /**
@@ -61,6 +64,7 @@ class MLRichEditor extends RichEditor
         $this->actAsParent(false);
 
         if ($this->isAvailable) {
+            $this->loadLocaleAssets();
             $this->addJs('js/mlswitcher.js');
         }
     }
