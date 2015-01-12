@@ -119,7 +119,7 @@ abstract class MLControl extends FormWidgetBase
     /**
      * {@inheritDoc}
      */
-    public function getSaveData($value)
+    public function getSaveValue($value)
     {
         $localeData = $this->getLocaleSaveData();
 
