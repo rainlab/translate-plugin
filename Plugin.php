@@ -5,6 +5,7 @@ use Lang;
 use File;
 use Event;
 use Backend;
+use Cms\Classes\Page;
 use Cms\Classes\Content;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
@@ -35,29 +36,22 @@ class Plugin extends PluginBase
     {
         /*
          * Set the page context for translation caching.
-         */
-        Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) {
-            if (!$page) return;
-            $translate = Translator::instance();
-            $translate->loadLocaleFromSession();
-            Message::setContext($translate->getLocale(), $page->url);
-        });
-
-        /*
          * Adds language suffixes to page files.
          */
         Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) {
-
-            if (!$page) return $page;
+            if (!$page) {
+                return;
+            }
 
             $translator = Translator::instance();
             $translator->loadLocaleFromSession();
-            $defLocale = $translator->getDefaultLocale();
+            Message::setContext($translate->getLocale(), $page->url);
+
+            $defaultLocale = $translator->getDefaultLocale();
             $locale = $translator->getLocale();
 
             $fileName = $page->getFileName();
-
-            $fileName  = str_replace(strstr($fileName, "."),'',$fileName);
+            $fileName = str_replace(strstr($fileName, "."), '', $fileName);
 
             if (!strlen(File::extension($fileName)))
                 $fileName .= '.htm';
@@ -66,13 +60,12 @@ class Plugin extends PluginBase
              * Splice the active locale in to the filename
              * - page.htm -> page.en.htm
              */
-
-            if ($locale != $defLocale) {
+            if ($locale != $defaultLocale) {
                 $fileName = substr_replace($fileName, '.' . $locale, strrpos($fileName, '.'), 0);
-
                 $page->setFileName($fileName);
             }
-            $page = \Cms\Classes\Page::loadCached($controller->getTheme(), $fileName);
+
+            $page = Page::loadCached($controller->getTheme(), $fileName);
             return $page;
         });
 
@@ -90,8 +83,9 @@ class Plugin extends PluginBase
              */
             $locale = Translator::instance()->getLocale();
             $fileName = substr_replace($fileName, '.'.$locale, strrpos($fileName, '.'), 0);
-            if (($content = Content::loadCached($controller->getTheme(), $fileName)) !== null)
+            if (($content = Content::loadCached($controller->getTheme(), $fileName)) !== null) {
                 return $content;
+            }
         });
 
         /*
