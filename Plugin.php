@@ -45,7 +45,7 @@ class Plugin extends PluginBase
 
             $translator = Translator::instance();
             $translator->loadLocaleFromSession();
-            Message::setContext($translate->getLocale(), $page->url);
+            Message::setContext($translator->getLocale(), $page->url);
 
             $defaultLocale = $translator->getDefaultLocale();
             $locale = $translator->getLocale();
