@@ -53,8 +53,9 @@ class Plugin extends PluginBase
             $fileName = $page->getFileName();
             $fileName = str_replace(strstr($fileName, "."), '', $fileName);
 
-            if (!strlen(File::extension($fileName)))
+            if (!strlen(File::extension($fileName))) {
                 $fileName .= '.htm';
+            }
 
             /*
              * Splice the active locale in to the filename
@@ -74,8 +75,9 @@ class Plugin extends PluginBase
          */
         Event::listen('cms.page.beforeRenderContent', function($controller, $fileName) {
 
-            if (!strlen(File::extension($fileName)))
+            if (!strlen(File::extension($fileName))) {
                 $fileName .= '.htm';
+            }
 
             /*
              * Splice the active locale in to the filename
