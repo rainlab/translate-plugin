@@ -34,7 +34,7 @@ class TranslatableModel extends ModelBehavior
     /**
      * @var bool Determines if empty translations should be replaced by originals
      */
-    protected $skipEmptyTranslationsOn = false;
+    protected $fallbackTranslations = false;
 
     /**
      * @var array Data store for translated attributes.
@@ -118,7 +118,7 @@ class TranslatableModel extends ModelBehavior
             
         if
         (
-            $this->skipEmptyTranslationsOn
+            $this->fallbackTranslations
             && empty($this->translatableAttributes[$locale][$key])
         )
             return $this->model->getAttributeValue($key);
@@ -212,9 +212,9 @@ class TranslatableModel extends ModelBehavior
      * Turns on empty translations skip
      * @return self
      */
-    public function skipEmptyTranslations()
+    public function fallbackTranslations()
     {
-        $this->skipEmptyTranslationsOn = true;
+        $this->fallbackTranslations = true;
         return $this->model;
     }
 
