@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\FormWidgets;
 
+use Backend\Classes\FormWidgetBase;
 use RainLab\Translate\Models\Locale;
 
 /**
@@ -9,8 +10,10 @@ use RainLab\Translate\Models\Locale;
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
  */
-class MLTextarea extends MLControl
+class MLTextarea extends FormWidgetBase
 {
+
+    use \RainLab\Translate\Traits\MLControl;
 
     /**
      * {@inheritDoc}
@@ -18,9 +21,17 @@ class MLTextarea extends MLControl
     public $defaultAlias = 'mltextarea';
 
     /**
+     * @var string If translation is unavailable, fall back to this standard field.
+     */
+    const FALLBACK_TYPE = 'textarea';
+
+    /**
      * {@inheritDoc}
      */
-    public $fallbackType = 'textarea';
+    public function init()
+    {
+        $this->initLocale();
+    }
 
     /**
      * {@inheritDoc}
@@ -29,12 +40,20 @@ class MLTextarea extends MLControl
     {
         $this->isAvailable = Locale::isAvailable();
 
-        $this->prepareVars();
+        $this->prepareLocaleVars();
 
         if ($this->isAvailable)
             return $this->makePartial('mltextarea');
         else
-            return parent::render();
+            return $this->renderFallbackField();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function loadAssets()
+    {
+        $this->loadLocaleAssets();
     }
 
 }

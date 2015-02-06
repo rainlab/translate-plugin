@@ -32,3 +32,12 @@
   top: 44px !important;
   right: 1px;
 }
+.field-multilingual.field-multilingual-richeditor .btn {
+  top: 43px;
+  right: 15px;
+  text-align: right;
+}
+.field-multilingual.field-multilingual-richeditor .dropdown-menu {
+  top: 74px !important;
+  right: 1px;
+}
