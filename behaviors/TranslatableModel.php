@@ -32,9 +32,9 @@ class TranslatableModel extends ModelBehavior
     protected $translatableDefault;
     
     /**
-     * @var bool Determines if empty translations should be replaced by originals
+     * @var bool Determines if empty translations should be replaced by default values
      */
-    protected $fallbackTranslations = false;
+    protected $fallbackTranslations = true;
 
     /**
      * @var array Data store for translated attributes.
@@ -209,12 +209,12 @@ class TranslatableModel extends ModelBehavior
     }
     
     /**
-     * Turns on empty translations skip
+     * Disables translations fallback
      * @return self
      */
-    public function fallbackTranslations()
+    public function disableFallbackTranslations()
     {
-        $this->fallbackTranslations = true;
+        $this->fallbackTranslations = false;
         return $this->model;
     }
 
