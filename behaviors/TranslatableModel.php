@@ -212,7 +212,7 @@ class TranslatableModel extends ModelBehavior
      * Disables translations fallback
      * @return self
      */
-    public function disableFallbackTranslations()
+    public function noFallbackTranslations()
     {
         $this->fallbackTranslations = false;
         return $this->model;

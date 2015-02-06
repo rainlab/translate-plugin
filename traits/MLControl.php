@@ -90,7 +90,7 @@ trait MLControl
     public function getLocaleValue($locale)
     {
         if ($this->model->methodExists('getTranslateAttribute'))
-            return $this->model->disableFallbackTranslations()->getTranslateAttribute($this->columnName, $locale);
+            return $this->model->noFallbackTranslations()->getTranslateAttribute($this->columnName, $locale);
         else
             return $this->formField->value;
     }
