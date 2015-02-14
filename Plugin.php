@@ -35,46 +35,6 @@ class Plugin extends PluginBase
     public function boot()
     {
         /*
-         * Set the page context for translation caching.
-         * Adds language suffixes to page files.
-         */
-        Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) {
-            if (!$page) {
-                return;
-            }
-
-            $translator = Translator::instance();
-            $translator->loadLocaleFromSession();
-            $locale = $translator->getLocale();
-
-            if (!$locale) {
-                return;
-            }
-
-            Message::setContext($locale, $page->url);
-
-            /*
-             * Strip off any and all extensions, revert to the base file.
-             */
-            $fileName = $page->getFileName();
-            $fileName = str_replace(strstr($fileName, "."), '', $fileName).'.htm';
-
-            /*
-             * Splice the active locale in to the filename
-             * - page.htm -> page.en.htm
-             */
-            $defaultLocale = $translator->getDefaultLocale();
-
-            if ($locale != $defaultLocale) {
-                $fileName = substr_replace($fileName, '.' . $locale, strrpos($fileName, '.'), 0);
-                $page->setFileName($fileName);
-            }
-
-            $page = Page::loadCached($controller->getTheme(), $fileName);
-            return $page;
-        });
-
-        /*
          * Adds language suffixes to content files.
          */
         Event::listen('cms.page.beforeRenderContent', function($controller, $fileName) {
