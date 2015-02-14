@@ -45,22 +45,26 @@ class Plugin extends PluginBase
 
             $translator = Translator::instance();
             $translator->loadLocaleFromSession();
-            Message::setContext($translator->getLocale(), $page->url);
-
-            $defaultLocale = $translator->getDefaultLocale();
             $locale = $translator->getLocale();
 
-            $fileName = $page->getFileName();
-            $fileName = str_replace(strstr($fileName, "."), '', $fileName);
-
-            if (!strlen(File::extension($fileName))) {
-                $fileName .= '.htm';
+            if (!$locale) {
+                return;
             }
+
+            Message::setContext($locale, $page->url);
+
+            /*
+             * Strip off any and all extensions, revert to the base file.
+             */
+            $fileName = $page->getFileName();
+            $fileName = str_replace(strstr($fileName, "."), '', $fileName).'.htm';
 
             /*
              * Splice the active locale in to the filename
              * - page.htm -> page.en.htm
              */
+            $defaultLocale = $translator->getDefaultLocale();
+
             if ($locale != $defaultLocale) {
                 $fileName = substr_replace($fileName, '.' . $locale, strrpos($fileName, '.'), 0);
                 $page->setFileName($fileName);
