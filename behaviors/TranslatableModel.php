@@ -1,8 +1,8 @@
 <?php namespace RainLab\Translate\Behaviors;
 
-use DB as Db;
+use Db;
 use System\Classes\ModelBehavior;
-use System\Classes\ApplicationException;
+use ApplicationException;
 use RainLab\Translate\Classes\Translator;
 use Exception;
 

@@ -2,6 +2,6 @@
 #  Form Behavior Config
 # ===================================
 
-form: @/plugins/rainlab/translate/models/locale/fields.yaml
+form: ~/plugins/rainlab/translate/models/locale/fields.yaml
 modelClass: RainLab\Translate\Models\Locale
 defaultRedirect: rainlab/translate/locales

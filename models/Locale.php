@@ -5,7 +5,7 @@ use File;
 use Cache;
 use Model;
 use Config;
-use October\Rain\Support\ValidationException;
+use ValidationException;
 
 /**
  * Locale Model
@@ -153,10 +153,11 @@ class Locale extends Model
         if (self::$cacheListEnabled)
             return self::$cacheListEnabled;
 
-        return self::$cacheListEnabled = self::isEnabled()
-            ->remember(1440, 'rainlab.translate.locales')
-            ->lists('name', 'code')
-        ;
+        $isEnabled = Cache::remember('rainlab.translate.locales', 1440, function() {
+            return self::isEnabled()->lists('name', 'code');
+        });
+
+        return self::$cacheListEnabled = $isEnabled;
     }
 
     /**
