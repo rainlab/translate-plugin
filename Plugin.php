@@ -139,7 +139,7 @@ class Plugin extends PluginBase
             ],
             'RainLab\Translate\FormWidgets\MLRichEditor' => [
                 'label' => 'Rich Editor (ML)',
-                'alias' => 'mlricheditor'
+                'code' => 'mlricheditor'
             ],
         ];
     }
