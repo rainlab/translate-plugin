@@ -74,8 +74,8 @@ class MLRichEditor extends RichEditor
         if ($switch) {
             $this->originalAssetPath = $this->assetPath;
             $this->originalViewPath = $this->viewPath;
-            $this->assetPath = '/modules/backend/FormWidgets/richeditor/assets';
-            $this->viewPath = base_path().'/modules/backend/FormWidgets/richeditor/partials';
+            $this->assetPath = '/modules/backend/formwidgets/richeditor/assets';
+            $this->viewPath = base_path().'/modules/backend/formwidgets/richeditor/partials';
         }
         else {
             $this->assetPath = $this->originalAssetPath;
