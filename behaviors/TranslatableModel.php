@@ -32,9 +32,9 @@ class TranslatableModel extends ModelBehavior
     protected $translatableDefault;
     
     /**
-     * @var bool Determines if empty translations should be replaced by default values
+     * @var bool Determines if empty translations should be replaced by default values.
      */
-    protected $fallbackTranslations = true;
+    protected $translatableUseFallback = true;
 
     /**
      * @var array Data store for translated attributes.
@@ -101,6 +101,16 @@ class TranslatableModel extends ModelBehavior
     }
 
     /**
+     * Disables translation fallback locale.
+     * @return self
+     */
+    public function noFallbackLocale()
+    {
+        $this->translatableUseFallback = false;
+        return $this->model;
+    }
+
+    /**
      * Returns a translated attribute value.
      * @param  string $key
      * @return string
@@ -113,20 +123,19 @@ class TranslatableModel extends ModelBehavior
         if ($locale == $this->translatableDefault)
             return $this->model->getAttributeValue($key);
 
-        if (!array_key_exists($locale, $this->translatableAttributes))
+        if (!array_key_exists($locale, $this->translatableAttributes)) {
             $this->loadTranslatableData($locale);
-            
-        if
-        (
-            $this->fallbackTranslations
-            && empty($this->translatableAttributes[$locale][$key])
-        )
+        }
+
+        if (isset($this->translatableAttributes[$locale][$key])) {
+            return $this->translatableAttributes[$locale][$key];
+        }
+
+        if ($this->translatableUseFallback) {
             return $this->model->getAttributeValue($key);
+        }
 
-        if (!isset($this->translatableAttributes[$locale][$key]))
-            return null;
-
-        return $this->translatableAttributes[$locale][$key];
+        return null;
     }
 
     /**
@@ -156,7 +165,6 @@ class TranslatableModel extends ModelBehavior
      */
     public function syncTranslatableAttributes()
     {
-
         /*
          * Spin through the known locales, store the translations if necessary
          */
@@ -191,8 +199,9 @@ class TranslatableModel extends ModelBehavior
      */
     public function translateContext($context = null)
     {
-        if ($context === null)
+        if ($context === null) {
             return $this->translatableContext;
+        }
 
         $this->translatableContext = $context;
     }
@@ -205,16 +214,6 @@ class TranslatableModel extends ModelBehavior
     public function lang($context = null)
     {
         $this->translateContext($context);
-        return $this->model;
-    }
-    
-    /**
-     * Disables translations fallback
-     * @return self
-     */
-    public function noFallbackTranslations()
-    {
-        $this->fallbackTranslations = false;
         return $this->model;
     }
 
