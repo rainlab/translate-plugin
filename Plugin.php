@@ -16,7 +16,6 @@ use RainLab\Translate\Classes\Translator;
  */
 class Plugin extends PluginBase
 {
-
     /**
      * Returns information about this plugin.
      *
@@ -28,7 +27,8 @@ class Plugin extends PluginBase
             'name'        => 'rainlab.translate::lang.plugin.name',
             'description' => 'rainlab.translate::lang.plugin.description',
             'author'      => 'Alexey Bobkov, Samuel Georges',
-            'icon'        => 'icon-language'
+            'icon'        => 'icon-language',
+            'homepage'    => 'https://github.com/rainlab/translate-plugin'
         ];
     }
 
@@ -85,7 +85,7 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
-           'RainLab\Translate\Components\LocalePicker' => 'localePicker',
+           'RainLab\Translate\Components\LocalePicker' => 'localePicker'
         ];
     }
 
@@ -99,7 +99,6 @@ class Plugin extends PluginBase
 
     public function registerSettings()
     {
-
         return [
             'locales' => [
                 'label'       => 'rainlab.translate::lang.locale.title',
@@ -118,7 +117,7 @@ class Plugin extends PluginBase
                 'order'       => 551,
                 'category'    => 'rainlab.translate::lang.plugin.name',
                 'permissions' => ['rainlab.translate.manage_messages']
-            ],
+            ]
         ];
     }
 
@@ -130,8 +129,8 @@ class Plugin extends PluginBase
     {
         return [
             'filters' => [
-                '_' => [$this, 'translateString'],
-                '__' => [$this, 'translatePlural'],
+                '_'  => [$this, 'translateString'],
+                '__' => [$this, 'translatePlural']
             ]
         ];
     }
@@ -150,7 +149,7 @@ class Plugin extends PluginBase
             'RainLab\Translate\FormWidgets\MLRichEditor' => [
                 'label' => 'Rich Editor (ML)',
                 'code' => 'mlricheditor'
-            ],
+            ]
         ];
     }
 
@@ -187,5 +186,4 @@ class Plugin extends PluginBase
 
         return $fields;
     }
-
 }
