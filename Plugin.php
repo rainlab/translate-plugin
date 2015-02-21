@@ -89,6 +89,14 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function registerPermissions()
+    {
+        return [
+            'rainlab.translate.manage_locales'      => ['tab' => 'system::lang.permissions.name', 'label' => 'rainlab.translate::lang.plugin.manage_locales'],
+            'rainlab.translate.manage_messages'     => ['tab' => 'system::lang.permissions.name', 'label' => 'rainlab.translate::lang.plugin.manage_messages']
+        ];
+    }
+
     public function registerSettings()
     {
 
@@ -100,6 +108,7 @@ class Plugin extends PluginBase
                 'url'         => Backend::url('rainlab/translate/locales'),
                 'order'       => 550,
                 'category'    => 'rainlab.translate::lang.plugin.name',
+                'permissions' => ['rainlab.translate.manage_locales']
             ],
             'messages' => [
                 'label'       => 'rainlab.translate::lang.messages.title',
@@ -108,6 +117,7 @@ class Plugin extends PluginBase
                 'url'         => Backend::url('rainlab/translate/messages'),
                 'order'       => 551,
                 'category'    => 'rainlab.translate::lang.plugin.name',
+                'permissions' => ['rainlab.translate.manage_messages']
             ],
         ];
     }

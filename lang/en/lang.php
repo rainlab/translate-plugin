@@ -4,6 +4,8 @@ return [
     'plugin' => [
         'name' => 'Translate',
         'description' => 'Enables multi-lingual websites.',
+        'manage_locales' => 'Manage locales',
+        'manage_messages' => 'Manage messages'
     ],
     'locale_picker' => [
         'component_name' => 'Locale Picker',

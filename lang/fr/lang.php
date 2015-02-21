@@ -4,6 +4,8 @@ return [
     'plugin' => [
         'name' => 'Traductions',
         'description' => 'Permet de créer des sites Internet multilingues',
+        'manage_locales' => 'Manage locales',
+        'manage_messages' => 'Manage messages'
     ],
     'locale_picker' => [
         'component_name' => 'Sélection de la langue',

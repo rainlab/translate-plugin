@@ -4,6 +4,8 @@ return [
     'plugin' => [
         'name' => 'Vertaal',
         'description' => 'Stelt meerdere talen in voor een website.',
+        'manage_locales' => 'Manage locales',
+        'manage_messages' => 'Manage messages'
     ],
     'locale_picker' => [
         'component_name' => 'Taalkeuze menu',
