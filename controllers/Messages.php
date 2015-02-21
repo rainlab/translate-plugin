@@ -17,6 +17,9 @@ use System\Classes\SettingsManager;
  */
 class Messages extends Controller
 {
+
+    public $requiredPermissions = ['rainlab.translate.manage_messages'];
+
     public function __construct()
     {
         parent::__construct();

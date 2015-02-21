@@ -92,8 +92,8 @@ class Plugin extends PluginBase
     public function registerPermissions()
     {
         return [
-            'rainlab.translate.manage_locales'      => ['tab' => 'system::lang.permissions.name', 'label' => 'rainlab.translate::lang.plugin.manage_locales'],
-            'rainlab.translate.manage_messages'     => ['tab' => 'system::lang.permissions.name', 'label' => 'rainlab.translate::lang.plugin.manage_messages']
+            'rainlab.translate.manage_locales'  => ['tab' => 'Translation', 'label' => 'rainlab.translate::lang.plugin.manage_locales'],
+            'rainlab.translate.manage_messages' => ['tab' => 'Translation', 'label' => 'rainlab.translate::lang.plugin.manage_messages']
         ];
     }
 
