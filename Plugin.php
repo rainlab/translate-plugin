@@ -35,6 +35,16 @@ class Plugin extends PluginBase
     public function boot()
     {
         /*
+         * Set the page context for translation caching.
+         */
+        Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) {
+            if (!$page) return;
+            $translate = Translator::instance();
+            $translate->loadLocaleFromSession();
+            Message::setContext($translate->getLocale(), $page->url);
+        });
+
+        /*
          * Adds language suffixes to content files.
          */
         Event::listen('cms.page.beforeRenderContent', function($controller, $fileName) {
