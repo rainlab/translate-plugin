@@ -18,7 +18,7 @@ class MLTextarea extends FormWidgetBase
     /**
      * {@inheritDoc}
      */
-    public $defaultAlias = 'mltextarea';
+    protected $defaultAlias = 'mltextarea';
 
     /**
      * @var string If translation is unavailable, fall back to this standard field.

@@ -18,7 +18,7 @@ class MLRichEditor extends RichEditor
     /**
      * {@inheritDoc}
      */
-    public $defaultAlias = 'mlricheditor';
+    protected $defaultAlias = 'mlricheditor';
 
     public $originalAssetPath;
     public $originalViewPath;

@@ -69,30 +69,25 @@ class Plugin extends PluginBase
          */
         Event::listen('backend.form.extendFieldsBefore', function($widget) {
 
-            if (!$model = $widget->model)
-                return;
+            if (!$model = $widget->model) return;
 
-            if (!method_exists($model, 'isClassExtendedWith'))
-                return;
+            if (!method_exists($model, 'isClassExtendedWith')) return;
 
-            if (!$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableModel'))
+            if (!$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableModel')) {
                 return;
+            }
 
-            if (!is_array($model->translatable))
-                return;
+            if (!is_array($model->translatable)) return;
 
             if (!empty($widget->config->fields)) {
-                $widget->config->fields = $this->processFormMLFields($widget->config->fields, $model);
                 $widget->fields = $this->processFormMLFields($widget->fields, $model);
             }
 
             if (!empty($widget->config->tabs['fields'])) {
-                $widget->config->tabs['fields'] = $this->processFormMLFields($widget->config->tabs['fields'], $model);
                 $widget->tabs['fields'] = $this->processFormMLFields($widget->tabs['fields'], $model);
             }
 
             if (!empty($widget->config->secondaryTabs['fields'])) {
-                $widget->config->secondaryTabs['fields'] = $this->processFormMLFields($widget->config->secondaryTabs['fields'], $model);
                 $widget->secondaryTabs['fields'] = $this->processFormMLFields($widget->secondaryTabs['fields'], $model);
             }
         });

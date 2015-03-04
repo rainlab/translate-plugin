@@ -18,7 +18,7 @@ class MLText extends FormWidgetBase
     /**
      * {@inheritDoc}
      */
-    public $defaultAlias = 'mltext';
+    protected $defaultAlias = 'mltext';
 
     /**
      * {@inheritDoc}
