@@ -2,6 +2,7 @@
 
 use RainLab\Translate\Models\Locale;
 use Backend\Classes\FormWidgetBase;
+use Session;
 
 /**
  * Generic ML Control
@@ -117,16 +118,22 @@ trait MLControl
     {
         $localeData = $this->getLocaleSaveData();
 
-        /*
-         * Set the translated values to the model
-         */
-        if ($this->model->methodExists('setTranslateAttribute')) {
-            foreach ($localeData as $locale => $value) {
-                $this->model->setTranslateAttribute($this->columnName, $value, $locale);
-            }
+        foreach ($localeData as $locale => $value) {
+            $this->setTranslateAttribute($this->columnName, $value, $locale);
         }
 
         return array_get($localeData, $this->defaultLocale->code, $value);
+    }
+
+    /*
+     * Set the translated values to the model
+     */
+    public function setTranslateAttribute($key, $value, $locale)
+    {
+        $data = [['key' => $key, 'value' => $value, 'locale' => $locale]];
+        $attributes = Session::get('RLTranslate.localeAttributes', []);
+        $attributes = array_merge($attributes, $data);
+        Session::put('RLTranslate.localeAttributes', $attributes);
     }
 
     /**
