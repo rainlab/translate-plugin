@@ -1,6 +1,7 @@
 <?php namespace RainLab\Translate\Behaviors;
 
 use Db;
+use Session;
 use System\Classes\ModelBehavior;
 use ApplicationException;
 use RainLab\Translate\Classes\Translator;
@@ -65,13 +66,17 @@ class TranslatableModel extends ModelBehavior
                 return $this->getTranslateAttribute($key);
         });
 
-        $this->model->bindEvent('model.beforeSetAttribute', function($key, $value) use ($model) {
-            if ($this->isTranslatable($key))
-                return $this->setTranslateAttribute($key, $value);
-        });
+        $this->model->bindEvent('model.afterSave', function() use ($model) {
+            if ($attributes = Session::get('RLTranslate.localeAttributes')) {
 
-        $this->model->bindEvent('model.saveInternal', function($data, $options) use ($model) {
-            $this->syncTranslatableAttributes();
+                foreach ($attributes as $attribute) {
+                    $this->setTranslateAttribute($attribute['key'], $attribute['value'], $attribute['locale']);
+                }
+
+                $this->syncTranslatableAttributes();
+
+                Session::forget('RLTranslate.localeAttributes');
+            }
         });
 
     }
@@ -172,7 +177,6 @@ class TranslatableModel extends ModelBehavior
         foreach ($knownLocales as $locale) {
             if (!$this->isTranslateDirty(null, $locale))
                 continue;
-
             $this->storeTranslatableData($locale);
         }
 
