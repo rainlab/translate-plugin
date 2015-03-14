@@ -236,8 +236,15 @@ class TranslatableModel extends ModelBehavior
         if (!$locale)
             $locale = $this->translatableContext;
 
-        if (!$this->model->exists)
+        /*
+         * Model doesn't exist yet, defer this logic in memory
+         */
+        if (!$this->model->exists) {
+            $this->model->bindEventOnce('model.afterCreate', function() use ($locale) {
+                $this->storeTranslatableData($locale);
+            });
             return;
+        }
 
         $data = json_encode($this->translatableAttributes[$locale]);
 
