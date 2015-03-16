@@ -4,8 +4,8 @@ return [
     'plugin' => [
         'name' => 'Fordítás',
         'description' => 'Többnyelvűvé teszi a weboldalt.',
-        'manage_locales' => 'Manage locales',
-        'manage_messages' => 'Manage messages'
+        'manage_locales' => 'Nyelvek menedszelése',
+        'manage_messages' => 'Szövegek menedzselése'
     ],
     'locale_picker' => [
         'component_name' => 'Nyelvválasztó',
