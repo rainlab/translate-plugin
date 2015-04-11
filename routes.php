@@ -20,6 +20,9 @@ App::before(function($request) {
         });
 
         Route::any($locale, 'Cms\Classes\Controller@run');
+    }else{
+        $locale = Session::get('rainlab.translate.locale', $translator->getDefaultLocale());
+        $translator->setLocale($locale);
     }
 
 });
