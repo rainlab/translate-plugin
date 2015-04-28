@@ -16,10 +16,10 @@ App::before(function($request) {
     if ($translator->setLocale($locale)) {
 
         Route::group(['prefix' => $locale], function() use ($locale) {
-            Route::any('{slug}', 'Cms\Classes\Controller@run')->where('slug', '(.*)?');
+            Route::any('{slug}', 'Cms\Classes\CmsController@run')->where('slug', '(.*)?');
         });
 
-        Route::any($locale, 'Cms\Classes\Controller@run');
+        Route::any($locale, 'Cms\Classes\CmsController@run');
     }
 
 });
