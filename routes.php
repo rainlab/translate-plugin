@@ -19,7 +19,9 @@ App::before(function($request) {
             Route::any('{slug}', 'Cms\Classes\CmsController@run')->where('slug', '(.*)?');
         });
 
-        Route::any($locale, 'Cms\Classes\CmsController@run');
+        Route::any($locale, function() {
+            return App::make('Cms\Classes\CmsController')->run('/');
+        });
     }
 
 });
