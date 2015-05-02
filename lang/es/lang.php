@@ -10,6 +10,8 @@ return [
     'plugin' => [
         'name' => 'Multilenguaje',
         'description' => 'Permite sitios web multilingües',
+        'manage_locales' => 'Manage locales',
+        'manage_messages' => 'Manage messages'
     ],
     'locale_picker' => [
         'component_name' => 'Selección de idioma',

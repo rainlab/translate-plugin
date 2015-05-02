@@ -4,6 +4,8 @@ return [
     'plugin' => [
         'name' => 'Traduções',
         'description' => 'Permite sites com multi-idiomas.',
+        'manage_locales' => 'Manage locales',
+        'manage_messages' => 'Manage messages'
     ],
     'locale_picker' => [
         'component_name' => 'Seleção de idiomas',

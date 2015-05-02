@@ -3,7 +3,7 @@
 # ===================================
 
 # Model List Column configuration
-list: @/plugins/rainlab/translate/models/locale/columns.yaml
+list: ~/plugins/rainlab/translate/models/locale/columns.yaml
 
 # Model Class name
 modelClass: RainLab\Translate\Models\Locale

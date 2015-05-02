@@ -8,7 +8,7 @@ use Backend\Classes\Controller;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\Locale;
 use RainLab\Translate\Classes\ThemeScanner;
-use System\Console\CacheClear;
+use System\Helpers\Cache as CacheHelper;
 use System\Classes\SettingsManager;
 
 /**
@@ -16,6 +16,9 @@ use System\Classes\SettingsManager;
  */
 class Messages extends Controller
 {
+
+    public $requiredPermissions = ['rainlab.translate.manage_messages'];
+
     public function __construct()
     {
         parent::__construct();
@@ -42,7 +45,7 @@ class Messages extends Controller
 
     public function onClearCache()
     {
-        CacheClear::fireInternal();
+        CacheHelper::clear();
         Flash::success(Lang::get('rainlab.translate::lang.messages.clear_cache_success'));
     }
 

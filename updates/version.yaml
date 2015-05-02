@@ -8,3 +8,8 @@
 1.0.3: Minor updates for latest October release.
 1.0.4: Locale cache will clear when updating a language.
 1.0.5: Add Spanish language and fix plugin config.
+1.0.6: Minor improvements to the code.
+1.0.7: Fixes major bug where translations are skipped entirely!
+1.0.8: Minor bug fixes.
+1.0.9: Fixes an issue where newly created models lose their translated values.
+1.0.10: Minor fix for latest build.

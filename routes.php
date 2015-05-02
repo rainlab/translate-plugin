@@ -1,5 +1,6 @@
 <?php
 
+use RainLab\Translate\Models\Locale;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\Translator;
 
@@ -13,14 +14,30 @@ App::before(function($request) {
         return;
 
     $locale = Request::segment(1);
-    if ($translator->setLocale($locale)) {
 
-        Route::group(['prefix' => $locale], function() use ($locale) {
-            Route::any('{slug}', 'Cms\Classes\Controller@run')->where('slug', '(.*)?');
+    if (!Locale::isValid($locale))
+        return;
+
+    $translator->setLocale($locale);
+
+    /*
+     * Register routes
+     */
+    Route::group(['prefix' => $locale], function() {
+        Route::any('{slug}', 'Cms\Classes\CmsController@run')->where('slug', '(.*)?');
+    });
+
+    Route::any($locale, 'Cms\Classes\CmsController@run');
+
+    /*
+     * Ensure Url::action() retains the localized URL
+     * by re-registering the route after the CMS.
+     */
+    Event::listen('cms.route', function() use ($locale) {
+        Route::group(['prefix' => $locale], function() {
+            Route::any('{slug}', 'Cms\Classes\CmsController@run')->where('slug', '(.*)?');
         });
-
-        Route::any($locale, 'Cms\Classes\Controller@run');
-    }
+    });
 
 });
 
