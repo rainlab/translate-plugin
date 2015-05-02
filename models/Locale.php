@@ -161,6 +161,16 @@ class Locale extends Model
     }
 
     /**
+     * Returns true if the supplied locale is valid.
+     * @return boolean
+     */
+    public static function isValid($locale)
+    {
+        $languages = array_keys(Locale::listEnabled());
+        return in_array($locale, $languages);
+    }
+
+    /**
      * Clears all cache keys used by this model
      * @return void
      */

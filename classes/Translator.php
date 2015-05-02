@@ -54,19 +54,17 @@ class Translator
      */
     public function setLocale($locale, $remember = true)
     {
-        $languages = array_keys(Locale::listEnabled());
-
-        if (in_array($locale, $languages)) {
-            App::setLocale($locale);
-            $this->activeLocale = $locale;
-
-            if ($remember)
-                $this->setSessionLocale($locale);
-
-            return true;
+        if (!Locale::isValid($locale)) {
+            return false;
         }
 
-        return false;
+        App::setLocale($locale);
+        $this->activeLocale = $locale;
+
+        if ($remember)
+            $this->setSessionLocale($locale);
+
+        return true;
     }
 
     /**
