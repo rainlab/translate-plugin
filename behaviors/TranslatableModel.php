@@ -130,7 +130,7 @@ class TranslatableModel extends ModelBehavior
             $this->loadTranslatableData($locale);
         }
 
-        if (isset($this->translatableAttributes[$locale][$key])) {
+        if ($this->hasTranslation($key, $locale)) {
             return $this->translatableAttributes[$locale][$key];
         }
 
@@ -139,6 +139,17 @@ class TranslatableModel extends ModelBehavior
         }
 
         return null;
+    }
+
+    /**
+     * Returns whether the attribute is translatable (has a translation) for the given locale.
+     * @param  string $key
+     * @param  string $locale
+     * @return bool
+     */
+    public function hasTranslation($key, $locale)
+    {
+        return !empty($this->translatableAttributes[$locale][$key]);
     }
 
     /**
