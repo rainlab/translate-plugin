@@ -4,6 +4,7 @@ use App;
 use Schema;
 use Session;
 use DbDongle;
+use Request;
 use RainLab\Translate\Models\Locale;
 
 /**
@@ -134,6 +135,28 @@ class Translator
     protected function setSessionLocale($locale)
     {
         Session::put(self::SESSION_LOCALE, $locale);
+    }
+
+    /**
+     * Returns the current path prefixed with language code.
+     *
+     * @param string $locale optional language code, default to the system default language
+     * @return string
+     */
+    public function getCurrentPathInLocale($locale = null)
+    {
+        if (is_null($locale) || !Locale::isValid($locale)) {
+            $locale = $this->defaultLocale;
+        }
+
+        $request_segments = Request::segments();
+
+        if (count($request_segments) == 0 || Locale::isValid($request_segments[0]))
+            $request_segments[0] = $locale;
+        else
+            array_unshift($request_segments, $locale);
+
+        return implode('/', $request_segments);
     }
 
 }

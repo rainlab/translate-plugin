@@ -1,7 +1,11 @@
 <?php namespace RainLab\Translate\Components;
 
+use Cache;
 use Redirect;
+use URL;
+use RainLab\Translate\Models\Locale;
 use RainLab\Translate\Models\Locale as LocaleModel;
+use RainLab\Translate\Models\Preferences;
 use RainLab\Translate\Classes\Translator;
 use Cms\Classes\ComponentBase;
 
@@ -42,7 +46,11 @@ class LocalePicker extends ComponentBase
             return;
 
         $this->translator->setLocale($locale);
-        return Redirect::to($this->currentPageUrl());
+
+        if (!Preferences::get('always_prefix_language_code'))
+            return Redirect::to($this->currentPageUrl());
+
+        return Redirect::to($this->translator->getCurrentPathInLocale($locale));
     }
 
 }
