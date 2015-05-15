@@ -13,3 +13,4 @@
 1.0.8: Minor bug fixes.
 1.0.9: Fixes an issue where newly created models lose their translated values.
 1.0.10: Minor fix for latest build.
+1.0.11: Fix multilingual rich editor when used in stretch mode.
