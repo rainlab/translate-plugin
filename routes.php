@@ -15,8 +15,11 @@ App::before(function($request) {
 
     $locale = Request::segment(1);
 
-    if (!Locale::isValid($locale))
+    if (!Locale::isValid($locale)){
+        $locale = Session::get('rainlab.translate.locale', $translator->getDefaultLocale());
+        $translator->setLocale($locale);
         return;
+    }
 
     $translator->setLocale($locale);
 
