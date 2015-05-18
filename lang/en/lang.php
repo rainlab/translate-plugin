@@ -4,12 +4,13 @@ return [
     'plugin' => [
         'name' => 'Translate',
         'description' => 'Enables multi-lingual websites.',
+        'tab' => 'Translation',
         'manage_locales' => 'Manage locales',
         'manage_messages' => 'Manage messages'
     ],
     'locale_picker' => [
         'component_name' => 'Locale Picker',
-        'component_description' => 'Shows a dropdown to select a front-end language.',
+        'component_description' => 'Shows a dropdown to select a front-end language.'
     ],
     'locale' => [
         'title' => 'Manage languages',
@@ -26,11 +27,11 @@ return [
         'is_enabled' => 'Enabled',
         'is_enabled_help' => 'Disabled languages will not be available in the front-end.',
         'not_available_help' => 'There are no other languages set up.',
-        'hint_locales' => 'Create new languages here for translating front-end content. The default language represents the content before it has been translated.',
+        'hint_locales' => 'Create new languages here for translating front-end content. The default language represents the content before it has been translated.'
     ],
     'messages' => [
         'title' => 'Translate Messages',
-		'description' => 'Update Messages',
+        'description' => 'Update Messages',
         'clear_cache_link' => 'Clear cache',
         'clear_cache_loading' => 'Clearing application cache...',
         'clear_cache_success' => 'Cleared the application cache successfully!',
@@ -40,6 +41,6 @@ return [
         'scan_messages_success' => 'Scanned theme template files successfully!',
         'scan_messages_hint' => 'Clicking <strong>Scan for messages</strong> will check the active theme files for any new messages to translate.',
         'hint_translate' => 'Here you can translate messages used on the front-end, the fields will save automatically.',
-        'hide_translated' => 'Hide translated',
-    ],
+        'hide_translated' => 'Hide translated'
+    ]
 ];

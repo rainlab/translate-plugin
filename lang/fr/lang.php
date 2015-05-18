@@ -4,12 +4,13 @@ return [
     'plugin' => [
         'name' => 'Traductions',
         'description' => 'Permet de créer des sites Internet multilingues',
-        'manage_locales' => 'Manage locales',
-        'manage_messages' => 'Manage messages'
+        'tab' => 'Traduction',
+        'manage_locales' => 'Gérer locales',
+        'manage_messages' => 'Gérer les messages'
     ],
     'locale_picker' => [
         'component_name' => 'Sélection de la langue',
-        'component_description' => 'Affiche un menu déroulant pour sélectionner la langue sur le site.',
+        'component_description' => 'Affiche un menu déroulant pour sélectionner la langue sur le site.'
     ],
     'locale' => [
         'title' => 'Gestion des langues',
@@ -26,11 +27,11 @@ return [
         'is_enabled' => 'Activer',
         'is_enabled_help' => 'Les langues désactivées ne seront plus disponibles sur le site.',
         'not_available_help' => 'Aucune autre langue n\'est définie.',
-        'hint_locales' => 'Vous pouvez ajouter de nouvelles langues et traduire les messages du site. La langue par défaut est celle utilisée pour les contenus avant toute traduction.',
+        'hint_locales' => 'Vous pouvez ajouter de nouvelles langues et traduire les messages du site. La langue par défaut est celle utilisée pour les contenus avant toute traduction.'
     ],
     'messages' => [
         'title' => 'Traduction des Messages',
-		'description' => 'Mettre à jour Messages',
+        'description' => 'Mettre à jour Messages',
         'clear_cache_link' => 'Supprimer le cache',
         'clear_cache_loading' => 'Suppression du cache de l\'application...',
         'clear_cache_success' => 'Le cache de l\'application a été supprimé !',
@@ -40,6 +41,6 @@ return [
         'scan_messages_success' => 'Recherche dans les fichiers du thème effectuée !',
         'scan_messages_hint' => 'Cliquez sur <strong>Rechercher des messages à traduire</strong> pour parcourir les fichiers du thème actif à la recherche de messages à traduire.',
         'hint_translate' => 'Vous pouvez traduire les messages affichés sur le site, les champs s\'enregistrent automatiquement.',
-        'hide_translated' => 'Masquer les traductions',
-    ],
+        'hide_translated' => 'Masquer les traductions'
+    ]
 ];

@@ -4,12 +4,13 @@ return [
     'plugin' => [
         'name' => 'Traduções',
         'description' => 'Permite sites com multi-idiomas.',
-        'manage_locales' => 'Manage locales',
-        'manage_messages' => 'Manage messages'
+        'tab' => 'Tradução',
+        'manage_locales' => 'Gerenciar localidades',
+        'manage_messages' => 'Gerenciar mensagens'
     ],
     'locale_picker' => [
         'component_name' => 'Seleção de idiomas',
-        'component_description' => 'Exibe um campo de seleção de idiomas.',
+        'component_description' => 'Exibe um campo de seleção de idiomas.'
     ],
     'locale' => [
         'title' => 'Gerenciar idiomas',
@@ -26,11 +27,11 @@ return [
         'is_enabled' => 'Ativo',
         'is_enabled_help' => 'Idiomas desativados não estarão disponíveis na página.',
         'not_available_help' => 'Não há outros idiomas configurados.',
-        'hint_locales' => 'Crie novos idiomas para traduzir o conteúdo da página. O idioma padrão apresenta o conteúdo antes das traduções.',
+        'hint_locales' => 'Crie novos idiomas para traduzir o conteúdo da página. O idioma padrão apresenta o conteúdo antes das traduções.'
     ],
     'messages' => [
         'title' => 'Traduzir mensagens',
-		'description' => 'Atualizar mensagens',
+        'description' => 'Atualizar mensagens',
         'clear_cache_link' => 'Limpar cache',
         'clear_cache_loading' => 'Limpando o cache da aplicação...',
         'clear_cache_success' => 'Cache da aplicação limpo com sucesso!',
@@ -40,6 +41,6 @@ return [
         'scan_messages_success' => 'Busca por novas mensagens nos arquivos concluída com sucesso!',
         'scan_messages_hint' => 'Clicando em <strong>Buscar por mensagens</strong> o sistema buscará por qualquer mensagem da aplicação que possa ser traduzida.',
         'hint_translate' => 'Aqui você pode raduzir as mensagens utilizadas na página, os campos são salvos automaticamente.',
-        'hide_translated' => 'Ocultar traduzidas',
-    ],
+        'hide_translated' => 'Ocultar traduzidas'
+    ]
 ];

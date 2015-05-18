@@ -4,12 +4,13 @@ return [
     'plugin' => [
         'name' => 'Fordítás',
         'description' => 'Többnyelvűvé teszi a weboldalt.',
+        'tab' => 'Fordítás',
         'manage_locales' => 'Nyelvek menedszelése',
         'manage_messages' => 'Szövegek menedzselése'
     ],
     'locale_picker' => [
         'component_name' => 'Nyelvválasztó',
-        'component_description' => 'Legördülőt jelenít meg egy nyelv kiválasztásához a felhasználói oldalon.'
+        'component_description' => 'Legördülő menüt jelenít meg egy nyelv kiválasztásához a felhasználói oldalon.'
     ],
     'locale' => [
         'title' => 'Nyelvek kezelése',
