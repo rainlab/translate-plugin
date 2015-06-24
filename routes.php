@@ -34,7 +34,7 @@ App::before(function($request) {
             return;
         }
         catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception) {
-            return Redirect::to($translator->getCurrentPathInLocale($translator->getLocale(true)));
+            return Redirect::to($translator->getCurrentPathInLocale(Preferences::get('default_frontend_language')));
         }
 
     }

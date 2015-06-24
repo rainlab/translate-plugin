@@ -50,5 +50,9 @@ return [
             'label' => 'Always prefix URL with language code.',
             'comment' => 'Issue 302 redirects if a URL without language code is accessed. Redirect to language stored in session with fallback to the default language set by the system.',
         ],
+        'default_frontend_language' => [
+            'label' => 'Default frontend language:',
+            'comment' => 'The default language to be shown to first time visitor.',
+        ],
     ],
 ];

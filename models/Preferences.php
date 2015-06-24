@@ -23,4 +23,13 @@ class Preferences extends Model
     {
         $this->always_prefix_language_code = false;
     }
+
+    /**
+     * Options for default frontend language perference. Returns all enabled
+     * locales.
+     */
+    public function getDefaultFrontendLanguageOptions($keyValue = null)
+    {
+        return Locale::listEnabled();
+    }
 }
