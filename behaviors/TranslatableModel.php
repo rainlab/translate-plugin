@@ -70,7 +70,7 @@ class TranslatableModel extends ModelBehavior
                 return $this->setTranslateAttribute($key, $value);
         });
 
-        $this->model->bindEvent('model.saveInternal', function($data, $options) use ($model) {
+        $this->model->bindEvent('model.saveInternal', function() use ($model) {
             $this->syncTranslatableAttributes();
         });
 
