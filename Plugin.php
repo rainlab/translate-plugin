@@ -103,8 +103,9 @@ class Plugin extends PluginBase
     public function registerPermissions()
     {
         return [
-            'rainlab.translate.manage_locales'  => ['tab' => 'Translation', 'label' => 'rainlab.translate::lang.plugin.manage_locales'],
-            'rainlab.translate.manage_messages' => ['tab' => 'Translation', 'label' => 'rainlab.translate::lang.plugin.manage_messages']
+            'rainlab.translate.manage_locales'     => ['tab' => 'Translation', 'label' => 'rainlab.translate::lang.plugin.manage_locales'],
+            'rainlab.translate.manage_messages'    => ['tab' => 'Translation', 'label' => 'rainlab.translate::lang.plugin.manage_messages'],
+            'rainlab.translate.manage_preferences' => ['tab' => 'Translation', 'label' => 'rainlab.translate::lang.plugin.manage_preferences'],
         ];
     }
 
@@ -128,6 +129,16 @@ class Plugin extends PluginBase
                 'order'       => 551,
                 'category'    => 'rainlab.translate::lang.plugin.name',
                 'permissions' => ['rainlab.translate.manage_messages']
+            ],
+            'preferences' => [
+                'label'       => 'rainlab.translate::lang.preferences.title',
+                'description' => 'rainlab.translate::lang.preferences.description',
+                'icon'        => 'icon-cog',
+                'class'       => 'RainLab\Translate\Models\Preferences',
+                'order'       => 552,
+                'category'    => 'rainlab.translate::lang.plugin.name',
+                'permissions' => ['rainlab.translate.manage_preferences'],
+                'keywords'    => 'language translate translation',
             ]
         ];
     }

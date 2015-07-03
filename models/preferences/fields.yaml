@@ -1,0 +1,15 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+
+    always_prefix_language_code:
+        label: rainlab.translate::lang.preferences.always_prefix_language_code.label
+        comment: rainlab.translate::lang.preferences.always_prefix_language_code.comment
+        type: checkbox
+
+    default_frontend_language:
+        label: rainlab.translate::lang.preferences.default_frontend_language.label
+        comment: rainlab.translate::lang.preferences.default_frontend_language.comment
+        type: dropdown

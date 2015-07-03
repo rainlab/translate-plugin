@@ -5,7 +5,8 @@ return [
         'name' => 'Translate',
         'description' => 'Enables multi-lingual websites.',
         'manage_locales' => 'Manage locales',
-        'manage_messages' => 'Manage messages'
+        'manage_messages' => 'Manage messages',
+        'manage_preferences' => 'Manage preferences',
     ],
     'locale_picker' => [
         'component_name' => 'Locale Picker',
@@ -41,5 +42,17 @@ return [
         'scan_messages_hint' => 'Clicking <strong>Scan for messages</strong> will check the active theme files for any new messages to translate.',
         'hint_translate' => 'Here you can translate messages used on the front-end, the fields will save automatically.',
         'hide_translated' => 'Hide translated',
+    ],
+    'preferences' => [
+        'title' => 'Preferences',
+        'description' => 'Configure the behaviour of the translator.',
+        'always_prefix_language_code' => [
+            'label' => 'Always prefix URL with language code.',
+            'comment' => 'Issue 302 redirects if a URL without language code is accessed. Redirect to language stored in session with fallback to the default language set by the system.',
+        ],
+        'default_frontend_language' => [
+            'label' => 'Default frontend language:',
+            'comment' => 'The default language to be shown to first time visitor.',
+        ],
     ],
 ];

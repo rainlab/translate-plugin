@@ -2,6 +2,7 @@
 
 use RainLab\Translate\Models\Locale;
 use RainLab\Translate\Models\Message;
+use RainLab\Translate\Models\Preferences;
 use RainLab\Translate\Classes\Translator;
 
 /*
@@ -15,8 +16,28 @@ App::before(function($request) {
 
     $locale = Request::segment(1);
 
-    if (!Locale::isValid($locale))
-        return;
+    // Redirect CMS routes without language code prefix if the
+    // `always_prefix_language_code` preference is turned on.
+    if (!Locale::isValid($locale)) {
+
+        // do not redirect if the setting isn't turned on,
+        // or if the requested path being a backend route.
+        if (!Preferences::get('always_prefix_language_code') ||
+            ltrim(Config::get('cms.backendUri'), '/') == Request::segment(1)) {
+            return;
+        }
+
+        try {
+            // determine if the requested path matches a route defined in other plugins.
+            Route::getRoutes()->match($request);
+
+            return;
+        }
+        catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception) {
+            return Redirect::to($translator->getCurrentPathInLocale(Preferences::get('default_frontend_language')));
+        }
+
+    }
 
     $translator->setLocale($locale);
 
