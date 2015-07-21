@@ -1,0 +1,11 @@
+{
+    "require-dev": {
+        "keios/oc-plugin-testsuite": "dev-bugfix"
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/justin-lau/oc-plugin-testsuite"
+        }
+    ]
+}
