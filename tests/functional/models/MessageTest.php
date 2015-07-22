@@ -13,6 +13,6 @@ class MessageTest extends \OctoberPluginTestCase
     {
         Message::importMessages(['Hello World!', 'Hello Piñata!']);
         $this->assertNotNull(Message::whereCode('hello.world')->first());
-        $this->assertNotNull(Message::whereCode('hello.pinata')->first());
+        $this->assertNotNull(Message::whereCode('hello.piñata')->first());
     }
 }

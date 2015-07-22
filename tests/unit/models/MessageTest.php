@@ -33,16 +33,16 @@ class MessageTest extends \OctoberPluginTestCase
         // brrowered some test cases from Stringy, the library Laravel's
         // `slug()` function depends on
         // https://github.com/danielstjules/Stringy/blob/master/tests/CommonTest.php
-        $this->assertEquals('foo.bar', Message::makeMessageCode('fòô bàř'));
-        $this->assertEquals('test', Message::makeMessageCode(' ŤÉŚŢ '));
-        $this->assertEquals('f.z.3', Message::makeMessageCode('φ = ź = 3'));
-        $this->assertEquals('perevirka', Message::makeMessageCode('перевірка'));
-        $this->assertEquals('lysaya.gora', Message::makeMessageCode('лысая гора'));
-        $this->assertEquals('shchuka', Message::makeMessageCode('щука'));
-        $this->assertEquals('foo', Message::makeMessageCode('foo 漢字')); // Chinese
-        $this->assertEquals('xin.chao.the.gioi', Message::makeMessageCode('xin chào thế giới'));
-        $this->assertEquals('xin.chao.the.gioi', Message::makeMessageCode('XIN CHÀO THẾ GIỚI'));
-        $this->assertEquals('dam.phat.chet.luon', Message::makeMessageCode('đấm phát chết luôn'));
+        $this->assertEquals('fòô.bàř', Message::makeMessageCode('fòô bàř'));
+        $this->assertEquals('ťéśţ', Message::makeMessageCode(' ŤÉŚŢ '));
+        $this->assertEquals('φ.ź.3', Message::makeMessageCode('φ = ź = 3'));
+        $this->assertEquals('перевірка', Message::makeMessageCode('перевірка'));
+        $this->assertEquals('лысая.гора', Message::makeMessageCode('лысая гора'));
+        $this->assertEquals('щука', Message::makeMessageCode('щука'));
+        $this->assertEquals('foo.漢字', Message::makeMessageCode('foo 漢字')); // Chinese
+        $this->assertEquals('xin.chào.thế.giới', Message::makeMessageCode('xin chào thế giới'));
+        $this->assertEquals('xin.chào.thế.giới', Message::makeMessageCode('XIN CHÀO THẾ GIỚI'));
+        $this->assertEquals('đấm.phát.chết.luôn', Message::makeMessageCode('đấm phát chết luôn'));
         $this->assertEquals('foo', Message::makeMessageCode('foo ')); // no-break space (U+00A0)
         $this->assertEquals('foo', Message::makeMessageCode('foo           ')); // spaces U+2000 to U+200A
         $this->assertEquals('foo', Message::makeMessageCode('foo ')); // narrow no-break space (U+202F)
