@@ -102,11 +102,24 @@ class Message extends Model
         ]);
 
         /*
+         * Copy deprecated message data over if exists.
+         *
+         * TODO: Remove this sinppet in the next major version.
+         */
+        if (!$item->exists) {
+            $deprecatedItem = static::whereCode(self::makeDeprecatedMessageCode($messageId))->first();
+
+            if ($deprecatedItem) {
+                $item->message_data = $deprecatedItem->message_data;
+            }
+        }
+
+        /*
          * Create a default entry
          */
         if (!$item->exists) {
             $data = [static::DEFAULT_LOCALE => $messageId];
-            $item->message_data = $data;
+            $item->message_data = $item->message_data ?: $data;
             $item->save();
         }
 
@@ -137,11 +150,24 @@ class Message extends Model
                 'code' => $messageCode
             ]);
 
+            /*
+             * Copy deprecated message data over if exists.
+             *
+             * TODO: Remove this sinppet in the next major version.
+             */
+            if (!$item->exists) {
+                $deprecatedItem = static::whereCode(self::makeDeprecatedMessageCode($message))->first();
+
+                if ($deprecatedItem) {
+                    $item->message_data = $deprecatedItem->message_data;
+                }
+            }
+
             // Do not import non-default messages that do not exist
             if (!$item->exists && $locale != static::DEFAULT_LOCALE)
                 continue;
 
-            $messageData = $item->exists ? $item->message_data : [];
+            $messageData = $item->exists || $item->message_data ? $item->message_data : [];
             $messageData[$locale] = $message;
 
             $item->message_data = $messageData;
