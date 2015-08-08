@@ -57,7 +57,7 @@ class MLRichEditor extends RichEditor
     /**
      * {@inheritDoc}
      */
-    public function loadAssets()
+    protected function loadAssets()
     {
         $this->actAsParent();
         parent::loadAssets();

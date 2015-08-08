@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/keios/oc-plugin-testsuite/bootstrap/autoload.php"
-         backupGlobals="false"
+<phpunit backupGlobals="false"
          backupStaticAttributes="false"
+         bootstrap="../../../tests/bootstrap.php"
          colors="true"
-         verbose="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false">
+         syntaxCheck="false"
+>
     <testsuites>
-        <testsuite name="Translate Plugin Unit Test Suite">
-            <directory>tests/unit</directory>
-        </testsuite>
-        <testsuite name="Translate Plugin Functional Test Suite">
-            <directory>tests/functional</directory>
+        <testsuite name="Plugin Unit Test Suite">
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <php>
