@@ -1,0 +1,5 @@
+{
+    "require-dev": {
+        "keios/oc-plugin-testsuite": "dev-master"
+    }
+}
