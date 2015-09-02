@@ -12,7 +12,6 @@ use ValidationException;
  */
 class Locale extends Model
 {
-
     use \October\Rain\Database\Traits\Validation;
 
     /**
@@ -52,8 +51,9 @@ class Locale extends Model
 
     public function afterCreate()
     {
-        if ($this->is_default)
+        if ($this->is_default) {
             $this->makeDefault();
+        }
     }
 
     public function beforeUpdate()
@@ -61,8 +61,9 @@ class Locale extends Model
         if ($this->isDirty('is_default')) {
             $this->makeDefault();
 
-            if (!$this->is_default)
+            if (!$this->is_default) {
                 throw new ValidationException(['is_default' => Lang::get('rainlab.translate::lang.locale.unset_default', ['locale'=>$this->name])]);
+            }
         }
     }
 
@@ -72,8 +73,9 @@ class Locale extends Model
      */
     public function makeDefault()
     {
-        if (!$this->is_enabled)
+        if (!$this->is_enabled) {
             throw new ValidationException(['is_enabled' => Lang::get('rainlab.translate::lang.locale.disabled_default', ['locale'=>$this->name])]);
+        }
 
         $this->newQuery()->where('id', $this->id)->update(['is_default' => true]);
         $this->newQuery()->where('id', '<>', $this->id)->update(['is_default' => false]);
@@ -85,8 +87,9 @@ class Locale extends Model
      */
     public static function getDefault()
     {
-        if (self::$defaultLocale !== null)
+        if (self::$defaultLocale !== null) {
             return self::$defaultLocale;
+        }
 
         return self::$defaultLocale = self::where('is_default', true)
             ->remember(1440, 'rainlab.translate.defaultLocale')
@@ -101,11 +104,13 @@ class Locale extends Model
      */
     public static function findByCode($code = null)
     {
-        if (!$code)
+        if (!$code) {
             return null;
+        }
 
-        if (isset(self::$cacheByCode[$code]))
+        if (isset(self::$cacheByCode[$code])) {
             return self::$cacheByCode[$code];
+        }
 
         return self::$cacheByCode[$code] = self::whereCode($code)->first();
     }
@@ -138,8 +143,9 @@ class Locale extends Model
      */
     public static function listAvailable()
     {
-        if (self::$cacheListAvailable)
+        if (self::$cacheListAvailable) {
             return self::$cacheListAvailable;
+        }
 
         return self::$cacheListAvailable = self::lists('name', 'code');
     }
@@ -150,8 +156,9 @@ class Locale extends Model
      */
     public static function listEnabled()
     {
-        if (self::$cacheListEnabled)
+        if (self::$cacheListEnabled) {
             return self::$cacheListEnabled;
+        }
 
         $isEnabled = Cache::remember('rainlab.translate.locales', 1440, function() {
             return self::isEnabled()->lists('name', 'code');
@@ -167,6 +174,7 @@ class Locale extends Model
     public static function isValid($locale)
     {
         $languages = array_keys(Locale::listEnabled());
+
         return in_array($locale, $languages);
     }
 
@@ -179,5 +187,4 @@ class Locale extends Model
         Cache::forget('rainlab.translate.locales');
         Cache::forget('rainlab.translate.defaultLocale');
     }
-
 }
