@@ -12,7 +12,6 @@ use RainLab\Translate\Models\Locale;
  */
 class MLTextarea extends FormWidgetBase
 {
-
     use \RainLab\Translate\Traits\MLControl;
 
     /**
@@ -42,10 +41,12 @@ class MLTextarea extends FormWidgetBase
 
         $this->prepareLocaleVars();
 
-        if ($this->isAvailable)
+        if ($this->isAvailable) {
             return $this->makePartial('mltextarea');
-        else
+        }
+        else {
             return $this->renderFallbackField();
+        }
     }
 
     /**

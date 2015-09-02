@@ -20,7 +20,6 @@ use Exception;
  */
 class TranslatableModel extends ModelBehavior
 {
-
     /**
      * @var string Active language for translations.
      */
@@ -61,13 +60,15 @@ class TranslatableModel extends ModelBehavior
         $this->initTranslatableContext();
 
         $this->model->bindEvent('model.beforeGetAttribute', function($key) use ($model) {
-            if ($this->isTranslatable($key))
+            if ($this->isTranslatable($key)) {
                 return $this->getTranslateAttribute($key);
+            }
         });
 
         $this->model->bindEvent('model.beforeSetAttribute', function($key, $value) use ($model) {
-            if ($this->isTranslatable($key))
+            if ($this->isTranslatable($key)) {
                 return $this->setTranslateAttribute($key, $value);
+            }
         });
 
         $this->model->bindEvent('model.saveInternal', function() use ($model) {
@@ -108,6 +109,7 @@ class TranslatableModel extends ModelBehavior
     public function noFallbackLocale()
     {
         $this->translatableUseFallback = false;
+
         return $this->model;
     }
 
@@ -187,8 +189,9 @@ class TranslatableModel extends ModelBehavior
          */
         $knownLocales = array_keys($this->translatableAttributes);
         foreach ($knownLocales as $locale) {
-            if (!$this->isTranslateDirty(null, $locale))
+            if (!$this->isTranslateDirty(null, $locale)) {
                 continue;
+            }
 
             $this->storeTranslatableData($locale);
         }
@@ -196,7 +199,9 @@ class TranslatableModel extends ModelBehavior
         /*
          * Saving the default locale, no need to restore anything
          */
-        if ($this->translatableContext == $this->translatableDefault) return;
+        if ($this->translatableContext == $this->translatableDefault) {
+            return;
+        }
 
         /*
          * Restore translatable values to models originals
@@ -230,6 +235,7 @@ class TranslatableModel extends ModelBehavior
     public function lang($context = null)
     {
         $this->translateContext($context);
+
         return $this->model;
     }
 
@@ -260,6 +266,7 @@ class TranslatableModel extends ModelBehavior
             $this->model->bindEventOnce('model.afterCreate', function() use ($locale) {
                 $this->storeTranslatableData($locale);
             });
+
             return;
         }
 
@@ -357,5 +364,4 @@ class TranslatableModel extends ModelBehavior
 
         return $dirty;
     }
-
 }

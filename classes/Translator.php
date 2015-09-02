@@ -14,7 +14,6 @@ use RainLab\Translate\Models\Locale;
  */
 class Translator
 {
-
     use \October\Rain\Support\Traits\Singleton;
 
     const SESSION_LOCALE = 'rainlab.translate.locale';
@@ -61,8 +60,9 @@ class Translator
         App::setLocale($locale);
         $this->activeLocale = $locale;
 
-        if ($remember)
+        if ($remember) {
             $this->setSessionLocale($locale);
+        }
 
         return true;
     }
@@ -74,8 +74,9 @@ class Translator
      */
     public function getLocale($fromSession = false)
     {
-        if ($fromSession && ($locale = $this->getSessionLocale()))
+        if ($fromSession && ($locale = $this->getSessionLocale())) {
             return $locale;
+        }
 
         return $this->activeLocale;
     }
@@ -96,8 +97,9 @@ class Translator
      */
     public function isConfigured()
     {
-        if ($this->isConfigured !== null)
+        if ($this->isConfigured !== null) {
             return $this->isConfigured;
+        }
 
         if (Session::has(self::SESSION_CONFIGURED)) {
             $result = true;
@@ -119,14 +121,16 @@ class Translator
 
     public function loadLocaleFromSession()
     {
-        if ($sessionLocale = $this->getSessionLocale())
+        if ($sessionLocale = $this->getSessionLocale()) {
             $this->setLocale($sessionLocale);
+        }
     }
 
     protected function getSessionLocale()
     {
-        if (!Session::has(self::SESSION_LOCALE))
+        if (!Session::has(self::SESSION_LOCALE)) {
             return null;
+        }
 
         return Session::get(self::SESSION_LOCALE);
     }
@@ -135,5 +139,4 @@ class Translator
     {
         Session::put(self::SESSION_LOCALE, $locale);
     }
-
 }
