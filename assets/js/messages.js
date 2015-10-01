@@ -79,6 +79,11 @@
             if (!this.tableElement) return
 
             var $toolbar = $('.toolbar', this.tableElement)
+            if ($toolbar.hasClass('message-buttons-added')) {
+                return
+            }
+
+            $toolbar.addClass('message-buttons-added')
             $toolbar.prepend(Mustache.render(this.tableToolbar.html()))
         }
 
