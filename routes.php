@@ -10,13 +10,16 @@ use RainLab\Translate\Classes\Translator;
 App::before(function($request) {
 
     $translator = Translator::instance();
-    if (!$translator->isConfigured())
+
+    if (!$translator->isConfigured()) {
         return;
+    }
 
     $locale = Request::segment(1);
 
-    if (!Locale::isValid($locale))
+    if (!Locale::isValid($locale)) {
         return;
+    }
 
     $translator->setLocale($locale);
 
@@ -38,7 +41,6 @@ App::before(function($request) {
             Route::any('{slug}', 'Cms\Classes\CmsController@run')->where('slug', '(.*)?');
         });
     });
-
 });
 
 /*

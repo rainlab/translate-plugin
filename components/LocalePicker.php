@@ -15,8 +15,8 @@ class LocalePicker extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'         => 'rainlab.translate::lang.locale_picker.component_name',
-            'description'  => 'rainlab.translate::lang.locale_picker.component_description',
+            'name'        => 'rainlab.translate::lang.locale_picker.component_name',
+            'description' => 'rainlab.translate::lang.locale_picker.component_description',
         ];
     }
 
@@ -38,11 +38,12 @@ class LocalePicker extends ComponentBase
 
     public function onSwitchLocale()
     {
-        if (!$locale = post('locale'))
+        if (!$locale = post('locale')) {
             return;
+        }
 
         $this->translator->setLocale($locale);
+
         return Redirect::to($this->currentPageUrl());
     }
-
 }

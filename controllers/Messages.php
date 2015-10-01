@@ -16,7 +16,6 @@ use System\Classes\SettingsManager;
  */
 class Messages extends Controller
 {
-
     public $requiredPermissions = ['rainlab.translate.manage_messages'];
 
     public function __construct()
@@ -53,6 +52,7 @@ class Messages extends Controller
     {
         ThemeScanner::scan();
         Flash::success(Lang::get('rainlab.translate::lang.messages.scan_messages_success'));
+
         return $this->onRefresh();
     }
 
@@ -89,8 +89,13 @@ class Messages extends Controller
          * Make table config, make default column read only
          */
         $config = $this->makeConfig('config_table.yaml');
-        if (!$selectedFrom) $config->columns['from']['readOnly'] = true;
-        if (!$selectedTo) $config->columns['to']['readOnly'] = true;
+
+        if (!$selectedFrom) {
+            $config->columns['from']['readOnly'] = true;
+        }
+        if (!$selectedTo) {
+            $config->columns['to']['readOnly'] = true;
+        }
 
         /*
          * Make table widget
@@ -137,15 +142,18 @@ class Messages extends Controller
 
     protected function removeTableData($changes)
     {
-        if (!is_array($changes))
+        if (!is_array($changes)) {
             return;
+        }
 
         foreach ($changes as $change) {
-            if (!$code = array_get($change, 'rowData.code'))
+            if (!$code = array_get($change, 'rowData.code')) {
                 continue;
+            }
 
-            if (!$item = Message::whereCode($code)->first())
+            if (!$item = Message::whereCode($code)->first()) {
                 continue;
+            }
 
             $item->delete();
         }
@@ -153,28 +161,33 @@ class Messages extends Controller
 
     protected function updateTableData($changes)
     {
-        if (!is_array($changes))
+        if (!is_array($changes)) {
             return;
+        }
 
         foreach ($changes as $change) {
-            if (!$code = array_get($change, 'rowData.code'))
+            if (!$code = array_get($change, 'rowData.code')) {
                 continue;
+            }
 
-            if (!$columnType = array_get($change, 'keyName'))
+            if (!$columnType = array_get($change, 'keyName')) {
                 continue;
+            }
 
-            if ($columnType != 'to' && $columnType != 'from')
+            if ($columnType != 'to' && $columnType != 'from') {
                 continue;
+            }
 
-            if (!$locale = post('locale_'.$columnType))
+            if (!$locale = post('locale_'.$columnType)) {
                 continue;
+            }
 
-            if (!$item = Message::whereCode($code)->first())
+            if (!$item = Message::whereCode($code)->first()) {
                 continue;
+            }
 
             $newValue = array_get($change, 'newValue');
             $item->toLocale($locale, $newValue);
         }
     }
-
 }

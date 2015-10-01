@@ -12,7 +12,6 @@ use RainLab\Translate\Models\Locale;
  */
 class MLRichEditor extends RichEditor
 {
-
     use \RainLab\Translate\Traits\MLControl;
 
     /**
@@ -41,8 +40,9 @@ class MLRichEditor extends RichEditor
         $parentContent = parent::render();
         $this->actAsParent(false);
 
-        if (!$this->isAvailable)
+        if (!$this->isAvailable) {
             return $parentContent;
+        }
 
         $this->vars['richeditor'] = $parentContent;
         return $this->makePartial('mlricheditor');
@@ -57,7 +57,7 @@ class MLRichEditor extends RichEditor
     /**
      * {@inheritDoc}
      */
-    public function loadAssets()
+    protected function loadAssets()
     {
         $this->actAsParent();
         parent::loadAssets();
@@ -82,5 +82,4 @@ class MLRichEditor extends RichEditor
             $this->viewPath = $this->originalViewPath;
         }
     }
-
 }

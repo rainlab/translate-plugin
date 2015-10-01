@@ -46,11 +46,13 @@ class Message extends Model
      */
     public function forLocale($locale = null, $default = null)
     {
-        if ($locale === null)
+        if ($locale === null) {
             $locale = self::DEFAULT_LOCALE;
+        }
 
-        if (array_key_exists($locale, $this->message_data))
+        if (array_key_exists($locale, $this->message_data)) {
             return $this->message_data[$locale];
+        }
 
         return $default;
     }
@@ -63,14 +65,16 @@ class Message extends Model
      */
     public function toLocale($locale = null, $message)
     {
-        if ($locale === null)
+        if ($locale === null) {
             return;
+        }
 
         $data = $this->message_data;
         $data[$locale] = $message;
 
-        if (!$message)
+        if (!$message) {
             unset($data[$locale]);
+        }
 
         $this->message_data = $data;
         $this->save();
@@ -83,16 +87,18 @@ class Message extends Model
      */
     public static function get($messageId)
     {
-        if (!self::$locale)
+        if (!self::$locale) {
             return $messageId;
+        }
 
         $messageCode = self::makeMessageCode($messageId);
 
         /*
          * Found in cache
          */
-        if (array_key_exists($messageCode, self::$cache))
+        if (array_key_exists($messageCode, self::$cache)) {
             return self::$cache[$messageCode];
+        }
 
         /*
          * Uncached item
@@ -102,11 +108,24 @@ class Message extends Model
         ]);
 
         /*
+         * Copy deprecated message data over if exists.
+         *
+         * TODO: Remove this sinppet in the next major version.
+         */
+        if (!$item->exists) {
+            $deprecatedItem = static::whereCode(self::makeDeprecatedMessageCode($messageId))->first();
+
+            if ($deprecatedItem) {
+                $item->message_data = $deprecatedItem->message_data;
+            }
+        }
+
+        /*
          * Create a default entry
          */
         if (!$item->exists) {
             $data = [static::DEFAULT_LOCALE => $messageId];
-            $item->message_data = $data;
+            $item->message_data = $item->message_data ?: $data;
             $item->save();
         }
 
@@ -116,6 +135,7 @@ class Message extends Model
         $msg = $item->forLocale(self::$locale, $messageId);
         self::$cache[$messageCode] = $msg;
         self::$hasNew = true;
+
         return $msg;
     }
 
@@ -127,8 +147,9 @@ class Message extends Model
      */
     public static function importMessages($messages, $locale = null)
     {
-        if ($locale === null)
+        if ($locale === null) {
             $locale = static::DEFAULT_LOCALE;
+        }
 
         foreach ($messages as $message) {
             $messageCode = self::makeMessageCode($message);
@@ -137,11 +158,25 @@ class Message extends Model
                 'code' => $messageCode
             ]);
 
-            // Do not import non-default messages that do not exist
-            if (!$item->exists && $locale != static::DEFAULT_LOCALE)
-                continue;
+            /*
+             * Copy deprecated message data over if exists.
+             *
+             * TODO: Remove this sinppet in the next major version.
+             */
+            if (!$item->exists) {
+                $deprecatedItem = static::whereCode(self::makeDeprecatedMessageCode($message))->first();
 
-            $messageData = $item->exists ? $item->message_data : [];
+                if ($deprecatedItem) {
+                    $item->message_data = $deprecatedItem->message_data;
+                }
+            }
+
+            // Do not import non-default messages that do not exist
+            if (!$item->exists && $locale != static::DEFAULT_LOCALE) {
+                continue;
+            }
+
+            $messageData = $item->exists || $item->message_data ? $item->message_data : [];
             $messageData[$locale] = $message;
 
             $item->message_data = $messageData;
@@ -164,6 +199,7 @@ class Message extends Model
         });
 
         $msg = strtr($msg, $params);
+
         return $msg;
     }
 
@@ -174,14 +210,16 @@ class Message extends Model
      */
     public static function setContext($locale, $url = null)
     {
-        if (!strlen($url))
+        if (!strlen($url)) {
             $url = '/';
+        }
 
         self::$url = $url;
         self::$locale = $locale;
 
-        if ($cached = Cache::get(self::makeCacheKey()))
+        if ($cached = Cache::get(self::makeCacheKey())) {
             self::$cache = (array) $cached;
+        }
     }
 
     /**
@@ -190,8 +228,9 @@ class Message extends Model
      */
     public static function saveToCache()
     {
-        if (!self::$hasNew || !self::$url || !self::$locale)
+        if (!self::$hasNew || !self::$url || !self::$locale) {
             return;
+        }
 
         Cache::put(self::makeCacheKey(), self::$cache, 1440);
     }
@@ -212,7 +251,25 @@ class Message extends Model
      */
     protected static function makeMessageCode($messageId)
     {
-        return Str::limit(strtolower(Str::slug($messageId, '.')), 250);
+        $separator = '.';
+
+        // Convert all dashes/underscores into separator
+        $flip = $separator == '-' ? '_' : '-';
+        $messageId = preg_replace('!['.preg_quote($flip).']+!u', $separator, $messageId);
+        // Remove all characters that are not the separator, letters, numbers, or whitespace.
+        $messageId = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', mb_strtolower($messageId));
+        // Replace all separator characters and whitespace by a single separator
+        $messageId = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $messageId);
+
+        return Str::limit(trim($messageId, $separator), 250);
     }
 
+    /**
+     * @deprecated
+     * @TODO Remove this function in the next major version.
+     */
+    protected static function makeDeprecatedMessageCode($messageId)
+    {
+        return Str::limit(strtolower(Str::slug($messageId, '.')), 250);
+    }
 }

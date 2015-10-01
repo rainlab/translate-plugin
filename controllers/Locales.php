@@ -35,13 +35,15 @@ class Locales extends Controller
      */
     public function listInjectRowClass($record, $definition = null)
     {
-        if (!$record->is_enabled)
+        if (!$record->is_enabled) {
             return 'safe disabled';
+        }
     }
 
     public function onCreateForm()
     {
         $this->asExtension('FormController')->create();
+
         return $this->makePartial('create_form');
     }
 
@@ -49,6 +51,7 @@ class Locales extends Controller
     {
         LocaleModel::clearCache();
         $this->asExtension('FormController')->create_onSave();
+
         return $this->listRefresh();
     }
 
@@ -56,6 +59,7 @@ class Locales extends Controller
     {
         $this->asExtension('FormController')->update(post('record_id'));
         $this->vars['recordId'] = post('record_id');
+
         return $this->makePartial('update_form');
     }
 
@@ -63,6 +67,7 @@ class Locales extends Controller
     {
         LocaleModel::clearCache();
         $this->asExtension('FormController')->update_onSave(post('record_id'));
+
         return $this->listRefresh();
     }
 
@@ -70,6 +75,7 @@ class Locales extends Controller
     {
         LocaleModel::clearCache();
         $this->asExtension('FormController')->update_onDelete(post('record_id'));
+
         return $this->listRefresh();
     }
 }
