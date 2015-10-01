@@ -9,6 +9,11 @@
         this.$form = null
 
         /*
+         * Table toolbar
+         */
+        this.tableToolbar = null
+
+        /*
          * Input with the "from" locale value
          */
         this.fromInput = null
@@ -67,6 +72,14 @@
             })
 
             this.tableElement.dataGrid('setData', this.emptyDataSet)
+        }
+
+        this.setToolbarContents = function(tableToolbar) {
+            if (tableToolbar) this.tableToolbar = $(tableToolbar)
+            if (!this.tableElement) return
+
+            var $toolbar = $('.toolbar', this.tableElement)
+            $toolbar.prepend(Mustache.render(this.tableToolbar.html()))
         }
 
         this.setTitleContents = function(fromEl, toEl) {

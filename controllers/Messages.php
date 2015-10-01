@@ -31,7 +31,7 @@ class Messages extends Controller
 
     public function index()
     {
-        $this->bodyClass = 'slim-container';
+        $this->bodyClass = 'slim-container breadcrumb-flush';
         $this->pageTitle = 'rainlab.translate::lang.messages.title';
         $this->prepareTable();
     }
@@ -58,8 +58,7 @@ class Messages extends Controller
 
     public function onChange()
     {
-
-        // Assuming that the widget was initialized in the 
+        // Assuming that the widget was initialized in the
         // controller constructor with the "table" alias.
         $dataSource = $this->widget->table->getDataSource();
 

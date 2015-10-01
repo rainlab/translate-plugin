@@ -5,7 +5,7 @@
     </ul>
 <?php Block::endPut() ?>
 
-<div class="padded-container container-flush">
+<div class="callout-container">
     <?= $this->makeHintPartial('translation_messages_hint', 'hint') ?>
 </div>
 
@@ -27,6 +27,7 @@
 $(document).render(function(){
     $.translateMessages.setTableElement('#<?= $table->getId() ?>')
     $.translateMessages.setTitleContents('#<?= $this->getId('fromTitle') ?>', '#<?= $this->getId('toTitle') ?>')
+    $.translateMessages.setToolbarContents('#<?= $this->getId('tableToolbar') ?>')
 })
 
 </script>

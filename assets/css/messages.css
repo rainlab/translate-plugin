@@ -1,9 +1,14 @@
 #messagesContainer {
   padding-top: 20px;
 }
+.callout-container .callout {
+  margin-bottom: 0;
+}
 .translate-messages {
   position: relative;
   margin-top: -20px;
+}
+.translate-messages .pagination {
   margin-left: 20px;
 }
 .translate-messages .dropdown-button-placeholder {
