@@ -2,10 +2,11 @@
 #  Grid Widget Configuration
 # ===================================
 
-dataSource: client
+# dataSource: client
+dataSource: server
 keyFrom: code
 recordsPerPage: 6
-handler: onChange
+# handler: onChange
 adding: false
 
 # toolbar:

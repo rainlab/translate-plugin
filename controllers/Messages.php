@@ -114,16 +114,22 @@ class Messages extends Controller
          * Populate data
          */
         $dataSource = $widget->getDataSource();
-        $records = $this->getTableData($selectedFrom, $selectedTo);
-        $dataSource->initRecords($records);
+
+        $dataSource->bindEvent('data.getRecords', function($offset, $count) use ($selectedFrom, $selectedTo) {
+            $messages = Message::limit($count)->offset($offset)->get();
+            $result =  $this->processTableData($messages, $selectedFrom, $selectedTo);
+            return $result;
+        });
+
+        $dataSource->bindEvent('data.getCount', function() {
+            return Message::count();
+        });
 
         $this->vars['table'] = $widget;
     }
 
-    protected function getTableData($from, $to)
+    protected function processTableData($messages, $from, $to)
     {
-        $messages = Message::all();
-
         $fromCode = $from ? $from->code : null;
         $toCode = $to ? $to->code : null;
 
