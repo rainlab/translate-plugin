@@ -47,5 +47,7 @@ App::before(function($request) {
  * Save any used messages to the contextual cache.
  */
 App::after(function($request) {
-    Message::saveToCache();
+    if (class_exists('RainLab\Translate\Models\Message')) {
+        Message::saveToCache();
+    }
 });

@@ -20,7 +20,7 @@
                 data-hotkey="ctrl+s, cmd+s"
                 data-popup-load-indicator
                 class="btn btn-primary">
-                <u>S</u>ave
+                <?= e(trans('backend::lang.form.save')) ?>
             </button>
 
             <button
@@ -57,7 +57,9 @@
 
     <script>
         setTimeout(
-            function(){ $('#updateForm input.form-control:first').focus() },
+            function() {
+                $('#updateForm input.form-control:first').focus()
+            },
             310
         )
     </script>

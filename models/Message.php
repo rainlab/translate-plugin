@@ -190,7 +190,7 @@ class Message extends Model
      * @param  array  $params
      * @return string
      */
-    public static function trans($messageId, $params)
+    public static function trans($messageId, $params = [])
     {
         $msg = static::get($messageId);
 
