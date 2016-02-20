@@ -4,7 +4,7 @@
 
 # dataSource: client
 dataSource: server
-keyFrom: code
+keyFrom: id
 recordsPerPage: 6
 # handler: onChange
 adding: false

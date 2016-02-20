@@ -56,20 +56,6 @@ class Messages extends Controller
         return $this->onRefresh();
     }
 
-    public function onChange()
-    {
-        // Assuming that the widget was initialized in the
-        // controller constructor with the "table" alias.
-        $dataSource = $this->widget->table->getDataSource();
-
-        while ($records = $dataSource->readRecords(5)) {
-            traceLog($records);
-        }
-
-        traceLog('hi');
-        traceLog(post());
-    }
-
     public function prepareTable()
     {
         $fromCode = post('locale_from', null);
@@ -100,14 +86,6 @@ class Messages extends Controller
          * Make table widget
          */
         $widget = $this->makeWidget('Backend\Widgets\Table', $config);
-
-        // $widget->bindEvent('table.dataChanged', function($action, $changes){
-        //     if ($action == 'remove')
-        //         $this->removeTableData($changes);
-        //     else
-        //         $this->updateTableData($changes);
-        // });
-
         $widget->bindToController();
 
         /*
@@ -117,12 +95,22 @@ class Messages extends Controller
 
         $dataSource->bindEvent('data.getRecords', function($offset, $count) use ($selectedFrom, $selectedTo) {
             $messages = Message::limit($count)->offset($offset)->get();
-            $result =  $this->processTableData($messages, $selectedFrom, $selectedTo);
+            $result = $this->processTableData($messages, $selectedFrom, $selectedTo);
             return $result;
         });
 
         $dataSource->bindEvent('data.getCount', function() {
             return Message::count();
+        });
+
+        $dataSource->bindEvent('data.updateRecord', function($key, $data) {
+            $message = Message::find($key);
+            $this->updateTableData($message, $data);
+        });
+
+        $dataSource->bindEvent('data.deleteRecord', function($key) {
+            $message = Message::find($key);
+            $message->delete();
         });
 
         $this->vars['table'] = $widget;
@@ -136,6 +124,7 @@ class Messages extends Controller
         $data = [];
         foreach ($messages as $message) {
             $data[] = [
+                'id' => $message->id,
                 'code' => $message->code,
                 'from' => $message->forLocale($fromCode),
                 'to' => $message->forLocale($toCode)
@@ -145,54 +134,28 @@ class Messages extends Controller
         return $data;
     }
 
-    protected function removeTableData($changes)
+    protected function updateTableData($message, $data)
     {
-        if (!is_array($changes)) {
+        if (!$message) {
             return;
         }
 
-        foreach ($changes as $change) {
-            if (!$code = array_get($change, 'rowData.code')) {
-                continue;
+        $fromCode = post('locale_from', null);
+        $toCode = post('locale_to', Locale::getDefault()->code);
+
+        // @todo This should be unified to a single save()
+        if ($fromCode) {
+            $fromValue = array_get($data, 'from');
+            if ($fromValue != $message->forLocale($fromCode)) {
+                $message->toLocale($fromCode, $fromValue);
             }
-
-            if (!$item = Message::whereCode($code)->first()) {
-                continue;
-            }
-
-            $item->delete();
-        }
-    }
-
-    protected function updateTableData($changes)
-    {
-        if (!is_array($changes)) {
-            return;
         }
 
-        foreach ($changes as $change) {
-            if (!$code = array_get($change, 'rowData.code')) {
-                continue;
+        if ($toCode) {
+            $toValue = array_get($data, 'to');
+            if ($toValue != $message->forLocale($toCode)) {
+                $message->toLocale($toCode, $toValue);
             }
-
-            if (!$columnType = array_get($change, 'keyName')) {
-                continue;
-            }
-
-            if ($columnType != 'to' && $columnType != 'from') {
-                continue;
-            }
-
-            if (!$locale = post('locale_'.$columnType)) {
-                continue;
-            }
-
-            if (!$item = Message::whereCode($code)->first()) {
-                continue;
-            }
-
-            $newValue = array_get($change, 'newValue');
-            $item->toLocale($locale, $newValue);
         }
     }
 }
