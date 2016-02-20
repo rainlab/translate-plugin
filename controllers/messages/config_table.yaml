@@ -2,15 +2,10 @@
 #  Grid Widget Configuration
 # ===================================
 
-# dataSource: client
 dataSource: server
 keyFrom: id
-recordsPerPage: 6
-# handler: onChange
+recordsPerPage: 500
 adding: false
-
-# toolbar:
-    # buttons: grid_toolbar
 
 columns:
     from:

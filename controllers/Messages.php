@@ -18,6 +18,8 @@ class Messages extends Controller
 {
     public $requiredPermissions = ['rainlab.translate.manage_messages'];
 
+    protected $hideTranslated = false;
+
     public function __construct()
     {
         parent::__construct();
@@ -60,11 +62,12 @@ class Messages extends Controller
     {
         $fromCode = post('locale_from', null);
         $toCode = post('locale_to', Locale::getDefault()->code);
+        $this->hideTranslated = post('hide_translated', false);
 
         /*
          * Page vars
          */
-        $this->vars['hideTranslated'] = post('hide_translated', false);
+        $this->vars['hideTranslated'] = $this->hideTranslated;
         $this->vars['defaultLocale'] = Locale::getDefault();
         $this->vars['locales'] = Locale::all();
         $this->vars['selectedFrom'] = $selectedFrom = Locale::findByCode($fromCode);
@@ -94,7 +97,10 @@ class Messages extends Controller
         $dataSource = $widget->getDataSource();
 
         $dataSource->bindEvent('data.getRecords', function($offset, $count) use ($selectedFrom, $selectedTo) {
-            $messages = Message::limit($count)->offset($offset)->get();
+            $messages = $count
+                ? Message::limit($count)->offset($offset)->get()
+                : Message::all();
+
             $result = $this->processTableData($messages, $selectedFrom, $selectedTo);
             return $result;
         });
@@ -116,6 +122,11 @@ class Messages extends Controller
         $this->vars['table'] = $widget;
     }
 
+    protected function isHideTranslated()
+    {
+        return post('hide_translated', false);
+    }
+
     protected function processTableData($messages, $from, $to)
     {
         $fromCode = $from ? $from->code : null;
@@ -123,11 +134,16 @@ class Messages extends Controller
 
         $data = [];
         foreach ($messages as $message) {
+            $toContent = $message->forLocale($toCode);
+            if ($this->hideTranslated && $toContent) {
+                continue;
+            }
+
             $data[] = [
                 'id' => $message->id,
                 'code' => $message->code,
                 'from' => $message->forLocale($fromCode),
-                'to' => $message->forLocale($toCode)
+                'to' => $toContent
             ];
         }
 
@@ -140,8 +156,8 @@ class Messages extends Controller
             return;
         }
 
-        $fromCode = post('locale_from', null);
-        $toCode = post('locale_to', Locale::getDefault()->code);
+        $fromCode = post('locale_from');
+        $toCode = post('locale_to');
 
         // @todo This should be unified to a single save()
         if ($fromCode) {

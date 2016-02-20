@@ -34,7 +34,7 @@
         this.toHeader = null
 
         /*
-         * The element with .dataGrid() bound to it
+         * The table widget element
          */
         this.tableElement = null
 
@@ -51,27 +51,12 @@
 
         $(document).on('change', '#hideTranslated', function(){
             self.toggleTranslated($(this).is(':checked'))
-            self.filterDataSet()
+            self.refreshTable()
         });
 
         this.toggleTranslated = function(isHide) {
-            // this.tableElement.dataGrid('deselect')
             this.hideTranslated = isHide
             this.setTitleContents()
-        }
-
-        this.filterDataSet = function() {
-            if (!this.hideTranslated) {
-                if (this.dataSet) this.tableElement.dataGrid('setData', this.dataSet)
-                return
-            }
-
-            this.dataSet = this.tableElement.dataGrid('getData')
-            this.emptyDataSet = $.grep(this.dataSet, function(obj, index){
-                return !obj.to
-            })
-
-            this.tableElement.dataGrid('setData', this.emptyDataSet)
         }
 
         this.setToolbarContents = function(tableToolbar) {
@@ -102,6 +87,15 @@
             this.$form = $('#messagesForm')
             this.fromInput = this.$form.find('input[name=locale_from]')
             this.toInput = this.$form.find('input[name=locale_to]')
+
+            this.tableElement.one('oc.tableUpdateData', $.proxy(this.updateTableData, this))
+        }
+
+        this.updateTableData = function(event, records) {
+            if (this.hideTranslated && !records.length) {
+                self.toggleTranslated($(this).is(':checked'))
+                self.refreshTable()
+            }
         }
 
         this.toggleDropdown = function(el) {
@@ -130,8 +124,11 @@
         }
 
         this.refreshGrid = function() {
-            // this.tableElement.dataGrid('setData', [])
             this.$form.request('onRefresh')
+        }
+
+        this.refreshTable = function() {
+            this.tableElement.table('updateDataTable')
         }
 
     }
