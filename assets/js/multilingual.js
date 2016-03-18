@@ -9,7 +9,7 @@
  * JavaScript API:
  * $('a#someElement').multiLingual({ option: 'value' })
  *
- * Dependences: 
+ * Dependences:
  * - Nil
  */
 

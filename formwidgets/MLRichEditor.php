@@ -65,7 +65,7 @@ class MLRichEditor extends RichEditor
 
         if (Locale::isAvailable()) {
             $this->loadLocaleAssets();
-            $this->addJs('js/mlswitcher.js');
+            $this->addJs('js/mlricheditor.js');
         }
     }
 
