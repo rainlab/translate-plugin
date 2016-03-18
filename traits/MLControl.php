@@ -2,6 +2,7 @@
 
 use RainLab\Translate\Models\Locale;
 use Backend\Classes\FormWidgetBase;
+use October\Rain\Html\Helper as HtmlHelper;
 
 /**
  * Generic ML Control
@@ -137,14 +138,17 @@ trait MLControl
      */
     public function getLocaleSaveData()
     {
+        $values = [];
         $data = post('RLTranslate');
+
         if (!is_array($data)) {
-            return [];
+            return $values;
         }
 
-        $values = [];
+        $columnName = implode('.', HtmlHelper::nameToArray($this->columnName));
+
         foreach ($data as $locale => $_data) {
-            $values[$locale] = array_get($_data, $this->columnName);
+            $values[$locale] = array_get($_data, $columnName);
         }
 
         return $values;

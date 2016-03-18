@@ -32,6 +32,18 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function register()
+    {
+        /*
+         * Defer event 2 levels deep to let others contribute before this registers.
+         */
+        Event::listen('backend.form.extendFieldsBefore', function($widget) {
+            $widget->bindEvent('form.extendFieldsBefore', function() use ($widget) {
+                $this->registerModelTranslation($widget);
+            });
+        });
+    }
+
     public function boot()
     {
         /*
@@ -63,39 +75,6 @@ class Plugin extends PluginBase
             $fileName = substr_replace($fileName, '.'.$locale, strrpos($fileName, '.'), 0);
             if (($content = Content::loadCached($controller->getTheme(), $fileName)) !== null) {
                 return $content;
-            }
-        });
-
-        /*
-         * Automatically replace form fields for multi lingual equivalents
-         */
-        Event::listen('backend.form.extendFieldsBefore', function($widget) {
-            if (!$model = $widget->model) {
-                return;
-            }
-
-            if (!method_exists($model, 'isClassExtendedWith')) {
-                return;
-            }
-
-            if (!$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableModel')) {
-                return;
-            }
-
-            if (!is_array($model->translatable)) {
-                return;
-            }
-
-            if (!empty($widget->config->fields)) {
-                $widget->fields = $this->processFormMLFields($widget->fields, $model);
-            }
-
-            if (!empty($widget->config->tabs['fields'])) {
-                $widget->tabs['fields'] = $this->processFormMLFields($widget->tabs['fields'], $model);
-            }
-
-            if (!empty($widget->config->secondaryTabs['fields'])) {
-                $widget->secondaryTabs['fields'] = $this->processFormMLFields($widget->secondaryTabs['fields'], $model);
             }
         });
     }
@@ -185,6 +164,43 @@ class Plugin extends PluginBase
     public function translatePlural($string, $count = 0, $params = [])
     {
         return Lang::choice($string, $count, $params);
+    }
+
+    /**
+     * Automatically replace form fields for multi lingual equivalents
+     */
+    protected function registerModelTranslation($widget)
+    {
+        if (!$model = $widget->model) {
+            return;
+        }
+
+        if (!method_exists($model, 'isClassExtendedWith')) {
+            return;
+        }
+
+        if (
+            !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableModel') &&
+            !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableCmsObject')
+        ) {
+            return;
+        }
+
+        if (!is_array($model->translatable)) {
+            return;
+        }
+
+        if (!empty($widget->config->fields)) {
+            $widget->fields = $this->processFormMLFields($widget->fields, $model);
+        }
+
+        if (!empty($widget->config->tabs['fields'])) {
+            $widget->tabs['fields'] = $this->processFormMLFields($widget->tabs['fields'], $model);
+        }
+
+        if (!empty($widget->config->secondaryTabs['fields'])) {
+            $widget->secondaryTabs['fields'] = $this->processFormMLFields($widget->secondaryTabs['fields'], $model);
+        }
     }
 
     /**

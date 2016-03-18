@@ -157,27 +157,6 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Extracts a attribute from a model/array with nesting support.
-     * @param  mixed  $data
-     * @param  string $attribute
-     * @return mixed
-     */
-    protected function getAttributeFromData($data, $attribute)
-    {
-        $keyArray = HtmlHelper::nameToArray($attribute);
-
-        $firstKey = array_shift($keyArray);
-
-        if (!$value = array_get($data, $firstKey)) {
-            return null;
-        }
-
-        return $keyArray
-            ? array_get($value, implode('.', $keyArray))
-            : $value;
-    }
-
-    /**
      * Returns whether the attribute is translatable (has a translation) for the given locale.
      * @param  string $key
      * @param  string $locale
@@ -200,19 +179,15 @@ abstract class TranslatableBehavior extends ExtensionBase
             $locale = $this->translatableContext;
         }
 
-        $keyName = implode('.', HtmlHelper::nameToArray($key));
-
         if ($locale == $this->translatableDefault) {
-            array_set($this->model->attributes, $keyName, $value);
-            return $value;
+            return $this->setAttributeFromData($this->model->attributes, $key, $value);
         }
 
         if (!array_key_exists($locale, $this->translatableAttributes)) {
             $this->loadTranslatableData($locale);
         }
 
-        array_set($this->translatableAttributes[$locale], $keyName, $value);
-        return $value;
+        return $this->setAttributeFromData($this->translatableAttributes[$locale], $key, $value);
     }
 
     /**
@@ -334,6 +309,34 @@ abstract class TranslatableBehavior extends ExtensionBase
         }
 
         return $dirty;
+    }
+
+    /**
+     * Extracts a attribute from a model/array with nesting support.
+     * @param  mixed  $data
+     * @param  string $attribute
+     * @return mixed
+     */
+    protected function getAttributeFromData($data, $attribute)
+    {
+        $keyArray = HtmlHelper::nameToArray($attribute);
+
+        return array_get($data, implode('.', $keyArray));
+    }
+
+    /**
+     * Sets an attribute from a model/array with nesting support.
+     * @param  mixed  $data
+     * @param  string $attribute
+     * @return mixed
+     */
+    protected function setAttributeFromData($data, $attribute, $value)
+    {
+        $keyArray = HtmlHelper::nameToArray($attribute);
+
+        array_set($data, implode('.', $keyArray), $value);
+
+        return $value;
     }
 
     /**
