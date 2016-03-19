@@ -330,7 +330,7 @@ abstract class TranslatableBehavior extends ExtensionBase
      * @param  string $attribute
      * @return mixed
      */
-    protected function setAttributeFromData($data, $attribute, $value)
+    protected function setAttributeFromData(&$data, $attribute, $value)
     {
         $keyArray = HtmlHelper::nameToArray($attribute);
 

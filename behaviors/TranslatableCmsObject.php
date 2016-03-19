@@ -33,12 +33,15 @@ class TranslatableCmsObject extends TranslatableBehavior
     {
         parent::__construct($model);
 
-        $this->model->bindEvent('model.afterFetch', function() {
+        $this->model->bindEvent('cmsObject.fillViewBagArray', function() {
             $this->mergeViewBagAttributes();
         });
     }
 
-    // @todo This needs work
+    /**
+     * Merge the viewBag array for the base and translated objects.
+     * @return void
+     */
     protected function mergeViewBagAttributes()
     {
         $locale = $this->translatableContext;
