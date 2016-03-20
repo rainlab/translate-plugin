@@ -87,8 +87,21 @@ class TranslatableCmsObject extends TranslatableBehavior
             $obj->fileName = $this->model->fileName;
         }
 
-        $obj->fill($data);
-        $obj->forceSave();
+        if (!$this->isEmptyDataSet($data)) {
+            $obj->fill($data);
+            $obj->forceSave();
+        }
+    }
+
+    /**
+     * Returns true if all attributes are empty (false when converted to booleans).
+     * @param  array $data
+     * @return bool
+     */
+    protected function isEmptyDataSet($data)
+    {
+        return !array_get($data, 'markup') &&
+            !count(array_filter(array_get($data, 'viewBag', [])));
     }
 
     /**
