@@ -3,11 +3,12 @@
 use App;
 use Schema;
 use Session;
+use Request;
 use DbDongle;
 use RainLab\Translate\Models\Locale;
 
 /**
- * Translate class
+ * Translate class 
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
@@ -113,6 +114,30 @@ class Translator
         }
 
         return $this->isConfigured = $result;
+    }
+
+    /**
+     * Returns the current path prefixed with language code.
+     *
+     * @param string $locale optional language code, default to the system default language
+     * @return string
+     */
+    public function getCurrentPathInLocale($locale = null)
+    {
+        if (is_null($locale) || !Locale::isValid($locale)) {
+            $locale = $this->defaultLocale;
+        }
+
+        $segments = Request::segments();
+
+        if (count($segments) == 0 || Locale::isValid($segments[0])) {
+            $segments[0] = $locale;
+        }
+        else {
+            array_unshift($segments, $locale);
+        }
+
+        return implode('/', $segments);
     }
 
     //
