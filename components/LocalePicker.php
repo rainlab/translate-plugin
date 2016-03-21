@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Components;
 
+use Request;
 use Redirect;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
@@ -7,9 +8,19 @@ use Cms\Classes\ComponentBase;
 
 class LocalePicker extends ComponentBase
 {
-    private $translator;
+    /**
+     * @var RainLab\Translate\Classes\Translator Translator object.
+     */
+    protected $translator;
 
+    /**
+     * @var array Collection of enabled locales.
+     */
     public $locales;
+
+    /**
+     * @var string The active locale code.
+     */
     public $activeLocale;
 
     public function componentDetails()
@@ -22,7 +33,14 @@ class LocalePicker extends ComponentBase
 
     public function defineProperties()
     {
-        return [];
+        return [
+            'forceUrl' => [
+                'title'       => 'Force URL schema',
+                'description' => 'Always prefix the URL with a language code.',
+                'default'     => 0,
+                'type'        => 'checkbox'
+            ],
+        ];
     }
 
     public function init()
@@ -32,6 +50,10 @@ class LocalePicker extends ComponentBase
 
     public function onRun()
     {
+        if ($redirect = $this->redirectForceUrl()) {
+            return $redirect;
+        }
+
         $this->page['activeLocale'] = $this->activeLocale = $this->translator->getLocale();
         $this->page['locales'] = $this->locales = LocaleModel::listEnabled();
     }
@@ -44,6 +66,26 @@ class LocalePicker extends ComponentBase
 
         $this->translator->setLocale($locale);
 
-        return Redirect::to($this->currentPageUrl());
+        if ($this->property('forceUrl')) {
+            return Redirect::to($this->translator->getCurrentPathInLocale($locale));
+        }
+
+        return Redirect::refresh();
+    }
+
+    protected function redirectForceUrl()
+    {
+        if (
+            Request::ajax() ||
+            !$this->property('forceUrl') ||
+            $this->translator->loadLocaleFromRequest()
+        ) {
+            return;
+        }
+
+        $locale = $this->translator->getLocale(true)
+            ?: $this->translator->getDefaultLocale();
+
+        return Redirect::to($this->translator->getCurrentPathInLocale($locale));
     }
 }

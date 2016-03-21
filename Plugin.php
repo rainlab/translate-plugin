@@ -53,10 +53,8 @@ class Plugin extends PluginBase
             if (!$page) {
                 return;
             }
-
-            $translate = Translator::instance();
-            $translate->loadLocaleFromSession();
-            Message::setContext($translate->getLocale(), $page->url);
+            $translator = Translator::instance();
+            Message::setContext($translator->getLocale(), $page->url);
         });
 
         /*

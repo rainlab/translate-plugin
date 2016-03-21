@@ -8,7 +8,7 @@ use DbDongle;
 use RainLab\Translate\Models\Locale;
 
 /**
- * Translate class 
+ * Translate class
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
@@ -116,6 +116,10 @@ class Translator
         return $this->isConfigured = $result;
     }
 
+    //
+    // Request handling
+    //
+
     /**
      * Returns the current path prefixed with language code.
      *
@@ -140,15 +144,40 @@ class Translator
         return implode('/', $segments);
     }
 
+    /**
+     * Sets the locale based on the first URI segment.
+     * @return bool
+     */
+    public function loadLocaleFromRequest()
+    {
+        $locale = Request::segment(1);
+
+        if (!Locale::isValid($locale)) {
+            return false;
+        }
+
+        $this->setLocale($locale);
+        return true;
+    }
+
     //
     // Session handling
     //
 
+    /**
+     * Looks at the session storage to find a locale.
+     * @return bool
+     */
     public function loadLocaleFromSession()
     {
-        if ($sessionLocale = $this->getSessionLocale()) {
-            $this->setLocale($sessionLocale);
+        $locale = $this->getSessionLocale();
+
+        if (!$locale) {
+            return false;
         }
+
+        $this->setLocale($locale);
+        return true;
     }
 
     protected function getSessionLocale()
