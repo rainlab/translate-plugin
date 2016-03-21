@@ -6,7 +6,7 @@ use RainLab\Pages\Classes\Page as PageBase;
 /**
  * Represents a multi-lingual CMS compound object.
  *
- * @package rainlab\pages
+ * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
  */
 class MLCmsObject extends CmsCompoundObject
@@ -22,20 +22,20 @@ class MLCmsObject extends CmsCompoundObject
 
     public static function setContext($locale, $parent)
     {
-        self::$locale = $locale;
-        self::$parent = $parent;
+        static::$locale = $locale;
+        static::$parent = $parent;
     }
 
     public static function forLocale($locale, $page)
     {
-        self::setContext($locale, $page);
+        static::setContext($locale, $page);
 
-        return self::inTheme($page->theme);
+        return static::inTheme($page->theme);
     }
 
     public static function findLocale($locale, $page)
     {
-        return self::forLocale($locale, $page)->find($page->fileName);
+        return static::forLocale($locale, $page)->find($page->fileName);
     }
 
     /**
@@ -47,8 +47,8 @@ class MLCmsObject extends CmsCompoundObject
     {
         $dirName = static::$parent->getObjectTypeDirName();
 
-        if (strlen(self::$locale)) {
-            $dirName .= '-' . self::$locale;
+        if (strlen(static::$locale)) {
+            $dirName .= '-' . static::$locale;
         }
 
         return $dirName;

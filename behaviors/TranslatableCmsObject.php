@@ -1,6 +1,5 @@
 <?php namespace RainLab\Translate\Behaviors;
 
-use RainLab\Translate\Classes\MLCmsObject;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\TranslatableBehavior;
 use October\Rain\Html\Helper as HtmlHelper;
@@ -15,6 +14,10 @@ use October\Rain\Html\Helper as HtmlHelper;
  *   public $implement = ['@RainLab.Translate.Behaviors.TranslatableCmsObject'];
  *
  *   public $translatable = ['title', 'markup'];
+ *
+ * This definition is optional and defaults to RainLab\Translate\Classes\MLCmsObject
+ *
+ *   public $translatableModel = 'RainLab\Translate\Classes\MLStaticPage';
  *
  */
 class TranslatableCmsObject extends TranslatableBehavior
@@ -36,6 +39,10 @@ class TranslatableCmsObject extends TranslatableBehavior
         $this->model->bindEvent('cmsObject.fillViewBagArray', function() {
             $this->mergeViewBagAttributes();
         });
+
+        $this->model->bindEvent('cmsObject.getTwigCacheKey', function($key) {
+            return $this->overrideTwigCacheKey($key);
+        });
     }
 
     /**
@@ -56,6 +63,19 @@ class TranslatableCmsObject extends TranslatableBehavior
                 $this->translatableViewBag[$locale]
             );
         }
+    }
+
+    /**
+     * Translated CMS objects need their own unique cache key in twig.
+     * @return string|null
+     */
+    protected function overrideTwigCacheKey($key)
+    {
+        if (!$locale = $this->translatableContext) {
+            return null;
+        }
+
+        return $key . '-' . $locale;
     }
 
     /**
@@ -83,7 +103,8 @@ class TranslatableCmsObject extends TranslatableBehavior
         $data = $this->translatableAttributes[$locale];
 
         if (!$obj = $this->getCmsObjectForLocale($locale)) {
-            $obj = MLCmsObject::forLocale($locale, $this->model);
+            $model = $this->createModel();
+            $obj = $model::forLocale($locale, $this->model);
             $obj->fileName = $this->model->fileName;
         }
 
@@ -134,7 +155,32 @@ class TranslatableCmsObject extends TranslatableBehavior
             return $this->model;
         }
 
-        return MLCmsObject::findLocale($locale, $this->model);
+        $model = $this->createModel();
+        return $model::findLocale($locale, $this->model);
+    }
+
+    /**
+     * Internal method, prepare the form model object
+     * @return Model
+     */
+    protected function createModel()
+    {
+        $class = $this->getTranslatableModelClass();
+        $model = new $class;
+        return $model;
+    }
+
+    /**
+     * Returns a collection of fields that will be hashed.
+     * @return array
+     */
+    public function getTranslatableModelClass()
+    {
+        if (property_exists($this->model, 'translatableModel')) {
+            return $this->model->translatableModel;
+        }
+
+        return 'RainLab\Translate\Classes\MLCmsObject';
     }
 
 }
