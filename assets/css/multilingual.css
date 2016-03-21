@@ -4,7 +4,7 @@
 .field-multilingual .btn {
   background: transparent;
   position: absolute;
-  color: #8c8c8c;
+  color: #7b7b7b;
   text-transform: uppercase;
   font-size: 11px;
   letter-spacing: 1px;
@@ -12,24 +12,24 @@
   padding-right: 0;
 }
 .field-multilingual .btn:hover {
-  color: #666666;
+  color: #555555;
 }
 .field-multilingual.field-multilingual-text .form-control {
   padding-right: 44px;
 }
 .field-multilingual.field-multilingual-text .btn {
-  right: 2px;
+  right: 4px;
   top: 50%;
   margin-top: -44px;
   height: 88px;
 }
 .field-multilingual.field-multilingual-textarea .btn {
-  right: 15px;
+  right: 11px;
   top: 5px;
   text-align: right;
 }
 .field-multilingual.field-multilingual-textarea .dropdown-menu {
-  top: 44px !important;
+  top: 39px !important;
   right: 1px;
 }
 .field-multilingual.field-multilingual-richeditor .btn {
@@ -40,4 +40,18 @@
 .field-multilingual.field-multilingual-richeditor .dropdown-menu {
   top: 74px !important;
   right: 1px;
+}
+.fancy-layout .form-tabless-fields .field-multilingual .btn {
+  color: rgba(255, 255, 255, 0.8);
+}
+.fancy-layout .form-tabless-fields .field-multilingual .btn:hover {
+  color: #ffffff;
+}
+.fancy-layout .field-multilingual-richeditor .btn {
+  top: 63px;
+  right: 25px;
+}
+.fancy-layout .field-multilingual-richeditor .dropdown-menu {
+  top: 94px !important;
+  right: 11px;
 }

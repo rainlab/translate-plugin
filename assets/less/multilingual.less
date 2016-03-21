@@ -1,12 +1,14 @@
 @import "../../../../../modules/backend/assets/less/core/boot.less";
 
+@multilingual-btn-color: #555555;
+
 .field-multilingual {
     position: relative;
 
     .btn {
         background: transparent;
         position: absolute;
-        color: lighten(@btn-default-color, 15%);
+        color: lighten(@multilingual-btn-color, 15%);
         text-transform: uppercase;
         font-size: 11px;
         letter-spacing: 1px;
@@ -14,7 +16,7 @@
         padding-right: 0;
 
         &:hover {
-            color: @btn-default-color;
+            color: @multilingual-btn-color;
         }
     }
 
@@ -24,7 +26,7 @@
         }
 
         .btn {
-            right: 2px;
+            right: 4px;
             top: 50%;
             margin-top: -44px;
             height: 88px;
@@ -33,13 +35,13 @@
 
     &.field-multilingual-textarea {
         .btn {
-            right: 15px;
+            right: 11px;
             top: 5px;
             text-align: right;
         }
 
         .dropdown-menu {
-            top: 44px !important;
+            top: 39px !important;
             right: 1px;
         }
     }
@@ -54,6 +56,30 @@
         .dropdown-menu {
             top: 74px !important;
             right: 1px;
+        }
+    }
+}
+
+.fancy-layout {
+    .form-tabless-fields .field-multilingual {
+        .btn {
+            color: rgba(255,255,255,.8);
+
+            &:hover {
+                color: rgba(255,255,255,1);
+            }
+        }
+    }
+
+    .field-multilingual-richeditor {
+        .btn {
+            top: 63px;
+            right: 25px;
+        }
+
+        .dropdown-menu {
+            top: 94px !important;
+            right: 11px;
         }
     }
 }
