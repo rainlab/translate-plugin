@@ -1,6 +1,7 @@
 <?php namespace RainLab\Translate\Models;
 
 use Str;
+use Lang;
 use Model;
 use Cache;
 
@@ -38,6 +39,15 @@ class Message extends Model
     public static $locale;
 
     public static $cache = [];
+
+    /**
+     * Returns the value for the active locale.
+     * @return string
+     */
+    public function getContentAttribute()
+    {
+        return $this->forLocale(Lang::getLocale());
+    }
 
     /**
      * Gets a message for a given locale, or the default.
@@ -134,15 +144,31 @@ class Message extends Model
      */
     public static function importMessages($messages, $locale = null)
     {
+        self::importMessageCodes(array_combine($messages, $messages), $locale);
+    }
+
+    /**
+     * Import an array of messages. Only known messages are imported.
+     * @param  array $messages
+     * @param  string $locale
+     * @return void
+     */
+    public static function importMessageCodes($messages, $locale = null)
+    {
         if ($locale === null) {
             $locale = static::DEFAULT_LOCALE;
         }
 
-        foreach ($messages as $message) {
-            $messageCode = self::makeMessageCode($message);
+        foreach ($messages as $code => $message) {
+            // Ignore empties
+            if (!strlen(trim($message))) {
+                continue;
+            }
+
+            $code = self::makeMessageCode($code);
 
             $item = static::firstOrNew([
-                'code' => $messageCode
+                'code' => $code
             ]);
 
             // Do not import non-default messages that do not exist
@@ -151,6 +177,12 @@ class Message extends Model
             }
 
             $messageData = $item->exists || $item->message_data ? $item->message_data : [];
+
+            // Do not overwrite existing translations
+            if (isset($messageData[$locale])) {
+                continue;
+            }
+
             $messageData[$locale] = $message;
 
             $item->message_data = $messageData;
@@ -228,10 +260,11 @@ class Message extends Model
         $separator = '.';
 
         // Convert all dashes/underscores into separator
-        $flip = $separator == '-' ? '_' : '-';
-        $messageId = preg_replace('!['.preg_quote($flip).']+!u', $separator, $messageId);
+        $messageId = preg_replace('!['.preg_quote('_').'|'.preg_quote('-').']+!u', $separator, $messageId);
+
         // Remove all characters that are not the separator, letters, numbers, or whitespace.
         $messageId = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', mb_strtolower($messageId));
+
         // Replace all separator characters and whitespace by a single separator
         $messageId = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $messageId);
 

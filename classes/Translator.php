@@ -121,6 +121,22 @@ class Translator
     //
 
     /**
+     * Sets the locale based on the first URI segment.
+     * @return bool
+     */
+    public function loadLocaleFromRequest()
+    {
+        $locale = Request::segment(1);
+
+        if (!Locale::isValid($locale)) {
+            return false;
+        }
+
+        $this->setLocale($locale);
+        return true;
+    }
+
+    /**
      * Returns the current path prefixed with language code.
      *
      * @param string $locale optional language code, default to the system default language
@@ -142,22 +158,6 @@ class Translator
         }
 
         return implode('/', $segments);
-    }
-
-    /**
-     * Sets the locale based on the first URI segment.
-     * @return bool
-     */
-    public function loadLocaleFromRequest()
-    {
-        $locale = Request::segment(1);
-
-        if (!Locale::isValid($locale)) {
-            return false;
-        }
-
-        $this->setLocale($locale);
-        return true;
     }
 
     //

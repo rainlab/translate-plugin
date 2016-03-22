@@ -23,6 +23,11 @@ class LocalePicker extends ComponentBase
      */
     public $activeLocale;
 
+    /**
+     * @var string The active locale name.
+     */
+    public $activeLocaleName;
+
     public function componentDetails()
     {
         return [
@@ -54,8 +59,9 @@ class LocalePicker extends ComponentBase
             return $redirect;
         }
 
-        $this->page['activeLocale'] = $this->activeLocale = $this->translator->getLocale();
         $this->page['locales'] = $this->locales = LocaleModel::listEnabled();
+        $this->page['activeLocale'] = $this->activeLocale = $this->translator->getLocale();
+        $this->page['activeLocaleName'] = $this->activeLocaleName = array_get($this->locales, $this->activeLocale);
     }
 
     public function onSwitchLocale()
