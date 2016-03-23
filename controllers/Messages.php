@@ -47,12 +47,23 @@ class Messages extends Controller
     public function onClearCache()
     {
         Cache::flush();
+
         Flash::success(Lang::get('rainlab.translate::lang.messages.clear_cache_success'));
+    }
+
+    public function onLoadScanMessagesForm()
+    {
+        return $this->makePartial('scan_messages_form');
     }
 
     public function onScanMessages()
     {
+        if (post('purge_messages', false)) {
+            Message::truncate();
+        }
+
         ThemeScanner::scan();
+
         Flash::success(Lang::get('rainlab.translate::lang.messages.scan_messages_success'));
 
         return $this->onRefresh();
