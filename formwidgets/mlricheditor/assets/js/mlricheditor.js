@@ -19,6 +19,7 @@
         this.options   = options
         this.$el       = $(element)
         this.$textarea = $(options.textareaElement)
+        this.$richeditor = $('[data-control=richeditor]', this.$el)
 
         // Init
         this.init()
@@ -27,20 +28,20 @@
     }
 
     MLRichEditor.DEFAULTS = {
-        textareaElement: null
     }
 
     MLRichEditor.prototype.init = function() {
         var $el = this.$el,
-            $textarea = this.$textarea
+            $textarea = this.$textarea,
+            $richeditor = this.$richeditor
 
-        $el.on('setLocale.oc.multilingual', function(e, locale, localeValue){
-            if (typeof localeValue === 'string' && $textarea.data('redactor')) {
-                $textarea.redactor('code.set', localeValue);
+        $el.on('setLocale.oc.multilingual', function(e, locale, localeValue) {
+            if (typeof localeValue === 'string' && $richeditor.data('oc.richEditor')) {
+                $richeditor.richEditor('setContent', localeValue);
             }
         })
 
-        $textarea.on('sanitize.oc.richeditor', function(){
+        $textarea.on('sanitize.oc.richeditor', function() {
             $el.multiLingual('setLocaleValue', this.value)
         })
     }

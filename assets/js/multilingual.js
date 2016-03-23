@@ -44,7 +44,12 @@
             self.$activeField.val(this.value)
         })
 
-        this.setLocale(this.options.defaultLocale)
+        /*
+         * Init locale
+         */
+        this.activeLocale = this.options.defaultLocale
+        this.$activeField = this.getLocaleElement(this.activeLocale)
+        this.$activeButton.text(this.activeLocale)
     }
 
     MultiLingual.DEFAULTS = {
@@ -75,9 +80,9 @@
     MultiLingual.prototype.setLocale = function(locale) {
         this.activeLocale = locale
         this.$activeField = this.getLocaleElement(locale)
-        this.$placeholder.val(this.getLocaleValue(locale))
         this.$activeButton.text(locale)
 
+        this.$placeholder.val(this.getLocaleValue(locale))
         this.$el.trigger('setLocale.oc.multilingual', [locale, this.getLocaleValue(locale)])
     }
 
