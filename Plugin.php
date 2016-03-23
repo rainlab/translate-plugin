@@ -10,6 +10,8 @@ use Cms\Classes\Content;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\Translator;
+use RainLab\Translate\Classes\ThemeScanner;
+use Exception;
 
 /**
  * Translate Plugin Information File
@@ -74,6 +76,16 @@ class Plugin extends PluginBase
             if (($content = Content::loadCached($controller->getTheme(), $fileName)) !== null) {
                 return $content;
             }
+        });
+
+        /*
+         * Import messages defined by the theme
+         */
+        Event::listen('cms.theme.setActiveTheme', function($code) {
+            try {
+                (new ThemeScanner)->scanThemeConfigForMessages();
+            }
+            catch (Exception $ex) {}
         });
     }
 
