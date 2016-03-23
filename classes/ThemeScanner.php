@@ -27,7 +27,7 @@ class ThemeScanner
     }
 
     /**
-     * Scans the theme templates for message references.
+     * Scans theme templates and config for messages.
      * @return void
      */
     public function scanForMessages()
@@ -36,7 +36,11 @@ class ThemeScanner
         $this->scanThemeTemplatesForMessages();
     }
 
-    protected function scanThemeConfigForMessages()
+    /**
+     * Scans the theme configuration for defined messages
+     * @return void
+     */
+    public function scanThemeConfigForMessages()
     {
         $theme = Theme::getActiveTheme();
         $config = $theme->getConfigArray('translate');
@@ -59,7 +63,11 @@ class ThemeScanner
         }
     }
 
-    protected function scanThemeTemplatesForMessages()
+    /**
+     * Scans the theme templates for message references.
+     * @return void
+     */
+    public function scanThemeTemplatesForMessages()
     {
         $messages = [];
 

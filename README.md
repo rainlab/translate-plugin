@@ -40,6 +40,8 @@ If translated, the text above will appear as whatever language is selected by th
 
 Message or string translation is the conversion of adhoc strings used throughout the site. A message can be translated with parameters.
 
+    {{ 'site.name'|_ }}
+
     {{ 'Welcome to our website!'|_ }}
 
     {{ 'Hello :name!'|_({ name: 'Friend' }) }}
@@ -48,7 +50,25 @@ A message can also be translated for a choice usage.
 
     {{ 'There are no apples|There are :number applies!'|__(2, { number: 'two' }) }}
 
-[comment]: <> (Themes can provide default values for these messages by including a `lang.yaml` file in the theme directory.)
+Themes can provide default values for these messages by defining a `translate` key in the `theme.yaml` file, located in the theme directory.
+
+    name: My Theme
+    # [...]
+
+    translate:
+        en:
+            site.name: 'My Website'
+            nav.home: 'Home'
+            nav.video: 'Video'
+            title.home: 'Welcome Home'
+            title.video: 'Screencast Video'
+
+You may also define the translations in a separate file, where the path is relative to the theme. The following definition will source the default messages from the file **config/lang.yaml** inside the theme.
+
+    name: My Theme
+    # [...]
+
+    translate: config/lang.yaml
 
 ## Content translation
 
