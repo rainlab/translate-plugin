@@ -40,7 +40,7 @@ If translated, the text above will appear as whatever language is selected by th
 
 Message or string translation is the conversion of adhoc strings used throughout the site. A message can be translated with parameters.
 
-    {{ 'site.name'|_ }}
+    {{ site.name|_ }}
 
     {{ 'Welcome to our website!'|_ }}
 
