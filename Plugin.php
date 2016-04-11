@@ -162,6 +162,10 @@ class Plugin extends PluginBase
             'RainLab\Translate\FormWidgets\MLRichEditor' => [
                 'label' => 'Rich Editor (ML)',
                 'code'  => 'mlricheditor'
+            ],
+            'RainLab\Translate\FormWidgets\MLBlogMarkdown' => [
+                'label' => 'Blog Markdown (ML)',
+                'code'  => 'mlblogmarkdown'
             ]
         ];
     }
@@ -236,6 +240,9 @@ class Plugin extends PluginBase
             }
             elseif ($type == 'richeditor') {
                 $fields[$name]['type'] = 'mlricheditor';
+            }
+            elseif ($type == 'RainLab\Blog\FormWidgets\BlogMarkdown') {
+                $fields[$name]['type'] = 'mlblogmarkdown';
             }
         }
 
