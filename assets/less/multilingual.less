@@ -5,7 +5,7 @@
 .field-multilingual {
     position: relative;
 
-    .btn {
+    .language-btn {
         background: transparent;
         position: absolute;
         color: lighten(@multilingual-btn-color, 15%);
@@ -28,7 +28,7 @@
             padding-right: 44px;
         }
 
-        .btn {
+        .language-btn {
             right: 4px;
             top: 50%;
             margin-top: -44px;
@@ -37,27 +37,40 @@
     }
 
     &.field-multilingual-textarea {
-        .btn {
+        .language-btn {
             right: 11px;
             top: 5px;
             text-align: right;
         }
 
-        .dropdown-menu {
+        .language-dropdown-menu {
             top: 39px;
             right: 1px;
         }
     }
 
     &.field-multilingual-richeditor {
-        .btn {
+        .language-btn {
             top: 43px;
             right: 15px;
             text-align: right;
         }
 
-        .dropdown-menu {
+        .language-dropdown-menu {
             top: 74px;
+            right: 1px;
+        }
+    }
+
+    &.field-multilingual-markdowneditor {
+        .language-btn {
+            top: 43px;
+            right: 15px;
+            text-align: right;
+}
+
+        .language-dropdown-menu {
+            top: 74px !important;
             right: 1px;
         }
     }
@@ -65,7 +78,7 @@
 
 .fancy-layout {
     .form-tabless-fields .field-multilingual {
-        .btn {
+        .language-btn {
             color: rgba(255,255,255,.8);
 
             &:hover {
