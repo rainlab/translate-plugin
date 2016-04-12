@@ -67,7 +67,7 @@ class MLBlogMarkdown extends BlogMarkdown
 
         if (Locale::isAvailable()) {
             $this->loadLocaleAssets();
-//            $this->addJs('js/mlmarkdowneditor.js');
+            $this->addJs('js/mlblogmarkdown.js');
         }
     }
 
