@@ -43,8 +43,6 @@
         });
 
         editor.on('change', function() {
-            console.log('textarea' + $textarea.val());
-            console.log('editor' + editor.getSession().getValue());
             $el.multiLingual('setLocaleValue', editor.getSession().getValue())
         })
     }
