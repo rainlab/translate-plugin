@@ -1,8 +1,8 @@
 /*
- * MLBlogMarkdown plugin
+ * MLMarkdownEditor plugin
  * 
  * Data attributes:
- * - data-control="mlblogmarkdown" - enables the plugin on an element
+ * - data-control="mlmarkdowneditor" - enables the plugin on an element
  * - data-textarea-element="textarea#id" - an option with a value
  *
  * JavaScript API:
@@ -15,7 +15,7 @@
     // MLRICHEDITOR CLASS DEFINITION
     // ============================
 
-    var MLBlogMarkdown = function(element, options) {
+    var MLMarkdownEditor = function(element, options) {
         this.options   = options
         this.$el       = $(element)
         this.$textarea = $(options.textareaElement)
@@ -28,10 +28,10 @@
         this.$el.multiLingual()
     }
 
-    MLBlogMarkdown.DEFAULTS = {
+    MLMarkdownEditor.DEFAULTS = {
     }
 
-    MLBlogMarkdown.prototype.init = function() {
+    MLMarkdownEditor.prototype.init = function() {
         var $el = this.$el,
             $textarea = this.$textarea,
             editor = this.$markdownEditor.markdownEditor('getEditorObject');
@@ -46,17 +46,17 @@
             $el.multiLingual('setLocaleValue', editor.getSession().getValue())
         })
     }
-    
-    var old = $.fn.mlBlogMarkdown
 
-    $.fn.mlBlogMarkdown = function (option) {
+    var old = $.fn.mlMarkdownEditor
+
+    $.fn.mlMarkdownEditor = function (option) {
         var args = Array.prototype.slice.call(arguments, 1), result
 
         this.each(function () {
             var $this   = $(this)
-            var data    = $this.data('oc.mlBlogMarkdown')
-            var options = $.extend({}, MLBlogMarkdown.DEFAULTS, $this.data(), typeof option == 'object' && option)
-            if (!data) $this.data('oc.mlBlogMarkdown', (data = new MLBlogMarkdown(this, options)))
+            var data    = $this.data('oc.mlMarkdownEditor')
+            var options = $.extend({}, MLMarkdownEditor.DEFAULTS, $this.data(), typeof option == 'object' && option)
+            if (!data) $this.data('oc.mlMarkdownEditor', (data = new MLMarkdownEditor(this, options)))
             if (typeof option == 'string') result = data[option].apply(data, args)
             if (typeof result != 'undefined') return false
         })
@@ -64,15 +64,15 @@
         return result ? result : this
     }
 
-    $.fn.mlBlogMarkdown.Constructor = MLBlogMarkdown;
+    $.fn.mlMarkdownEditor.Constructor = MLMarkdownEditor;
 
-    $.fn.mlBlogMarkdown.noConflict = function () {
-        $.fn.mlBlogMarkdown = old
+    $.fn.mlMarkdownEditor.noConflict = function () {
+        $.fn.mlMarkdownEditor = old
         return this
     }
 
     $(document).render(function (){
-        $('[data-control="mlblogmarkdown"]').mlBlogMarkdown()
+        $('[data-control="mlmarkdowneditor"]').mlMarkdownEditor()
     })
 
 
