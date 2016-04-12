@@ -1,8 +1,8 @@
 /*
- * MLRichEditor plugin
+ * MLBlogMarkdown plugin
  * 
  * Data attributes:
- * - data-control="mlricheditor" - enables the plugin on an element
+ * - data-control="mlblogmarkdown" - enables the plugin on an element
  * - data-textarea-element="textarea#id" - an option with a value
  *
  * JavaScript API:

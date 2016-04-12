@@ -1,6 +1,7 @@
 <?php namespace RainLab\Translate\FormWidgets;
 
 use RainLab\Blog\FormWidgets\BlogMarkdown;
+use RainLab\Blog\Models\Post;
 use RainLab\Translate\Models\Locale;
 
 /**
@@ -84,4 +85,23 @@ class MLBlogMarkdown extends BlogMarkdown
             $this->viewPath = $this->originalViewPath;
         }
     }
+
+    public function getSaveValue($value)
+    {
+        $localeData = $this->getLocaleSaveData();
+
+        /*
+         * Set the translated values to the model
+         */
+        if ($this->model->methodExists('setTranslateAttribute')) {
+            foreach ($localeData as $locale => $value) {
+                $this->model->setTranslateAttribute($this->columnName, $value, $locale);
+                $this->model->setTranslateAttribute('content_html', Post::formatHtml($value), $locale);
+
+            }
+        }
+
+        return array_get($localeData, $this->defaultLocale->code, $value);
+    }
+
 }
