@@ -14,8 +14,17 @@ class MLBlogMarkdown extends MLMarkdownEditor
 {
 
     public function init() {
-        $this->actAsParent();
+        $this->overrideAssetPaths();
         parent::init();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function loadAssets()
+    {
+        $this->overrideAssetPaths();
+        parent::loadAssets();
     }
 
     public function getSaveValue($value)
@@ -36,10 +45,11 @@ class MLBlogMarkdown extends MLMarkdownEditor
         return array_get($localeData, $this->defaultLocale->code, $value);
     }
 
-    private function actAsParent($switch = true)
+    private function overrideAssetPaths($switch = true)
     {
-        $this->assetPath = "/plugins/rainlab/translate/formwidgets/mlmarkdowneditor/assets";
-        $this->viewPath = base_path()."/plugins/rainlab/translate/formwidgets/mlmarkdowneditor/partials";
+        $this->originalAssetPath = "/plugins/rainlab/translate/formwidgets/mlmarkdowneditor/assets";
+        $this->originalViewPath = base_path()."/plugins/rainlab/translate/formwidgets/mlmarkdowneditor/partials";
+        $this->assetPath = $this->originalAssetPath;
+        $this->viewPath = $this->originalViewPath;
     }
-
 }

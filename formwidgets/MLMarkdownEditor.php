@@ -85,20 +85,4 @@ class MLMarkdownEditor extends MarkdownEditor
         }
     }
 
-    public function getSaveValue($value)
-    {
-        $localeData = $this->getLocaleSaveData();
-
-        /*
-         * Set the translated values to the model
-         */
-        if ($this->model->methodExists('setTranslateAttribute')) {
-            foreach ($localeData as $locale => $value) {
-                $this->model->setTranslateAttribute($this->columnName, $value, $locale);
-            }
-        }
-
-        return array_get($localeData, $this->defaultLocale->code, $value);
-    }
-
 }
