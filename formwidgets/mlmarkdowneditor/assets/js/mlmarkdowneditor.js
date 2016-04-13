@@ -20,7 +20,7 @@
         this.$el       = $(element)
         this.$textarea = $(options.textareaElement)
         this.$form = $('#post-form')
-        this.$markdownEditor = $('[data-field-name=content] [data-control=markdowneditor]:first', this.$form)
+        this.$markdownEditor = $('[data-control=markdowneditor]:first', this.$el)
 
         // Init
         this.init()
