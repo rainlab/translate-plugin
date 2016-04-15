@@ -2,13 +2,13 @@
 
 use Lang;
 use Flash;
-use Cache;
 use Request;
 use BackendMenu;
 use Backend\Classes\Controller;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\Locale;
 use RainLab\Translate\Classes\ThemeScanner;
+use System\Helpers\Cache as CacheHelper;
 use System\Classes\SettingsManager;
 
 /**
@@ -46,7 +46,7 @@ class Messages extends Controller
 
     public function onClearCache()
     {
-        Cache::flush();
+        CacheHelper::clear();
 
         Flash::success(Lang::get('rainlab.translate::lang.messages.clear_cache_success'));
     }
