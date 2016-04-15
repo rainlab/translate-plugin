@@ -4,7 +4,6 @@ use App;
 use Schema;
 use Session;
 use Request;
-use DbDongle;
 use RainLab\Translate\Models\Locale;
 
 /**
@@ -105,7 +104,7 @@ class Translator
         if (Session::has(self::SESSION_CONFIGURED)) {
             $result = true;
         }
-        elseif (DbDongle::hasDatabase() && Schema::hasTable('rainlab_translate_locales')) {
+        elseif (App::hasDatabase() && Schema::hasTable('rainlab_translate_locales')) {
             Session::put(self::SESSION_CONFIGURED, true);
             $result = true;
         }
