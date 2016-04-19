@@ -18,8 +18,6 @@
     var MLMarkdownEditor = function(element, options) {
         this.options   = options
         this.$el       = $(element)
-        this.$textarea = $(options.textareaElement)
-        this.$form = $('#post-form')
         this.$markdownEditor = $('[data-control=markdowneditor]:first', this.$el)
 
         // Init
@@ -33,7 +31,7 @@
 
     MLMarkdownEditor.prototype.init = function() {
         var $el = this.$el,
-            $textarea = this.$textarea,
+            $markdownEditor = this.$markdownEditor,
             editor = this.$markdownEditor.markdownEditor('getEditorObject');
 
         $el.on('setLocale.oc.multilingual', function(e, locale, localeValue) {
@@ -42,9 +40,9 @@
             }
         });
 
-        editor.on('change', function() {
+        $markdownEditor.on('oc.markdownEditorInitPreview', function() {
             $el.multiLingual('setLocaleValue', editor.getSession().getValue())
-        })
+        });
     }
 
     var old = $.fn.mlMarkdownEditor
