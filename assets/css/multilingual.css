@@ -10,6 +10,9 @@
   letter-spacing: 1px;
   width: 44px;
   padding-right: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  text-shadow: none;
 }
 .field-multilingual .btn:hover {
   color: #555555;
