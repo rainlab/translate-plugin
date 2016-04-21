@@ -12,13 +12,14 @@
 
 +function ($) { "use strict";
 
-    // MLRICHEDITOR CLASS DEFINITION
+    // MLMarkdownEditor CLASS DEFINITION
     // ============================
 
     var MLMarkdownEditor = function(element, options) {
         this.options   = options
         this.$el       = $(element)
         this.$markdownEditor = $('[data-control=markdowneditor]:first', this.$el)
+        this.$form = this.$el.closest('form')
 
         // Init
         this.init()
@@ -32,6 +33,7 @@
     MLMarkdownEditor.prototype.init = function() {
         var $el = this.$el,
             $markdownEditor = this.$markdownEditor,
+            $form = this.$form,
             editor = this.$markdownEditor.markdownEditor('getEditorObject');
 
         $el.on('setLocale.oc.multilingual', function(e, locale, localeValue) {
@@ -40,7 +42,7 @@
             }
         });
 
-        $markdownEditor.on('oc.markdownEditorInitPreview', function() {
+        editor.on('change', function() {
             $el.multiLingual('setLocaleValue', editor.getSession().getValue())
         });
     }
