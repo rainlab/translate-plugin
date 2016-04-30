@@ -230,8 +230,17 @@ class Plugin extends PluginBase
      */
     protected function processFormMLFields($fields, $model)
     {
+        $translatable = array_flip($model->translatable);
+
+        /*
+         * Special: A custom field "markup_html" is used for Content templates.
+         */
+        if ($model instanceof Content && array_key_exists('markup', $translatable)) {
+            $translatable['markup_html'] = true;
+        }
+
         foreach ($fields as $name => $config) {
-            if (!in_array($name, $model->translatable)) {
+            if (!array_key_exists($name, $translatable)) {
                 continue;
             }
 

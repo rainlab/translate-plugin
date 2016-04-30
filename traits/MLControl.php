@@ -14,11 +14,6 @@ use October\Rain\Html\Helper as HtmlHelper;
 trait MLControl
 {
     /**
-     * @var string Form field column name.
-     */
-    public $columnName;
-
-    /**
      * @var boolean Determines whether translation services are available
      */
     public $isAvailable;
@@ -34,7 +29,6 @@ trait MLControl
      */
     public function initLocale()
     {
-        $this->columnName  = $this->formField->fieldName;
         $this->defaultLocale  = Locale::getDefault();
         $this->parentViewPath = $this->guessViewPathFrom(__TRAIT__, '/partials');
         $this->isAvailable = Locale::isAvailable();
@@ -91,7 +85,10 @@ trait MLControl
     public function getLocaleValue($locale)
     {
         if ($this->model->methodExists('getTranslateAttribute')) {
-            return $this->model->noFallbackLocale()->getTranslateAttribute($this->columnName, $locale);
+            return $this->model->noFallbackLocale()->getTranslateAttribute(
+                $this->valueFrom ?: $this->fieldName,
+                $locale
+            );
         }
         else {
             return $this->formField->value;
@@ -125,7 +122,11 @@ trait MLControl
          */
         if ($this->model->methodExists('setTranslateAttribute')) {
             foreach ($localeData as $locale => $value) {
-                $this->model->setTranslateAttribute($this->columnName, $value, $locale);
+                $this->model->setTranslateAttribute(
+                    $this->valueFrom ?: $this->fieldName,
+                    $value,
+                    $locale
+                );
             }
         }
 
@@ -145,10 +146,10 @@ trait MLControl
             return $values;
         }
 
-        $columnName = implode('.', HtmlHelper::nameToArray($this->columnName));
+        $fieldName = implode('.', HtmlHelper::nameToArray($this->fieldName));
 
         foreach ($data as $locale => $_data) {
-            $values[$locale] = array_get($_data, $columnName);
+            $values[$locale] = array_get($_data, $fieldName);
         }
 
         return $values;
