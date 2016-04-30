@@ -164,7 +164,7 @@ abstract class TranslatableBehavior extends ExtensionBase
      */
     public function hasTranslation($key, $locale)
     {
-        return !empty($this->getAttributeFromData($this->translatableAttributes[$locale], $key));
+        return !!$this->getAttributeFromData($this->translatableAttributes[$locale], $key);
     }
 
     /**
