@@ -28,14 +28,4 @@ class MLContent extends MLCmsObject
     {
         return static::$parent->getObjectTypeDirName();
     }
-
-    public function setMarkupHtmlAttribute($value)
-    {
-        return $this->markup = $value;
-    }
-
-    public function getMarkupHtmlAttribute()
-    {
-        return $this->markup;
-    }
 }
