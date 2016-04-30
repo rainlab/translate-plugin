@@ -1,6 +1,7 @@
 <?php namespace RainLab\Translate;
 
 use App;
+use Str;
 use Lang;
 use File;
 use Event;
@@ -9,6 +10,7 @@ use Cms\Classes\Page;
 use Cms\Classes\Content;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
+use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\ThemeScanner;
 use Exception;
@@ -86,6 +88,13 @@ class Plugin extends PluginBase
                 (new ThemeScanner)->scanThemeConfigForMessages();
             }
             catch (Exception $ex) {}
+        });
+
+        /*
+         * Prune localized content files from template list
+         */
+        Event::listen('pages.content.templateList', function($widget, $templates) {
+            return $this->pruneTranslatedContentTemplates($templates);
         });
     }
 
@@ -240,5 +249,23 @@ class Plugin extends PluginBase
         }
 
         return $fields;
+    }
+
+    /**
+     * Removes localized content files from templates collection
+     * @param \October\Rain\Database\Collection $templates
+     * @return \October\Rain\Database\Collection
+     */
+    protected function pruneTranslatedContentTemplates($templates)
+    {
+        $locales = LocaleModel::listAvailable();
+
+        $extensions = array_map(function($ext) {
+            return '.'.$ext;
+        }, array_keys($locales));
+
+        return $templates->filter(function($template) use ($extensions) {
+            return !Str::endsWith($template->getBaseFileName(), $extensions);
+        });
     }
 }
