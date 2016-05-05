@@ -79,6 +79,37 @@ class TranslatableCmsObject extends TranslatableBehavior
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function syncTranslatableAttributes()
+    {
+        parent::syncTranslatableAttributes();
+
+        if ($this->model->isDirty('fileName')) {
+            $this->syncTranslatableFileNames();
+        }
+    }
+
+    /**
+     * If the parent model file name is changed, this should
+     * be reflected in the translated models also.
+     */
+    protected function syncTranslatableFileNames()
+    {
+        $knownLocales = array_keys($this->translatableAttributes);
+        foreach ($knownLocales as $locale) {
+            if ($locale == $this->translatableDefault) {
+                continue;
+            }
+
+            if ($obj = $this->getCmsObjectForLocale($locale)) {
+                $obj->fileName = $this->model->fileName;
+                $obj->forceSave();
+            }
+        }
+    }
+
+    /**
      * Saves the translation data in the join table.
      * @param  string $locale
      * @return void
