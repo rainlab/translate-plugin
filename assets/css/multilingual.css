@@ -1,7 +1,7 @@
 .field-multilingual {
   position: relative;
 }
-.field-multilingual .btn {
+.field-multilingual .language-btn {
   background: transparent;
   position: absolute;
   color: #7b7b7b;
@@ -14,47 +14,56 @@
   box-shadow: none;
   text-shadow: none;
 }
-.field-multilingual .btn:hover {
+.field-multilingual .language-btn:hover {
   color: #555555;
 }
 .field-multilingual.field-multilingual-text .form-control {
   padding-right: 44px;
 }
-.field-multilingual.field-multilingual-text .btn {
+.field-multilingual.field-multilingual-text .language-btn {
   right: 4px;
   top: 50%;
   margin-top: -44px;
   height: 88px;
 }
-.field-multilingual.field-multilingual-textarea .btn {
+.field-multilingual.field-multilingual-textarea .language-btn {
   right: 11px;
   top: 5px;
   text-align: right;
 }
-.field-multilingual.field-multilingual-textarea .dropdown-menu {
+.field-multilingual.field-multilingual-textarea .language-dropdown-menu {
   top: 39px !important;
   right: 1px;
 }
-.field-multilingual.field-multilingual-richeditor .btn {
+.field-multilingual.field-multilingual-richeditor .language-btn {
   top: 43px;
   right: 15px;
   text-align: right;
 }
-.field-multilingual.field-multilingual-richeditor .dropdown-menu {
+.field-multilingual.field-multilingual-richeditor .language-dropdown-menu {
   top: 74px !important;
   right: 1px;
 }
-.fancy-layout .form-tabless-fields .field-multilingual .btn {
+.field-multilingual.field-multilingual-markdowneditor .language-btn {
+  top: 43px;
+  right: 15px;
+  text-align: right;
+}
+.field-multilingual.field-multilingual-markdowneditor .language-dropdown-menu {
+  top: 74px !important;
+  right: 1px;
+}
+.fancy-layout .form-tabless-fields .field-multilingual .language-btn {
   color: rgba(255, 255, 255, 0.8);
 }
-.fancy-layout .form-tabless-fields .field-multilingual .btn:hover {
+.fancy-layout .form-tabless-fields .field-multilingual .language-btn:hover {
   color: #ffffff;
 }
-.fancy-layout .field-multilingual-richeditor .btn {
+.fancy-layout .field-multilingual-richeditor .language-btn {
   top: 63px;
   right: 25px;
 }
-.fancy-layout .field-multilingual-richeditor .dropdown-menu {
+.fancy-layout .field-multilingual-richeditor .language-dropdown-menu {
   top: 94px !important;
   right: 11px;
 }

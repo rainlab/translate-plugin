@@ -37,7 +37,7 @@
 
         $el.on('setLocale.oc.multilingual', function(e, locale, localeValue) {
             if (typeof localeValue === 'string' && $richeditor.data('oc.richEditor')) {
-                $richeditor.richEditor('setContent', localeValue);
+                $textarea.redactor('code.set', localeValue);
             }
         })
 
