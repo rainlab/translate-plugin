@@ -13,6 +13,7 @@
   -webkit-box-shadow: none;
   box-shadow: none;
   text-shadow: none;
+  z-index: 2;
 }
 .field-multilingual .btn:hover {
   color: #555555;
@@ -32,7 +33,7 @@
   text-align: right;
 }
 .field-multilingual.field-multilingual-textarea .dropdown-menu {
-  top: 39px !important;
+  top: 39px;
   right: 1px;
 }
 .field-multilingual.field-multilingual-richeditor .btn {
@@ -41,7 +42,7 @@
   text-align: right;
 }
 .field-multilingual.field-multilingual-richeditor .dropdown-menu {
-  top: 74px !important;
+  top: 74px;
   right: 1px;
 }
 .fancy-layout .form-tabless-fields .field-multilingual .btn {
@@ -49,12 +50,4 @@
 }
 .fancy-layout .form-tabless-fields .field-multilingual .btn:hover {
   color: #ffffff;
-}
-.fancy-layout .field-multilingual-richeditor .btn {
-  top: 63px;
-  right: 25px;
-}
-.fancy-layout .field-multilingual-richeditor .dropdown-menu {
-  top: 94px !important;
-  right: 11px;
 }

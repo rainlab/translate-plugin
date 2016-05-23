@@ -12,6 +12,9 @@
 
 +function ($) { "use strict";
 
+    var Base = $.oc.foundation.base,
+        BaseProto = Base.prototype
+
     // MLRICHEDITOR CLASS DEFINITION
     // ============================
 
@@ -21,29 +24,71 @@
         this.$textarea = $(options.textareaElement)
         this.$richeditor = $('[data-control=richeditor]', this.$el)
 
+        $.oc.foundation.controlUtils.markDisposable(element)
+        Base.call(this)
+
         // Init
         this.init()
-
-        this.$el.multiLingual()
     }
+
+    MLRichEditor.prototype = Object.create(BaseProto)
+    MLRichEditor.prototype.constructor = MLRichEditor
 
     MLRichEditor.DEFAULTS = {
     }
 
     MLRichEditor.prototype.init = function() {
-        var $el = this.$el,
-            $textarea = this.$textarea,
-            $richeditor = this.$richeditor
+        this.$el.multiLingual()
 
-        $el.on('setLocale.oc.multilingual', function(e, locale, localeValue) {
-            if (typeof localeValue === 'string' && $richeditor.data('oc.richEditor')) {
-                $richeditor.richEditor('setContent', localeValue);
-            }
-        })
+        this.$el.on('setLocale.oc.multilingual', this.proxy(this.onSetLocale))
+        this.$textarea.on('syncContent.oc.richeditor', this.proxy(this.onSyncContent))
 
-        $textarea.on('sanitize.oc.richeditor', function() {
-            $el.multiLingual('setLocaleValue', this.value)
-        })
+        this.updateLayout()
+
+        $(window).on('resize', this.proxy(this.updateLayout))
+        $(window).on('oc.updateUi', this.proxy(this.updateLayout))
+        this.$el.one('dispose-control', this.proxy(this.dispose))
+    }
+
+    MLRichEditor.prototype.dispose = function() {
+        this.$el.off('setLocale.oc.multilingual', this.proxy(this.onSetLocale))
+        this.$textarea.off('syncContent.oc.richeditor', this.proxy(this.onSyncContent))
+        $(window).off('resize', this.proxy(this.updateLayout))
+        $(window).off('oc.updateUi', this.proxy(this.updateLayout))
+
+        this.$el.off('dispose-control', this.proxy(this.dispose))
+
+        this.$el.removeData('oc.mlRichEditor')
+
+        this.$el = null
+
+        this.options = null
+
+        BaseProto.dispose.call(this)
+    }
+
+    MLRichEditor.prototype.onSetLocale = function(e, locale, localeValue) {
+        if (typeof localeValue === 'string' && this.$richeditor.data('oc.richEditor')) {
+            this.$richeditor.richEditor('setContent', localeValue);
+        }
+    }
+
+    MLRichEditor.prototype.onSyncContent = function(ev, richeditor, value) {
+        this.$el.multiLingual('setLocaleValue', value.html)
+    }
+
+    MLRichEditor.prototype.updateLayout = function() {
+        var $toolbar = $('.fr-toolbar', this.$el),
+            $btn = $('.btn[data-active-locale]:first', this.$el),
+            $dropdown = $('.dropdown-menu[data-locale-dropdown]:first', this.$el)
+
+        if (!$toolbar.length) {
+            return
+        }
+
+        var height = $toolbar.outerHeight(true)
+        $btn.css('top', height + 6)
+        $dropdown.css('top', height + 40)
     }
 
     // MLRICHEDITOR PLUGIN DEFINITION

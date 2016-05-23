@@ -16,6 +16,7 @@
         padding-right: 0;
         .box-shadow(none);
         text-shadow: none;
+        z-index: 2;
 
         &:hover {
             color: @multilingual-btn-color;
@@ -43,7 +44,7 @@
         }
 
         .dropdown-menu {
-            top: 39px !important;
+            top: 39px;
             right: 1px;
         }
     }
@@ -56,7 +57,7 @@
         }
 
         .dropdown-menu {
-            top: 74px !important;
+            top: 74px;
             right: 1px;
         }
     }
@@ -73,15 +74,14 @@
         }
     }
 
-    .field-multilingual-richeditor {
-        .btn {
-            top: 63px;
-            right: 25px;
-        }
-
-        .dropdown-menu {
-            top: 94px !important;
-            right: 11px;
-        }
-    }
+    // .field-multilingual-richeditor {
+    //     .btn {
+    //         top: 63px;
+    //         right: 25px;
+    //     }
+    //     .dropdown-menu {
+    //         top: 94px !important;
+    //         right: 11px;
+    //     }
+    // }
 }
