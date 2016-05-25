@@ -25,7 +25,7 @@
 
         this.$activeField  = null
         this.$activeButton = $('[data-active-locale]', this.$el)
-        this.$dropdown     = $('ul.language-dropdown-menu', this.$el)
+        this.$dropdown     = $('ul.ml-dropdown-menu', this.$el)
         this.$placeholder  = $(this.options.placeholderField)
 
         this.$dropdown.on('click', '[data-switch-locale]', function(event){

@@ -79,8 +79,8 @@
 
     MLRichEditor.prototype.updateLayout = function() {
         var $toolbar = $('.fr-toolbar', this.$el),
-            $btn = $('.btn[data-active-locale]:first', this.$el),
-            $dropdown = $('.dropdown-menu[data-locale-dropdown]:first', this.$el)
+            $btn = $('.ml-btn[data-active-locale]:first', this.$el),
+            $dropdown = $('.ml-dropdown-menu[data-locale-dropdown]:first', this.$el)
 
         if (!$toolbar.length) {
             return
