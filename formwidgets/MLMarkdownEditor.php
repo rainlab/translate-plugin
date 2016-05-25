@@ -4,12 +4,11 @@ use Backend\FormWidgets\MarkdownEditor;
 use RainLab\Translate\Models\Locale;
 
 /**
- * ML Blog Markdown
- * Renders a multi-lingual text field.
+ * ML Markdown Editor
+ * Renders a multi-lingual Markdown editor.
  *
- * @property  originalViewPath
  * @package rainlab\translate
- * @author Rafał Soboń
+ * @author Alexey Bobkov, Samuel Georges
  */
 class MLMarkdownEditor extends MarkdownEditor
 {
@@ -19,17 +18,16 @@ class MLMarkdownEditor extends MarkdownEditor
      * {@inheritDoc}
      */
     protected $defaultAlias = 'mlmarkdowneditor';
-    public $originalViewPath;
+
     public $originalAssetPath;
+    public $originalViewPath;
 
     /**
      * {@inheritDoc}
      */
     public function init()
     {
-        $this->actAsParent();
         parent::init();
-        $this->actAsParent(false);
         $this->initLocale();
     }
 
@@ -71,7 +69,7 @@ class MLMarkdownEditor extends MarkdownEditor
         }
     }
 
-    private function actAsParent($switch = true)
+    protected function actAsParent($switch = true)
     {
         if ($switch) {
             $this->originalAssetPath = $this->assetPath;

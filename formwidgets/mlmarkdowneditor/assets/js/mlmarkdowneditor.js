@@ -1,50 +1,78 @@
 /*
  * MLMarkdownEditor plugin
- * 
+ *
  * Data attributes:
  * - data-control="mlmarkdowneditor" - enables the plugin on an element
  * - data-textarea-element="textarea#id" - an option with a value
  *
  * JavaScript API:
- * $('a#someElement').mlRichEditor({ option: 'value' })
+ * $('a#someElement').mlMarkdownEditor({ option: 'value' })
  *
  */
 
 +function ($) { "use strict";
 
-    // MLMarkdownEditor CLASS DEFINITION
+    var Base = $.oc.foundation.base,
+        BaseProto = Base.prototype
+
+    // MLMARKDOWNEDITOR CLASS DEFINITION
     // ============================
 
     var MLMarkdownEditor = function(element, options) {
         this.options   = options
         this.$el       = $(element)
+        this.$textarea = $(options.textareaElement)
         this.$markdownEditor = $('[data-control=markdowneditor]:first', this.$el)
-        this.$form = this.$el.closest('form')
+
+        $.oc.foundation.controlUtils.markDisposable(element)
+        Base.call(this)
 
         // Init
         this.init()
-
-        this.$el.multiLingual()
     }
 
+    MLMarkdownEditor.prototype = Object.create(BaseProto)
+    MLMarkdownEditor.prototype.constructor = MLMarkdownEditor
+
     MLMarkdownEditor.DEFAULTS = {
+        textareaElement: null,
+        placeholderField: null,
+        defaultLocale: 'en'
     }
 
     MLMarkdownEditor.prototype.init = function() {
-        var $el = this.$el,
-            $markdownEditor = this.$markdownEditor,
-            $form = this.$form,
-            editor = this.$markdownEditor.markdownEditor('getEditorObject');
+        this.$el.multiLingual()
 
-        $el.on('setLocale.oc.multilingual', function(e, locale, localeValue) {
-            if (typeof localeValue === 'string') {
-                editor.getSession().setValue(localeValue)
-            }
-        });
+        this.$el.on('setLocale.oc.multilingual', this.proxy(this.onSetLocale))
+        this.$textarea.on('changeContent.oc.markdowneditor', this.proxy(this.onChangeContent))
 
-        editor.on('change', function() {
-            $el.multiLingual('setLocaleValue', editor.getSession().getValue())
-        });
+        this.$el.one('dispose-control', this.proxy(this.dispose))
+    }
+
+    MLMarkdownEditor.prototype.dispose = function() {
+        this.$el.off('setLocale.oc.multilingual', this.proxy(this.onSetLocale))
+        this.$textarea.off('changeContent.oc.markdowneditor', this.proxy(this.onChangeContent))
+        this.$el.off('dispose-control', this.proxy(this.dispose))
+
+        this.$el.removeData('oc.mlMarkdownEditor')
+
+        this.$textarea = null
+        this.$markdownEditor = null
+        this.$el = null
+
+        this.options = null
+
+        BaseProto.dispose.call(this)
+    }
+
+    MLMarkdownEditor.prototype.onSetLocale = function(e, locale, localeValue) {
+        if (typeof localeValue === 'string' && this.$markdownEditor.data('oc.markdownEditor')) {
+            this.$markdownEditor.markdownEditor('setContent', localeValue);
+        }
+    }
+
+    MLMarkdownEditor.prototype.onChangeContent = function(ev, markdowneditor, value) {
+        this.$el.multiLingual('setLocaleValue', value)
     }
 
     var old = $.fn.mlMarkdownEditor

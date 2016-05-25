@@ -5,7 +5,7 @@ use RainLab\Translate\Models\Locale;
 
 /**
  * ML Rich Editor
- * Renders a multi-lingual WYSIWYG edtiro.
+ * Renders a multi-lingual WYSIWYG editor.
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges

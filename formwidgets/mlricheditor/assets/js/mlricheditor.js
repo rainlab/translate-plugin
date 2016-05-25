@@ -22,7 +22,7 @@
         this.options   = options
         this.$el       = $(element)
         this.$textarea = $(options.textareaElement)
-        this.$richeditor = $('[data-control=richeditor]', this.$el)
+        this.$richeditor = $('[data-control=richeditor]:first', this.$el)
 
         $.oc.foundation.controlUtils.markDisposable(element)
         Base.call(this)
@@ -35,6 +35,9 @@
     MLRichEditor.prototype.constructor = MLRichEditor
 
     MLRichEditor.DEFAULTS = {
+        textareaElement: null,
+        placeholderField: null,
+        defaultLocale: 'en'
     }
 
     MLRichEditor.prototype.init = function() {
@@ -60,6 +63,8 @@
 
         this.$el.removeData('oc.mlRichEditor')
 
+        this.$textarea = null
+        this.$richeditor = null
         this.$el = null
 
         this.options = null
