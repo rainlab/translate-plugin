@@ -30,7 +30,7 @@ return [
         'hint_locales' => 'Create new languages here for translating front-end content. The default language represents the content before it has been translated.',
     ],
     'messages' => [
-        'title' => 'Translate Messages',
+        'title' => 'Translate messages',
         'description' => 'Update Messages',
         'clear_cache_link' => 'Clear cache',
         'clear_cache_loading' => 'Clearing application cache...',
