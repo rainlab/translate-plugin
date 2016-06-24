@@ -24,6 +24,11 @@ trait MLControl
     protected $parentViewPath;
 
     /**
+     * @var RainLab\Translate\Models\Locale Object
+     */
+    protected $defaultLocale;
+
+    /**
      * Initialize control
      * @return void
      */
