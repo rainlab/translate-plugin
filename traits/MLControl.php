@@ -34,7 +34,7 @@ trait MLControl
      */
     public function initLocale()
     {
-        $this->defaultLocale  = Locale::getDefault();
+        $this->defaultLocale = Locale::getDefault();
         $this->parentViewPath = $this->guessViewPathFrom(__TRAIT__, '/partials');
         $this->isAvailable = Locale::isAvailable();
     }
@@ -118,7 +118,7 @@ trait MLControl
     /**
      * {@inheritDoc}
      */
-    public function getSaveValue($value)
+    public function getLocaleSaveValue($value)
     {
         $localeData = $this->getLocaleSaveData();
 

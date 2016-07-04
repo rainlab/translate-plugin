@@ -50,6 +50,15 @@ class MLTextarea extends FormWidgetBase
     }
 
     /**
+     * Returns an array of translated values for this field
+     * @return array
+     */
+    public function getSaveValue($value)
+    {
+        return $this->getLocaleSaveValue($value);
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function loadAssets()
