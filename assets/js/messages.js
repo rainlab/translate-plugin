@@ -54,6 +54,10 @@
             self.refreshTable()
         });
 
+        $(document).on('keyup', '.control-table input.string-input', function(ev) {
+            self.onApplyValue(ev)
+        });
+
         this.toggleTranslated = function(isHide) {
             this.hideTranslated = isHide
             this.setTitleContents()
@@ -89,6 +93,22 @@
             this.toInput = this.$form.find('input[name=locale_to]')
 
             this.tableElement.one('oc.tableUpdateData', $.proxy(this.updateTableData, this))
+        }
+
+        this.onApplyValue = function(ev) {
+            if (ev.keyCode == 13) {
+                var $table = $(ev.currentTarget).closest('[data-control=table]')
+
+                if (!$table.length) {
+                    return
+                }
+
+                var tableObj = $table.data('oc.table')
+                if (tableObj) {
+                    tableObj.setCellValue($(ev.currentTarget).closest('td').get(0), ev.currentTarget.value)
+                    tableObj.commitEditedRow()
+                }
+            }
         }
 
         this.updateTableData = function(event, records) {

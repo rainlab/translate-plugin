@@ -123,6 +123,7 @@ class Messages extends Controller
         $dataSource->bindEvent('data.updateRecord', function($key, $data) {
             $message = Message::find($key);
             $this->updateTableData($message, $data);
+            CacheHelper::clear();
         });
 
         $dataSource->bindEvent('data.deleteRecord', function($key) {

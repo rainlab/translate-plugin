@@ -9,7 +9,7 @@
     <?= $this->makeHintPartial('translation_messages_hint', 'hint') ?>
 </div>
 
-<?= Form::open(['id' => 'messagesForm', 'class'=>'layout-item stretch layout-column']) ?>
+<?= Form::open(['id' => 'messagesForm', 'class'=>'layout-item stretch layout-column', 'onsubmit'=>'return false']) ?>
 
     <div id="messagesContainer">
         <?= $this->makePartial('messages') ?>
