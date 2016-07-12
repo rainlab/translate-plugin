@@ -21,3 +21,4 @@
 1.1.4: Adds new multilingual markdown editor.
 1.1.5: Minor update to the multilingual control API.
 1.1.6: Minor improvements in the message editor.
+1.1.7: Fixes bug not showing content when first loading multilingual textarea controls.

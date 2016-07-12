@@ -16,7 +16,7 @@
             placeholder="<?= e(trans($field->placeholder)) ?>"
             class="form-control field-textarea size-<?= $field->size ?>"
             autocomplete="off"
-            <?= $field->getAttributes() ?>></textarea>
+            <?= $field->getAttributes() ?>><?= e($field->value) ?></textarea>
 
         <button
             class="btn btn-default ml-btn"
