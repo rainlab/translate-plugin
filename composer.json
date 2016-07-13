@@ -1,0 +1,21 @@
+{
+    "name": "rainlab/translate-plugin",
+    "type": "october-plugin",
+    "description": "Translate plugin for October CMS",
+    "homepage": "https://octobercms.com/plugin/rainlab-translate",
+    "keywords": ["october", "octobercms", "translate"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexey Bobkov",
+            "email": "aleksey.bobkov@gmail.com",
+            "role": "Co-founder"
+        },
+        {
+            "name": "Samuel Georges",
+            "email": "daftspunky@gmail.com",
+            "role": "Co-founder"
+        }
+    ],
+    "minimum-stability": "dev"
+}
