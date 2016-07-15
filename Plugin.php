@@ -186,7 +186,7 @@ class Plugin extends PluginBase
 
     public function translatePlural($string, $count = 0, $params = [])
     {
-        return Lang::choice($string, $count, $params);
+        return Lang::choice(Message::trans($string, $params), $count, $params);
     }
 
     /**
