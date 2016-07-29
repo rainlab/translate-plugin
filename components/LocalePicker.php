@@ -4,6 +4,7 @@ use Request;
 use Redirect;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
+use October\Rain\Router\Router as RainRouter;
 use Cms\Classes\ComponentBase;
 
 class LocalePicker extends ComponentBase
@@ -72,11 +73,13 @@ class LocalePicker extends ComponentBase
 
         $this->translator->setLocale($locale);
 
+        $pageUrl = $this->makeLocaleUrlFromPage($locale);
+
         if ($this->property('forceUrl')) {
-            return Redirect::to($this->translator->getCurrentPathInLocale($locale));
+            return Redirect::to($this->translator->getPathInLocale($pageUrl, $locale));
         }
 
-        return Redirect::refresh();
+        return Redirect::to($pageUrl);
     }
 
     protected function redirectForceUrl()
@@ -93,5 +96,22 @@ class LocalePicker extends ComponentBase
             ?: $this->translator->getDefaultLocale();
 
         return Redirect::to($this->translator->getCurrentPathInLocale($locale));
+    }
+
+    /**
+     * Returns the URL from a page object, including current parameter values.
+     * @return string
+     */
+    protected function makeLocaleUrlFromPage($locale)
+    {
+        $page = $this->getPage();
+
+        $page->rewriteTranslatablePageUrl($locale);
+
+        $router = new RainRouter;
+
+        $params = $this->getRouter()->getParameters();
+
+        return $router->urlFromPattern($page->url, $params);
     }
 }

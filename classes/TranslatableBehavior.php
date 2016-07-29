@@ -24,7 +24,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     protected $translatableContext;
 
     /**
-     * @var string Active language for translations.
+     * @var string Default system language.
      */
     protected $translatableDefault;
 
@@ -60,13 +60,13 @@ abstract class TranslatableBehavior extends ExtensionBase
 
         $this->model->bindEvent('model.beforeGetAttribute', function($key) {
             if ($this->isTranslatable($key)) {
-                return $this->getTranslateAttribute($key);
+                return $this->getAttributeTranslated($key);
             }
         });
 
         $this->model->bindEvent('model.beforeSetAttribute', function($key, $value) {
             if ($this->isTranslatable($key)) {
-                return $this->setTranslateAttribute($key, $value);
+                return $this->setAttributeTranslated($key, $value);
             }
         });
 
@@ -112,6 +112,16 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
+     * @deprecated getTranslateAttribute is deprecated, use getAttributeTranslated instead.
+     * @todo Remove method if year >= 2017
+     */
+    public function getTranslateAttribute($key, $locale = null)
+    {
+        traceLog(static::class . '::getTranslateAttribute is deprecated, use getAttributeTranslated instead.');
+        return $this->getAttributeTranslated($key, $locale);
+    }
+
+    /**
      * Returns a translated attribute value.
      *
      * The base value must come from 'attributes' on the model otherwise the process
@@ -121,7 +131,7 @@ abstract class TranslatableBehavior extends ExtensionBase
      * @param  string $locale
      * @return string
      */
-    public function getTranslateAttribute($key, $locale = null)
+    public function getAttributeTranslated($key, $locale = null)
     {
         if ($locale == null) {
             $locale = $this->translatableContext;
@@ -168,12 +178,22 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
+     * @deprecated setTranslateAttribute is deprecated, use setAttributeTranslated instead.
+     * @todo Remove method if year >= 2017
+     */
+    public function setTranslateAttribute($key, $value, $locale = null)
+    {
+        traceLog(static::class . '::setTranslateAttribute is deprecated, use setAttributeTranslated instead.');
+        return $this->setAttributeTranslated($key, $value, $locale);
+    }
+
+    /**
      * Sets a translated attribute value.
      * @param  string $key   Attribute
      * @param  string $value Value to translate
      * @return string        Translated value
      */
-    public function setTranslateAttribute($key, $value, $locale = null)
+    public function setAttributeTranslated($key, $value, $locale = null)
     {
         if ($locale == null) {
             $locale = $this->translatableContext;

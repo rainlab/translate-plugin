@@ -116,10 +116,10 @@ This can be useful inside a Twig template.
 There are ways to get and set attributes without changing the context.
 
     // Gets a single translated attribute for a language
-    $user->getTranslateAttribute('name', 'fr');
+    $user->getAttributeTranslated('name', 'fr');
 
     // Sets a single translated attribute for a language
-    $user->setTranslateAttribute('name', 'Jean-Claude', 'fr');
+    $user->setAttributeTranslated('name', 'Jean-Claude', 'fr');
 
 ## Conditionally extending plugins
 

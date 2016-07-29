@@ -143,11 +143,27 @@ class Translator
      */
     public function getCurrentPathInLocale($locale = null)
     {
+        return $this->getPathInLocale(Request::path(), $locale);
+    }
+
+    /**
+     * Returns the path prefixed with language code.
+     *
+     * @param string $path Path to rewrite
+     * @param string $locale optional language code, default to the system default language
+     * @return string
+     */
+    public function getPathInLocale($path, $locale = null)
+    {
+        $segments = explode('/', $path);
+
+        $segments = array_values(array_filter($segments, function ($v) {
+            return $v != '';
+        }));
+
         if (is_null($locale) || !Locale::isValid($locale)) {
             $locale = $this->defaultLocale;
         }
-
-        $segments = Request::segments();
 
         if (count($segments) == 0 || Locale::isValid($segments[0])) {
             $segments[0] = $locale;
