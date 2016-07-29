@@ -121,6 +121,32 @@ There are ways to get and set attributes without changing the context.
     // Sets a single translated attribute for a language
     $user->setAttributeTranslated('name', 'Jean-Claude', 'fr');
 
+## URL translation
+
+Pages in the CMS support translating the URL property. Assuming you have 3 languages set up:
+
+- en: English
+- fr: French
+- ru: Russian
+
+There is a page with the following content:
+
+```
+url = "/contact"
+
+[viewBag]
+localeUrl[ru] = "/контакт"
+==
+<p>Page content</p>
+```
+
+The word "Contact" in French is the same so a translated URL is not given, or needed. If the page has no URL override specified, then the default URL will be used. Pages will not be duplicated for a given language.
+
+- /fr/contact - Page in French
+- /en/contact - Page in English
+- /ru/контакт - Page in Russian
+- /ru/contact - 404
+
 ## Conditionally extending plugins
 
 #### Models
