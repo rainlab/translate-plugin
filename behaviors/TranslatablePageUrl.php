@@ -49,12 +49,32 @@ class TranslatablePageUrl extends ExtensionBase
         $this->initTranslatableContext();
 
         $this->model->bindEvent('model.afterFetch', function() {
-            $this->translatableDefaultUrl = $this->model->url;
+            $this->translatableDefaultUrl = $this->getModelUrl();
 
             if (!App::runningInBackend()) {
                 $this->rewriteTranslatablePageUrl();
             }
         });
+    }
+
+    protected function setModelUrl($value)
+    {
+        if ($this->model instanceof \RainLab\Pages\Classes\Page) {
+            array_set($this->model->attributes, 'viewBag.url', $value);
+        }
+        else {
+            $this->model->url = $value;
+        }
+    }
+
+    protected function getModelUrl()
+    {
+        if ($this->model instanceof \RainLab\Pages\Classes\Page) {
+            return array_get($this->model->attributes, 'viewBag.url');
+        }
+        else {
+            return $this->model->url;
+        }
     }
 
     /**
@@ -76,15 +96,13 @@ class TranslatablePageUrl extends ExtensionBase
     public function rewriteTranslatablePageUrl($locale = null)
     {
         $locale = $locale ?: $this->translatableContext;
+        $localeUrl = $this->translatableDefaultUrl;
 
-        if ($locale == $this->translatableDefault) {
-            $this->model->url = $this->translatableDefaultUrl;
+        if ($locale != $this->translatableDefault) {
+            $localeUrl = $this->getSettingsUrlAttributeTranslated($locale) ?: $localeUrl;
         }
-        else {
-            $localeUrl = $this->getSettingsUrlAttributeTranslated($locale);
 
-            $this->model->url = $localeUrl ?: $this->translatableDefaultUrl;
-        }
+        $this->setModelUrl($localeUrl);
     }
 
     /**
@@ -104,7 +122,7 @@ class TranslatablePageUrl extends ExtensionBase
      */
     public function getSettingsUrlAttributeTranslated($locale)
     {
-        $defaults = ($locale == $this->translatableDefault) ? $this->model->url : null;
+        $defaults = ($locale == $this->translatableDefault) ? $this->translatableDefaultUrl : null;
 
         return array_get($this->model->attributes, 'viewBag.localeUrl.'.$locale, $defaults);
     }
@@ -119,7 +137,7 @@ class TranslatablePageUrl extends ExtensionBase
             return;
         }
 
-        if ($value == $this->model->url) {
+        if ($value == $this->translatableDefaultUrl) {
             return;
         }
 
@@ -135,5 +153,23 @@ class TranslatablePageUrl extends ExtensionBase
                 array_set($this->model->attributes, 'viewBag.localeUrl.'.$locale, $value);
             }
         });
+    }
+
+    /**
+     * Mutator detected by MLControl, proxy for Static Pages plugin.
+     * @return string
+     */
+    public function getViewBagUrlAttributeTranslated($locale)
+    {
+        return $this->getSettingsUrlAttributeTranslated($locale);
+    }
+
+    /**
+     * Mutator detected by MLControl, proxy for Static Pages plugin.
+     * @return string
+     */
+    public function setViewBagUrlAttributeTranslated($value, $locale)
+    {
+        return $this->setSettingsUrlAttributeTranslated($value, $locale);
     }
 }

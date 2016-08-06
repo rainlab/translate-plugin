@@ -1,18 +1,11 @@
 <?php namespace RainLab\Translate;
 
-use App;
-use Str;
 use Lang;
-use File;
 use Event;
 use Backend;
 use Cms\Classes\Page;
-use Cms\Classes\Content;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
-use RainLab\Translate\Models\Locale as LocaleModel;
-use RainLab\Translate\Classes\Translator;
-use RainLab\Translate\Classes\ThemeScanner;
 use RainLab\Translate\Classes\EventRegistry;
 use Exception;
 

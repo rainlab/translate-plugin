@@ -1,14 +1,9 @@
 <?php namespace RainLab\Translate\Classes;
 
-use App;
 use Str;
-use Lang;
 use File;
-use Event;
-use Backend;
 use Cms\Classes\Page;
 use Cms\Classes\Content;
-use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
@@ -35,24 +30,25 @@ class EventRegistry
         $this->registerModelTranslation($widget);
 
         // Handle URL translations
-        $this->registerCmsPageTranslation($widget);
+        $this->registerPageUrlTranslation($widget);
     }
 
     //
     // Translate URLs
     //
 
-    public function registerCmsPageTranslation($widget)
+    public function registerPageUrlTranslation($widget)
     {
         if (!$model = $widget->model) {
             return;
         }
 
-        if (!$model instanceof Page) {
-            return;
+        if ($model instanceof Page) {
+            $widget->fields['settings[url]']['type'] = 'mltext';
         }
-
-        $widget->fields['settings[url]']['type'] = 'mltext';
+        elseif ($model instanceof \RainLab\Pages\Classes\Page) {
+            $widget->fields['viewBag[url]']['type'] = 'mltext';
+        }
     }
 
     //
