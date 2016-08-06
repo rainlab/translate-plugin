@@ -24,3 +24,4 @@
 1.1.7: Fixes bug not showing content when first loading multilingual textarea controls.
 1.2.0: CMS pages now support translating the URL.
 1.2.1: Minor update in the rich editor and code editor language control position.
+1.2.2: Static Pages now support translating the URL.
