@@ -106,12 +106,30 @@ class LocalePicker extends ComponentBase
     {
         $page = $this->getPage();
 
-        $page->rewriteTranslatablePageUrl($locale);
+        /*
+         * Static Page
+         */
+        if (isset($page->apiBag['staticPage'])) {
 
-        $router = new RainRouter;
+            $staticPage = $page->apiBag['staticPage'];
 
-        $params = $this->getRouter()->getParameters();
+            $staticPage->rewriteTranslatablePageUrl($locale);
 
-        return $router->urlFromPattern($page->url, $params);
+            $localeUrl = array_get($staticPage->attributes, 'viewBag.url');
+        }
+        /*
+         * CMS Page
+         */
+        else {
+            $page->rewriteTranslatablePageUrl($locale);
+
+            $router = new RainRouter;
+
+            $params = $this->getRouter()->getParameters();
+
+            $localeUrl = $router->urlFromPattern($page->url, $params);
+        }
+
+        return $localeUrl;
     }
 }

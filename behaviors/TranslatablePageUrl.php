@@ -166,10 +166,10 @@ class TranslatablePageUrl extends ExtensionBase
 
     /**
      * Mutator detected by MLControl, proxy for Static Pages plugin.
-     * @return string
+     * @return void
      */
     public function setViewBagUrlAttributeTranslated($value, $locale)
     {
-        return $this->setSettingsUrlAttributeTranslated($value, $locale);
+        $this->setSettingsUrlAttributeTranslated($value, $locale);
     }
 }
