@@ -78,6 +78,15 @@ class MLRichEditor extends RichEditor
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function onLoadPageLinksForm()
+    {
+        $this->actAsParent();
+        return parent::onLoadPageLinksForm();
+    }
+
     protected function actAsParent($switch = true)
     {
         if ($switch) {
