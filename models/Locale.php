@@ -5,6 +5,7 @@ use File;
 use Cache;
 use Model;
 use Config;
+use ApplicationException;
 use ValidationException;
 
 /**
@@ -53,6 +54,13 @@ class Locale extends Model
     {
         if ($this->is_default) {
             $this->makeDefault();
+        }
+    }
+
+    public function beforeDelete()
+    {
+        if ($this->is_default) {
+            throw new ApplicationException(Lang::get('rainlab.translate::lang.locale.delete_default', ['locale'=>$this->name]));
         }
     }
 

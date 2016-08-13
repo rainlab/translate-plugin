@@ -19,6 +19,7 @@ return [
         'select_label' => 'Select language',
         'default_suffix' => 'default',
         'unset_default' => '":locale" is already default and cannot be unset as default.',
+        'delete_default' => '":locale" is the default and cannot be deleted.',
         'disabled_default' => '":locale" is disabled and cannot be set as default.',
         'name' => 'Name',
         'code' => 'Code',
