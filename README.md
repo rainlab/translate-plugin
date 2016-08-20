@@ -126,7 +126,7 @@ There are ways to get and set attributes without changing the context.
 Translatable model attributes can also be declared as an index by passing the `$transatable` attribute value as an array. The first value is the attribute name, the other values represent options, in this case setting the option `index` to `true`.
 
         public $translatable = [
-            'name'
+            'name',
             ['slug', 'index' => true]
         ];
 
