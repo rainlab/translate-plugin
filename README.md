@@ -121,6 +121,23 @@ There are ways to get and set attributes without changing the context.
     // Sets a single translated attribute for a language
     $user->setAttributeTranslated('name', 'Jean-Claude', 'fr');
 
+## Indexed attributes
+
+Translatable model attributes can also be declared as an index by passing the `$transatable` attribute value as an array. The first value is the attribute name, the other values represent options, in this case setting the option `index` to `true`.
+
+        public $translatable = [
+            'name'
+            ['slug', 'index' => true]
+        ];
+
+Once an attribute is indexed, you may use the `transWhere` method to apply a basic query to the model.
+
+    Post::transWhere('slug', 'hello-world')->first();
+
+The `transWhere` method accepts a third argument to explicitly pass a locale value, otherwise it will be detected from the enivronment.
+
+    Post::transWhere('slug', 'hello-world', 'en')->first();
+
 ## URL translation
 
 Pages in the CMS support translating the URL property. Assuming you have 3 languages set up:

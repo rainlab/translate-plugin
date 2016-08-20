@@ -21,6 +21,39 @@ use Exception;
 class TranslatableModel extends TranslatableBehavior
 {
     /**
+     * Applies a translatable index to a basic query. This scope will join the index table.
+     * @param  Builder $query
+     * @param  string $index
+     * @param  string $value
+     * @param  string $locale
+     * @return Builder
+     */
+    public function scopeTransWhere($query, $index, $value, $locale = null)
+    {
+        if (!$locale) {
+            $locale = $this->translatableContext;
+        }
+
+        return $query
+            ->where(function($q) use ($index, $value) {
+                $q->where($this->model->getTable().'.'.$index, $value);
+                $q->orWhere(function($q) use ($index, $value) {
+                    $q
+                        ->where('rainlab_translate_indexes.item', $index)
+                        ->where('rainlab_translate_indexes.value', $value)
+                    ;
+                });
+            })
+            ->leftJoin('rainlab_translate_indexes', function($join) use ($locale) {
+                $join
+                    ->on($this->model->getQualifiedKeyName(), '=', 'rainlab_translate_indexes.model_id')
+                    ->where('rainlab_translate_indexes.model_type', '=', get_class($this->model))
+                    ->where('rainlab_translate_indexes.locale', '=', $locale)
+                ;
+            });
+    }
+
+    /**
      * Saves the translation data in the join table.
      * @param  string $locale
      * @return void
@@ -42,6 +75,17 @@ class TranslatableModel extends TranslatableBehavior
             return;
         }
 
+        $this->storeTranslatableBasicData($locale);
+        $this->storeTranslatableIndexData($locale);
+    }
+
+    /**
+     * Saves the basic translation data in the join table.
+     * @param  string $locale
+     * @return void
+     */
+    protected function storeTranslatableBasicData($locale = null)
+    {
         $data = json_encode($this->translatableAttributes[$locale]);
 
         $obj = Db::table('rainlab_translate_attributes')
@@ -50,15 +94,64 @@ class TranslatableModel extends TranslatableBehavior
             ->where('model_type', get_class($this->model));
 
         if ($obj->count() > 0) {
-            return $obj->update(['attribute_data' => $data]);
+            $obj->update(['attribute_data' => $data]);
+        }
+        else {
+            Db::table('rainlab_translate_attributes')->insert([
+                'locale' => $locale,
+                'model_id' => $this->model->getKey(),
+                'model_type' => get_class($this->model),
+                'attribute_data' => $data
+            ]);
+        }
+    }
+
+    /**
+     * Saves the indexed translation data in the join table.
+     * @param  string $locale
+     * @return void
+     */
+    protected function storeTranslatableIndexData($locale = null)
+    {
+        $optionedAttributes = $this->getTranslatableAttributesWithOptions();
+        if (!count($optionedAttributes)) {
+            return;
         }
 
-        Db::table('rainlab_translate_attributes')->insert([
-            'locale' => $locale,
-            'model_id' => $this->model->getKey(),
-            'model_type' => get_class($this->model),
-            'attribute_data' => $data
-        ]);
+        $data = $this->translatableAttributes[$locale];
+
+        foreach ($optionedAttributes as $attribute => $options) {
+            $value = array_get($data, $attribute);
+
+            $obj = Db::table('rainlab_translate_indexes')
+                ->where('locale', $locale)
+                ->where('model_id', $this->model->getKey())
+                ->where('model_type', get_class($this->model))
+                ->where('item', $attribute);
+
+            $recordExists = $obj->count() > 0;
+
+            if (!strlen($value)) {
+                if ($recordExists) {
+                    $obj->delete();
+                }
+                return;
+            }
+
+            if ($recordExists) {
+                $obj->update(['value' => $value]);
+            }
+            else {
+                Db::table('rainlab_translate_indexes')->insert([
+                    'locale' => $locale,
+                    'model_id' => $this->model->getKey(),
+                    'model_type' => get_class($this->model),
+                    'item' => $attribute,
+                    'value' => $value
+                ]);
+            }
+
+        }
     }
 
     /**

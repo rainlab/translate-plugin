@@ -1,9 +1,9 @@
 1.0.1:
-  - First version of Translate
-  - create_messages_table.php
-  - create_attributes_table.php
-  - create_locales_table.php
-  - seed_all_tables.php
+    - First version of Translate
+    - create_messages_table.php
+    - create_attributes_table.php
+    - create_locales_table.php
+    - seed_all_tables.php
 1.0.2: Languages and Messages can now be deleted.
 1.0.3: Minor updates for latest October release.
 1.0.4: Locale cache will clear when updating a language.
@@ -26,3 +26,6 @@
 1.2.1: Minor update in the rich editor and code editor language control position.
 1.2.2: Static Pages now support translating the URL.
 1.2.3: Fixes Rich Editor when inserting a page link.
+1.2.4:
+    - Translatable attributes can now be declared as indexes.
+    - create_indexes_table.php

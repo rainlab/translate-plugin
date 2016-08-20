@@ -75,7 +75,7 @@ class EventRegistry
             return;
         }
 
-        if (!is_array($model->translatable)) {
+        if (!$model->hasTransatableAttributes()) {
             return;
         }
 
@@ -100,7 +100,7 @@ class EventRegistry
      */
     protected function processFormMLFields($fields, $model)
     {
-        $translatable = array_flip($model->translatable);
+        $translatable = array_flip($model->getTranslatableAttributes());
 
         /*
          * Special: A custom field "markup_html" is used for Content templates.

@@ -273,12 +273,49 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
+     * Checks if this model has transatable attributes.
+     * @return true
+     */
+    public function hasTransatableAttributes()
+    {
+        return is_array($this->model->translatable) &&
+            count($this->model->translatable) > 0;
+    }
+
+    /**
      * Returns a collection of fields that will be hashed.
      * @return array
      */
     public function getTranslatableAttributes()
     {
-        return $this->model->translatable;
+        $translatable = [];
+
+        foreach ($this->model->translatable as $attribute) {
+            $translatable[] = is_array($attribute) ? array_shift($attribute) : $attribute;
+        }
+
+        return $translatable;
+    }
+
+    /**
+     * Returns the defined options for a translatable attribute.
+     * @return array
+     */
+    public function getTranslatableAttributesWithOptions()
+    {
+        $attributes = [];
+
+        foreach ($this->model->translatable as $options) {
+            if (!is_array($options)) {
+                continue;
+            }
+
+            $attributeName = array_shift($options);
+
+            $attributes[$attributeName] = $options;
+        }
+
+        return $attributes;
     }
 
     /**
