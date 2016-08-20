@@ -35,6 +35,8 @@ class TranslatableModel extends TranslatableBehavior
             $locale = $this->translatableContext;
         }
 
+        $query->select($this->model->getTable().'.*');
+
         $query->where(function($q) use ($index, $value) {
             $q->where($this->model->getTable().'.'.$index, $value);
             $q->orWhere(function($q) use ($index, $value) {
