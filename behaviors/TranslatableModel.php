@@ -21,7 +21,8 @@ use Exception;
 class TranslatableModel extends TranslatableBehavior
 {
     /**
-     * Applies a translatable index to a basic query. This scope will join the index table.
+     * Applies a translatable index to a basic query. This scope will join the index
+     * table and cannot be executed more than once.
      * @param  Builder $query
      * @param  string $index
      * @param  string $value
@@ -34,23 +35,28 @@ class TranslatableModel extends TranslatableBehavior
             $locale = $this->translatableContext;
         }
 
-        return $query
-            ->where(function($q) use ($index, $value) {
-                $q->where($this->model->getTable().'.'.$index, $value);
-                $q->orWhere(function($q) use ($index, $value) {
-                    $q
-                        ->where('rainlab_translate_indexes.item', $index)
-                        ->where('rainlab_translate_indexes.value', $value)
-                    ;
-                });
-            })
-            ->leftJoin('rainlab_translate_indexes', function($join) use ($locale) {
-                $join
-                    ->on($this->model->getQualifiedKeyName(), '=', 'rainlab_translate_indexes.model_id')
-                    ->where('rainlab_translate_indexes.model_type', '=', get_class($this->model))
-                    ->where('rainlab_translate_indexes.locale', '=', $locale)
+        $query->where(function($q) use ($index, $value) {
+            $q->where($this->model->getTable().'.'.$index, $value);
+            $q->orWhere(function($q) use ($index, $value) {
+                $q
+                    ->where('rainlab_translate_indexes.item', $index)
+                    ->where('rainlab_translate_indexes.value', $value)
                 ;
             });
+        });
+
+        // This join will crap out if this scope executes twice, it is a known issue.
+        // It should check if the join exists before applying it, this mechanism was
+        // not found in Laravel. So options are block joins entirely or allow once.
+        $query->leftJoin('rainlab_translate_indexes', function($join) use ($locale) {
+            $join
+                ->on($this->model->getQualifiedKeyName(), '=', 'rainlab_translate_indexes.model_id')
+                ->where('rainlab_translate_indexes.model_type', '=', get_class($this->model))
+                ->where('rainlab_translate_indexes.locale', '=', $locale)
+            ;
+        });
+
+        return $query;
     }
 
     /**
@@ -121,6 +127,10 @@ class TranslatableModel extends TranslatableBehavior
         $data = $this->translatableAttributes[$locale];
 
         foreach ($optionedAttributes as $attribute => $options) {
+            if (!array_get($options, 'index', false)) {
+                continue;
+            }
+
             $value = array_get($data, $attribute);
 
             $obj = Db::table('rainlab_translate_indexes')
