@@ -29,3 +29,6 @@
 1.2.4:
     - Translatable attributes can now be declared as indexes.
     - create_indexes_table.php
+1.2.4.1:
+    - model_id is changed from string to unsigned int for compatibility with all databases
+    - update_model_id_field.php
