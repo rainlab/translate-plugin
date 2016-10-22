@@ -54,6 +54,15 @@
   top: 74px !important;
   right: 12px;
 }
+.field-multilingual.field-multilingual-repeater .ml-btn {
+  top: -15px;
+  right: 20px;
+  text-align: right;
+}
+.field-multilingual.field-multilingual-repeater .ml-dropdown-menu {
+  top: 15px;
+  right: 8px;
+}
 .fancy-layout .form-tabless-fields .field-multilingual .ml-btn {
   color: rgba(255, 255, 255, 0.8);
 }

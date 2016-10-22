@@ -128,6 +128,9 @@ class EventRegistry
             elseif ($type == 'markdown') {
                 $fields[$name]['type'] = 'mlmarkdowneditor';
             }
+            elseif ($type == 'repeater') {
+                $fields[$name]['type'] = 'mlrepeater';
+            }
         }
 
         return $fields;

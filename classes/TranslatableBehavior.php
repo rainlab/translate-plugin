@@ -112,16 +112,6 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * @deprecated getTranslateAttribute is deprecated, use getAttributeTranslated instead.
-     * @todo Remove method if year >= 2017
-     */
-    public function getTranslateAttribute($key, $locale = null)
-    {
-        traceLog(static::class . '::getTranslateAttribute is deprecated, use getAttributeTranslated instead.');
-        return $this->getAttributeTranslated($key, $locale);
-    }
-
-    /**
      * Returns a translated attribute value.
      *
      * The base value must come from 'attributes' on the model otherwise the process
@@ -137,23 +127,41 @@ abstract class TranslatableBehavior extends ExtensionBase
             $locale = $this->translatableContext;
         }
 
+        /*
+         * Result should not return NULL to successfully hook beforeGetAttribute event
+         */
+        $result = '';
+
+        /*
+         * Default locale
+         */
         if ($locale == $this->translatableDefault) {
-            return $this->getAttributeFromData($this->model->attributes, $key);
+            $result = $this->getAttributeFromData($this->model->attributes, $key);
+        }
+        /*
+         * Other locale
+         */
+        else {
+            if (!array_key_exists($locale, $this->translatableAttributes)) {
+                $this->loadTranslatableData($locale);
+            }
+
+            if ($this->hasTranslation($key, $locale)) {
+                $result = $this->getAttributeFromData($this->translatableAttributes[$locale], $key);
+            }
+            elseif ($this->translatableUseFallback) {
+                $result = $this->getAttributeFromData($this->model->attributes, $key);
+            }
         }
 
-        if (!array_key_exists($locale, $this->translatableAttributes)) {
-            $this->loadTranslatableData($locale);
+        /*
+         * Handle jsonable attributes, default may return to return as a string
+         */
+        if ($this->model->isJsonable($key) && is_string($result)) {
+            $result = json_decode($result, true);
         }
 
-        if ($this->hasTranslation($key, $locale)) {
-            return $this->getAttributeFromData($this->translatableAttributes[$locale], $key);
-        }
-
-        if ($this->translatableUseFallback) {
-            return $this->getAttributeFromData($this->model->attributes, $key);
-        }
-
-        return null;
+        return $result;
     }
 
     /**
@@ -175,16 +183,6 @@ abstract class TranslatableBehavior extends ExtensionBase
     public function hasTranslation($key, $locale)
     {
         return !!$this->getAttributeFromData($this->translatableAttributes[$locale], $key);
-    }
-
-    /**
-     * @deprecated setTranslateAttribute is deprecated, use setAttributeTranslated instead.
-     * @todo Remove method if year >= 2017
-     */
-    public function setTranslateAttribute($key, $value, $locale = null)
-    {
-        traceLog(static::class . '::setTranslateAttribute is deprecated, use setAttributeTranslated instead.');
-        return $this->setAttributeTranslated($key, $value, $locale);
     }
 
     /**
@@ -410,4 +408,23 @@ abstract class TranslatableBehavior extends ExtensionBase
      */
     abstract protected function loadTranslatableData($locale = null);
 
+    /**
+     * @deprecated setTranslateAttribute is deprecated, use setAttributeTranslated instead.
+     * @todo Remove method if year >= 2017
+     */
+    public function setTranslateAttribute($key, $value, $locale = null)
+    {
+        traceLog(static::class . '::setTranslateAttribute is deprecated, use setAttributeTranslated instead.');
+        return $this->setAttributeTranslated($key, $value, $locale);
+    }
+
+    /**
+     * @deprecated getTranslateAttribute is deprecated, use getAttributeTranslated instead.
+     * @todo Remove method if year >= 2017
+     */
+    public function getTranslateAttribute($key, $locale = null)
+    {
+        traceLog(static::class . '::getTranslateAttribute is deprecated, use getAttributeTranslated instead.');
+        return $this->getAttributeTranslated($key, $locale);
+    }
 }

@@ -161,6 +161,10 @@ class Plugin extends PluginBase
             'RainLab\Translate\FormWidgets\MLMarkdownEditor' => [
                 'label' => 'Markdown Editor (ML)',
                 'code'  => 'mlmarkdowneditor'
+            ],
+            'RainLab\Translate\FormWidgets\MLRepeater' => [
+                'label' => 'Markdown Repeater (ML)',
+                'code'  => 'mlrepeater'
             ]
         ];
     }

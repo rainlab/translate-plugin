@@ -166,9 +166,11 @@ trait MLControl
         }
 
         $fieldName = implode('.', HtmlHelper::nameToArray($this->fieldName));
+        $isJson = $this->isLocaleFieldJsonable();
 
         foreach ($data as $locale => $_data) {
-            $values[$locale] = array_get($_data, $fieldName);
+            $value = array_get($_data, $fieldName);
+            $values[$locale] = $isJson ? json_decode($value, true) : $value;
         }
 
         return $values;
@@ -181,5 +183,14 @@ trait MLControl
     public function getFallbackType()
     {
         return defined('static::FALLBACK_TYPE') ? static::FALLBACK_TYPE : 'text';
+    }
+
+    /**
+     * Returns true if the field is specified as jsonable in the model.
+     * @return bool
+     */
+    public function isLocaleFieldJsonable()
+    {
+        return $this->model->isJsonable($this->fieldName);
     }
 }
