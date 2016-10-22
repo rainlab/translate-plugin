@@ -4,9 +4,7 @@
         $value = ($value = $this->getLocaleValue($code)) && $this->isLocaleFieldJsonable() ? json_encode($value) : $value;
     ?>
     <input
-        atype="hidden"
-type="text"
-style="width:100%"
+        type="hidden"
         name="<?= $field->getName('RLTranslate['.$code.']') ?>"
         value="<?= e($value) ?>"
         data-locale-value="<?= $code ?>"
