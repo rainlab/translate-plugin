@@ -115,6 +115,8 @@ class MLRepeater extends Repeater
          */
         $lockerData = $this->getLocaleSaveDataAsArray($locale) ?: [];
 
+        $this->reprocessExistingLocaleItems($lockerData);
+
         foreach ($this->formWidgets as $key => $widget) {
             $value = array_shift($lockerData);
             if (!$value) {
@@ -140,6 +142,21 @@ class MLRepeater extends Repeater
             'updateValue' => json_encode($previousValue),
             'updateLocale' => $previousLocale,
         ];
+    }
+
+    /**
+     * Recreates form widgets based on number of repeater items.
+     * @return void
+     */
+    protected function reprocessExistingLocaleItems($data)
+    {
+        $this->formWidgets = [];
+
+        $indexVar = self::INDEX_PREFIX.$this->formField->getName(false);
+
+        $_POST[$indexVar] = array_keys($data);
+
+        $this->processExistingItems();
     }
 
     /**
