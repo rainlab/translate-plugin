@@ -64,7 +64,7 @@ class MLRepeater extends Repeater
      */
     public function getSaveValue($value)
     {
-        $this->overrideLockerWithSaveData();
+        $this->rewritePostValues();
 
         return $this->getLocaleSaveValue($value);
     }
@@ -106,14 +106,14 @@ class MLRepeater extends Repeater
 
     public function onSwitchItemLocale()
     {
-        if (!$locale = post('repeater_locale')) {
+        if (!$locale = post('_repeater_locale')) {
             throw new ApplicationException('Unable to find a repeater locale for: '.$locale);
         }
 
         /*
          * Update widget
          */
-        $lockerData = $this->getLockerDataAsArray($locale) ?: [];
+        $lockerData = $this->getLocaleSaveDataAsArray($locale) ?: [];
 
         foreach ($this->formWidgets as $key => $widget) {
             $value = array_shift($lockerData);
@@ -132,8 +132,8 @@ class MLRepeater extends Repeater
         /*
          * Update previous
          */
-        $previousLocale = post('repeater_previous_locale');
-        $previousValue = $this->getPostbackSaveData();
+        $previousLocale = post('_repeater_previous_locale');
+        $previousValue = $this->getPrimarySaveDataAsArray();
 
         return [
             '#'.$this->getId('mlRepeater') => $parentContent,
@@ -146,7 +146,7 @@ class MLRepeater extends Repeater
      * Gets the active values from the selected locale.
      * @return array
      */
-    protected function getPostbackSaveData()
+    protected function getPrimarySaveDataAsArray()
     {
         return post($this->formField->getName()) ?: [];
     }
@@ -155,7 +155,7 @@ class MLRepeater extends Repeater
      * Returns the stored locale data as an array.
      * @return array
      */
-    protected function getLockerDataAsArray($locale)
+    protected function getLocaleSaveDataAsArray($locale)
     {
         $saveData = array_get($this->getLocaleSaveData(), $locale, []);
 
@@ -172,7 +172,7 @@ class MLRepeater extends Repeater
      * locker based on which ever locale is selected using an item map
      * @return void
      */
-    protected function overrideLockerWithSaveData()
+    protected function rewritePostValues()
     {
         /*
          * Get the selected locale at postback
@@ -188,7 +188,7 @@ class MLRepeater extends Repeater
         /*
          * Splice the save data in to the locker data for selected locale
          */
-        $data = $this->getPostbackSaveData();
+        $data = $this->getPrimarySaveDataAsArray();
         $fieldName = 'RLTranslate.'.$locale.'.'.implode('.', HtmlHelper::nameToArray($this->fieldName));
         array_set($_POST, $fieldName, json_encode($data));
     }

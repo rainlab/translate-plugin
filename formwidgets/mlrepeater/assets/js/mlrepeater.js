@@ -89,8 +89,8 @@
 
         this.$el.request(this.options.switchHandler, {
             data: {
-                repeater_previous_locale: previousLocale,
-                repeater_locale: locale
+                _repeater_previous_locale: previousLocale,
+                _repeater_locale: locale
             },
             success: function(data) {
                 self.$el.multiLingual('setLocaleValue', data.updateValue, data.updateLocale)
