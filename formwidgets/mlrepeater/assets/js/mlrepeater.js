@@ -42,12 +42,18 @@
     MLRepeater.prototype.init = function() {
         this.$el.multiLingual()
 
+        this.checkEmptyItems()
+
+        $(document).on('render', this.proxy(this.checkEmptyItems))
+
         this.$el.on('setLocale.oc.multilingual', this.proxy(this.onSetLocale))
 
         this.$el.one('dispose-control', this.proxy(this.dispose))
     }
 
     MLRepeater.prototype.dispose = function() {
+
+        $(document).off('render', this.proxy(this.checkEmptyItems))
 
         this.$el.off('setLocale.oc.multilingual', this.proxy(this.onSetLocale))
 
@@ -65,9 +71,18 @@
         BaseProto.dispose.call(this)
     }
 
+    MLRepeater.prototype.checkEmptyItems = function() {
+        var isEmpty = !$('ul.field-repeater-items > li', this.$el).length
+        this.$el.toggleClass('is-empty', isEmpty)
+    }
+
     MLRepeater.prototype.onSetLocale = function(e, locale, localeValue) {
         var self = this,
             previousLocale = this.locale
+
+        this.$el
+            .addClass('loading-indicator-container size-form-field')
+            .loadIndicator()
 
         this.locale = locale
         this.$locale.val(locale)
@@ -79,6 +94,7 @@
             },
             success: function(data) {
                 self.$el.multiLingual('setLocaleValue', data.updateValue, data.updateLocale)
+                self.$el.loadIndicator('hide')
                 this.success(data)
             }
         })

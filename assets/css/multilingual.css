@@ -63,6 +63,18 @@
   top: 15px;
   right: 8px;
 }
+.field-multilingual.field-multilingual-repeater.is-empty {
+  padding-top: 5px;
+}
+.field-multilingual.field-multilingual-repeater.is-empty .ml-btn {
+  top: -10px;
+  right: 5px;
+  text-align: right;
+}
+.field-multilingual.field-multilingual-repeater.is-empty .ml-dropdown-menu {
+  top: 15px;
+  right: -7px;
+}
 .fancy-layout .form-tabless-fields .field-multilingual .ml-btn {
   color: rgba(255, 255, 255, 0.8);
 }
