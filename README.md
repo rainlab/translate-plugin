@@ -98,11 +98,20 @@ The attribute will then contain the default language value and other language co
 
     $user->translateContext('fr');
 
-    // Sets the name in French
-    $user->name = 'Giselle';
-
     // Outputs the name in French
     echo $user->name;
+
+You may use the same process for setting values.
+
+    $user = User::first();
+
+    // Sets the name in the default language
+    $user->name = 'English';
+
+    $user->translateContext('fr');
+
+    // Sets the name in French
+    $user->name = 'Anglais';
 
 The `lang()` method is a shorthand version of `translateContext()` and is also chainable.
 
@@ -120,6 +129,17 @@ There are ways to get and set attributes without changing the context.
 
     // Sets a single translated attribute for a language
     $user->setAttributeTranslated('name', 'Jean-Claude', 'fr');
+
+## Fallback attribute values
+
+By default, untranslated attributes will fall back to the default locale. This behavior can be disabled by calling the `noFallbackLocale` method.
+
+    $user = User::first();
+
+    $user->noFallbackLocale()->lang('fr');
+
+    // Returns NULL if there is no French translation
+    $user->name;
 
 ## Indexed attributes
 
