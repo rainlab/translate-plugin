@@ -191,6 +191,6 @@ trait MLControl
      */
     public function isLocaleFieldJsonable()
     {
-        return $this->model->isJsonable($this->fieldName);
+        return method_exists($this->model, 'isJsonable') && $this->model->isJsonable($this->fieldName);
     }
 }

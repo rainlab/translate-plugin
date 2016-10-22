@@ -155,9 +155,9 @@ abstract class TranslatableBehavior extends ExtensionBase
         }
 
         /*
-         * Handle jsonable attributes, default may return to return as a string
+         * Handle jsonable attributes, default locale may return the value as a string
          */
-        if ($this->model->isJsonable($key) && is_string($result)) {
+        if (is_string($result) && method_exists($this->model, 'isJsonable') && $this->model->isJsonable($key)) {
             $result = json_decode($result, true);
         }
 
