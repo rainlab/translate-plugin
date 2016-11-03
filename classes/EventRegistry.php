@@ -50,7 +50,7 @@ class EventRegistry
             $widget->fields['settings[url]']['type'] = 'mltext';
         }
         elseif (
-            $model instanceof \RainLab\Pages\Classes\Page
+            $model instanceof \RainLab\Pages\Classes\Page &&
             isset($widget->fields['viewBag[url]'])
         ) {
             $widget->fields['viewBag[url]']['type'] = 'mltext';
