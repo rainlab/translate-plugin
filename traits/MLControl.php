@@ -186,11 +186,23 @@ trait MLControl
     }
 
     /**
-     * Returns true if the field is specified as jsonable in the model.
+     * Returns true if widget is a repeater, or the field is specified
+     * as jsonable in the model.
      * @return bool
      */
     public function isLocaleFieldJsonable()
     {
-        return method_exists($this->model, 'isJsonable') && $this->model->isJsonable($this->fieldName);
+        if ($this instanceof \Backend\FormWidgets\Repeater) {
+            return true;
+        }
+
+        if (
+            method_exists($this->model, 'isJsonable') &&
+            $this->model->isJsonable($this->fieldName)
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

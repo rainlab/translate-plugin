@@ -38,6 +38,8 @@ class MLRepeater extends Repeater
      */
     public function render()
     {
+        $this->isAvailable = Locale::isAvailable();
+
         $this->actAsParent();
         $parentContent = parent::render();
         $this->actAsParent(false);
@@ -48,8 +50,6 @@ class MLRepeater extends Repeater
 
         $this->vars['repeater'] = $parentContent;
         return $this->makePartial('mlrepeater');
-
-        $this->isAvailable = Locale::isAvailable();
     }
 
     public function prepareVars()
@@ -152,9 +152,9 @@ class MLRepeater extends Repeater
     {
         $this->formWidgets = [];
 
-        $indexVar = self::INDEX_PREFIX.$this->formField->getName(false);
+        $indexVar = self::INDEX_PREFIX.implode('.', HtmlHelper::nameToArray($this->formField->getName(false)));
 
-        $_POST[$indexVar] = array_keys($data);
+        array_set($_POST, $indexVar, array_keys($data));
 
         $this->processExistingItems();
     }
