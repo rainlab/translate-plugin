@@ -31,3 +31,4 @@
     - create_indexes_table.php
 1.2.5: Adds new multilingual repeater form widget.
 1.2.6: Fixes repeater usage with static pages plugin.
+1.2.7: Fixes placeholder usage with static pages plugin.

@@ -8,7 +8,6 @@
  */
 class MLStaticPage extends MLCmsObject
 {
-
     /**
      * @var bool Wrap code section in PHP tags.
      */
@@ -18,6 +17,16 @@ class MLStaticPage extends MLCmsObject
      * @var array List of attribute names which are not considered "settings".
      */
     protected $purgeable = ['placeholders'];
+
+    /**
+     * {@inheritDoc}
+     */
+    public function afterFetch()
+    {
+        parent::afterFetch();
+
+        $this->getPlaceholdersAttribute();
+    }
 
     /**
      * Parses the page placeholder {% put %} tags and extracts the placeholder values.
@@ -82,5 +91,4 @@ class MLStaticPage extends MLCmsObject
         $this->attributes['code'] = trim($result);
         $this->attributes['placeholders'] = $placeholders;
     }
-
 }

@@ -99,14 +99,16 @@ trait MLControl
         $mutateMethod = 'get'.$studKey.'AttributeTranslated';
 
         if ($this->model->methodExists($mutateMethod)) {
-            return $this->model->$mutateMethod($locale);
+            $value = $this->model->$mutateMethod($locale);
         }
         elseif ($this->model->methodExists('getAttributeTranslated')) {
-            return $this->model->noFallbackLocale()->getAttributeTranslated($key, $locale);
+            $value = $this->model->noFallbackLocale()->getAttributeTranslated($key, $locale);
         }
         else {
-            return $this->formField->value;
+            $value = $this->formField->value;
         }
+
+        return $value;
     }
 
     /**
