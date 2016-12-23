@@ -80,6 +80,18 @@ class Plugin extends PluginBase
                 ->pruneTranslatedContentTemplates($templates)
             ;
         });
+
+        /*
+         * Override pages.menuitem.resolveitem event only when there's no locale in request
+         * (for example when we are generating the sitemap.xml)
+         */
+        if (!Classes\Translator::instance()->loadLocaleFromRequest()) {
+            Event::listen('pages.menuitem.resolveItem', function ($type, $item, $url, $theme) {
+                    if ($type == 'cms-page') {
+                        return Behaviors\TranslatablePageUrl::resolveMenuItem($item, $url, $theme);
+                    }
+            }, 10);
+        }
     }
 
     public function registerComponents()

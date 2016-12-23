@@ -1,6 +1,7 @@
 <?php namespace RainLab\Translate\Behaviors;
 
 use App;
+use Cms;
 use RainLab\Translate\Classes\Translator;
 use October\Rain\Extension\ExtensionBase;
 use ApplicationException;
@@ -172,4 +173,34 @@ class TranslatablePageUrl extends ExtensionBase
     {
         $this->setSettingsUrlAttributeTranslated($value, $locale);
     }
+
+    /**
+     * Handler for the pages.menuitem.resolveItem event.
+     */
+    public static function resolveMenuItem($item, $url, $theme)
+    {
+        $result = null;
+
+        if ($item->type == 'cms-page') {
+            if (!$item->reference) {
+                return;
+            }
+
+            $page = \Cms\Classes\Page::loadCached($theme, $item->reference);
+            $translate = Translator::instance();
+            if ($page->hasTranslatablePageUrl($translate->getLocale())) {
+                $page->rewriteTranslatablePageUrl($translate->getLocale());
+            }
+            $pageUrl = $translate->getPathInLocale($page->url, $translate->getLocale());
+            $pageUrl = Cms::url($pageUrl);
+
+            $result = [];
+            $result['url'] = $pageUrl;
+            $result['isActive'] = $pageUrl == $url;
+            $result['mtime'] = $page ? $page->mtime : null;
+        }
+
+        return $result;
+    }
+
 }
