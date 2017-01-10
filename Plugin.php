@@ -50,11 +50,11 @@ class Plugin extends PluginBase
     public function boot()
     {
         /*
-         * Set the page context for translation caching.
+         * Set the page context for translation caching with high priority.
          */
         Event::listen('cms.page.beforeRenderPage', function($controller, $page) {
             EventRegistry::instance()->setMessageContext($page);
-        });
+        }, 100);
 
         /*
          * Import messages defined by the theme
