@@ -11,12 +11,6 @@
         <?= $repeater ?>
     </div>
 
-    <button
-        class="btn btn-default ml-btn"
-        data-toggle="dropdown"
-        data-active-locale
-        type="button">
-    </button>
 
     <input
         type="hidden"
@@ -25,7 +19,16 @@
         value="<?= e($defaultLocale->code) ?>"
     />
 
-    <?= $this->makeParentPartial('locale_values') ?>
+    <div class="ml-selector-wrap model">
+        <button
+            class="item btn btn-default ml-btn"
+            data-toggle="dropdown"
+            data-active-locale
+            type="button">
+        </button>
 
-    <?= $this->makeParentPartial('locale_selector') ?>
+        <?= $this->makeParentPartial('locale_selector') ?>
+    </div>
+
+    <?= $this->makeParentPartial('locale_values') ?>
 </div>

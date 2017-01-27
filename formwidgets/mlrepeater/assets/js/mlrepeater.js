@@ -40,6 +40,7 @@
     }
 
     MLRepeater.prototype.init = function() {
+        this.addLangSwitcherToButtonBar()
         this.$el.multiLingual()
 
         this.checkEmptyItems()
@@ -96,8 +97,18 @@
                 self.$el.multiLingual('setLocaleValue', data.updateValue, data.updateLocale)
                 self.$el.loadIndicator('hide')
                 this.success(data)
+                self.addLangSwitcherToButtonBar()
             }
         })
+    }
+
+    MLRepeater.prototype.addLangSwitcherToButtonBar = function () {
+        var $repeaterBtnWrap = this.$el.find('.field-repeater-buttons')
+        this.$el.find('.ml-selector-wrap.model')
+            .addClass('hide')
+            .clone(true)
+            .appendTo($repeaterBtnWrap)
+            .removeClass('hide model')
     }
 
     // MLREPEATER PLUGIN DEFINITION
