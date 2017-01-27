@@ -54,10 +54,15 @@
   top: 74px !important;
   right: 12px;
 }
+.field-multilingual.field-multilingual-repeater .ml-selector-wrap {
+  display: inline;
+}
 .field-multilingual.field-multilingual-repeater .ml-btn {
-  top: -10px;
-  right: 20px;
-  text-align: right;
+  position: relative;
+  padding: 0;
+  width: auto;
+  top: 0 !important;
+  right: 0 !important;
 }
 .field-multilingual.field-multilingual-repeater .ml-dropdown-menu {
   top: 15px;
