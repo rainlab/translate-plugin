@@ -34,3 +34,4 @@
 1.2.7: Fixes placeholder usage with static pages plugin.
 1.2.8: Improvements to code for latest October build compatibility.
 1.2.9: Fixes context for translated strings when used with Static Pages.
+1.2.10: Minor UI fix to the multilingual repeater.
