@@ -52,7 +52,7 @@ class Plugin extends PluginBase
         /*
          * Set the page context for translation caching with high priority.
          */
-        Event::listen('cms.page.beforeRenderPage', function($controller, $page) {
+        Event::listen('cms.page.init', function($controller, $page) {
             EventRegistry::instance()->setMessageContext($page);
         }, 100);
 
