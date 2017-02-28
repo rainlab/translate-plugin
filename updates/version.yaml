@@ -30,3 +30,8 @@
     - Translatable attributes can now be declared as indexes.
     - create_indexes_table.php
 1.2.5: Adds new multilingual repeater form widget.
+1.2.6: Fixes repeater usage with static pages plugin.
+1.2.7: Fixes placeholder usage with static pages plugin.
+1.2.8: Improvements to code for latest October build compatibility.
+1.2.9: Fixes context for translated strings when used with Static Pages.
+1.2.10: Minor UI fix to the multilingual repeater.

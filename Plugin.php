@@ -33,13 +33,11 @@ class Plugin extends PluginBase
     public function register()
     {
         /*
-         * Defer event 2 levels deep to let others contribute before this registers.
+         * Defer event with low priority to let others contribute before this registers.
          */
         Event::listen('backend.form.extendFieldsBefore', function($widget) {
-            $widget->bindEvent('form.extendFieldsBefore', function() use ($widget) {
-                EventRegistry::instance()->registerFormFieldReplacements($widget);
-            });
-        });
+            EventRegistry::instance()->registerFormFieldReplacements($widget);
+        }, -1);
 
         /*
          * Handle translated page URLs
@@ -52,11 +50,11 @@ class Plugin extends PluginBase
     public function boot()
     {
         /*
-         * Set the page context for translation caching.
+         * Set the page context for translation caching with high priority.
          */
-        Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) {
+        Event::listen('cms.page.init', function($controller, $page) {
             EventRegistry::instance()->setMessageContext($page);
-        });
+        }, 100);
 
         /*
          * Import messages defined by the theme
@@ -146,26 +144,11 @@ class Plugin extends PluginBase
     public function registerFormWidgets()
     {
         return [
-            'RainLab\Translate\FormWidgets\MLText' => [
-                'label' => 'Text (ML)',
-                'code'  => 'mltext'
-            ],
-            'RainLab\Translate\FormWidgets\MLTextarea' => [
-                'label' => 'Textarea (ML)',
-                'code'  => 'mltextarea'
-            ],
-            'RainLab\Translate\FormWidgets\MLRichEditor' => [
-                'label' => 'Rich Editor (ML)',
-                'code'  => 'mlricheditor'
-            ],
-            'RainLab\Translate\FormWidgets\MLMarkdownEditor' => [
-                'label' => 'Markdown Editor (ML)',
-                'code'  => 'mlmarkdowneditor'
-            ],
-            'RainLab\Translate\FormWidgets\MLRepeater' => [
-                'label' => 'Markdown Repeater (ML)',
-                'code'  => 'mlrepeater'
-            ]
+            'RainLab\Translate\FormWidgets\MLText' => 'mltext',
+            'RainLab\Translate\FormWidgets\MLTextarea' => 'mltextarea',
+            'RainLab\Translate\FormWidgets\MLRichEditor' => 'mlricheditor',
+            'RainLab\Translate\FormWidgets\MLMarkdownEditor' => 'mlmarkdowneditor',
+            'RainLab\Translate\FormWidgets\MLRepeater' => 'mlrepeater',
         ];
     }
 

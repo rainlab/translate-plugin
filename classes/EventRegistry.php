@@ -43,10 +43,16 @@ class EventRegistry
             return;
         }
 
-        if ($model instanceof Page) {
+        if (
+            $model instanceof Page &&
+            isset($widget->fields['settings[url]'])
+        ) {
             $widget->fields['settings[url]']['type'] = 'mltext';
         }
-        elseif ($model instanceof \RainLab\Pages\Classes\Page) {
+        elseif (
+            $model instanceof \RainLab\Pages\Classes\Page &&
+            isset($widget->fields['viewBag[url]'])
+        ) {
             $widget->fields['viewBag[url]']['type'] = 'mltext';
         }
     }

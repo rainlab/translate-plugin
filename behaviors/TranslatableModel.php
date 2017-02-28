@@ -1,6 +1,7 @@
 <?php namespace RainLab\Translate\Behaviors;
 
 use Db;
+use DbDongle;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\TranslatableBehavior;
 use ApplicationException;
@@ -52,7 +53,7 @@ class TranslatableModel extends TranslatableBehavior
         // not found in Laravel. So options are block joins entirely or allow once.
         $query->leftJoin('rainlab_translate_indexes', function($join) use ($locale) {
             $join
-                ->on($this->model->getQualifiedKeyName(), '=', 'rainlab_translate_indexes.model_id')
+                ->on(Db::raw(DbDongle::cast($this->model->getQualifiedKeyName(), 'TEXT')), '=', 'rainlab_translate_indexes.model_id')
                 ->where('rainlab_translate_indexes.model_type', '=', get_class($this->model))
                 ->where('rainlab_translate_indexes.locale', '=', $locale)
             ;
