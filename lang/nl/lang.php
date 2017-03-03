@@ -4,8 +4,9 @@ return [
     'plugin' => [
         'name' => 'Vertaal',
         'description' => 'Stelt meerdere talen in voor een website.',
-        'manage_locales' => 'Manage locales',
-        'manage_messages' => 'Manage messages'
+        'tab' => 'Vertalingen',
+        'manage_locales' => 'Beheer talen',
+        'manage_messages' => 'Beheer berichten'
     ],
     'locale_picker' => [
         'component_name' => 'Taalkeuze menu',
@@ -30,7 +31,7 @@ return [
     ],
     'messages' => [
         'title' => 'Vertaal berichten',
-		'description' => 'Wijzig berichten',
+	'description' => 'Wijzig berichten',
         'clear_cache_link' => 'Leeg cache',
         'clear_cache_loading' => 'Applicatie cache legen...',
         'clear_cache_success' => 'De applicatie cache is succesvol geleegd.',
@@ -38,7 +39,12 @@ return [
         'scan_messages_link' => 'Zoek naar nieuwe berichten',
         'scan_messages_loading' => 'Zoeken naar nieuwe berichten...',
         'scan_messages_success' => 'De thema bestanden zijn succesvol gescand!',
-        'scan_messages_hint' => 'Klikken op <strong>Zoeken naar nieuwe berichten</strong> controleert de actieve thema bestanden voor nieuwe berichten om te vertalen. ',
+        'scan_messages_hint' => 'Klikken op <strong>Zoeken naar nieuwe berichten</strong> controleert de actieve thema bestanden voor nieuwe berichten om te vertalen.',
+	'scan_messages_process' => 'Dit proces zal het actieve thema scannen voor berichten die kunnen worden vertaald.',
+        'scan_messages_process_limitations' => 'Sommige berichten zullen niet opgevangen worden en zullen pas verschijnen na het eerste gebruik.',
+        'scan_messages_purge_label' => 'Verwijder eerst alle berichten',
+        'scan_messages_purge_help' => 'Indien aangevinkt zullen alle berichten verwijdert worden voor het uitvoeren van de scan.',
+        'scan_messages_purge_confirm' => 'Weet u zeker dat u alle berichten wilt verwijderen? Dit kan niet ongedaan gemaakt worden!',
         'hint_translate' => 'Hier kan je berichten vertalen die worden gebruikt op de website. De velden worden automatisch opgeslagen.',
         'hide_translated' => 'Verberg vertaalde berichten',
     ],
