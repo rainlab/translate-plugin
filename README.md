@@ -235,3 +235,9 @@ Since the Twig filter will not be available all the time, we can pipe them to th
             ]
         ];
     }
+
+# User Interface
+
+#### Switching locales
+
+Users can switch between locales by clicking on the locale indicator on the right hand side of the Multilanguage input. By holding the CMD / CTRL key all Multilanguage Input fields will switch to the selected locale.
