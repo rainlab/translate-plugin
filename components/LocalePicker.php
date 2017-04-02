@@ -6,6 +6,7 @@ use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use October\Rain\Router\Router as RainRouter;
 use Cms\Classes\ComponentBase;
+use Event;
 
 class LocalePicker extends ComponentBase
 {
@@ -28,6 +29,11 @@ class LocalePicker extends ComponentBase
      * @var string The active locale name.
      */
     public $activeLocaleName;
+
+    /**
+     * @var string The old locale code.
+     */
+    public $oldLocale;
 
     public function componentDetails()
     {
@@ -70,6 +76,8 @@ class LocalePicker extends ComponentBase
         if (!$locale = post('locale')) {
             return;
         }
+
+        $this->oldLocale = $this->translator->getLocale();
 
         $this->translator->setLocale($locale);
 
@@ -126,6 +134,8 @@ class LocalePicker extends ComponentBase
             $router = new RainRouter;
 
             $params = $this->getRouter()->getParameters();
+
+            $params = Event::fire('translate.params.translateParams', [$page->baseFileName, $params, $this->oldLocale, $locale], true);
 
             $localeUrl = $router->urlFromPattern($page->url, $params);
         }
