@@ -154,7 +154,7 @@ Once an attribute is indexed, you may use the `transWhere` method to apply a bas
 
     Post::transWhere('slug', 'hello-world')->first();
 
-The `transWhere` method accepts a third argument to explicitly pass a locale value, otherwise it will be detected from the enivronment.
+The `transWhere` method accepts a third argument to explicitly pass a locale value, otherwise it will be detected from the environment.
 
     Post::transWhere('slug', 'hello-world', 'en')->first();
 
@@ -240,4 +240,4 @@ Since the Twig filter will not be available all the time, we can pipe them to th
 
 #### Switching locales
 
-Users can switch between locales by clicking on the locale indicator on the right hand side of the Multilanguage input. By holding the CMD / CTRL key all Multilanguage Input fields will switch to the selected locale.
+Users can switch between locales by clicking on the locale indicator on the right hand side of the Multi-language input. By holding the CMD / CTRL key all Multi-language Input fields will switch to the selected locale.
