@@ -152,9 +152,20 @@ class MLRepeater extends Repeater
     {
         $this->formWidgets = [];
 
-        $indexVar = self::INDEX_PREFIX.implode('.', HtmlHelper::nameToArray($this->formField->getName(false)));
+        $loadedIndexes = $loadedGroups = [];
 
-        array_set($_POST, $indexVar, array_keys($data));
+        if (is_array($data)) {
+            foreach ($data as $index => $loadedValue) {
+                $loadedIndexes[] = array_get($loadedValue, '_index', $index);
+                $loadedGroups[] = array_get($loadedValue, '_group');
+            }
+        }
+
+        $indexVar = self::INDEX_PREFIX.implode('.', HtmlHelper::nameToArray($this->formField->getName(false)));
+        $groupVar = self::GROUP_PREFIX.implode('.', HtmlHelper::nameToArray($this->formField->getName(false)));
+
+        array_set($_POST, $indexVar, $loadedIndexes);
+        array_set($_POST, $groupVar, $loadedGroups);
 
         $this->processExistingItems();
     }
@@ -165,7 +176,9 @@ class MLRepeater extends Repeater
      */
     protected function getPrimarySaveDataAsArray()
     {
-        return post($this->formField->getName()) ?: [];
+        $data = post($this->formField->getName()) ?: [];
+
+        return $this->processSaveValue($data);
     }
 
     /**
