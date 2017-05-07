@@ -49,6 +49,25 @@ class Plugin extends PluginBase
 
     public function boot()
     {
+        /**
+         * Localize the page titles
+         */
+        Event::listen('cms.page.init', function($controller, $page) {
+            $messageIds = [$page->title, $page->seo_title];
+
+            if (isset($page->apiBag['staticPage'])) {
+                $vars = $page->apiBag['staticPage']->getViewBag();
+                $messageIds[] = $vars->property('seo_title');
+                $vars->setProperty('seo_title', Message::get($vars->property('seo_title')));
+            }
+
+            Message::importMessages($messageIds);
+            $page->title = Message::get($page->title);
+
+            if ($page->seo_title)
+                $page->seo_title = Message::get($page->seo_title);
+        });
+
         /*
          * Set the page context for translation caching with high priority.
          */
