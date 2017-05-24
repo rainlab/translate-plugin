@@ -26,6 +26,9 @@ App::before(function($request) {
     if (!$locale = $translator->getLocale()) {
         return;
     }
+    else if (!$translator->isSessionLocal()) {
+        $translator->setBrowserLocal(Request::header('accept-language'));
+    }
 
     /*
      * Register routes
