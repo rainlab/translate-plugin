@@ -128,6 +128,7 @@ class TranslatableModel extends TranslatableBehavior
         }
 
         $data = $this->translatableAttributes[$locale];
+
         foreach ($optionedAttributes as $attribute => $options) {
             if (!array_get($options, 'index', false)) {
                 continue;
@@ -152,7 +153,8 @@ class TranslatableModel extends TranslatableBehavior
 
             if ($recordExists) {
                 $obj->update(['value' => $value]);
-            } else {
+            }
+            else {
                 Db::table('rainlab_translate_indexes')->insert([
                     'locale' => $locale,
                     'model_id' => $this->model->getKey(),
