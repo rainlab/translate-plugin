@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Traits;
 
+use Illuminate\Support\Facades\Session;
 use Str;
 use RainLab\Translate\Models\Locale;
 use Backend\Classes\FormWidgetBase;
@@ -35,7 +36,7 @@ trait MLControl
      */
     public function initLocale()
     {
-        $this->defaultLocale = Locale::getDefault();
+        $this->defaultLocale = Session::get('rainlab.translate.inputLocale') ? Locale::findByCode(Session::get('rainlab.translate.inputLocale')) : Locale::getDefault();
         $this->parentViewPath = $this->guessViewPathFrom(__TRAIT__, '/partials');
         $this->isAvailable = Locale::isAvailable();
     }
