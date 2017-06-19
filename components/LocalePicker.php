@@ -135,7 +135,9 @@ class LocalePicker extends ComponentBase
 
             $params = $this->getRouter()->getParameters();
 
-            $params = Event::fire('translate.params.translateParams', [$page->baseFileName, $params, $this->oldLocale, $locale], true);
+            $new_params = Event::fire('translate.params.translateParams', [$page->baseFileName, $params, $this->oldLocale, $locale], true);
+
+            if ($new_params) $params = $new_params;
 
             $localeUrl = $router->urlFromPattern($page->url, $params);
         }
