@@ -24,15 +24,4 @@
         Import messages
     </a>
     -->
-    <form method="get" class="pull-right">
-        <?php if ( ! is_null(get('search'))): ?>
-        <a
-            href="javascript:;"
-            data-request="onReset"
-            class="btn oc-icon-undo"><?= e(trans('rainlab.translate::lang.messages.reset_search')) ?>
-        </a>
-        <?php endif ?>
-        <input placeholder="Search..." name="search" id="search" value="<?= get('search') ?>" type="text" class="form-control icon search growable pull-right">
-    </form>
-
 </script>

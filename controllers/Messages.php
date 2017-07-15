@@ -71,7 +71,6 @@ class Messages extends Controller
 
     public function prepareTable()
     {
-        $search   = input('search', null);
         $fromCode = post('locale_from', null);
         $toCode = post('locale_to', Locale::getDefault()->code);
         $this->hideTranslated = post('hide_translated', false);
@@ -108,14 +107,23 @@ class Messages extends Controller
          */
         $dataSource = $widget->getDataSource();
 
-        $dataSource->bindEvent('data.getRecords', function($offset, $count) use ($selectedFrom, $selectedTo, $search) {
-            $messages = $count
-                ? Message::orderBy('message_data','asc')->where('message_data', 'LIKE', '%'.$search.'%')->limit($count)->offset($offset)->get()
-                : Message::orderBy('message_data','asc')->get();
+        $dataSource->bindEvent('data.getRecords', function($offset, $count) use ($selectedFrom, $selectedTo) {
+            $messages = $this->listMessagesForDatasource([
+                'offset' => $offset,
+                'count' => $count
+            ]);
 
-            $result = $this->processTableData($messages, $selectedFrom, $selectedTo);
+            return $this->processTableData($messages, $selectedFrom, $selectedTo);
+        });
 
-            return $result;
+        $dataSource->bindEvent('data.searchRecords', function($search, $offset, $count) use ($selectedFrom, $selectedTo) {
+            $messages = $this->listMessagesForDatasource([
+                'search' => $search,
+                'offset' => $offset,
+                'count' => $count
+            ]);
+
+            return $this->processTableData($messages, $selectedFrom, $selectedTo);
         });
 
         $dataSource->bindEvent('data.getCount', function() {
@@ -140,6 +148,27 @@ class Messages extends Controller
     protected function isHideTranslated()
     {
         return post('hide_translated', false);
+    }
+
+    protected function listMessagesForDatasource($options = [])
+    {
+        extract(array_merge([
+            'search' => null,
+            'offset' => null,
+            'count' => null,
+        ], $options));
+
+        $query = Message::orderBy('message_data','asc');
+
+        if ($search) {
+            $query = $query->searchWhere($search, ['message_data']);
+        }
+
+        if ($count) {
+            $query = $query->limit($count)->offset($offset);
+        }
+
+        return $query->get();
     }
 
     protected function processTableData($messages, $from, $to)
@@ -188,14 +217,5 @@ class Messages extends Controller
                 $message->toLocale($toCode, $toValue);
             }
         }
-    }
-
-    /**
-     * reset searching
-     * @return \Redirect
-     */
-    function onReset()
-    {
-        return \Redirect::to( \Request::url() );
     }
 }
