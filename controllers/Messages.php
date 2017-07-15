@@ -71,6 +71,7 @@ class Messages extends Controller
 
     public function prepareTable()
     {
+        $search   = input('search', null);
         $fromCode = post('locale_from', null);
         $toCode = post('locale_to', Locale::getDefault()->code);
         $this->hideTranslated = post('hide_translated', false);
@@ -107,12 +108,13 @@ class Messages extends Controller
          */
         $dataSource = $widget->getDataSource();
 
-        $dataSource->bindEvent('data.getRecords', function($offset, $count) use ($selectedFrom, $selectedTo) {
+        $dataSource->bindEvent('data.getRecords', function($offset, $count) use ($selectedFrom, $selectedTo, $search) {
             $messages = $count
-                ? Message::orderBy('message_data','asc')->limit($count)->offset($offset)->get()
+                ? Message::orderBy('message_data','asc')->where('message_data', 'LIKE', '%'.$search.'%')->limit($count)->offset($offset)->get()
                 : Message::orderBy('message_data','asc')->get();
 
             $result = $this->processTableData($messages, $selectedFrom, $selectedTo);
+
             return $result;
         });
 
@@ -186,5 +188,14 @@ class Messages extends Controller
                 $message->toLocale($toCode, $toValue);
             }
         }
+    }
+
+    /**
+     * reset searching
+     * @return \Redirect
+     */
+    function onReset()
+    {
+        return \Redirect::to( \Request::url() );
     }
 }
