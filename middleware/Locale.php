@@ -1,6 +1,6 @@
 <?php
 
-namespace RainLab\Translate\Middlewares;
+namespace RainLab\Translate\Middleware;
 
 use RainLab\Translate\Classes\Translator;
 use Closure;

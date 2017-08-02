@@ -51,7 +51,7 @@ class Plugin extends PluginBase
     {
     
         \Cms\Classes\CmsController::extend(function($controller) {
-            $controller->middleware('RainLab\Translate\Middlewares\Locale');
+            $controller->middleware('RainLab\Translate\Middleware\Locale');
         });
         
         /*

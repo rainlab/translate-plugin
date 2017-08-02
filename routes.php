@@ -1,7 +1,6 @@
 <?php
 
 use RainLab\Translate\Models\Message;
-use RainLab\Translate\Classes\Translator;
 
 /*
  * Adds a custom route to check for the locale prefix.
