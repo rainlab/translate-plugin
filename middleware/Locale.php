@@ -17,8 +17,7 @@ class Locale
     public function handle($request, Closure $next)
     {
         $translator = Translator::instance();
-        $translator->isConfigured();
-    
+
         if( !$translator->loadLocaleFromRequest() ) {
             $translator->loadLocaleFromSession();
         }
