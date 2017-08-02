@@ -49,6 +49,11 @@ class Plugin extends PluginBase
 
     public function boot()
     {
+        
+        \Cms\Classes\CmsController::extend(function($controller) {
+            $controller->middleware('RainLab\Translate\Middleware\Locale');
+        });
+        
         /*
          * Set the page context for translation caching with high priority.
          */
