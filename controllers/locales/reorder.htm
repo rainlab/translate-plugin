@@ -1,0 +1,8 @@
+<?php Block::put('breadcrumb') ?>
+    <ul>
+        <li><a href="<?= Backend::url('system/settings') ?>"><?= e(trans('system::lang.settings.menu_label')) ?></a></li>
+        <li><a href="<?= Backend::url('rainlab/translate/locales') ?>"><?= e(trans('rainlab.translate::lang.locale.title')) ?></a></li>
+        <li><?= e(trans('rainlab.translate::lang.locale.reorder_title')) ?></li>
+    </ul>
+<?php Block::endPut() ?>
+<?= $this->reorderRender() ?>
