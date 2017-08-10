@@ -29,6 +29,8 @@ return [
         'is_enabled_help'       => 'Deaktivierte Sprachen sind im Frontend nicht verfügbar.',
         'not_available_help'    => 'Es gibt keine anderen Sprachen.',
         'hint_locales'          => 'Hier können neue Sprachen angelegt werden, in die Inhalte im Frontend übersetzt werden können. Die Standardsprache dient als Ausgangssprache für Übersetzungen.',
+        'reorder_title'         => 'Sprachen sortieren',
+        'sort_order'            => 'Sortierung',
     ],
 
     'messages'          => [

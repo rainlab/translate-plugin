@@ -3,6 +3,10 @@
 # ===================================
 
 columns:
+    sort_order:
+        label: rainlab.translate::lang.locale.sort_order
+        invisible: true
+
     name:
         label: rainlab.translate::lang.locale.name
         searchable: yes
