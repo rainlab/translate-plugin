@@ -10,7 +10,7 @@ class UpdateLocalesTable extends Migration
     {
         Schema::table('rainlab_translate_locales', function($table)
         {
-            $table->integer('sort_order');
+            $table->integer('sort_order')->default(0);
         });
 
         // for existing locales, we set the primary key as sort_order default
