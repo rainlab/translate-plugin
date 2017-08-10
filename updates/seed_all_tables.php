@@ -8,12 +8,14 @@ class SeedAllTables extends Seeder
 
     public function run()
     {
-        Locale::create([
-            'code' => 'en',
-            'name' => 'English',
-            'is_default' => true,
-            'is_enabled' => true
-        ]);
+        if(Locale::count() === 0) {
+            Locale::create([
+                'code' => 'en',
+                'name' => 'English',
+                'is_default' => true,
+                'is_enabled' => true
+            ]);
+        }
     }
 
 }
