@@ -14,6 +14,7 @@ use ValidationException;
 class Locale extends Model
 {
     use \October\Rain\Database\Traits\Validation;
+    use \October\Rain\Database\Traits\Sortable;
 
     /**
      * @var string The database table used by the model.
@@ -137,6 +138,18 @@ class Locale extends Model
     }
 
     /**
+     * Scope for ordering the locales
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeOrder($query)
+    {
+        return $query
+            ->orderBy('sort_order', 'asc')
+        ;
+    }
+
+    /**
      * Returns true if there are at least 2 locales available.
      * @return boolean
      */
@@ -155,7 +168,7 @@ class Locale extends Model
             return self::$cacheListAvailable;
         }
 
-        return self::$cacheListAvailable = self::lists('name', 'code');
+        return self::$cacheListAvailable = self::order()->lists('name', 'code');
     }
 
     /**
@@ -169,7 +182,7 @@ class Locale extends Model
         }
 
         $isEnabled = Cache::remember('rainlab.translate.locales', 1440, function() {
-            return self::isEnabled()->lists('name', 'code');
+            return self::isEnabled()->order()->lists('name', 'code');
         });
 
         return self::$cacheListEnabled = $isEnabled;
