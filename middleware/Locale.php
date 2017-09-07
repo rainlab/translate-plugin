@@ -18,9 +18,11 @@ class Locale
     {
         $translator = Translator::instance();
 
-        if( !$translator->loadLocaleFromRequest() ) {
-            $translator->loadLocaleFromSession();
-        }
+        if( !$translator->isConfigured() ) {
+            if( !$translator->loadLocaleFromRequest() ) {
+                $translator->loadLocaleFromSession();
+            }
+        }       
         
         return $next($request);
     }
