@@ -40,7 +40,7 @@
             }
         })
 
-        this.$placeholder.on('keyup', function(){
+        this.$placeholder.on('input', function(){
             self.$activeField.val(this.value)
         })
 
