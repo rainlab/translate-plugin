@@ -1,12 +1,10 @@
-<?php
-
-return [
+<?php return [
     'plugin' => [
         'name' => 'Translate',
         'description' => 'Enables multi-lingual websites.',
         'tab' => 'Translation',
         'manage_locales' => 'Manage locales',
-        'manage_messages' => 'Manage messages'
+        'manage_messages' => 'Manage messages',
     ],
     'locale_picker' => [
         'component_name' => 'Locale Picker',
@@ -29,6 +27,8 @@ return [
         'is_enabled_help' => 'Disabled languages will not be available in the front-end.',
         'not_available_help' => 'There are no other languages set up.',
         'hint_locales' => 'Create new languages here for translating front-end content. The default language represents the content before it has been translated.',
+        'reorder_title' => 'Reorder languages',
+        'sort_order' => 'Sort Order',
     ],
     'messages' => [
         'title' => 'Translate messages',

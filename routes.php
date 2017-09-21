@@ -30,18 +30,18 @@ App::before(function($request) {
     /*
      * Register routes
      */
-    Route::group(['prefix' => $locale], function() {
+    Route::group(['prefix' => $locale, 'middleware' => 'web'], function() {
         Route::any('{slug}', 'Cms\Classes\CmsController@run')->where('slug', '(.*)?');
     });
 
-    Route::any($locale, 'Cms\Classes\CmsController@run');
+    Route::any($locale, 'Cms\Classes\CmsController@run')->middleware('web');
 
     /*
      * Ensure Url::action() retains the localized URL
      * by re-registering the route after the CMS.
      */
     Event::listen('cms.route', function() use ($locale) {
-        Route::group(['prefix' => $locale], function() {
+        Route::group(['prefix' => $locale, 'middleware' => 'web'], function() {
             Route::any('{slug}', 'Cms\Classes\CmsController@run')->where('slug', '(.*)?');
         });
     });

@@ -1,7 +1,8 @@
 <!-- Individual values -->
 <?php foreach ($locales as $code => $name): ?>
     <?php
-        $value = ($value = $this->getLocaleValue($code)) && $this->isLocaleFieldJsonable() ? json_encode($value) : $value;
+        $value = $this->getLocaleValue($code);
+        $value = $this->isLocaleFieldJsonable() ? json_encode($value) : $value;
     ?>
     <input
         type="hidden"

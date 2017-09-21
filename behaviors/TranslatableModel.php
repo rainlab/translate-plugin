@@ -95,7 +95,7 @@ class TranslatableModel extends TranslatableBehavior
      */
     protected function storeTranslatableBasicData($locale = null)
     {
-        $data = json_encode($this->translatableAttributes[$locale]);
+        $data = json_encode($this->translatableAttributes[$locale], JSON_UNESCAPED_UNICODE);
 
         $obj = Db::table('rainlab_translate_attributes')
             ->where('locale', $locale)
@@ -148,7 +148,7 @@ class TranslatableModel extends TranslatableBehavior
                 if ($recordExists) {
                     $obj->delete();
                 }
-                return;
+                continue;
             }
 
             if ($recordExists) {
@@ -163,7 +163,6 @@ class TranslatableModel extends TranslatableBehavior
                     'value' => $value
                 ]);
             }
-
         }
     }
 

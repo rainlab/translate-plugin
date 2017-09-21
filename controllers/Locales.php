@@ -12,11 +12,13 @@ class Locales extends Controller
 {
     public $implement = [
         'Backend.Behaviors.ListController',
-        'Backend.Behaviors.FormController'
+        'Backend.Behaviors.FormController',
+        'Backend.Behaviors.ReorderController',
     ];
 
     public $listConfig = 'config_list.yaml';
     public $formConfig = 'config_form.yaml';
+    public $reorderConfig = 'config_reorder.yaml';
 
     public $requiredPermissions = ['rainlab.translate.manage_locales'];
 
@@ -77,5 +79,11 @@ class Locales extends Controller
         $this->asExtension('FormController')->update_onDelete(post('record_id'));
 
         return $this->listRefresh();
+    }
+
+    public function onReorder()
+    {
+        LocaleModel::clearCache();
+        $this->asExtension('ReorderController')->onReorder();
     }
 }

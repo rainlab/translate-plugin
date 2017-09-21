@@ -6,6 +6,7 @@ dataSource: server
 keyFrom: id
 recordsPerPage: 500
 adding: false
+searching: true
 
 columns:
     from:
