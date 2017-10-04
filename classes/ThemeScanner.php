@@ -6,6 +6,7 @@ use Cms\Classes\Layout;
 use Cms\Classes\Partial;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\Translator;
+use System\Models\MailTemplate;
 
 /**
  * Theme scanner class
@@ -34,6 +35,7 @@ class ThemeScanner
     {
         $this->scanThemeConfigForMessages();
         $this->scanThemeTemplatesForMessages();
+        $this->scanMailTemplatesForMessages();
     }
 
     /**
@@ -81,6 +83,22 @@ class ThemeScanner
 
         foreach (Partial::all() as $partial) {
             $messages = array_merge($messages, $this->parseContent($partial->markup));
+        }
+
+        Message::importMessages($messages);
+    }
+
+    /**
+     * Scans the mail templates for message references.
+     * @return void
+     */
+    public function scanMailTemplatesForMessages()
+    {
+        $messages = [];
+
+        foreach (MailTemplate::allTemplates() as $mailTemplate) {
+            $messages = array_merge($messages, $this->parseContent($mailTemplate->subject));
+            $messages = array_merge($messages, $this->parseContent($mailTemplate->content_html));
         }
 
         Message::importMessages($messages);
