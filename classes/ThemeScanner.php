@@ -97,7 +97,6 @@ class ThemeScanner
         $messages = [];
 
         foreach (MailTemplate::allTemplates() as $mailTemplate) {
-
             $messages = array_merge($messages, $this->parseContent($mailTemplate->subject));
             $messages = array_merge($messages, $this->parseContent($mailTemplate->content_html));
         }
