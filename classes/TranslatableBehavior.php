@@ -186,7 +186,26 @@ abstract class TranslatableBehavior extends ExtensionBase
      */
     public function hasTranslation($key, $locale)
     {
-        return !!$this->getAttributeFromData($this->translatableAttributes[$locale], $key);
+        /*
+         * If the default locale is passed, the attributes are retreived from the model,
+         * otherwise fetch the attributes from the $translatableAttributes property
+         */
+        if ($locale == $this->translatableDefault) {
+            $translatableAttributes = $this->model->attributes;
+        }
+        else {          
+            /*
+             * Ensure that the translatableData has been loaded
+             * @see https://github.com/rainlab/translate-plugin/issues/302
+             */
+            if (!isset($this->translatableAttributes[$locale])) {
+                $this->loadTranslatableData($locale);
+            }
+
+            $translatableAttributes = $this->translatableAttributes[$locale];
+        }
+
+        return !!$this->getAttributeFromData($translatableAttributes, $key);
     }
 
     /**
