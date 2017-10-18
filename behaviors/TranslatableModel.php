@@ -148,7 +148,7 @@ class TranslatableModel extends TranslatableBehavior
                 if ($recordExists) {
                     $obj->delete();
                 }
-                return;
+                continue;
             }
 
             if ($recordExists) {
@@ -163,7 +163,6 @@ class TranslatableModel extends TranslatableBehavior
                     'value' => $value
                 ]);
             }
-
         }
     }
 
