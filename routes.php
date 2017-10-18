@@ -9,12 +9,10 @@ App::before(function($request) {
     
     Event::listen('cms.beforeRoute', function() {
         
-        foreach( \RainLab\Translate\Models\Locale::listAvailable() as $code => $locale ) {
-            
+        foreach( \RainLab\Translate\Models\Locale::listAvailable() as $code => $locale ) {   
             Route::middleware('web')->prefix($code)->group( function() {
                 Route::any('{slug?}', 'Cms\Classes\CmsController@run')->where( 'slug', '(.*)?' );
             } );
-            
         }
         
     });
