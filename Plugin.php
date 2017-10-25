@@ -87,6 +87,8 @@ class Plugin extends PluginBase
         $modifyKey = function (&$key) {
             $key = $key . '-' . Lang::getLocale();
         };
+        Event::listen('pages.router.getCacheKey', $modifyKey);
+        Event::listen('pages.page.getMenuCacheKey', $modifyKey);
         Event::listen('pages.snippet.getMapCacheKey', $modifyKey);
         Event::listen('pages.snippet.getPartialMapCacheKey', $modifyKey);
     }
