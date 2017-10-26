@@ -41,7 +41,7 @@
         'scan_messages_begin_scan' => 'Begin scan',
         'scan_messages_loading' => 'Zoeken naar nieuwe berichten...',
         'scan_messages_success' => 'De thema bestanden zijn succesvol gescand!',
-        'scan_messages_hint' => 'Klikken op <strong>Zoeken naar nieuwe berichten</strong> controleert het huidige thema bestanden voor nieuwe berichten om te vertalen. ',
+        'scan_messages_hint' => 'Klikken op <strong>Zoeken naar nieuwe berichten</strong> controleert de bestanden van het huidige thema op nieuwe berichten om te vertalen.',
         'scan_messages_process' => 'Dit proces zal proberen het huidige thema te scannen voor berichten om te vertalen',
         'scan_messages_process_limitations' => 'Sommige berichten zullen niet worden herkend en zullen pas verschijnen nadat ze voor de eerste keer zijn gebruikt',
         'scan_messages_purge_label' => 'Verwijder eerst alle berichten',
