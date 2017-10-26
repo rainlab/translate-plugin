@@ -41,3 +41,4 @@
     - Added reordering to languages
     - builder_table_update_rainlab_translate_locales.php
     - seed_all_tables.php
+1.3.2: Improved compatibility with RainLab.Pages, added ability to scan Mail Messages for translatable variables.
