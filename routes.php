@@ -14,16 +14,11 @@ App::before(function($request) {
 
     $translator = Translator::instance();
 
-    if (!$translator->isConfigured()) {
-        return;
-    }
-
-    if (!$translator->loadLocaleFromRequest()) {
-        $translator->loadLocaleFromSession();
-        return;
-    }
-
-    if (!$locale = $translator->getLocale()) {
+    if (
+        !$translator->isConfigured() ||
+        !$translator->loadLocaleFromRequest() ||
+        (!$locale = $translator->getLocale())
+    ) {
         return;
     }
 
