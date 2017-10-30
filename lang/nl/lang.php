@@ -36,7 +36,7 @@
         'clear_cache_link' => 'Leeg cache',
         'clear_cache_loading' => 'Applicatie cache legen...',
         'clear_cache_success' => 'De applicatie cache is succesvol geleegd.',
-        'clear_cache_hint' => 'Het is verstandig om regelmatig op <strong>Leeg cache</strong> te klikken om de wijzigingen te zien op de website.',
+        'clear_cache_hint' => 'Het kan zijn dat het nodig is om op "cache legen" te klikken om wijzigingen op de website te zien.',
         'scan_messages_link' => 'Zoek naar nieuwe berichten',
         'scan_messages_begin_scan' => 'Begin scan',
         'scan_messages_loading' => 'Zoeken naar nieuwe berichten...',
