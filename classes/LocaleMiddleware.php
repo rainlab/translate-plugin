@@ -17,7 +17,8 @@ class LocaleMiddleware
         $translator = Translator::instance();
         $translator->isConfigured();
 
-        if (!$translator->loadLocaleFromRequest()) {
+
+        if (!$translator->loadLocaleFromRequest() && !$translator->skipSessionLocaleRetrieval()) {
             $translator->loadLocaleFromSession();
         }
 
