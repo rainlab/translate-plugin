@@ -91,7 +91,7 @@ class Translator
     }
 
     /**
-     * Check if this plugin is installed and the database is available, 
+     * Check if this plugin is installed and the database is available,
      * stores the result in the session for efficiency.
      * @return boolean
      */
@@ -208,4 +208,17 @@ class Translator
     {
         Session::put(self::SESSION_LOCALE, $locale);
     }
+
+    /**
+     * Should we load the locale from the session?
+     * See https://github.com/rainlab/translate-plugin/issues/315
+     *
+     * @return boolean
+     */
+    public function skipSessionLocaleRetrieval()
+    {
+        return config('cms.translate.skipSession', false);
+
+    }
+
 }
