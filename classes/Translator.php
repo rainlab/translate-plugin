@@ -2,6 +2,7 @@
 
 use App;
 use Schema;
+use Config;
 use Session;
 use Request;
 use RainLab\Translate\Models\Locale;
@@ -217,8 +218,7 @@ class Translator
      */
     public function skipSessionLocaleRetrieval()
     {
-        return config('cms.translate.skipSession', false);
-
+        return Config::get('rainlab.translate::skipSession', false);
     }
 
 }
