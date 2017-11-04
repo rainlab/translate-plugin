@@ -4,6 +4,7 @@ use App;
 use Schema;
 use Session;
 use Request;
+use Config;
 use RainLab\Translate\Models\Locale;
 
 /**
@@ -149,13 +150,17 @@ class Translator
     /**
      * Returns the path prefixed with language code.
      *
-     * @param string $path Path to rewrite
+     * @param string $path Path to rewrite, already translate, with or without locale prefixed
      * @param string $locale optional language code, default to the system default language
-     * @param boolean $removeDefaultLocale dont prefix the path with the default locale
+     * @param boolean $prefixDefaultLocale should we prefix the path when the locale = default locale
      * @return string
      */
-    public function getPathInLocale($path, $locale = null, $removeDefaultLocale = false)
+    public function getPathInLocale($path, $locale = null, $prefixDefaultLocale = null)
     {
+        $prefixDefaultLocale = (is_null($prefixDefaultLocale))
+            ? Config::get('rainlab.translate::prefixDefaultLocale')
+            : $prefixDefaultLocale;
+
         $segments = explode('/', $path);
 
         $segments = array_values(array_filter($segments, function ($v) {
@@ -168,14 +173,18 @@ class Translator
 
         if (count($segments) == 0 || Locale::isValid($segments[0])) {
             $segments[0] = $locale;
-        }
-        else {
+        } else {
             array_unshift($segments, $locale);
         }
 
-        if ($removeDefaultLocale
-            && isset($segments[0]) && $segments[0] == $this->defaultLocale
+        // If we don't want te default locale to be prefixed
+        // AND the first segment equals the defaultlocale
+        if (
+            !$prefixDefaultLocale
+            && isset($segments[0])
+            && $segments[0] == $this->defaultLocale
         ) {
+            // remove the first element (whichis the default locale)
             array_shift($segments);
         };
 

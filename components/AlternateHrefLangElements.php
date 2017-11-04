@@ -36,7 +36,7 @@ class AlternateHrefLangElements extends ComponentBase
     {
         $translator = Translator::instance();
         $page = $this->getPage();
-        
+
         /*
          * Static Page
          */
@@ -55,7 +55,7 @@ class AlternateHrefLangElements extends ComponentBase
             $localeUrl = $router->urlFromPattern($page->url, $params);
         }
 
-        return $translator->getPathInLocale($localeUrl, $locale, true);
+        return $translator->getPathInLocale($localeUrl, $locale);
     }
 
 }
