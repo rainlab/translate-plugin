@@ -91,7 +91,7 @@ class Translator
     }
 
     /**
-     * Check if this plugin is installed and the database is available, 
+     * Check if this plugin is installed and the database is available,
      * stores the result in the session for efficiency.
      * @return boolean
      */
@@ -151,9 +151,10 @@ class Translator
      *
      * @param string $path Path to rewrite
      * @param string $locale optional language code, default to the system default language
+     * @param boolean $removeDefaultLocale dont prefix the path with the default locale
      * @return string
      */
-    public function getPathInLocale($path, $locale = null)
+    public function getPathInLocale($path, $locale = null, $removeDefaultLocale = false)
     {
         $segments = explode('/', $path);
 
@@ -171,6 +172,12 @@ class Translator
         else {
             array_unshift($segments, $locale);
         }
+
+        if ($removeDefaultLocale
+            && isset($segments[0]) && $segments[0] == $this->defaultLocale
+        ) {
+            array_shift($segments);
+        };
 
         return implode('/', $segments);
     }
