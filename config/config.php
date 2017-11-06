@@ -11,6 +11,6 @@ return [
     | ( For now only used in the alternate-hreflang cmponent )
     |
     */
-    'prefixDefaultLocale' => false
+    'prefixDefaultLocale' => true
 
 ];
