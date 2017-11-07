@@ -184,7 +184,7 @@ class Translator
             && isset($segments[0])
             && $segments[0] == $this->defaultLocale
         ) {
-            // remove the first element (whichis the default locale)
+            // remove the first element (which is the default locale)
             array_shift($segments);
         };
 
