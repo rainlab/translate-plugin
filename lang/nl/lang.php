@@ -10,6 +10,10 @@
         'component_name' => 'Taalkeuze menu',
         'component_description' => 'Geeft een taal keuzemenu weer om de taal te wijzigen voor de website.',
     ],
+    'alternate_hreflang' => [
+        'component_name' => 'Alternatieve hrefLang elementen',
+        'component_description' => 'Toont hreflang elementen voor de alt. talen'
+    ],
     'locale' => [
         'title' => 'Beheer talen',
         'update_title' => 'Wijzig taal',

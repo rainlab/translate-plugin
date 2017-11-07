@@ -14,8 +14,8 @@ class AlternateHrefLangElements extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name' => 'Alternate HREF Lang elements',
-            'description' => 'Injects the language alternatives as hreflang elements'
+            'name'        => 'rainlab.translate::lang.alternate_hreflang.component_name',
+            'description' => 'rainlab.translate::lang.alternate_hreflang.component_description'
         ];
     }
 
