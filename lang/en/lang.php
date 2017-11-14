@@ -10,6 +10,10 @@
         'component_name' => 'Locale Picker',
         'component_description' => 'Shows a dropdown to select a front-end language.',
     ],
+    'alternate_hreflang' => [
+        'component_name' => 'Alternate hrefLang elements',
+        'component_description' => 'Injects the language alternatives for page as hreflang elements'
+    ],
     'locale' => [
         'title' => 'Manage languages',
         'update_title' => 'Update language',
