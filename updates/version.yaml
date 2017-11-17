@@ -43,3 +43,4 @@
     - seed_all_tables.php
 1.3.2: Improved compatibility with RainLab.Pages, added ability to scan Mail Messages for translatable variables.
 1.3.3: Fix to the locale picker session handling in Build 420 onwards.
+1.3.4: Add alternate hreflang elements and adds prefixDefaultLocale setting
