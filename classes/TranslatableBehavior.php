@@ -399,7 +399,18 @@ abstract class TranslatableBehavior extends ExtensionBase
     {
         $keyArray = HtmlHelper::nameToArray($attribute);
 
-        return array_get($data, implode('.', $keyArray));
+        $path = implode('.', $keyArray);
+        $val =  array_get($data, $path);
+
+        // For json attributes
+        if (is_null($val) && count($keyArray) > 1 && isset($data[$keyArray[0]]) && is_string($data[$keyArray[0]])) {
+            $data[$keyArray[0]] =  json_decode($data[$keyArray[0]], true);
+            if (!is_null($data[$keyArray[0]])) {
+                $val = array_get($data, $path);
+            }
+        }
+
+        return $val;
     }
 
     /**
