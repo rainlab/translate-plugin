@@ -115,6 +115,8 @@ class MLRepeater extends Repeater
          */
         $lockerData = $this->getLocaleSaveDataAsArray($locale) ?: [];
 
+        $this->formField->value = $lockerData;
+
         $this->reprocessExistingLocaleItems($lockerData);
 
         foreach ($this->formWidgets as $key => $widget) {
