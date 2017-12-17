@@ -137,6 +137,9 @@ class EventRegistry
             elseif ($type == 'repeater') {
                 $fields[$name]['type'] = 'mlrepeater';
             }
+            elseif ($type == 'mediafinder') {
+                $fields[$name]['type'] = 'mlmediafinder';
+            }
         }
 
         return $fields;
