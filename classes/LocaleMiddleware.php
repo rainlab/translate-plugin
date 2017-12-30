@@ -12,15 +12,19 @@ class LocaleMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
-    {
+    public function handle($request, Closure $next)                                                                                                                                  
+    {                                                                                                                                                                                
         $translator = Translator::instance();
         $translator->isConfigured();
 
-        if (!$translator->loadLocaleFromRequest()) {
-            $translator->loadLocaleFromSession();
-        }
+        if( ! $translator->loadLocaleFromRequest()) {
+            if(Config::get('translate.prefixDefaultLocale')) {
+                $translator->loadLocaleFromSession();
+            } else {
+                $translator->setLocale($translator->getDefaultLocale());
+            }
+         }
 
-        return $next($request);
+         return $next($request);
     }
 }
