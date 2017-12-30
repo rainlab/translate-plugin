@@ -45,3 +45,4 @@
 1.3.3: Fix to the locale picker session handling in Build 420 onwards.
 1.3.4: Add alternate hreflang elements and adds prefixDefaultLocale setting.
 1.3.5: Fix MLRepeater bug when switching locales.
+1.3.6: Fix Middleware to use the prefixDefaultLocale setting introduced in 134
