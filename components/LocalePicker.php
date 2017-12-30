@@ -2,6 +2,7 @@
 
 use Request;
 use Redirect;
+use Config;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use October\Rain\Router\Router as RainRouter;
@@ -92,10 +93,21 @@ class LocalePicker extends ComponentBase
             return;
         }
 
-        $locale = $this->translator->getLocale(true)
+        $prefixDefaultLocale = Config::get('rainlab.translate::prefixDefaultLocale');
+        $locale = $this->translator->getLocale(false)
             ?: $this->translator->getDefaultLocale();
 
-        return Redirect::to($this->translator->getCurrentPathInLocale($locale));
+        if ($prefixDefaultLocale) {
+
+            return Redirect::to($this->translator->getCurrentPathInLocale($locale));
+
+        } elseif ( $locale == $this->translator->getDefaultLocale()) {
+            return;
+        } else {
+            $this->translator->setLocale($this->translator->getDefaultLocale());
+            return;
+        }
+
     }
 
     /**
