@@ -2,6 +2,7 @@
 
 use RainLab\Translate\Classes\Translator;
 use Closure;
+use Config;
 
 class LocaleMiddleware
 {
@@ -12,13 +13,13 @@ class LocaleMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)                                                                                                                                  
-    {                                                                                                                                                                                
+    public function handle($request, Closure $next)
+    {
         $translator = Translator::instance();
         $translator->isConfigured();
 
-        if( ! $translator->loadLocaleFromRequest()) {
-            if(Config::get('translate.prefixDefaultLocale')) {
+        if (!$translator->loadLocaleFromRequest()) {
+            if (Config::get('translate.prefixDefaultLocale')) {
                 $translator->loadLocaleFromSession();
             } else {
                 $translator->setLocale($translator->getDefaultLocale());
