@@ -24,8 +24,8 @@ class LocaleMiddleware
             } else {
                 $translator->setLocale($translator->getDefaultLocale());
             }
-         }
+        }
 
-         return $next($request);
+        return $next($request);
     }
 }
