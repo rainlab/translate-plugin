@@ -19,7 +19,7 @@ class LocaleMiddleware
         $translator->isConfigured();
 
         if (!$translator->loadLocaleFromRequest()) {
-            if (Config::get('translate.prefixDefaultLocale')) {
+            if (Config::get('rainlab.translate::prefixDefaultLocale')) {
                 $translator->loadLocaleFromSession();
             } else {
                 $translator->setLocale($translator->getDefaultLocale());
