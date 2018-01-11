@@ -46,3 +46,4 @@
 1.3.4: Add alternate hreflang elements and adds prefixDefaultLocale setting.
 1.3.5: Fix MLRepeater bug when switching locales.
 1.3.6: Fix Middleware to use the prefixDefaultLocale setting introduced in 1.3.4
+1.3.7: Fix config reference in LocaleMiddleware
