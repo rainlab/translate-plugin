@@ -126,6 +126,7 @@ class MLRepeater extends Repeater
             }
             else {
                 $widget->setFormValues($value);
+                $this->formField->value[$key] = $value;
             }
         }
 
