@@ -11,6 +11,7 @@ return [
     | ( For now only used in the alternate-hreflang cmponent )
     |
     */
-    'prefixDefaultLocale' => true
+    'prefixDefaultLocale' => true,
+    'cacheTimeout'        => 1440,
 
 ];

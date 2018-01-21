@@ -4,6 +4,7 @@ use Str;
 use Lang;
 use Model;
 use Cache;
+use Config;
 
 /**
  * Message Model
@@ -238,7 +239,7 @@ class Message extends Model
             return;
         }
 
-        Cache::put(self::makeCacheKey(), self::$cache, 1440);
+        Cache::put(self::makeCacheKey(), self::$cache, Config::get('rainlab.translate::cacheTimeout', 1440));
     }
 
     /**
