@@ -1,7 +1,6 @@
 <?php namespace RainLab\Translate\Classes;
 
 use App;
-use Event;
 use Schema;
 use Session;
 use Request;
@@ -65,9 +64,6 @@ class Translator
         if ($remember) {
             $this->setSessionLocale($locale);
         }
-
-        // this is a workaround to force Argon to switch to the current locale
-        Event::fire('locale.changed', $locale);
 
         return true;
     }
