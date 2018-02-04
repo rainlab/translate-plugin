@@ -53,5 +53,7 @@
         'scan_messages_purge_confirm' => 'Are you sure you want to delete all messages? This cannot be undone!',
         'hint_translate' => 'Here you can translate messages used on the front-end, the fields will save automatically.',
         'hide_translated' => 'Hide translated',
+        'export_messages_link' => 'Export Messages',
+        'import_messages_link' => 'Import Messages',
     ],
 ];
