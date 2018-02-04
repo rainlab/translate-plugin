@@ -8,6 +8,13 @@ class MessageExport extends ExportModel
 
     /**
      * exports the message data with each locale in a separate column.
+     *
+     * code  | en    | de    | fr
+     * -------------------------------
+     * title | Title | Titel | Titre
+     * name  | Name  | Name  | Prénom
+     * ...
+     *
      * @param $columns
      * @param null $sessionKey
      * @return mixed
