@@ -7,15 +7,10 @@ class MessageExport extends ExportModel
     const CODE_COLUMN_NAME = 'code';
 
     /**
-     * Called when data is being exported.
-     * The return value should be an array in the format of:
-     *
-     *   [
-     *       'db_name1' => 'Some attribute value',
-     *       'db_name2' => 'Another attribute value'
-     *   ],
-     *   [...]
-     *
+     * exports the message data with each locale in a separate column.
+     * @param $columns
+     * @param null $sessionKey
+     * @return mixed
      */
     public function exportData($columns, $sessionKey = null)
     {

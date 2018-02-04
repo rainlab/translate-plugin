@@ -10,19 +10,40 @@ class MessageImport extends ImportModel
     ];
 
     /**
-     * Called when data is being imported.
-     * The $results array should be in the format of:
+     * import the message data from a csv.
+     * the code column is required and must not be empty.
      *
-     *    [
-     *        'db_name1' => 'Some value',
-     *        'db_name2' => 'Another value'
-     *    ],
-     *    [...]
-     *
+     * @param $results
+     * @param null $sessionKey
      */
     public function importData($results, $sessionKey = null)
     {
+        $codeName = MessageExport::CODE_COLUMN_NAME;
 
+        foreach ($results as $index => $result) {
+            try {
+                if (isset($result[$codeName]) && !empty($result[$codeName])) {
+                    $code = $result[$codeName];
+                    // modify result to match the expected message_data schema
+                    unset($result[$codeName]);
+                    $result[Message::DEFAULT_LOCALE] = $code;
+
+                    $message = Message::firstOrNew(['code' => $code]);
+                    $message->message_data = array_merge($message->message_data, $result);
+
+                    if ($message->exists) {
+                        $this->logUpdated();
+                    } else {
+                        $this->logCreated();
+                    }
+                    $message->save();
+                } else {
+                    $this->logSkipped($index, 'no code provided');
+                }
+            } catch (\Exception $exception) {
+                $this->logError($index, $exception->getMessage());
+            }
+        }
     }
 
 }

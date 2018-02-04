@@ -1,9 +1,7 @@
 import:
     title: Import Messages
     modelClass: RainLab\Translate\Models\MessageImport
-    list: $/rainlab/translate/models/message/columns.yaml
 
 export:
     title: Export Messages
     modelClass: RainLab\Translate\Models\MessageExport
-    list: $/rainlab/translate/models/message/columns.yaml
