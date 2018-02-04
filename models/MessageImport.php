@@ -4,7 +4,10 @@ use Backend\Models\ImportModel;
 
 class MessageImport extends ImportModel
 {
-    public $rules = [];
+
+    public $rules = [
+        'code' => 'required'
+    ];
 
     /**
      * Called when data is being imported.
@@ -21,4 +24,5 @@ class MessageImport extends ImportModel
     {
 
     }
+
 }
