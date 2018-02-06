@@ -194,7 +194,7 @@ Event::listen('translate.params.translateParams', function($page, $params, $oldL
         return YourModel::translateParams($params, $oldLocale, $newLocale);
     }
 });
-
+```
 
 In YourModel, one possible implementation might look like this:
 
