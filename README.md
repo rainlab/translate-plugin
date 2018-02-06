@@ -190,7 +190,7 @@ It's possible to translate URL parameters by listening to the translate.params.t
 
 ```php
 Event::listen('translate.params.translateParams', function($page, $params, $oldLocale, $newLocale) {
-    if ($page == 'your-page-filename') {
+    if ($page->baseFileName == 'your-page-filename') {
         return YourModel::translateParams($params, $oldLocale, $newLocale);
     }
 });
