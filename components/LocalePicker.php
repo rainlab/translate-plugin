@@ -159,11 +159,11 @@ class LocalePicker extends ComponentBase
              *
              * Example usage:
              *
-             * Event::listen('translate.params.translateParams', function($page, $params, $oldLocale, $newLocale) {
-             *    if ($page->baseFileName == 'your-page-filename') {
-             *         return YourModel::translateParams($params, $oldLocale, $newLocale);
-             *     }
-             * });
+             *     Event::listen('translate.params.translateParams', function($page, $params, $oldLocale, $newLocale) {
+             *        if ($page->baseFileName == 'your-page-filename') {
+             *             return YourModel::translateParams($params, $oldLocale, $newLocale);
+             *         }
+             *     });
              *
              */            
             $translatedParams = Event::fire('translate.params.translateParams', 
