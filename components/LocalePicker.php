@@ -152,21 +152,21 @@ class LocalePicker extends ComponentBase
             $params = $this->getRouter()->getParameters();
                         
             /**
-             * @event translate.params.translateParams
+             * @event translate.localePicker.translateParams
              * Enables manipulating the URL parameters
              *
              * You will have access to the page object, the old and new locale and the URL parameters.
              *
              * Example usage:
              *
-             *     Event::listen('translate.params.translateParams', function($page, $params, $oldLocale, $newLocale) {
+             *     Event::listen('translate.localePicker.translateParams', function($page, $params, $oldLocale, $newLocale) {
              *        if ($page->baseFileName == 'your-page-filename') {
              *             return YourModel::translateParams($params, $oldLocale, $newLocale);
              *         }
              *     });
              *
              */            
-            $translatedParams = Event::fire('translate.params.translateParams', 
+            $translatedParams = Event::fire('translate.localePicker.translateParams', 
                                             [$page, $params, $this->oldLocale, $locale], true);
             
             if ($translatedParams) {
