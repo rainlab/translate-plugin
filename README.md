@@ -186,10 +186,10 @@ The word "Contact" in French is the same so a translated URL is not given, or ne
 
 ## URL Parameter translation
 
-It's possible to translate URL parameters by listening to the translate.params.translateParams event, which is fired when switching languages.
+It's possible to translate URL parameters by listening to the translate.localePicker.translateParams event, which is fired when switching languages.
 
 ```php
-Event::listen('translate.params.translateParams', function($page, $params, $oldLocale, $newLocale) {
+Event::listen('translate.localePicker.translateParams', function($page, $params, $oldLocale, $newLocale) {
     if ($page->baseFileName == 'your-page-filename') {
         return YourModel::translateParams($params, $oldLocale, $newLocale);
     }
