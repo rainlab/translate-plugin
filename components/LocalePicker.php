@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Components;
 
+use Event;
 use Request;
 use Redirect;
 use Config;
