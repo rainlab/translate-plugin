@@ -1,8 +1,9 @@
 <?php namespace RainLab\Translate\Components;
 
+use Event;
+use Config;
 use Request;
 use Redirect;
-use Config;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use October\Rain\Router\Router as RainRouter;
