@@ -30,7 +30,7 @@ class TranslatableModel extends TranslatableBehavior
      * @param  string $locale
      * @return Builder
      */
-    public function scopeTransWhere($query, $index, $value, $locale = null)
+    public function scopeTransWhere($query, $index, $value, $locale = null, $operator = '=')
     {
         if (!$locale) {
             $locale = $this->translatableContext;
@@ -38,12 +38,12 @@ class TranslatableModel extends TranslatableBehavior
 
         $query->select($this->model->getTable().'.*');
 
-        $query->where(function($q) use ($index, $value) {
+        $query->where(function($q) use ($index, $value, $operator) {
             $q->where($this->model->getTable().'.'.$index, $value);
-            $q->orWhere(function($q) use ($index, $value) {
+            $q->orWhere(function($q) use ($index, $value, $operator) {
                 $q
                     ->where('rainlab_translate_indexes.item', $index)
-                    ->where('rainlab_translate_indexes.value', $value)
+                    ->where('rainlab_translate_indexes.value', $operator, $value)
                 ;
             });
         });

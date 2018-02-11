@@ -184,6 +184,33 @@ The word "Contact" in French is the same so a translated URL is not given, or ne
 - /ru/контакт - Page in Russian
 - /ru/contact - 404
 
+## URL Parameter translation
+
+It's possible to translate URL parameters by listening to the translate.localePicker.translateParams event, which is fired when switching languages.
+
+```php
+Event::listen('translate.localePicker.translateParams', function($page, $params, $oldLocale, $newLocale) {
+    if ($page->baseFileName == 'your-page-filename') {
+        return YourModel::translateParams($params, $oldLocale, $newLocale);
+    }
+});
+```
+
+In YourModel, one possible implementation might look like this:
+
+```php
+public static function translateParams($params, $oldLocale, $newLocale) {
+    $newParams = $params;
+    foreach ($params as $paramName => $paramValue) {
+        $records = self::transWhere($paramName, $paramValue, $oldLocale)->first();
+        if ($records) {
+            $records->translateContext($newLocale);
+            $newParams[$paramName] = $records->$paramName;
+        }
+    }
+    return $newParams;
+}
+```
 ## Conditionally extending plugins
 
 #### Models

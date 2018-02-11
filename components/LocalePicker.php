@@ -1,8 +1,9 @@
 <?php namespace RainLab\Translate\Components;
 
+use Event;
+use Config;
 use Request;
 use Redirect;
-use Config;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use October\Rain\Router\Router as RainRouter;
@@ -29,6 +30,11 @@ class LocalePicker extends ComponentBase
      * @var string The active locale name.
      */
     public $activeLocaleName;
+    
+    /**
+     * @var The active locale code before switching.
+     */
+    public $oldLocale;
 
     public function componentDetails()
     {
@@ -72,6 +78,9 @@ class LocalePicker extends ComponentBase
             return;
         }
 
+        // Remember the current locale before switching to the requested one
+        $this->oldLocale = $this->translator->getLocale();
+        
         $this->translator->setLocale($locale);
 
         $pageUrl = $this->makeLocaleUrlFromPage($locale);
@@ -142,7 +151,29 @@ class LocalePicker extends ComponentBase
             $router = new RainRouter;
 
             $params = $this->getRouter()->getParameters();
-
+                        
+            /**
+             * @event translate.localePicker.translateParams
+             * Enables manipulating the URL parameters
+             *
+             * You will have access to the page object, the old and new locale and the URL parameters.
+             *
+             * Example usage:
+             *
+             *     Event::listen('translate.localePicker.translateParams', function($page, $params, $oldLocale, $newLocale) {
+             *        if ($page->baseFileName == 'your-page-filename') {
+             *             return YourModel::translateParams($params, $oldLocale, $newLocale);
+             *         }
+             *     });
+             *
+             */            
+            $translatedParams = Event::fire('translate.localePicker.translateParams', 
+                                            [$page, $params, $this->oldLocale, $locale], true);
+            
+            if ($translatedParams) {
+                $params = $translatedParams;
+            }
+            
             $localeUrl = $router->urlFromPattern($page->url, $params);
         }
 
