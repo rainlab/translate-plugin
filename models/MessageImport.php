@@ -19,7 +19,8 @@ class MessageImport extends ImportModel
      * ...
      *
      * the code column is required and must not be empty.
-     * empty values in the locale columns are ignored and don't overwrite existing values.
+     * note: messages with an existing code are not removed/touched if the import doesn't contain this code.
+     * As a result you can incrementally update the messages by just adding the new codes and messages to the csv.
      *
      * @param $results
      * @param null $sessionKey
@@ -35,11 +36,6 @@ class MessageImport extends ImportModel
                     // modify result to match the expected message_data schema
                     unset($result[$codeName]);
                     $result[Message::DEFAULT_LOCALE] = $code;
-
-                    // filter out empty values
-                    $result = array_filter($result, function($value) {
-                        return !empty($value);
-                    });
 
                     $message = Message::firstOrNew(['code' => $code]);
 
