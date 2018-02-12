@@ -31,7 +31,7 @@ class MessageExport extends ExportModel
                 $result[$column] = isset($data[$column]) ? $data[$column] : '';
             }
             return  $result;
-        });
+        })->toArray();
     }
 
     public static function getColumns()

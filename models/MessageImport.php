@@ -39,6 +39,9 @@ class MessageImport extends ImportModel
 
                     $message = Message::firstOrNew(['code' => $code]);
 
+                    // create empty array, if $message is new
+                    $message->message_data = $message->message_data ?: [];
+
                     $message->message_data = array_merge($message->message_data, $result);
 
                     if ($message->exists) {
