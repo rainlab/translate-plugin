@@ -11,17 +11,14 @@
         data-handler="onLoadScanMessagesForm"
         class="btn oc-icon-refresh"><?= e(trans('rainlab.translate::lang.messages.scan_messages_link')) ?>
     </a>
-
-    <!--
     <a
-        href="javascript:;"
-        class="btn">
-        Export messages
+        href="<?= Backend::url('rainlab/translate/messages/import') ?>"
+        class="btn oc-icon-sign-in">
+        <?= e(trans('rainlab.translate::lang.messages.import_messages_link')) ?>
     </a>
     <a
-        href="javascript:;"
-        class="btn">
-        Import messages
+        href="<?= Backend::url('rainlab/translate/messages/export') ?>"
+        class="btn oc-icon-sign-out">
+        <?= e(trans('rainlab.translate::lang.messages.export_messages_link')) ?>
     </a>
-    -->
 </script>
