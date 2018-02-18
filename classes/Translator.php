@@ -1,6 +1,7 @@
 <?php namespace RainLab\Translate\Classes;
 
 use App;
+use Date;
 use Schema;
 use Session;
 use Request;
@@ -59,6 +60,9 @@ class Translator
 
         App::setLocale($locale);
         $this->activeLocale = $locale;
+
+        $date = new Date();
+        $date->setLocale($locale);
 
         if ($remember) {
             $this->setSessionLocale($locale);
