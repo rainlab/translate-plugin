@@ -1,7 +1,9 @@
 <?php namespace RainLab\Translate\Controllers;
 
+use Backend\Behaviors\ImportExportController;
 use Lang;
 use Flash;
+use RainLab\Translate\Models\MessageExport;
 use Request;
 use BackendMenu;
 use Backend\Classes\Controller;
@@ -16,6 +18,12 @@ use System\Classes\SettingsManager;
  */
 class Messages extends Controller
 {
+    public $implement = [
+        ImportExportController::class,
+    ];
+
+    public $importExportConfig = 'config_import_export.yaml';
+
     public $requiredPermissions = ['rainlab.translate.manage_messages'];
 
     protected $hideTranslated = false;
@@ -29,6 +37,9 @@ class Messages extends Controller
 
         $this->addJs('/plugins/rainlab/translate/assets/js/messages.js');
         $this->addCss('/plugins/rainlab/translate/assets/css/messages.css');
+
+        $this->importColumns = MessageExport::getColumns();
+        $this->exportColumns = MessageExport::getColumns();
     }
 
     public function index()

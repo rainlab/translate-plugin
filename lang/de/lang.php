@@ -41,5 +41,7 @@
         'scan_messages_hint' => 'Ein Klick auf <strong>Nach Inhalten suchen</strong> sucht nach neuen Inhalten, die übersetzt werden können.',
         'hint_translate' => 'Hier können Inhalte aus dem Frontend übersetzt werden. Die Felder werden automatisch gespeichert.',
         'hide_translated' => 'Bereits übersetzte Inhalte ausblenden',
+        'export_messages_link' => 'Übersetzungen exportieren',
+        'import_messages_link' => 'Übersetzungen importieren',
     ],
 ];
