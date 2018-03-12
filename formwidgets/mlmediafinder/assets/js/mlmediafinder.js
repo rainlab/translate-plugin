@@ -1,12 +1,23 @@
-/**
- * multilingual media finder
+/*
+ * MLMediaFinder plugin
+ *
+ * Data attributes:
+ * - data-control="mlmediafinder" - enables the plugin on an element
+ * - data-option="value" - an option with a value
+ *
+ * JavaScript API:
+ * $('a#someElement').mlMediaFinder({ option: 'value' })
+ *
+ * Dependences:
+ * - mediafinder (mediafinder.js)
  */
+
 +function($) { "use strict";
 
     var Base = $.oc.foundation.base,
         BaseProto = Base.prototype
 
-    // MLRICHEDITOR CLASS DEFINITION
+    // MLMEDIAFINDER CLASS DEFINITION
     // ============================
 
     var MLMediaFinder = function(element, options) {
@@ -30,36 +41,30 @@
     }
 
     MLMediaFinder.prototype.init = function() {
-        if (this.options.isMulti === null) {
-            this.options.isMulti = this.$mediafinder.hasClass('is-multi')
-        }
 
-        if (this.options.isPreview === null) {
-            this.options.isPreview = this.$mediafinder.hasClass('is-preview')
-        }
-
-        if (this.options.isImage === null) {
-            this.options.isImage = this.$mediafinder.hasClass('is-image')
-        }
         this.$el.multiLingual()
         this.$el.on('setLocale.oc.multilingual', this.proxy(this.onSetLocale))
         this.$el.one('dispose-control', this.proxy(this.dispose))
+        // Listen for change event from mediafinder
+        this.$findValue.on('change', this.proxy(this.setValue))
 
         // Stop here for preview mode
         if (this.options.isPreview)
             return
 
-        this.$el.on('click', '.find-button', this.proxy(this.onClickFindButton))
-        this.$el.on('click', '.find-remove-button', this.proxy(this.onClickRemoveButton))
-
         this.updateLayout();
+    }
+
+    // Simplify setPath
+    MLMediaFinder.prototype.setValue = function(e) {
+        this.setPath($(e.target).val())
     }
 
     MLMediaFinder.prototype.dispose = function() {
         this.$el.off('setLocale.oc.multilingual', this.proxy(this.onSetLocale))
-        this.$el.off('click', '.find-button', this.proxy(this.onClickFindButton))
-        this.$el.off('click', '.find-remove-button', this.proxy(this.onClickRemoveButton))
         this.$el.off('dispose-control', this.proxy(this.dispose))
+        this.$findValue.off('change', this.proxy(this.setValue))
+
         this.$el.removeData('oc.mlMediaFinder')
 
         this.$findValue = null
@@ -73,36 +78,6 @@
         BaseProto.dispose.call(this)
     }
 
-    MLMediaFinder.prototype.onClickFindButton = function() {
-        var self = this
-
-        new $.oc.mediaManager.popup({
-            alias: 'ocmediamanager',
-            cropAndInsertButton: true,
-            onInsert: function(items) {
-                if (!items.length) {
-                    alert('Please select image(s) to insert.')
-                    return
-                }
-
-                if (items.length > 1) {
-                    alert('Please select a single item.')
-                    return
-                }
-
-                var path = items[0].path
-
-                //self.evalIsPopulated()
-                self.setPath(path);
-
-                this.hide()
-            }
-        })
-    }
-
-    MLMediaFinder.prototype.onClickRemoveButton = function(e) {
-        this.setPath('')
-    }
 
     MLMediaFinder.prototype.onSetLocale = function(e, locale, localeValue) {
         this.setPath(localeValue)
@@ -113,9 +88,8 @@
             this.$findValue = localeValue;
 
             var path = localeValue ? this.options.mediaPath + localeValue : ''
-            //if(this.options.isImage) {
-                $('[data-find-image]', this.$mediafinder).attr('src', path)
-            //}
+
+            $('[data-find-image]', this.$mediafinder).attr('src', path)
             $('[data-find-file-name]', this.$mediafinder).text(localeValue.substring(1))
 
             // if value is present display image/file, else display open icon for media manager
@@ -134,7 +108,7 @@
         $dropdown.css('top', 0)
     }
 
-    // MLRICHEDITOR PLUGIN DEFINITION
+    // MLMEDIAFINDER PLUGIN DEFINITION
     // ============================
 
     var old = $.fn.mlMediaFinder
@@ -155,7 +129,7 @@
 
     $.fn.mlMediaFinder.Constructor = MLMediaFinder
 
-    // MLRICHEDITOR NO CONFLICT
+    // MLMEDIAFINDER NO CONFLICT
     // =================
 
     $.fn.mlMediaFinder.noConflict = function () {
@@ -163,7 +137,7 @@
         return this
     }
 
-    // MLRICHEDITOR DATA-API
+    // MLMEDIAFINDER DATA-API
     // ===============
 
     $(document).render(function () {

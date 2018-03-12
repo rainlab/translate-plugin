@@ -61,8 +61,10 @@ class MLMediaFinder extends MediaFinder
      */
     public function loadAssets()
     {
-        // we only load the css from parent, unfortunately the js must be reimplemented due to missing events.
+        // load Assets from Mediafinder
         $this->addCss('/modules/backend/formwidgets/mediafinder/assets/css/mediafinder.css');
+        $this->addJs('/modules/backend/formwidgets/mediafinder/assets/js/mediafinder.js');
+
         $this->addJs('js/mlmediafinder.js');
 
         if (Locale::isAvailable()) {
