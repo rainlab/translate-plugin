@@ -71,6 +71,7 @@ class TranslatablePage extends ExtensionBase
         $translate = Translator::instance();
         $this->translatableContext = $translate->getLocale();
         $this->translatableDefault = $translate->getDefaultLocale();
+        $this->translatableDefaultAttributes = $this->getModelAttributes();
     }
 
     public function noFallbackLocale()
