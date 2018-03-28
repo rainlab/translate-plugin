@@ -7,7 +7,7 @@ use ApplicationException;
 use Exception;
 
 /**
- * Translatable page model extension
+ * Translatable Page Model extension
  *
  * Usage:
  *
@@ -29,7 +29,7 @@ class TranslatablePage extends ExtensionBase
     protected $translatableDefault;
 
     /**
-     * @var string Default page Attributes.
+     * @var string Default Page Attributes.
      */
     protected $translatableDefaultAttributes = [];
 
@@ -48,21 +48,9 @@ class TranslatablePage extends ExtensionBase
         });
     }
 
-    public function noFallbackLocale()
-    {
-        $this->translatableUseFallback = false;
-
-        return $this->model;
-    }
-
     protected function setModelAttribute($attr, $value)
     {
         $this->model[$attr] = $value;
-    }
-
-    protected function getModelAttribute($attr)
-    {
-        return $this->model[$attr];
     }
 
     protected function getModelAttributes()
@@ -74,6 +62,10 @@ class TranslatablePage extends ExtensionBase
         return $attributes;
     }
 
+    /**
+     * Initializes this class, sets the default language code to use.
+     * @return void
+     */
     public function initTranslatableContext()
     {
         $translate = Translator::instance();
@@ -81,6 +73,18 @@ class TranslatablePage extends ExtensionBase
         $this->translatableDefault = $translate->getDefaultLocale();
     }
 
+    public function noFallbackLocale()
+    {
+        $this->translatableUseFallback = false;
+
+        return $this->model;
+    }
+
+    /**
+     * Checks if a translated Attribute exists and rewrites it.
+     * This method should only be called from the context of front-end.
+     * @return void
+     */
     public function rewriteTranslatablePageAttributes($locale = null)
     {
         $locale = $locale ?: $this->translatableContext;
@@ -97,8 +101,8 @@ class TranslatablePage extends ExtensionBase
     }
 
     /**
-     * Checks if a translated URL exists and rewrites it, this method
-     * should only be called from the context of front-end.
+     * Checks if a translated URL exists and rewrites it.
+     * This method should only be called from the context of front-end.
      * @return void
      */
     public function rewriteTranslatablePageUrl($locale = null)
@@ -113,13 +117,9 @@ class TranslatablePage extends ExtensionBase
         $this->setModelAttribute('url', $localeUrl);
     }
 
-    public function hasTranslatablePageAttribute($attr, $locale = null)
-    {
-        $locale = $locale ?: $this->translatableContext;
-
-        return strlen($this->getSettingsAttributeTranslated($attr, $locale)) > 0;
-    }
-
+    /*
+     * Called by MLControl to get a translated page attribute
+     */
     public function getAttributeTranslated($attr, $locale)
     {
         if (strpos($attr, 'settings[') === 0)
@@ -131,6 +131,9 @@ class TranslatablePage extends ExtensionBase
         return array_get($this->model->attributes, $locale_attr, $defaults);
     }
 
+    /*
+     * Called by MLControl to set a translated page attribute
+     */
     public function setAttributeTranslated($attr, $value, $locale)
     {
         if ($locale == $this->translatableDefault) {
