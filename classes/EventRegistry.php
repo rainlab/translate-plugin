@@ -29,9 +29,6 @@ class EventRegistry
         // Replace with ML Controls for translatable attributes
         $this->registerModelTranslation($widget);
 
-        // Handle URL translations
-        $this->registerPageUrlTranslation($widget);
-
         // Handle Page translations
         $this->registerPageTranslation($widget);
     }
@@ -50,30 +47,18 @@ class EventRegistry
         {
             if (isset($widget->fields['settings[title]']))
                 $widget->fields['settings[title]']['type'] = 'mltext';
+
+            if (isset($widget->fields['settings[url]']))
+                $widget->fields['settings[url]']['type'] = 'mltext';
+
             if (isset($widget->tabs['fields']['settings[description]']))
                 $widget->tabs['fields']['settings[description]']['type'] = 'mltextarea';
+
             if (isset($widget->tabs['fields']['settings[meta_title]']))
                 $widget->tabs['fields']['settings[meta_title]']['type'] = 'mltext';
+
             if (isset($widget->tabs['fields']['settings[meta_description]']))
                 $widget->tabs['fields']['settings[meta_description]']['type'] = 'mltextarea';
-        }
-    }
-
-    //
-    // Translate URLs
-    //
-
-    public function registerPageUrlTranslation($widget)
-    {
-        if (!$model = $widget->model) {
-            return;
-        }
-
-        if (
-            $model instanceof Page &&
-            isset($widget->fields['settings[url]'])
-        ) {
-            $widget->fields['settings[url]']['type'] = 'mltext';
         }
         elseif (
             $model instanceof \RainLab\Pages\Classes\Page &&
