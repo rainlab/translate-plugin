@@ -297,7 +297,7 @@ abstract class TranslatableBehavior extends ExtensionBase
      * Checks if this model has transatable attributes.
      * @return true
      */
-    public function hasTransatableAttributes()
+    public function hasTranslatableAttributes()
     {
         return is_array($this->model->translatable) &&
             count($this->model->translatable) > 0;

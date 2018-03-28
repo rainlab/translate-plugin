@@ -44,6 +44,7 @@ class Plugin extends PluginBase
          */
         Page::extend(function($page) {
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
+            $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
         });
     }
 
