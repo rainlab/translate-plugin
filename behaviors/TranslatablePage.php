@@ -20,7 +20,7 @@ class TranslatablePage extends ExtensionBase
 {
     protected $model;
 
-    protected $attributes = ['title', 'description', 'meta_title', 'meta_description'];
+    protected $attributes = ['url', 'title', 'description', 'meta_title', 'meta_description'];
 
     protected $translatableUseFallback = true;
 
@@ -96,6 +96,23 @@ class TranslatablePage extends ExtensionBase
         }
     }
 
+    /**
+     * Checks if a translated URL exists and rewrites it, this method
+     * should only be called from the context of front-end.
+     * @return void
+     */
+    public function rewriteTranslatablePageUrl($locale = null)
+    {
+        $locale = $locale ?: $this->translatableContext;
+        $localeUrl = $this->translatableDefaultAttributes['url'];
+
+        if ($locale != $this->translatableDefault) {
+            $localeUrl = $this->getAttributeTranslated('url', $locale) ?: $localeUrl;
+        }
+
+        $this->setModelAttribute('url', $localeUrl);
+    }
+
     public function hasTranslatablePageAttribute($attr, $locale = null)
     {
         $locale = $locale ?: $this->translatableContext;
@@ -140,5 +157,23 @@ class TranslatablePage extends ExtensionBase
                 array_set($this->model->attributes, $locale_attr, $value);
             }
         });
+    }
+
+    /**
+     * Mutator detected by MLControl, proxy for Static Pages plugin.
+     * @return string
+     */
+    public function getViewBagUrlAttributeTranslated($locale)
+    {
+        return $this->getAttributeTranslated('url', $locale);
+    }
+
+    /**
+     * Mutator detected by MLControl, proxy for Static Pages plugin.
+     * @return void
+     */
+    public function setViewBagUrlAttributeTranslated($value, $locale)
+    {
+        $this->setAttributeTranslated('url', $value, $locale);
     }
 }
