@@ -83,11 +83,7 @@ class LocalePicker extends ComponentBase
         
         $this->translator->setLocale($locale);
 
-        $pageUrl = $this->makeLocaleUrlFromPage($locale);
-
-        // preserve the query string, if it exists
-        $query = http_build_query(request()->query());
-        $pageUrl = $query ? $pageUrl . '?' . $query : $pageUrl;
+        $pageUrl = $this->withPreservedQueryString($this->makeLocaleUrlFromPage($locale));
 
         if ($this->property('forceUrl')) {
             return Redirect::to($this->translator->getPathInLocale($pageUrl, $locale));
@@ -111,9 +107,11 @@ class LocalePicker extends ComponentBase
             ?: $this->translator->getDefaultLocale();
 
         if ($prefixDefaultLocale) {
-
-            return Redirect::to($this->translator->getCurrentPathInLocale($locale));
-
+            return Redirect::to(
+                $this->withPreservedQueryString(
+                    $this->translator->getCurrentPathInLocale($locale)
+                )
+            );
         } elseif ( $locale == $this->translator->getDefaultLocale()) {
             return;
         } else {
@@ -178,5 +176,19 @@ class LocalePicker extends ComponentBase
         }
 
         return $localeUrl;
+    }
+
+    /**
+     * Makes sure to add any existing query string to the redirect url.
+     *
+     * @param $pageUrl
+     *
+     * @return string
+     */
+    protected function withPreservedQueryString($pageUrl)
+    {
+        $query = http_build_query(request()->query());
+
+        return $query ? $pageUrl . '?' . $query : $pageUrl;
     }
 }
