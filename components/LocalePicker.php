@@ -83,8 +83,7 @@ class LocalePicker extends ComponentBase
         
         $this->translator->setLocale($locale);
 
-        $pageUrl = $this->withPreservedQueryString($this->makeLocaleUrlFromPage($locale));
-
+        $pageUrl = $this->withPreservedQueryString($this->makeLocaleUrlFromPage($locale), $locale);
         if ($this->property('forceUrl')) {
             return Redirect::to($this->translator->getPathInLocale($pageUrl, $locale));
         }
@@ -109,7 +108,8 @@ class LocalePicker extends ComponentBase
         if ($prefixDefaultLocale) {
             return Redirect::to(
                 $this->withPreservedQueryString(
-                    $this->translator->getCurrentPathInLocale($locale)
+                    $this->translator->getCurrentPathInLocale($locale),
+                    $locale
                 )
             );
         } elseif ( $locale == $this->translator->getDefaultLocale()) {
@@ -182,12 +182,34 @@ class LocalePicker extends ComponentBase
      * Makes sure to add any existing query string to the redirect url.
      *
      * @param $pageUrl
+     * @param $locale
      *
      * @return string
      */
-    protected function withPreservedQueryString($pageUrl)
-    {
-        $query = http_build_query(request()->query());
+    protected function withPreservedQueryString($pageUrl, $locale)
+    {       
+        $page = $this->getPage();
+        $query = request()->query();
+
+        /**
+         * @event translate.localePicker.translateQuery
+         * Enables manipulating the URL query parameters
+         *
+         * You will have access to the page object, the old and new locale and the URL query parameters.
+         *
+         * Example usage:
+         *
+         *     Event::listen('translate.localePicker.translateQuery', function($page, $params, $oldLocale, $newLocale) {
+         *        if ($page->baseFileName == 'your-page-filename') {
+         *             return YourModel::translateParams($params, $oldLocale, $newLocale);
+         *         }
+         *     });
+         *
+         */
+        $translatedQuery = Event::fire('translate.localePicker.translateQuery', 
+                                        [$page, $query, $this->oldLocale, $locale], true);
+        
+        $query = http_build_query($translatedQuery ?: $query);
 
         return $query ? $pageUrl . '?' . $query : $pageUrl;
     }
