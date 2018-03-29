@@ -9,6 +9,8 @@ use Exception;
 /**
  * Translatable page URL model extension
  *
+ * @deprecated TranslatablePageUrl is deprecated, use TranslatablePage instead.
+ *
  * Usage:
  *
  * In the model class definition:
@@ -44,6 +46,7 @@ class TranslatablePageUrl extends ExtensionBase
      */
     public function __construct($model)
     {
+        traceLog(static::class . ' is deprecated, use ' . TranslatablePage::class . ' instead.');
         $this->model = $model;
 
         $this->initTranslatableContext();

@@ -49,4 +49,6 @@
 1.3.7: Fix config reference in LocaleMiddleware
 1.3.8: Keep query string when switching locales
 1.4.0: Add importer and exporter for messages
-1.4.1: Add TranslatablePage behavior (replaces TranslatablePageUrl)
+1.4.1:
+    - Added TranslatablePage behavior
+    - TranslatablePageUrl behavior is now deprecated
