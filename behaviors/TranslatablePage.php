@@ -50,7 +50,12 @@ class TranslatablePage extends ExtensionBase
 
     protected function setModelAttribute($attr, $value)
     {
-        $this->model[$attr] = $value;
+        if ($attr === 'url' && $this->model instanceof \RainLab\Pages\Classes\Page) {
+            array_set($this->model->attributes, 'viewBag.url', $value);
+        }
+        else {
+            $this->model[$attr] = $value;
+        }
     }
 
     protected function getModelAttributes()
@@ -123,7 +128,8 @@ class TranslatablePage extends ExtensionBase
      */
     public function getAttributeTranslated($attr, $locale)
     {
-        if (strpos($attr, 'settings[') === 0)
+        if (strpos($attr, '[') !== false)
+            // retrieve attr name within brackets (i.e. settings[title] yields title)
             $attr = preg_split("/[\[\]]/", $attr)[1];
 
         $defaults = ($locale == $this->translatableDefault) ? $this->translatableDefaultAttributes[$attr] : null;
@@ -141,7 +147,8 @@ class TranslatablePage extends ExtensionBase
             return;
         }
 
-        if (strpos($attr, 'settings[') === 0)
+        if (strpos($attr, '[') !== false)
+            // retrieve attr name within brackets (i.e. settings[title] yields title)
             $attr = preg_split("/[\[\]]/", $attr)[1];
 
         if ($value == $this->translatableDefaultAttributes[$attr]) {
