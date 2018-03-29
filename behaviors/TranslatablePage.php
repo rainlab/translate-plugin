@@ -62,7 +62,11 @@ class TranslatablePage extends ExtensionBase
     {
         $attributes = [];
         foreach ($this->attributes as $attr) {
-            $attributes[$attr] = $this->model[$attr];
+            if ($attr === 'url' && $this->model instanceof \RainLab\Pages\Classes\Page) {
+                $attributes[$attr] = array_get($this->model->attributes, 'viewBag.url');
+            } else {
+                $attributes[$attr] = $this->model[$attr];
+            }
         }
         return $attributes;
     }
