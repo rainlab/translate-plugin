@@ -69,11 +69,6 @@ class TranslatablePage extends ExtensionBase
         $this->model[$attr] = $value;
     }
 
-    protected function getModelAttribute($attr)
-    {
-        return $this->model[$attr];
-    }
-
     protected function getModelAttributes()
     {
         $attributes = [];
@@ -88,6 +83,7 @@ class TranslatablePage extends ExtensionBase
         $translate = Translator::instance();
         $this->translatableContext = $translate->getLocale();
         $this->translatableDefault = $translate->getDefaultLocale();
+        $this->translatableDefaultAttributes = $this->getModelAttributes();
     }
 
     public function rewriteTranslatablePageAttributes($locale = null)
@@ -105,16 +101,10 @@ class TranslatablePage extends ExtensionBase
         }
     }
 
-    public function hasTranslatablePageAttribute($attr, $locale = null)
-    {
-        $locale = $locale ?: $this->translatableContext;
-
-        return strlen($this->getSettingsAttributeTranslated($attr, $locale)) > 0;
-    }
-
     public function getAttributeTranslated($attr, $locale)
     {
-        if (strpos($attr, 'settings[') === 0)
+        if (strpos($attr, '[') !== false)
+            // retrieve attr name within brackets (i.e. settings[title] yields title)
             $attr = preg_split("/[\[\]]/", $attr)[1];
 
         $defaults = ($locale == $this->translatableDefault) ? $this->translatableDefaultAttributes[$attr] : null;
@@ -129,7 +119,8 @@ class TranslatablePage extends ExtensionBase
             return;
         }
 
-        if (strpos($attr, 'settings[') === 0)
+        if (strpos($attr, '[') !== false)
+            // retrieve attr name within brackets (i.e. settings[title] yields title)
             $attr = preg_split("/[\[\]]/", $attr)[1];
 
         if ($value == $this->translatableDefaultAttributes[$attr]) {
