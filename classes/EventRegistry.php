@@ -46,16 +46,18 @@ class EventRegistry
             return;
         }
 
-        if ($model instanceof Page)
-        {
-            if (isset($widget->fields['settings[title]']))
-                $widget->fields['settings[title]']['type'] = 'mltext';
-            if (isset($widget->tabs['fields']['settings[description]']))
-                $widget->tabs['fields']['settings[description]']['type'] = 'mltextarea';
-            if (isset($widget->tabs['fields']['settings[meta_title]']))
-                $widget->tabs['fields']['settings[meta_title]']['type'] = 'mltext';
-            if (isset($widget->tabs['fields']['settings[meta_description]']))
-                $widget->tabs['fields']['settings[meta_description]']['type'] = 'mltextarea';
+        if (
+            !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatablePage')
+        ) {
+            return;
+        }
+
+        if (!empty($widget->fields)) {
+            $widget->fields = $this->processFormMLFields($widget->fields, $model);
+        }
+
+        if (!empty($widget->tabs['fields'])) {
+            $widget->tabs['fields'] = $this->processFormMLFields($widget->tabs['fields'], $model);
         }
     }
 

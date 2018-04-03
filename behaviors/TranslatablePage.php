@@ -48,6 +48,15 @@ class TranslatablePage extends ExtensionBase
         });
     }
 
+    public function getTranslatableAttributes()
+    {
+        $attributes = [];
+        foreach ($this->attributes as $attribute) {
+            $attributes[] = "settings[{$attribute}]";
+        }
+        return $attributes;
+    }
+
     public function noFallbackLocale()
     {
         $this->translatableUseFallback = false;
