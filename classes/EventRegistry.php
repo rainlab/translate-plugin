@@ -31,34 +31,6 @@ class EventRegistry
 
         // Handle URL translations
         $this->registerPageUrlTranslation($widget);
-
-        // Handle Page translations
-        $this->registerPageTranslation($widget);
-    }
-
-    //
-    // Translate Page
-    //
-
-    public function registerPageTranslation($widget)
-    {
-        if (!$model = $widget->model) {
-            return;
-        }
-
-        if (
-            !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatablePage')
-        ) {
-            return;
-        }
-
-        if (!empty($widget->fields)) {
-            $widget->fields = $this->processFormMLFields($widget->fields, $model);
-        }
-
-        if (!empty($widget->tabs['fields'])) {
-            $widget->tabs['fields'] = $this->processFormMLFields($widget->tabs['fields'], $model);
-        }
     }
 
     //
@@ -104,6 +76,7 @@ class EventRegistry
 
         if (
             !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableModel') &&
+            !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatablePage') &&
             !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableCmsObject')
         ) {
             return;

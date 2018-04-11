@@ -109,6 +109,11 @@ class TranslatablePage extends TranslatableBehavior
         });
     }
 
+    public function hasTranslatableAttributes()
+    {
+        return true;
+    }
+
     // not needed but parent abstract model requires those
     protected function storeTranslatableData($locale = null) {}
     protected function loadTranslatableData($locale = null) {}
