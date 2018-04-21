@@ -69,7 +69,19 @@ You may also define the translations in a separate file, where the path is relat
     # [...]
 
     translate: config/lang.yaml
-
+This is an example of **config/lang.yaml** file with two languages:
+```
+en:
+    site.name: 'My Website'
+    nav.home: 'Home'
+    nav.video: 'Video'
+    title.home: 'Welcome Home'
+hr:
+    site.name: 'Moje web stranice'
+    nav.home: 'Početna'
+    nav.video: 'Video'
+    title.home: 'Dobrodošli'
+```
 ## Content translation
 
 This plugin activates a feature in the CMS that allows content files to use language suffixes, for example:
