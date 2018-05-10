@@ -35,7 +35,6 @@ class MessageImport extends ImportModel
                     $code = $result[$codeName];
                     // modify result to match the expected message_data schema
                     unset($result[$codeName]);
-                    $result[Message::DEFAULT_LOCALE] = $code;
 
                     $message = Message::firstOrNew(['code' => $code]);
 
