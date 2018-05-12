@@ -43,6 +43,10 @@ class MessageImport extends ImportModel
 
                     $message->message_data = array_merge($message->message_data, $result);
 
+                    if(!isset($message->message_data[Message::DEFAULT_LOCALE])) {
+                        $result[Message::DEFAULT_LOCALE] = $code;
+                    }
+
                     if ($message->exists) {
                         $this->logUpdated();
                     } else {
