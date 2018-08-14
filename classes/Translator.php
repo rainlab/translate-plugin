@@ -137,6 +137,23 @@ class Translator
     }
 
     /**
+     * Sets the locale based on the browser accept languages
+     * @return bool
+     */
+    public function loadLocaleFromRequestLanguages()
+    {
+        $locales = Locale::listAvailable();
+
+        foreach(Request::getLanguages() as $request_lang) {
+            if(array_key_exists($request_lang, $locales)) {
+                 return $this->setLocale($request_lang);
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the current path prefixed with language code.
      *
      * @param string $locale optional language code, default to the system default language
