@@ -144,9 +144,9 @@ class Translator
     {
         $locales = Locale::listAvailable();
 
-        foreach(Request::getLanguages() as $request_lang) {
-            if(array_key_exists($request_lang, $locales)) {
-                 return $this->setLocale($request_lang);
+        foreach (Request::getLanguages() as $requestLang) {
+            if (array_key_exists($requestLang, $locales)) {
+                 return $this->setLocale($requestLang);
             }
         }
 
