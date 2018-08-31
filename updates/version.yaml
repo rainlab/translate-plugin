@@ -49,3 +49,5 @@
 1.3.7: Fix config reference in LocaleMiddleware
 1.3.8: Keep query string when switching locales
 1.4.0: Add importer and exporter for messages
+1.4.1: Updated Hungarian translation. Added Arabic translation. Fixed issue where default texts are overwritten by import. Fixed issue where the language switcher for repeater fields would overlap with the first repeater row.
+    
