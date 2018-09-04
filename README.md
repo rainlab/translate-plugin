@@ -50,7 +50,7 @@ A message can also be translated for a choice usage.
 
     {{ 'There are no apples|There are :number applies!'|__(2, { number: 'two' }) }}
 
-If you can set a locale manually by passing a second argument.
+Or you set a locale manually by passing a second argument.
 
     {{ 'this is always english'|_({}, 'en') }}
 
