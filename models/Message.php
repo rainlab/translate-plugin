@@ -94,11 +94,13 @@ class Message extends Model
     /**
      * Creates or finds an untranslated message string.
      * @param  string $messageId
+     * @param  string $locale
      * @return string
      */
-    public static function get($messageId)
+    public static function get($messageId, $locale = null)
     {
-        if (!self::$locale) {
+        $locale = $locale ? $locale : self::$locale;
+        if (!$locale) {
             return $messageId;
         }
 
@@ -130,7 +132,7 @@ class Message extends Model
         /*
          * Schedule new cache and go
          */
-        $msg = $item->forLocale(self::$locale, $messageId);
+        $msg = $item->forLocale($locale, $messageId);
         self::$cache[$messageCode] = $msg;
         self::$hasNew = true;
 
@@ -195,11 +197,12 @@ class Message extends Model
      * Looks up and translates a message by its string.
      * @param  string $messageId
      * @param  array  $params
+     * @param  string $locale
      * @return string
      */
-    public static function trans($messageId, $params = [])
+    public static function trans($messageId, $params = [], $locale = null)
     {
-        $msg = static::get($messageId);
+        $msg = static::get($messageId, $locale);
 
         $params = array_build($params, function($key, $value){
             return [':'.$key, $value];
