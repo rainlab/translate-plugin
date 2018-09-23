@@ -111,33 +111,22 @@ class MLRepeater extends Repeater
         }
 
         /*
-         * Update widget
+         * Update previous locale
          */
-        $lockerData = $this->getLocaleSaveDataAsArray($locale) ?: [];
+        $previousLocale = post('_repeater_previous_locale');
+        $previousValue = $this->getPrimarySaveDataAsArray();
 
-        $this->formField->value = $lockerData;
-
-        $this->reprocessExistingLocaleItems($lockerData);
-
-        foreach ($this->formWidgets as $key => $widget) {
-            $value = array_shift($lockerData);
-            if (!$value) {
-                unset($this->formWidgets[$key]);
-            }
-            else {
-                $widget->setFormValues($value);
-            }
-        }
+        /*
+         * Update widget for new locale
+         */
+        self::$onlyExistingItems = true; // Ignore post index and group data (from previous locale)
+        $data = $this->getLocaleSaveDataAsArray($locale) ?: [];
+        $this->reprocessExistingLocaleItems($data);
 
         $this->actAsParent();
         $parentContent = parent::render();
         $this->actAsParent(false);
-
-        /*
-         * Update previous
-         */
-        $previousLocale = post('_repeater_previous_locale');
-        $previousValue = $this->getPrimarySaveDataAsArray();
+        self::$onlyExistingItems = false;
 
         return [
             '#'.$this->getId('mlRepeater') => $parentContent,
@@ -147,28 +136,13 @@ class MLRepeater extends Repeater
     }
 
     /**
-     * Recreates form widgets based on number of repeater items.
+     * Recreates form widgets based on locale data.
      * @return void
      */
     protected function reprocessExistingLocaleItems($data)
     {
         $this->formWidgets = [];
-
-        $loadedIndexes = $loadedGroups = [];
-
-        if (is_array($data)) {
-            foreach ($data as $index => $loadedValue) {
-                $loadedIndexes[] = array_get($loadedValue, '_index', $index);
-                $loadedGroups[] = array_get($loadedValue, '_group');
-            }
-        }
-
-        $indexVar = self::INDEX_PREFIX.implode('.', HtmlHelper::nameToArray($this->formField->getName(false)));
-        $groupVar = self::GROUP_PREFIX.implode('.', HtmlHelper::nameToArray($this->formField->getName(false)));
-
-        array_set($_POST, $indexVar, $loadedIndexes);
-        array_set($_POST, $groupVar, $loadedGroups);
-
+        $this->formField->value = $data;
         $this->processExistingItems();
     }
 
@@ -178,9 +152,9 @@ class MLRepeater extends Repeater
      */
     protected function getPrimarySaveDataAsArray()
     {
+        $this->reprocessExistingLocaleItems([]); // Rely solely on submitted form
         $data = post($this->formField->getName()) ?: [];
-
-        return $this->processSaveValue($data);
+        return parent::getSaveValue($data);
     }
 
     /**
