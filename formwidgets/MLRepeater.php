@@ -100,6 +100,7 @@ class MLRepeater extends Repeater
 
     public function onAddItem()
     {
+        $this->setActiveLocale($this->formLocale());
         $this->actAsParent();
         return parent::onAddItem();
     }
@@ -116,13 +117,9 @@ class MLRepeater extends Repeater
         $previousLocale = post('_repeater_previous_locale');
         $previousValue = $this->getPrimarySaveDataAsArray();
 
-        /*
-         * Update widget for new locale
-         */
-        self::$onlyExistingItems = true; // Ignore post index and group data (from previous locale)
-        $data = $this->getLocaleSaveDataAsArray($locale) ?: [];
-        $this->reprocessExistingLocaleItems($data);
+        $this->setActiveLocale($locale);
 
+        self::$onlyExistingItems = true;
         $this->actAsParent();
         $parentContent = parent::render();
         $this->actAsParent(false);
@@ -144,6 +141,19 @@ class MLRepeater extends Repeater
         $this->formWidgets = [];
         $this->formField->value = $data;
         $this->processExistingItems();
+    }
+
+    /**
+     * Update widget for new locale
+     * @return void
+     */
+    protected function setActiveLocale($locale)
+    {
+        self::$onlyExistingItems = true; // Ignore post index and group data (from previous locale)
+        $data = $this->getLocaleSaveDataAsArray($locale) ?: [];
+        $this->reprocessExistingLocaleItems($data);
+        self::$onlyExistingItems = false;
+
     }
 
     /**
@@ -180,14 +190,7 @@ class MLRepeater extends Repeater
      */
     protected function rewritePostValues()
     {
-        /*
-         * Get the selected locale at postback
-         */
-        $data = post('RLTranslateRepeaterLocale');
-        $fieldName = implode('.', HtmlHelper::nameToArray($this->fieldName));
-        $locale = array_get($data, $fieldName);
-
-        if (!$locale) {
+        if (!$locale = $this->formLocale()) {
             return;
         }
 
@@ -197,5 +200,16 @@ class MLRepeater extends Repeater
         $data = $this->getPrimarySaveDataAsArray();
         $fieldName = 'RLTranslate.'.$locale.'.'.implode('.', HtmlHelper::nameToArray($this->fieldName));
         array_set($_POST, $fieldName, json_encode($data));
+    }
+
+    /**
+     * Get the selected locale at postback
+     * @return string
+     */
+    protected function formLocale()
+    {
+        $data = post('RLTranslateRepeaterLocale');
+        $fieldName = implode('.', HtmlHelper::nameToArray($this->fieldName));
+        return array_get($data, $fieldName);
     }
 }
