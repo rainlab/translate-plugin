@@ -82,6 +82,9 @@ hr:
     nav.video: 'Video'
     title.home: 'Dobrodošli'
 ```
+
+In order to make these default values reflected to your frontend site, go to **Settings -> Translate messages** in the backend and hit **Scan for messages**. They will also be loaded automatically when the theme is activated.
+
 ## Content translation
 
 This plugin activates a feature in the CMS that allows content files to use language suffixes, for example:
