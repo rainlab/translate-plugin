@@ -84,6 +84,13 @@ class TranslatableModel extends TranslatableBehavior
             return;
         }
 
+        /*
+         * Resolve computed fields before saving...
+         */
+        $computedFields = $this->model->fireEvent('model.translate.resolveComputedFields', [$locale], true);
+        if (is_array($computedFields))
+            $this->translatableAttributes[$locale] = array_merge($this->translatableAttributes[$locale], $computedFields);
+
         $this->storeTranslatableBasicData($locale);
         $this->storeTranslatableIndexData($locale);
     }
