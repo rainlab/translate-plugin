@@ -283,3 +283,61 @@ Since the Twig filter will not be available all the time, we can pipe them to th
 #### Switching locales
 
 Users can switch between locales by clicking on the locale indicator on the right hand side of the Multi-language input. By holding the CMD / CTRL key all Multi-language Input fields will switch to the selected locale.
+
+## Integration without JQuery and October Framework files
+
+You can build your own request to change the language, this is useful when you work with React and/or modern enviroments and you dont want add JQuery for the project
+
+This is a example:
+
+Javascript Example of a Select input and the Fetch API integration
+
+``` Javascript
+  document.querySelector('#I18N_SELECT').addEventListener('change', function () {
+    const details = {
+      _session_key: document.querySelector('input[name="_session_key"]').value,
+      _token: document.querySelector('input[name="_token"]').value,
+      locale: this.value
+    }
+
+    let formBody = []
+
+    for (var property in details) {
+      let encodedKey = encodeURIComponent(property)
+
+      let encodedValue = encodeURIComponent(details[property])
+
+      formBody.push(encodedKey + '=' + encodedValue)
+    }
+
+    formBody = formBody.join('&')
+
+    fetch(location.href + '/', {
+      method: 'POST',
+      body: formBody,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'X-OCTOBER-REQUEST-HANDLER': 'onSwitchLocale',
+        'X-OCTOBER-REQUEST-PARTIALS': '',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    }).then(res => res.json()).then(res => window.location.replace(res.X_OCTOBER_REDIRECT)).catch(err => console.log(err))
+  })
+```
+
+The HTML:
+
+``` html
+<select id='I18N_SELECT'>
+  <option value="none" hidden></option>
+  {% for code, name in locales %}
+  {% if code != activeLocale %}
+
+  <option value="{{code}}" name="locale">{{code | upper }}</option>
+  {% endif %}
+
+  {% endfor %}
+  {{ form_open() }}
+  {{ form_close() }}
+</select>
+```
