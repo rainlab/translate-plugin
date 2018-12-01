@@ -327,16 +327,14 @@ document.querySelector('#I18N_SELECT').addEventListener('change', function () {
 The HTML:
 
 ``` html
+{{ form_open() }}
 <select id='I18N_SELECT'>
     <option value="none" hidden></option>
-    
     {% for code, name in locales %}
         {% if code != activeLocale %}
             <option value="{{code}}" name="locale">{{code | upper }}</option>
         {% endif %}
     {% endfor %}
-    
-    {{ form_open() }}
-    {{ form_close() }}
 </select>
+{{ form_close() }}
 ```
