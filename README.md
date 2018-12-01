@@ -283,3 +283,58 @@ Since the Twig filter will not be available all the time, we can pipe them to th
 #### Switching locales
 
 Users can switch between locales by clicking on the locale indicator on the right hand side of the Multi-language input. By holding the CMD / CTRL key all Multi-language Input fields will switch to the selected locale.
+
+## Integration without JQuery and October Framework files
+
+It is possible to use the front-end language switcher without using jQuery or the OctoberCMS AJAX Framework by making the AJAX API request yourself manually. The following is an example of how to do that.
+
+```Javascript
+document.querySelector('#I18N_SELECT').addEventListener('change', function () {
+    const details = {
+        _session_key: document.querySelector('input[name="_session_key"]').value,
+        _token: document.querySelector('input[name="_token"]').value,
+        locale: this.value
+    }
+
+    let formBody = []
+
+    for (var property in details) {
+        let encodedKey = encodeURIComponent(property)
+
+        let encodedValue = encodeURIComponent(details[property])
+
+        formBody.push(encodedKey + '=' + encodedValue)
+    }
+
+    formBody = formBody.join('&')
+
+    fetch(location.href + '/', {
+        method: 'POST',
+        body: formBody,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'X-OCTOBER-REQUEST-HANDLER': 'onSwitchLocale',
+            'X-OCTOBER-REQUEST-PARTIALS': '',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(res => res.json())
+    .then(res => window.location.replace(res.X_OCTOBER_REDIRECT))
+    .catch(err => console.log(err))
+})
+```
+
+The HTML:
+
+``` html
+{{ form_open() }}
+<select id='I18N_SELECT'>
+    <option value="none" hidden></option>
+    {% for code, name in locales %}
+        {% if code != activeLocale %}
+            <option value="{{code}}" name="locale">{{code | upper }}</option>
+        {% endif %}
+    {% endfor %}
+</select>
+{{ form_close() }}
+```
