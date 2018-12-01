@@ -21,9 +21,6 @@ class MLRepeater extends Repeater
      */
     protected $defaultAlias = 'mlrepeater';
 
-    public $originalAssetPath;
-    public $originalViewPath;
-
     /**
      * {@inheritDoc}
      */
@@ -84,18 +81,20 @@ class MLRepeater extends Repeater
         }
     }
 
-    protected function actAsParent($switch = true)
+    /**
+     * {@inheritDoc}
+     */
+    protected function getParentViewPath()
     {
-        if ($switch) {
-            $this->originalAssetPath = $this->assetPath;
-            $this->originalViewPath = $this->viewPath;
-            $this->assetPath = '/modules/backend/formwidgets/repeater/assets';
-            $this->viewPath = base_path().'/modules/backend/formwidgets/repeater/partials';
-        }
-        else {
-            $this->assetPath = $this->originalAssetPath;
-            $this->viewPath = $this->originalViewPath;
-        }
+        return base_path().'/modules/backend/formwidgets/repeater/partials';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getParentAssetPath()
+    {
+        return '/modules/backend/formwidgets/repeater/assets';
     }
 
     public function onAddItem()
