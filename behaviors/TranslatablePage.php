@@ -1,6 +1,5 @@
 <?php namespace RainLab\Translate\Behaviors;
 
-use App;
 use RainLab\Translate\Classes\TranslatableBehavior;
 
 /**
@@ -12,20 +11,20 @@ use RainLab\Translate\Classes\TranslatableBehavior;
  *
  *   public $implement = ['@RainLab.Translate.Behaviors.TranslatablePage'];
  *
+ *   public $translatable = ['title', 'description'];
+ *
  */
 class TranslatablePage extends TranslatableBehavior
 {
-    protected $translatableAttributes = ['title', 'description', 'meta_title', 'meta_description'];
 
     public function __construct($model)
     {
-        $this->model = $model;
-        $this->initTranslatableContext();
+        parent::__construct($model);
 
         $this->model->bindEvent('model.afterFetch', function() {
             $this->translatableOriginals = $this->getModelAttributes();
 
-            if (!App::runningInBackend()) {
+            if ( ! app()->runningInBackend()) {
                 $this->rewriteTranslatablePageAttributes();
             }
         });
@@ -34,7 +33,7 @@ class TranslatablePage extends TranslatableBehavior
     public function getTranslatableAttributes()
     {
         $attributes = [];
-        foreach ($this->translatableAttributes as $attribute) {
+        foreach ($this->model->translatable as $attribute) {
             $attributes[] = "settings[{$attribute}]";
         }
         return $attributes;
@@ -43,7 +42,7 @@ class TranslatablePage extends TranslatableBehavior
     protected function getModelAttributes()
     {
         $attributes = [];
-        foreach ($this->translatableAttributes as $attr) {
+        foreach ($this->model->translatable as $attr) {
             $attributes[$attr] = $this->model[$attr];
         }
         return $attributes;
@@ -59,7 +58,7 @@ class TranslatablePage extends TranslatableBehavior
     {
         $locale = $locale ?: $this->translatableContext;
 
-        foreach ($this->translatableAttributes as $attr) {
+        foreach ($this->model->translatable as $attr) {
             $locale_attr = $this->translatableOriginals[$attr];
 
             if ($locale != $this->translatableDefault) {
