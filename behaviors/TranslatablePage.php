@@ -22,7 +22,7 @@ class TranslatablePage extends TranslatableBehavior
     {
         parent::__construct($model);
 
-        if ($this->model->translatable) {
+        if (isset($this->model->translatable)) {
             $this->translatableAttributes = $this->model->translatable;
         }
         $this->model->bindEvent('model.afterFetch', function() {
