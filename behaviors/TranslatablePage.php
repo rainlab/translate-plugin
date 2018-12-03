@@ -16,14 +16,14 @@ use RainLab\Translate\Classes\TranslatableBehavior;
  */
 class TranslatablePage extends TranslatableBehavior
 {
-    protected $translatableAttributes = ['title', 'description', 'meta_title', 'meta_description'];
+    protected $translatableAttributes = [];
 
     public function __construct($model)
     {
         parent::__construct($model);
 
-        if (property_exists($model, 'translatable')) {
-            $this->translatableAttributes = $model->translatable;
+        if ($this->model->translatable) {
+            $this->translatableAttributes = $this->model->translatable;
         }
         $this->model->bindEvent('model.afterFetch', function() {
             $this->translatableOriginals = $this->getModelAttributes();
@@ -43,7 +43,7 @@ class TranslatablePage extends TranslatableBehavior
         return $attributes;
     }
 
-    protected function getModelAttributes()
+    public function getModelAttributes()
     {
         $attributes = [];
         foreach ($this->translatableAttributes as $attr) {
@@ -62,7 +62,7 @@ class TranslatablePage extends TranslatableBehavior
     {
         $locale = $locale ?: $this->translatableContext;
 
-        foreach ($this->model->translatable as $attr) {
+        foreach ($this->translatableAttributes as $attr) {
             $locale_attr = $this->translatableOriginals[$attr];
 
             if ($locale != $this->translatableDefault) {
@@ -114,7 +114,7 @@ class TranslatablePage extends TranslatableBehavior
 
     public function hasTranslatableAttributes()
     {
-        return true;
+        return !empty($this->translatableAttributes);
     }
 
     // not needed but parent abstract model requires those

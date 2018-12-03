@@ -43,6 +43,7 @@ class Plugin extends PluginBase
          * Handle translated page URLs
          */
         Page::extend(function($page) {
+            $page->addDynamicProperty('translatable', ['title', 'description', 'meta_title', 'meta_description']);
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
         });
