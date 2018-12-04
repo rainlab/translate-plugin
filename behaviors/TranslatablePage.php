@@ -16,14 +16,14 @@ use RainLab\Translate\Classes\TranslatableBehavior;
  */
 class TranslatablePage extends TranslatableBehavior
 {
-    protected $translatableAttributes = [];
+    protected $translatable = [];
 
     public function __construct($model)
     {
         parent::__construct($model);
 
         if (isset($this->model->translatable)) {
-            $this->translatableAttributes = $this->model->translatable;
+            $this->translatable = $this->model->translatable;
         }
 
         $this->model->bindEvent('model.afterFetch', function() {
@@ -39,7 +39,7 @@ class TranslatablePage extends TranslatableBehavior
     {
         $attributes = [];
 
-        foreach ($this->translatableAttributes as $attr) {
+        foreach ($this->translatable as $attr) {
             $attributes[] = "settings[{$attr}]";
         }
         return $attributes;
@@ -49,7 +49,7 @@ class TranslatablePage extends TranslatableBehavior
     {
         $attributes = [];
 
-        foreach ($this->translatableAttributes as $attr) {
+        foreach ($this->translatable as $attr) {
             $attributes[$attr] = $this->model[$attr];
         }
         return $attributes;
@@ -65,7 +65,7 @@ class TranslatablePage extends TranslatableBehavior
     {
         $locale = $locale ?: $this->translatableContext;
 
-        foreach ($this->translatableAttributes as $attr) {
+        foreach ($this->translatable as $attr) {
             $locale_attr = $this->translatableOriginals[$attr];
 
             if ($locale != $this->translatableDefault) {
@@ -117,7 +117,7 @@ class TranslatablePage extends TranslatableBehavior
 
     public function hasTranslatableAttributes()
     {
-        return !empty($this->translatableAttributes);
+        return !empty($this->translatable);
     }
 
     // not needed but parent abstract model requires those
