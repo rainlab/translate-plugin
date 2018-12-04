@@ -25,6 +25,7 @@ class TranslatablePage extends TranslatableBehavior
         if (isset($this->model->translatable)) {
             $this->translatableAttributes = $this->model->translatable;
         }
+
         $this->model->bindEvent('model.afterFetch', function() {
             $this->translatableOriginals = $this->getModelAttributes();
 
@@ -37,8 +38,9 @@ class TranslatablePage extends TranslatableBehavior
     public function getTranslatableAttributes()
     {
         $attributes = [];
-        foreach ($this->translatableAttributes as $attribute) {
-            $attributes[] = "settings[{$attribute}]";
+
+        foreach ($this->translatableAttributes as $attr) {
+            $attributes[] = "settings[{$attr}]";
         }
         return $attributes;
     }
@@ -46,6 +48,7 @@ class TranslatablePage extends TranslatableBehavior
     public function getModelAttributes()
     {
         $attributes = [];
+
         foreach ($this->translatableAttributes as $attr) {
             $attributes[$attr] = $this->model[$attr];
         }
