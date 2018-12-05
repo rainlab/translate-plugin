@@ -1,8 +1,8 @@
-.ml-btn[data-active-locale] {
+.field-multilingual-mediafinder > .ml-btn {
     top: -28px;
     right: 4px;
 }
 
-.ml-dropdown-menu[data-locale-dropdown] {
-    top: 0;
+.field-multilingual-mediafinder > .ml-dropdown-menu {
+    top: 1px;
 }

@@ -4,7 +4,7 @@
     data-control="mlmediafinder"
     data-default-locale="<?= $defaultLocale->code ?>"
     data-media-path="<?= $mediaPath ?>"
-    class="field-multilingual dropdown"
+    class="field-multilingual field-multilingual-mediafinder dropdown"
     >
 
     <?= $mediafinder ?>
@@ -16,7 +16,7 @@
         type="button">
     </button>
 
-    <?= $this->makeParentPartial('locale_values') ?>
+    <?= $this->makeMLPartial('locale_values') ?>
 
-    <?= $this->makeParentPartial('locale_selector') ?>
+    <?= $this->makeMLPartial('locale_selector') ?>
 </div>
