@@ -1,0 +1,8 @@
+.ml-btn[data-active-locale] {
+    top: -28px;
+    right: 4px;
+}
+
+.ml-dropdown-menu[data-locale-dropdown] {
+    top: 0;
+}

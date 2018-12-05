@@ -36,6 +36,7 @@
              * If Ctrl/Cmd key is pressed, find other instances and switch
              */
             if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
                 $('[data-switch-locale="'+selectedLocale+'"]').click()
             }
         })

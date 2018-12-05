@@ -35,12 +35,15 @@ class MessageImport extends ImportModel
                     $code = $result[$codeName];
                     // modify result to match the expected message_data schema
                     unset($result[$codeName]);
-                    $result[Message::DEFAULT_LOCALE] = $code;
 
                     $message = Message::firstOrNew(['code' => $code]);
 
                     // create empty array, if $message is new
                     $message->message_data = $message->message_data ?: [];
+                    
+                    if(!isset($message->message_data[Message::DEFAULT_LOCALE])) {
+                        $result[Message::DEFAULT_LOCALE] = $code;
+                    }
 
                     $message->message_data = array_merge($message->message_data, $result);
 

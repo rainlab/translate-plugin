@@ -5,7 +5,11 @@ use RainLab\Translate\Models\Locale;
 use System\Classes\MediaLibrary;
 
 /**
- * MLMediaFinder Form Widget
+ * ML MediaFinder Form Widget
+ * Renders a multilingual media finder.
+ *
+ * @package rainlab\translate
+ * @author Sascha Aeppli
  */
 class MLMediaFinder extends MediaFinder
 {
@@ -15,6 +19,7 @@ class MLMediaFinder extends MediaFinder
      * @inheritDoc
      */
     protected $defaultAlias = 'mlmediafinder';
+
     public $originalAssetPath;
     public $originalViewPath;
     private $mediaPath;
@@ -59,38 +64,40 @@ class MLMediaFinder extends MediaFinder
     /**
      * @inheritDoc
      */
-    public function loadAssets()
-    {
-        // load Assets from Mediafinder
-        $this->addCss('/modules/backend/formwidgets/mediafinder/assets/css/mediafinder.css');
-        $this->addJs('/modules/backend/formwidgets/mediafinder/assets/js/mediafinder.js');
-
-        $this->addJs('js/mlmediafinder.js');
-
-        if (Locale::isAvailable()) {
-            $this->loadLocaleAssets();
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getSaveValue($value)
     {
         return $this->getLocaleSaveValue($value);
     }
 
-    protected function actAsParent($switch = true)
+    /**
+     * @inheritDoc
+     */
+    public function loadAssets()
     {
-        if ($switch) {
-            $this->originalAssetPath = $this->assetPath;
-            $this->originalViewPath = $this->viewPath;
-            $this->assetPath = '/modules/backend/formwidgets/mediafinder/assets';
-            $this->viewPath = base_path().'/modules/backend/formwidgets/mediafinder/partials';
+        $this->actAsParent();
+        parent::loadAssets();
+        $this->actAsParent(false);
+
+        if (Locale::isAvailable()) {
+            $this->loadLocaleAssets();
+            $this->addJs('js/mlmediafinder.js');
+            $this->addCss('css/mlmediafinder.css');
         }
-        else {
-            $this->assetPath = $this->originalAssetPath;
-            $this->viewPath = $this->originalViewPath;
-        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getParentViewPath()
+    {
+        return base_path().'/modules/backend/formwidgets/mediafinder/partials';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getParentAssetPath()
+    {
+        return '/modules/backend/formwidgets/mediafinder/assets';
     }
 }

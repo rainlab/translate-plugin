@@ -87,17 +87,19 @@ class MLRichEditor extends RichEditor
         return parent::onLoadPageLinksForm();
     }
 
-    protected function actAsParent($switch = true)
+    /**
+     * {@inheritDoc}
+     */
+    protected function getParentViewPath()
     {
-        if ($switch) {
-            $this->originalAssetPath = $this->assetPath;
-            $this->originalViewPath = $this->viewPath;
-            $this->assetPath = '/modules/backend/formwidgets/richeditor/assets';
-            $this->viewPath = base_path().'/modules/backend/formwidgets/richeditor/partials';
-        }
-        else {
-            $this->assetPath = $this->originalAssetPath;
-            $this->viewPath = $this->originalViewPath;
-        }
+        return base_path().'/modules/backend/formwidgets/richeditor/partials';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getParentAssetPath()
+    {
+        return '/modules/backend/formwidgets/richeditor/assets';
     }
 }

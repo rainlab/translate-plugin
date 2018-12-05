@@ -13,7 +13,6 @@
  */
 
 +function($) { "use strict";
-
     var Base = $.oc.foundation.base,
         BaseProto = Base.prototype
 
@@ -51,8 +50,6 @@
         // Stop here for preview mode
         if (this.options.isPreview)
             return
-
-        this.updateLayout();
     }
 
     // Simplify setPath
@@ -97,15 +94,6 @@
 
             this.$el.multiLingual('setLocaleValue', localeValue);
         }
-    }
-
-    MLMediaFinder.prototype.updateLayout = function() {
-        var $btn = $('.ml-btn[data-active-locale]:first', this.$el),
-            $dropdown = $('.ml-dropdown-menu[data-locale-dropdown]:first', this.$el)
-
-        $btn.css('top', -28)
-        $btn.css('right', 4)
-        $dropdown.css('top', 0)
     }
 
     // MLMEDIAFINDER PLUGIN DEFINITION
