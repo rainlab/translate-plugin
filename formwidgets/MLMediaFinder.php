@@ -20,8 +20,10 @@ class MLMediaFinder extends MediaFinder
      */
     protected $defaultAlias = 'mlmediafinder';
 
-    public $originalAssetPath;
-    public $originalViewPath;
+    /**
+     * needed to preview images, because we only get a relative path
+     * @var string path to media library
+     */
     private $mediaPath;
 
     /**
