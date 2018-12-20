@@ -10,7 +10,7 @@ class MessageExport extends ExportModel
     /**
      * exports the message data with each locale in a separate column.
      *
-     * code      | default   | en    | de    | fr
+     * code      | x         | en    | de    | fr
      * ----------------------------------------------
      * title     | title     | Title | Titel | Titre
      * item.name | Item Name | Name  | Name  | Prénom
