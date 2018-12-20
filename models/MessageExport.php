@@ -5,7 +5,6 @@ use Backend\Models\ExportModel;
 class MessageExport extends ExportModel
 {
     const CODE_COLUMN_NAME = 'code';
-    const DEFAULT_LOCALE_COLUMN_NAME = 'default';
 
     /**
      * exports the message data with each locale in a separate column.
