@@ -1,6 +1,7 @@
 <?php namespace RainLab\Translate\Tests\Unit\Models;
 
 use PluginTestCase;
+use RainLab\Translate\Models\Locale;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\MessageExport;
 
@@ -68,6 +69,21 @@ class ExportMessageTest extends PluginTestCase
         $result = $exportMode->exportData(['dummy']);
 
         $this->assertEquals($expected, $result);
+    }
+
+    public function testGetColumns()
+    {
+        Locale::unguard();
+        Locale::create(['code' => 'de', 'name' => 'German', 'is_enabled' => true]);
+
+        $columns = MessageExport::getColumns();
+
+        $this->assertEquals([
+            MessageExport::CODE_COLUMN_NAME => MessageExport::CODE_COLUMN_NAME,
+            Message::DEFAULT_LOCALE => Message::DEFAULT_LOCALE,
+            'en' => 'en',
+            'de' => 'de',
+        ], $columns);
     }
 
     private function createMessages()

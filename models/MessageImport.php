@@ -38,14 +38,11 @@ class MessageImport extends ImportModel
 
                     $message = Message::firstOrNew(['code' => $code]);
 
-                    // create empty array, if $message is new
-                    $message->message_data = $message->message_data ?: [];
-                    
-                    if(!isset($message->message_data[Message::DEFAULT_LOCALE])) {
+                    // write default if not existing
+                    if(!isset($result[Message::DEFAULT_LOCALE])) {
                         $result[Message::DEFAULT_LOCALE] = $code;
                     }
-
-                    $message->message_data = array_merge($message->message_data, $result);
+                    $message->message_data = array_merge($message->message_data ?: [], $result);
 
                     if ($message->exists) {
                         $this->logUpdated();
@@ -57,6 +54,7 @@ class MessageImport extends ImportModel
                     $this->logSkipped($index, 'no code provided');
                 }
             } catch (\Exception $exception) {
+                echo $exception->getMessage();
                 $this->logError($index, $exception->getMessage());
             }
         }
