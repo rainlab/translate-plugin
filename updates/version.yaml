@@ -51,3 +51,4 @@
 1.4.0: Add importer and exporter for messages
 1.4.1: Updated Hungarian translation. Added Arabic translation. Fixed issue where default texts are overwritten by import. Fixed issue where the language switcher for repeater fields would overlap with the first repeater row.
 1.4.2: Add multilingual MediaFinder
+1.4.3: !!! Please update OctoberCMS to Build 444 before updating this plugin. Added ability to translate CMS Pages fields (e.g. title, description, meta-title, meta-description)

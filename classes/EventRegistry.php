@@ -76,12 +76,14 @@ class EventRegistry
 
         if (
             !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableModel') &&
+            !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatablePage') &&
             !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableCmsObject')
         ) {
             return;
         }
 
-        if (!$model->hasTransatableAttributes()) {
+
+        if (!$model->hasTranslatableAttributes()) {
             return;
         }
 
