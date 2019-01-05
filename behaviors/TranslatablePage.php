@@ -72,19 +72,26 @@ class TranslatablePage extends TranslatableBehavior
 
     public function getAttributeTranslated($key, $locale = null)
     {
+        $locale = $locale ?: $this->translatableContext;
+
         if (strpbrk($key, '[]') !== false) {
             // retrieve attr name within brackets (i.e. settings[title] yields title)
             $key = preg_split("/[\[\]]/", $key)[1];
         }
 
-        $defaults = ($locale == $this->translatableDefault) ? $this->translatableOriginals[$key] : null;
+        if (!$this->translatableOriginals[$key]) {
+            $this->translatableOriginals = $this->getModelAttributes();
+        }
+        $default = ($locale == $this->translatableDefault) ? $this->translatableOriginals[$key] : null;
 
         $locale_attr = sprintf('viewBag.locale%s.%s', ucfirst($key), $locale);
-        return array_get($this->model->attributes, $locale_attr, $defaults);
+        return array_get($this->model->attributes, $locale_attr, $default);
     }
 
     public function setAttributeTranslated($key, $value, $locale = null)
     {
+        $locale = $locale ?: $this->translatableContext;
+
         if ($locale == $this->translatableDefault) {
             return;
         }
@@ -98,15 +105,21 @@ class TranslatablePage extends TranslatableBehavior
             return;
         }
 
+        $this->saveTranslation($key, $value, $locale);
         $this->model->bindEventOnce('model.beforeSave', function() use ($key, $value, $locale) {
-            $locale_attr = sprintf('viewBag.locale%s.%s', ucfirst($key), $locale);
-            if (!$value) {
-                array_forget($this->model->attributes, $locale_attr);
-            }
-            else {
-                array_set($this->model->attributes, $locale_attr, $value);
-            }
+            $this->saveTranslation($key, $value, $locale);
         });
+    }
+
+    public function saveTranslation($key, $value, $locale)
+    {
+        $locale_attr = sprintf('viewBag.locale%s.%s', ucfirst($key), $locale);
+        if (!$value) {
+            array_forget($this->model->attributes, $locale_attr);
+        }
+        else {
+            array_set($this->model->attributes, $locale_attr, $value);
+        }
     }
 
     // not needed but parent abstract model requires those
