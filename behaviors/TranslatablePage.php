@@ -29,6 +29,15 @@ class TranslatablePage extends TranslatableBehavior
         });
     }
 
+    public function isTranslatable($key)
+    {
+        if ($this->translatableDefault == $this->translatableContext) {
+            return false;
+        }
+
+        return in_array($key, $this->model->translatable);
+    }
+
     public function getTranslatableAttributes()
     {
         $attributes = [];
@@ -63,7 +72,8 @@ class TranslatablePage extends TranslatableBehavior
             $locale_attr = $this->translatableOriginals[$attr];
 
             if ($locale != $this->translatableDefault) {
-                $locale_attr = $this->getAttributeTranslated($attr, $locale) ?: $locale_attr;
+                $translated = $this->getAttributeTranslated($attr, $locale);
+                $locale_attr = $translated ?: $this->translatableUseFallback ? $locale_attr : null;
             }
 
             $this->model[$attr] = $locale_attr;
@@ -78,11 +88,7 @@ class TranslatablePage extends TranslatableBehavior
             // retrieve attr name within brackets (i.e. settings[title] yields title)
             $key = preg_split("/[\[\]]/", $key)[1];
         }
-
-        if (!$this->translatableOriginals[$key]) {
-            $this->translatableOriginals = $this->getModelAttributes();
-        }
-        $default = ($locale == $this->translatableDefault) ? $this->translatableOriginals[$key] : null;
+        $default = ($locale == $this->translatableDefault || $this->translatableUseFallback) ? $this->translatableOriginals[$key] : '';
 
         $locale_attr = sprintf('viewBag.locale%s.%s', ucfirst($key), $locale);
         return array_get($this->model->attributes, $locale_attr, $default);
