@@ -53,3 +53,4 @@
 1.4.2: Add multilingual MediaFinder
 1.4.3: !!! Please update OctoberCMS to Build 444 before updating this plugin. Added ability to translate CMS Pages fields (e.g. title, description, meta-title, meta-description)
 1.4.4: Minor improvements to compatibility with Laravel framework.
+1.4.5: Fixed issue when using the language switcher
