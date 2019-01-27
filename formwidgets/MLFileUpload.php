@@ -7,7 +7,7 @@ use RainLab\Translate\Classes\Translator;
 /**
  * MLFileUpload Form Widget
  * Thanks to Adrien Girbone for this code
- * ref. https://github.com/Glitchbone/octobercms-filetranslate-plugin/tree/38823391d6ffd70c4678101fa134b033aa38ebac
+ * ref. https://github.com/Glitchbone/octobercms-filetranslate-plugin/
  */
 class MLFileUpload extends FileUpload
 {
