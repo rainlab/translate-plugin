@@ -142,6 +142,9 @@ class EventRegistry
             elseif ($type == 'mediafinder') {
                 $fields[$name]['type'] = 'mlmediafinder';
             }
+            elseif ($type == 'fileupload') {
+                $fields[$name]['type'] = 'mlfileupload';
+            }
         }
 
         return $fields;
