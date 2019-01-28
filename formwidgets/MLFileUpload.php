@@ -51,10 +51,9 @@ class MLFileUpload extends FileUpload
 
                 foreach(post('MLFileTranslate') as $code => $attrs) {
                     foreach($attrs as $k => $v) {
-                        $file->lang($code)->$k = $v;
+                        $file->setAttributeTranslated($k, $v, $code);
                     }
                 }
-
                 $file->save();
 
                 return ['displayName' => $file->title ?: $file->file_name];
