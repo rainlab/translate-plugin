@@ -88,7 +88,7 @@ class TranslatablePage extends TranslatableBehavior
             // retrieve attr name within brackets (i.e. settings[title] yields title)
             $key = preg_split("/[\[\]]/", $key)[1];
         }
-        $default = ($locale == $this->translatableDefault || $this->translatableUseFallback) ? $this->translatableOriginals[$key] : '';
+        $default = ($locale == $this->translatableDefault || $this->translatableUseFallback) ? array_get($this->translatableOriginals, $key) : '';
 
         $locale_attr = sprintf('viewBag.locale%s.%s', ucfirst($key), $locale);
         return array_get($this->model->attributes, $locale_attr, $default);
@@ -107,7 +107,7 @@ class TranslatablePage extends TranslatableBehavior
             $key = preg_split("/[\[\]]/", $key)[1];
         }
 
-        if ($value == $this->translatableOriginals[$key]) {
+        if ($value == array_get($this->translatableOriginals, $key)) {
             return;
         }
 
