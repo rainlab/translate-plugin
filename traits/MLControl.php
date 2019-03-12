@@ -20,9 +20,14 @@ trait MLControl
     public $isAvailable;
 
     /**
-     * @var string Specifies a path to the views directory.
+     * @var string Stores the original asset path when acting as the parent control
      */
-    protected $parentViewPath;
+    public $originalAssetPath;
+
+    /**
+     * @var string Stores the original view path when acting as the parent control
+     */
+    public $originalViewPath;
 
     /**
      * @var RainLab\Translate\Models\Locale Object
@@ -36,8 +41,47 @@ trait MLControl
     public function initLocale()
     {
         $this->defaultLocale = Locale::getDefault();
-        $this->parentViewPath = $this->guessViewPathFrom(__TRAIT__, '/partials');
         $this->isAvailable = Locale::isAvailable();
+    }
+
+    /**
+     * Returns the parent control's view path
+     *
+     * @return string
+     */
+    protected function getParentViewPath()
+    {
+        // return base_path().'/modules/backend/formwidgets/parentcontrol/partials';
+    }
+
+    /**
+     * Returns the parent control's asset path
+     *
+     * @return string
+     */
+    protected function getParentAssetPath()
+    {
+        // return '/modules/backend/formwidgets/parentcontrol/assets';
+    }
+
+    /**
+     * Swap the asset & view paths with the parent control's to
+     * act as the parent control
+     *
+     * @param boolean $switch Defaults to true, determines whether to act as the parent or revert to current
+     */
+    protected function actAsParent($switch = true)
+    {
+        if ($switch) {
+            $this->originalAssetPath = $this->assetPath;
+            $this->originalViewPath = $this->viewPath;
+            $this->assetPath = $this->getParentAssetPath();
+            $this->viewPath = $this->getParentViewPath();
+        }
+        else {
+            $this->assetPath = $this->originalAssetPath;
+            $this->viewPath = $this->originalViewPath;
+        }
     }
 
     /**
@@ -45,7 +89,7 @@ trait MLControl
      */
     public function renderFallbackField()
     {
-        return $this->makeParentPartial('fallback_field');
+        return $this->makeMLPartial('fallback_field');
     }
 
     /**
@@ -54,14 +98,23 @@ trait MLControl
      * @param array $params Parameter variables to pass to the view.
      * @return string The view contents.
      */
-    public function makeParentPartial($partial, $params = [])
+    public function makeMLPartial($partial, $params = [])
     {
         $oldViewPath = $this->viewPath;
-        $this->viewPath = $this->parentViewPath;
+        $this->viewPath = $this->guessViewPathFrom(__TRAIT__, '/partials');
         $result = $this->makePartial($partial, $params);
         $this->viewPath = $oldViewPath;
 
         return $result;
+    }
+
+    /**
+     * {@deprecated} 1.4.1 Replaced by makeMLPartial
+     */
+    public function makeParentPartial($partial, $params = [])
+    {
+        traceLog('Method makeParentPartial has been deprecated, use makeMLPartial instead.');
+        return $this->makeMLPartial($partial, $params);
     }
 
     /**

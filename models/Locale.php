@@ -168,7 +168,7 @@ class Locale extends Model
             return self::$cacheListAvailable;
         }
 
-        return self::$cacheListAvailable = self::order()->lists('name', 'code');
+        return self::$cacheListAvailable = self::order()->pluck('name', 'code')->all();
     }
 
     /**
@@ -182,7 +182,7 @@ class Locale extends Model
         }
 
         $isEnabled = Cache::remember('rainlab.translate.locales', 1440, function() {
-            return self::isEnabled()->order()->lists('name', 'code');
+            return self::isEnabled()->order()->pluck('name', 'code')->all();
         });
 
         return self::$cacheListEnabled = $isEnabled;
