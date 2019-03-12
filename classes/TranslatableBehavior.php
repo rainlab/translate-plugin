@@ -242,7 +242,9 @@ abstract class TranslatableBehavior extends ExtensionBase
         if (!$this->translatableAttributes && post('RLTranslate')) {
             foreach (post("RLTranslate") as $locale => $data) {
                 foreach ($data as $key => $value) {
-                    $this->setAttributeTranslated($key, $value, $locale);
+                    if ($this->isTranslatable($key)) {
+                        $this->setAttributeTranslated($key, $value, $locale);
+                    }
                 }
             }
         }
