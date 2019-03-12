@@ -240,9 +240,10 @@ abstract class TranslatableBehavior extends ExtensionBase
     {
         // empty translatableAttributes when called from a related model 
         if (!$this->translatableAttributes && post('RLTranslate')) {
+            $translatable = $this->model->getTranslatableAttributes();
             foreach (post("RLTranslate") as $locale => $data) {
                 foreach ($data as $key => $value) {
-                    if ($this->isTranslatable($key)) {
+                    if (in_array($key, $translatable)) {
                         $this->setAttributeTranslated($key, $value, $locale);
                     }
                 }
