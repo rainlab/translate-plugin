@@ -238,6 +238,15 @@ abstract class TranslatableBehavior extends ExtensionBase
      */
     public function syncTranslatableAttributes()
     {
+        // empty translatableAttributes when called from a related model 
+        if (!$this->translatableAttributes && post('RLTranslate')) {
+            foreach (post("RLTranslate") as $locale => $data) {
+                foreach ($data as $key => $value) {
+                    $this->setAttributeTranslated($key, $value, $locale);
+                }
+            }
+        }
+
         /*
          * Spin through the known locales, store the translations if necessary
          */
