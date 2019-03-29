@@ -51,6 +51,21 @@
         this.activeLocale = this.options.defaultLocale
         this.$activeField = this.getLocaleElement(this.activeLocale)
         this.$activeButton.text(this.activeLocale)
+
+        /*
+         * Handle oc.inputPreset.beforeUpdate event
+         */
+        $('[data-input-preset]', this.$el).on('oc.inputPreset.beforeUpdate', function(event, inputPreset, src) {
+            var sourceLocale = src.siblings('.ml-btn[data-active-locale]').text()
+            var targetLocale = $(this).data('locale-value')
+            var targetActiveLocale = $(this).siblings('.ml-btn[data-active-locale]').text()
+
+            if (sourceLocale && targetLocale && sourceLocale !== targetLocale)
+                inputPreset.cancelled = true
+
+            if (inputPreset.cancelled === false && targetLocale && targetActiveLocale && targetActiveLocale !== targetLocale)
+                $(this).siblings('.ml-btn[data-active-locale]').text(targetLocale)
+        })
     }
 
     MultiLingual.DEFAULTS = {
