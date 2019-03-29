@@ -60,6 +60,7 @@
             var targetLocale = $(this).data('locale-value')
             var targetActiveLocale = $(this).siblings('.ml-btn[data-active-locale]').text()
 
+            // set input-preset field updatability when its locale is not the src locale
             if (sourceLocale && targetLocale && sourceLocale !== targetLocale)
                 $(this).data('update', false)
 
@@ -100,6 +101,8 @@
 
         this.$placeholder.val(this.getLocaleValue(locale))
         this.$el.trigger('setLocale.oc.multilingual', [locale, this.getLocaleValue(locale)])
+        // reset input-preset fields updatability attribute
+        $('[data-input-preset]', this.$el).data('update', true)
     }
 
     // MULTILINGUAL PLUGIN DEFINITION
