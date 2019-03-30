@@ -87,7 +87,7 @@ class EventRegistry
             return;
         }
 
-        if (!empty($widget->config->fields) && !$widget->config->isNested) {
+        if (!empty($widget->config->fields) && !$widget->isNested) {
             $widget->fields = $this->processFormMLFields($widget->fields, $model);
         }
 
