@@ -165,9 +165,11 @@ class MLRepeater extends Repeater
 
         $indexVar = self::INDEX_PREFIX.implode('.', HtmlHelper::nameToArray($this->formField->getName(false)));
         $groupVar = self::GROUP_PREFIX.implode('.', HtmlHelper::nameToArray($this->formField->getName(false)));
-
-        array_set($_POST, $indexVar, $loadedIndexes);
-        array_set($_POST, $groupVar, $loadedGroups);
+        
+        $requestData = Request::all();
+        array_set($requestData, $indexVar, $loadedIndexes);
+        array_set($requestData, $groupVar, $loadedGroups);
+        Request::merge($requestData);
 
         $this->processExistingItems();
     }
