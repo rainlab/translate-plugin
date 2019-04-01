@@ -4,6 +4,7 @@ use Backend\FormWidgets\Repeater;
 use RainLab\Translate\Models\Locale;
 use October\Rain\Html\Helper as HtmlHelper;
 use ApplicationException;
+use Request;
 
 /**
  * ML Repeater
@@ -221,6 +222,9 @@ class MLRepeater extends Repeater
          */
         $data = $this->getPrimarySaveDataAsArray();
         $fieldName = 'RLTranslate.'.$locale.'.'.implode('.', HtmlHelper::nameToArray($this->fieldName));
-        array_set($_POST, $fieldName, json_encode($data));
+        
+        $requestData = Request::all();
+        array_set($requestData, $fieldName, json_encode($data));
+        Request::merge($requestData);
     }
 }
