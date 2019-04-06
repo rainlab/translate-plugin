@@ -117,7 +117,7 @@ class MLRepeater extends Repeater
 
         $this->formField->value = $lockerData;
 
-        $this->reprocessExistingLocaleItems($lockerData);
+        $this->reprocessLocaleItems($lockerData);
 
         foreach ($this->formWidgets as $key => $widget) {
             $value = array_shift($lockerData);
@@ -147,31 +147,19 @@ class MLRepeater extends Repeater
     }
 
     /**
-     * Recreates form widgets based on number of repeater items.
+     * Ensure that the current locale data is processed by the repeater instead of the original non-translated data
      * @return void
      */
-    protected function reprocessExistingLocaleItems($data)
+    protected function reprocessLocaleItems($data)
     {
         $this->formWidgets = [];
 
-        $loadedIndexes = $loadedGroups = [];
-
-        if (is_array($data)) {
-            foreach ($data as $index => $loadedValue) {
-                $loadedIndexes[] = array_get($loadedValue, '_index', $index);
-                $loadedGroups[] = array_get($loadedValue, '_group');
-            }
-        }
-
-        $indexVar = self::INDEX_PREFIX.implode('.', HtmlHelper::nameToArray($this->formField->getName(false)));
-        $groupVar = self::GROUP_PREFIX.implode('.', HtmlHelper::nameToArray($this->formField->getName(false)));
-        
+        $key = implode('.', HtmlHelper::nameToArray($this->formField->getName()));
         $requestData = Request::all();
-        array_set($requestData, $indexVar, $loadedIndexes);
-        array_set($requestData, $groupVar, $loadedGroups);
-        Request::merge($requestData);
+        array_set($requestData, $key, $data);
+        Request::merge([$requestData]);
 
-        $this->processExistingItems();
+        $this->processItems();
     }
 
     /**
