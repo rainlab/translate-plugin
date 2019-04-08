@@ -4,6 +4,7 @@ use Str;
 use RainLab\Translate\Models\Locale;
 use Backend\Classes\FormWidgetBase;
 use October\Rain\Html\Helper as HtmlHelper;
+use Request;
 
 /**
  * Generic ML Control
@@ -214,7 +215,7 @@ trait MLControl
     public function getLocaleSaveData()
     {
         $values = [];
-        $data = post('RLTranslate');
+        $data = Request::input('RLTranslate');
 
         if (!is_array($data)) {
             return $values;
