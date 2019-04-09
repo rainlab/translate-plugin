@@ -104,6 +104,34 @@ class MLRepeater extends Repeater
         return parent::onAddItem();
     }
 
+    /**
+     * On reorder, the MLRepeater will change the positions of the selected index to the new index value
+     * for every language, ensuring all languages reflect the same positioning of items.
+     *
+     * @return array
+     */
+    public function onReorder()
+    {
+        // Index positions
+        $oldIndex = post('_repeater_index');
+        $newIndex = post('_repeater_new_index');
+
+        $translateData = post('RLTranslate');
+        foreach ($translateData as $locale => &$data) {
+            $fieldData = json_decode(array_get($data, implode('.', HtmlHelper::nameToArray($this->fieldName))));
+
+            // Reposition item
+            $piece = array_splice($fieldData, $oldIndex, 1);
+            array_splice($fieldData, $newIndex, 0, $piece);
+            array_set($data, implode('.', HtmlHelper::nameToArray($this->fieldName)), json_encode($fieldData));
+        }
+        unset($data);
+
+        Request::merge([
+            'RLTranslate' => $translateData
+        ]);
+    }
+
     public function onSwitchItemLocale()
     {
         if (!$locale = post('_repeater_locale')) {
@@ -212,7 +240,7 @@ class MLRepeater extends Repeater
          */
         $data = $this->getPrimarySaveDataAsArray();
         $fieldName = 'RLTranslate.'.$locale.'.'.implode('.', HtmlHelper::nameToArray($this->fieldName));
-        
+
         $requestData = Request::all();
         array_set($requestData, $fieldName, json_encode($data));
         Request::merge($requestData);
