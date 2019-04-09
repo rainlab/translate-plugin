@@ -1,6 +1,6 @@
 /*
  * MLRepeater plugin
- * 
+ *
  * Data attributes:
  * - data-control="mlrepeater" - enables the plugin on an element
  *
@@ -49,6 +49,10 @@
         this.$el.on('setLocale.oc.multilingual', this.proxy(this.onSetLocale))
 
         this.$el.one('dispose-control', this.proxy(this.dispose))
+
+        // Repeater events
+        this.$el.on('ajaxDone', this.proxy(this.onReorder))
+        this.$el.find('.field-repeater').on('ajaxDone.mlrepeater', '> .field-repeater-items > .field-repeater-item > .repeater-item-remove > [data-repeater-remove]', this.proxy(this.onRemoveItem))
     }
 
     MLRepeater.prototype.dispose = function() {
@@ -58,6 +62,10 @@
         this.$el.off('setLocale.oc.multilingual', this.proxy(this.onSetLocale))
 
         this.$el.off('dispose-control', this.proxy(this.dispose))
+
+        // Repeater events
+        this.$el.off('ajaxDone', this.proxy(this.onReorder))
+        this.$el.find('.field-repeater').off('ajaxDone.mlrepeater', '> .field-repeater-items > .field-repeater-item > .repeater-item-remove > [data-repeater-remove]', this.proxy(this.onRemoveItem))
 
         this.$el.removeData('oc.mlRepeater')
 
@@ -98,6 +106,20 @@
                 this.success(data)
             }
         })
+    }
+
+    MLRepeater.prototype.updateLocaleData = function (data) {
+        for (var locale in data) {
+            this.$el.multiLingual('setLocaleValue', data[locale], locale)
+        }
+    }
+
+    MLRepeater.prototype.onReorder = function (event, request, data) {
+        if (!request.handler.match(/onReorder$/)) {
+            return
+        }
+
+        this.updateLocaleData(data.translateData)
     }
 
     // MLREPEATER PLUGIN DEFINITION
