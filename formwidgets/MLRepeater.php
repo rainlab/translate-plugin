@@ -105,8 +105,10 @@ class MLRepeater extends Repeater
     }
 
     /**
+     * Item reorder callback
+     *
      * On reorder, the MLRepeater will change the positions of the selected index to the new index value
-     * for every language, ensuring all languages reflect the same positioning of items.
+     * for every language in the POST data, ensuring all languages reflect the same positioning of items.
      *
      * @return array
      */
@@ -120,16 +122,62 @@ class MLRepeater extends Repeater
         foreach ($translateData as $locale => &$data) {
             $fieldData = json_decode(array_get($data, implode('.', HtmlHelper::nameToArray($this->fieldName))));
 
+            if (!is_array($fieldData) || !count($fieldData)) {
+                continue;
+            }
+
             // Reposition item
-            $piece = array_splice($fieldData, $oldIndex, 1);
+            $piece = array_splice($fieldData, $oldIndex, 1) ?? [];
             array_splice($fieldData, $newIndex, 0, $piece);
             array_set($data, implode('.', HtmlHelper::nameToArray($this->fieldName)), json_encode($fieldData));
         }
         unset($data);
 
-        Request::merge([
-            'RLTranslate' => $translateData
-        ]);
+        // Get the current field's translation data
+        $fieldData = [];
+        foreach ($translateData as $locale => $data) {
+            $fieldData[$locale] = array_get($data, implode('.', HtmlHelper::nameToArray($this->fieldName)));
+        }
+
+        return [
+            'translateData' => $fieldData
+        ];
+    }
+
+    /**
+     * Item removal callback
+     *
+     * On removing an item, remove the item from all languages in the POST data.
+     *
+     * @return array
+     */
+    public function onRemoveItem()
+    {
+        $index = post('_repeater_index');
+
+        $translateData = post('RLTranslate');
+        foreach ($translateData as $locale => &$data) {
+            $fieldData = json_decode(array_get($data, implode('.', HtmlHelper::nameToArray($this->fieldName))));
+
+            if (!is_array($fieldData) || !count($fieldData)) {
+                continue;
+            }
+
+            // Remove item
+            array_splice($fieldData, $index, 1);
+            array_set($data, implode('.', HtmlHelper::nameToArray($this->fieldName)), json_encode($fieldData));
+        }
+        unset($data);
+
+        // Get the current field's translation data
+        $fieldData = [];
+        foreach ($translateData as $locale => $data) {
+            $fieldData[$locale] = array_get($data, implode('.', HtmlHelper::nameToArray($this->fieldName)));
+        }
+
+        return [
+            'translateData' => $fieldData
+        ];
     }
 
     public function onSwitchItemLocale()
