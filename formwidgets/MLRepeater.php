@@ -110,13 +110,12 @@ class MLRepeater extends Repeater
             throw new ApplicationException('Unable to find a repeater locale for: '.$locale);
         }
 
-        /*
-         * Update widget
-         */
+        // Store previous value
+        $previousLocale = post('_repeater_previous_locale');
+        $previousValue = $this->getPrimarySaveDataAsArray();
+
+        // Update widget to show form for switched locale
         $lockerData = $this->getLocaleSaveDataAsArray($locale) ?: [];
-
-        $this->formField->value = $lockerData;
-
         $this->reprocessLocaleItems($lockerData);
 
         foreach ($this->formWidgets as $key => $widget) {
@@ -133,12 +132,6 @@ class MLRepeater extends Repeater
         $parentContent = parent::render();
         $this->actAsParent(false);
 
-        /*
-         * Update previous
-         */
-        $previousLocale = post('_repeater_previous_locale');
-        $previousValue = $this->getPrimarySaveDataAsArray();
-
         return [
             '#'.$this->getId('mlRepeater') => $parentContent,
             'updateValue' => json_encode($previousValue),
@@ -153,11 +146,12 @@ class MLRepeater extends Repeater
     protected function reprocessLocaleItems($data)
     {
         $this->formWidgets = [];
+        $this->formField->value = $data;
 
         $key = implode('.', HtmlHelper::nameToArray($this->formField->getName()));
         $requestData = Request::all();
         array_set($requestData, $key, $data);
-        Request::merge([$requestData]);
+        Request::merge($requestData);
 
         $this->processItems();
     }
