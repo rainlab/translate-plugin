@@ -76,16 +76,18 @@ class EventRegistry
 
         if (
             !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableModel') &&
+            !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatablePage') &&
             !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableCmsObject')
         ) {
             return;
         }
 
-        if (!$model->hasTransatableAttributes()) {
+
+        if (!$model->hasTranslatableAttributes()) {
             return;
         }
 
-        if (!empty($widget->config->fields)) {
+        if (!empty($widget->config->fields) && !$widget->isNested) {
             $widget->fields = $this->processFormMLFields($widget->fields, $model);
         }
 
@@ -136,6 +138,9 @@ class EventRegistry
             }
             elseif ($type == 'repeater') {
                 $fields[$name]['type'] = 'mlrepeater';
+            }
+            elseif ($type == 'mediafinder') {
+                $fields[$name]['type'] = 'mlmediafinder';
             }
         }
 

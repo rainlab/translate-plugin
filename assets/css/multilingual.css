@@ -55,13 +55,13 @@
   right: 12px;
 }
 .field-multilingual.field-multilingual-repeater .ml-btn {
-  top: -10px;
-  right: 50px;
+  top: -27px;
+  right: 11px;
   text-align: right;
 }
 .field-multilingual.field-multilingual-repeater .ml-dropdown-menu {
-  top: 15px;
-  right: 38px;
+  top: 0;
+  right: 0;
 }
 .field-multilingual.field-multilingual-repeater.is-empty {
   padding-top: 5px;

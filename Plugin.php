@@ -43,7 +43,9 @@ class Plugin extends PluginBase
          * Handle translated page URLs
          */
         Page::extend(function($page) {
+            $page->addDynamicProperty('translatable', ['title', 'description', 'meta_title', 'meta_description']);
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
+            $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
         });
     }
 
@@ -168,6 +170,7 @@ class Plugin extends PluginBase
             'RainLab\Translate\FormWidgets\MLRichEditor' => 'mlricheditor',
             'RainLab\Translate\FormWidgets\MLMarkdownEditor' => 'mlmarkdowneditor',
             'RainLab\Translate\FormWidgets\MLRepeater' => 'mlrepeater',
+            'RainLab\Translate\FormWidgets\MLMediaFinder' => 'mlmediafinder',
         ];
     }
 

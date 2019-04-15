@@ -59,13 +59,13 @@ abstract class TranslatableBehavior extends ExtensionBase
         $this->initTranslatableContext();
 
         $this->model->bindEvent('model.beforeGetAttribute', function($key) {
-            if ($this->isTranslatable($key)) {
+            if ($key !== 'translatable' && $this->isTranslatable($key)) {
                 return $this->getAttributeTranslated($key);
             }
         });
 
         $this->model->bindEvent('model.beforeSetAttribute', function($key, $value) {
-            if ($this->isTranslatable($key)) {
+            if ($key !== 'translatable' && $this->isTranslatable($key)) {
                 return $this->setAttributeTranslated($key, $value);
             }
         });
@@ -297,7 +297,7 @@ abstract class TranslatableBehavior extends ExtensionBase
      * Checks if this model has transatable attributes.
      * @return true
      */
-    public function hasTransatableAttributes()
+    public function hasTranslatableAttributes()
     {
         return is_array($this->model->translatable) &&
             count($this->model->translatable) > 0;
