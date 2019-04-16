@@ -158,7 +158,7 @@ By default, untranslated attributes will fall back to the default locale. This b
 
 ## Indexed attributes
 
-Translatable model attributes can also be declared as an index by passing the `$transatable` attribute value as an array. The first value is the attribute name, the other values represent options, in this case setting the option `index` to `true`.
+Translatable model attributes can also be declared as an index by passing the `$translatable` attribute value as an array. The first value is the attribute name, the other values represent options, in this case setting the option `index` to `true`.
 
         public $translatable = [
             'name',
@@ -172,6 +172,23 @@ Once an attribute is indexed, you may use the `transWhere` method to apply a bas
 The `transWhere` method accepts a third argument to explicitly pass a locale value, otherwise it will be detected from the environment.
 
     Post::transWhere('slug', 'hello-world', 'en')->first();
+
+## File attachments captions
+
+File attachments can have their captions translated by specifying their key names in the `$translatable` attribute.
+
+    public $attachOne = [
+        'avatar' => 'System\Models\File'
+    ];
+
+    public $attachMany = [
+        'photos' => 'System\Models\File'
+    ];    
+
+    public $translatable = [
+        'name', 'avatar', 'photos'
+    ];
+
 
 ## URL translation
 

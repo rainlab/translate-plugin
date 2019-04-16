@@ -5,6 +5,7 @@ use Event;
 use Backend;
 use Cms\Classes\Page;
 use System\Classes\PluginBase;
+use System\Models\File;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\EventRegistry;
 use Exception;
@@ -46,6 +47,17 @@ class Plugin extends PluginBase
             $page->addDynamicProperty('translatable', ['title', 'description', 'meta_title', 'meta_description']);
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
+        });
+
+        /*
+         * Handle translatable file title and description
+         */
+        File::extend(function($file) {
+            $file->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+            $file->addDynamicProperty('translatable', ['title', 'description']);
+            //see https://github.com/octobercms/october/issues/3433
+            $file->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            $file->addDynamicProperty('purgeable', ['translatable']);
         });
     }
 
@@ -171,6 +183,7 @@ class Plugin extends PluginBase
             'RainLab\Translate\FormWidgets\MLMarkdownEditor' => 'mlmarkdowneditor',
             'RainLab\Translate\FormWidgets\MLRepeater' => 'mlrepeater',
             'RainLab\Translate\FormWidgets\MLMediaFinder' => 'mlmediafinder',
+            'RainLab\Translate\FormWidgets\MLFileUpload' => 'mlfileupload',
         ];
     }
 

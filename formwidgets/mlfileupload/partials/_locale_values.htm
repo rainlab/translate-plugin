@@ -1,0 +1,8 @@
+<?php foreach ($locales as $code => $name): ?>
+    <input
+    type="hidden"
+    name="MLFileTranslate[<?= $code; ?>][<?= $attribute; ?>]"
+    value="<?= $file->getAttributeTranslated($attribute, $code) ?>"
+    data-locale-value="<?= $code ?>"
+    />
+<?php endforeach ?>
