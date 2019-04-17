@@ -1,6 +1,6 @@
 /*
  * MLRepeater plugin
- * 
+ *
  * Data attributes:
  * - data-control="mlrepeater" - enables the plugin on an element
  *

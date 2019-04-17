@@ -110,14 +110,13 @@ class MLRepeater extends Repeater
             throw new ApplicationException('Unable to find a repeater locale for: '.$locale);
         }
 
-        /*
-         * Update widget
-         */
+        // Store previous value
+        $previousLocale = post('_repeater_previous_locale');
+        $previousValue = $this->getPrimarySaveDataAsArray();
+
+        // Update widget to show form for switched locale
         $lockerData = $this->getLocaleSaveDataAsArray($locale) ?: [];
-
-        $this->formField->value = $lockerData;
-
-        $this->reprocessExistingLocaleItems($lockerData);
+        $this->reprocessLocaleItems($lockerData);
 
         foreach ($this->formWidgets as $key => $widget) {
             $value = array_shift($lockerData);
@@ -133,12 +132,6 @@ class MLRepeater extends Repeater
         $parentContent = parent::render();
         $this->actAsParent(false);
 
-        /*
-         * Update previous
-         */
-        $previousLocale = post('_repeater_previous_locale');
-        $previousValue = $this->getPrimarySaveDataAsArray();
-
         return [
             '#'.$this->getId('mlRepeater') => $parentContent,
             'updateValue' => json_encode($previousValue),
@@ -147,31 +140,20 @@ class MLRepeater extends Repeater
     }
 
     /**
-     * Recreates form widgets based on number of repeater items.
+     * Ensure that the current locale data is processed by the repeater instead of the original non-translated data
      * @return void
      */
-    protected function reprocessExistingLocaleItems($data)
+    protected function reprocessLocaleItems($data)
     {
         $this->formWidgets = [];
+        $this->formField->value = $data;
 
-        $loadedIndexes = $loadedGroups = [];
-
-        if (is_array($data)) {
-            foreach ($data as $index => $loadedValue) {
-                $loadedIndexes[] = array_get($loadedValue, '_index', $index);
-                $loadedGroups[] = array_get($loadedValue, '_group');
-            }
-        }
-
-        $indexVar = self::INDEX_PREFIX.implode('.', HtmlHelper::nameToArray($this->formField->getName(false)));
-        $groupVar = self::GROUP_PREFIX.implode('.', HtmlHelper::nameToArray($this->formField->getName(false)));
-        
+        $key = implode('.', HtmlHelper::nameToArray($this->formField->getName()));
         $requestData = Request::all();
-        array_set($requestData, $indexVar, $loadedIndexes);
-        array_set($requestData, $groupVar, $loadedGroups);
+        array_set($requestData, $key, $data);
         Request::merge($requestData);
 
-        $this->processExistingItems();
+        $this->processItems();
     }
 
     /**
@@ -224,7 +206,7 @@ class MLRepeater extends Repeater
          */
         $data = $this->getPrimarySaveDataAsArray();
         $fieldName = 'RLTranslate.'.$locale.'.'.implode('.', HtmlHelper::nameToArray($this->fieldName));
-        
+
         $requestData = Request::all();
         array_set($requestData, $fieldName, json_encode($data));
         Request::merge($requestData);
