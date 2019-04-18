@@ -4,6 +4,7 @@ use Lang;
 use Event;
 use Backend;
 use Cms\Classes\Page;
+use System\Models\File;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\EventRegistry;
@@ -46,6 +47,14 @@ class Plugin extends PluginBase
             $page->addDynamicProperty('translatable', ['title', 'description', 'meta_title', 'meta_description']);
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
+        });
+
+        /*
+         * Add translation support to file models
+         */
+        File::extend(function ($model) {
+            $model->addDynamicProperty('translatable', ['title', 'description']);
+            $model->extendClassWith('RainLab.Translate.Behaviors.TranslatableModel');
         });
     }
 
