@@ -3,6 +3,7 @@
 use Lang;
 use Event;
 use Backend;
+use Cache;
 use Cms\Classes\Page;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
@@ -100,6 +101,17 @@ class Plugin extends PluginBase
         Event::listen('pages.page.getMenuCacheKey', $modifyKey);
         Event::listen('pages.snippet.getMapCacheKey', $modifyKey);
         Event::listen('pages.snippet.getPartialMapCacheKey', $modifyKey);
+
+
+        /**
+         * Delete all cache. Fixes following issue:
+         * https://github.com/rainlab/pages-plugin/issues/326
+         */
+        $clearAllPagesCache = function ($controller, $object, $type) {
+            Cache::clear();
+        };
+        Event::listen('pages.object.save', $clearAllPagesCache);
+
     }
 
     public function registerComponents()
