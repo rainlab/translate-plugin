@@ -54,6 +54,7 @@ class Plugin extends PluginBase
          */
         File::extend(function ($model) {
             $model->addDynamicProperty('translatable', ['title', 'description']);
+            $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
             $model->extendClassWith('RainLab.Translate.Behaviors.TranslatableModel');
         });
     }
