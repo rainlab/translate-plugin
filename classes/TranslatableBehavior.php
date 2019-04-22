@@ -357,6 +357,20 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
+     * Get the original values of the translated attributes
+     * @param  string $locale
+     * @return array
+     */
+    public function getTranslatableOriginals($locale = null)
+    {
+        if (!$locale) {
+            return $this->translatableOriginals;
+        } else {
+            return $this->translatableOriginals[$locale];
+        }
+    }
+
+    /**
      * Get the translated attributes that have been changed since last sync.
      * @return array
      */
