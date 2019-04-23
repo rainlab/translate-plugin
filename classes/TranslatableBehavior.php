@@ -359,7 +359,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     /**
      * Get the original values of the translated attributes
      * @param  string $locale
-     * @return array
+     * @return array (or null if $locale does not exist)
      */
     public function getTranslatableOriginals($locale = null)
     {
