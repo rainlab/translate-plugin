@@ -357,6 +357,20 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
+     * Get the original values of the translated attributes.
+     * @param  string|null $locale If `null`, the method will get the original data for all locales.
+     * @return array|null Returns locale data as an array, or `null` if an invalid locale is specified.
+     */
+    public function getTranslatableOriginals($locale = null)
+    {
+        if (!$locale) {
+            return $this->translatableOriginals;
+        } else {
+            return $this->translatableOriginals[$locale] ?? null;
+        }
+    }
+
+    /**
      * Get the translated attributes that have been changed since last sync.
      * @return array
      */
