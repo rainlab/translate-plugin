@@ -366,7 +366,7 @@ abstract class TranslatableBehavior extends ExtensionBase
         if (!$locale) {
             return $this->translatableOriginals;
         } else {
-            return $this->translatableOriginals[$locale];
+            return $this->translatableOriginals[$locale] ?? null;
         }
     }
 
