@@ -21,6 +21,8 @@ use Exception;
  */
 class TranslatableModel extends TranslatableBehavior
 {
+    use \RainLab\Translate\Traits\Sluggable;
+
     /**
      * Applies a translatable index to a basic query. This scope will join the index
      * table and cannot be executed more than once.
@@ -84,6 +86,7 @@ class TranslatableModel extends TranslatableBehavior
             return;
         }
 
+        $this->slugAttributesTranslated($locale);
         $this->storeTranslatableBasicData($locale);
         $this->storeTranslatableIndexData($locale);
     }
