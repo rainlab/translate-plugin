@@ -1,6 +1,6 @@
 <?php namespace RainLab\Translate\Traits;
 
-use October\Rain\Support\Str;
+use Str;
 
 trait Sluggable
 {
