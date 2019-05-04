@@ -10,7 +10,9 @@ trait Sluggable
      */
     protected function slugAttributesTranslated($locale)
     {
-        if (!isset($this->model->slugs) || !method_exists($this->model, 'slugAttributes')) return;
+        if (!isset($this->model->slugs) || !method_exists($this->model, 'slugAttributes')) {
+            return;
+        }
         
         $optionedAttributes = $this->getTranslatableAttributesWithOptions();
 
