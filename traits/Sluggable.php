@@ -17,7 +17,9 @@ trait Sluggable
         $optionedAttributes = $this->getTranslatableAttributesWithOptions();
 
         foreach ($this->model->slugs as $slugAttribute => $sourceAttributes) {
-            if (!isset($optionedAttributes[$slugAttribute])) continue;
+            if (!isset($optionedAttributes[$slugAttribute])) {
+                continue;
+            }
             $this->setSluggedValueTranslated($locale, $slugAttribute, $sourceAttributes);
         }
     }
