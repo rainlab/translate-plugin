@@ -3,7 +3,7 @@
 namespace Rainlab\Translate\Components;
 
 use Cms\Classes\ComponentBase;
-use Illuminate\Support\Facades\Event;
+use Event;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use October\Rain\Router\Router as RainRouter;
