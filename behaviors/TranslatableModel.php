@@ -39,7 +39,7 @@ class TranslatableModel extends TranslatableBehavior
         $query->select($this->model->getTable().'.*');
 
         $query->where(function($q) use ($index, $value, $operator) {
-            $q->where($this->model->getTable().'.'.$index, $value);
+            $q->where($this->model->getTable().'.'.$index, $operator, $value);
             $q->orWhere(function($q) use ($index, $value, $operator) {
                 $q
                     ->where('rainlab_translate_indexes.item', $index)
