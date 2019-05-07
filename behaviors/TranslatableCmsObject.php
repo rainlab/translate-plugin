@@ -46,16 +46,15 @@ class TranslatableCmsObject extends TranslatableBehavior
             return $this->overrideTwigCacheKey($key);
         });
 
+        // delete all translation files associated with the default language static page
         $this->model->bindEvent('model.afterDelete', function() use ($model) {
-            $contentPath = sprintf('%s/%s/%s', themes_path(), $model->theme->getDirName(), $model->getObjectTypeDirName());
-
             foreach (Locale::listEnabled() as $locale => $label) {
                 if ($locale == $this->translatableDefault) {
                     continue;
                 }
-                $localePath = sprintf('%s-%s/%s', $contentPath, $locale, $model->fileName);
-                if (File::exists($localePath)) {
-                    File::delete($localePath);
+                if ($obj = $this->getCmsObjectForLocale($locale)) {
+                    $obj->fileName = $this->model->fileName;
+                    $obj->delete();
                 }
             }
         });
