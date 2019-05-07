@@ -52,7 +52,6 @@ class TranslatableCmsObject extends TranslatableBehavior
                     continue;
                 }
                 if ($obj = $this->getCmsObjectForLocale($locale)) {
-                    $obj->fileName = $this->model->fileName;
                     $obj->delete();
                 }
             }
@@ -227,5 +226,4 @@ class TranslatableCmsObject extends TranslatableBehavior
 
         return 'RainLab\Translate\Classes\MLCmsObject';
     }
-
 }
