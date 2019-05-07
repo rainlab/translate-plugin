@@ -1,6 +1,5 @@
 <?php namespace RainLab\Translate\Behaviors;
 
-use File;
 use RainLab\Translate\Models\Locale;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\TranslatableBehavior;
