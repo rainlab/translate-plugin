@@ -69,6 +69,21 @@ You may also define the translations in a separate file, where the path is relat
     # [...]
 
     translate: config/lang.yaml
+This is an example of **config/lang.yaml** file with two languages:
+```
+en:
+    site.name: 'My Website'
+    nav.home: 'Home'
+    nav.video: 'Video'
+    title.home: 'Welcome Home'
+hr:
+    site.name: 'Moje web stranice'
+    nav.home: 'Početna'
+    nav.video: 'Video'
+    title.home: 'Dobrodošli'
+```
+
+In order to make these default values reflected to your frontend site, go to **Settings -> Translate messages** in the backend and hit **Scan for messages**. They will also be loaded automatically when the theme is activated.
 
 ## Content translation
 
@@ -154,7 +169,7 @@ Once an attribute is indexed, you may use the `transWhere` method to apply a bas
 
     Post::transWhere('slug', 'hello-world')->first();
 
-The `transWhere` method accepts a third argument to explicitly pass a locale value, otherwise it will be detected from the enivronment.
+The `transWhere` method accepts a third argument to explicitly pass a locale value, otherwise it will be detected from the environment.
 
     Post::transWhere('slug', 'hello-world', 'en')->first();
 
@@ -183,6 +198,48 @@ The word "Contact" in French is the same so a translated URL is not given, or ne
 - /en/contact - Page in English
 - /ru/контакт - Page in Russian
 - /ru/contact - 404
+
+## URL parameter translation
+
+It's possible to translate URL parameters by listening to the `translate.localePicker.translateParams` event, which is fired when switching languages.
+
+```php
+Event::listen('translate.localePicker.translateParams', function($page, $params, $oldLocale, $newLocale) {
+    if ($page->baseFileName == 'your-page-filename') {
+        return YourModel::translateParams($params, $oldLocale, $newLocale);
+    }
+});
+```
+
+In YourModel, one possible implementation might look like this:
+
+```php
+public static function translateParams($params, $oldLocale, $newLocale) {
+    $newParams = $params;
+    foreach ($params as $paramName => $paramValue) {
+        $records = self::transWhere($paramName, $paramValue, $oldLocale)->first();
+        if ($records) {
+            $records->translateContext($newLocale);
+            $newParams[$paramName] = $records->$paramName;
+        }
+    }
+    return $newParams;
+}
+```
+
+## Query string translation
+
+It's possible to translate query string parameters by listening to the `translate.localePicker.translateQuery` event, which is fired when switching languages.
+
+```php
+Event::listen('translate.localePicker.translateQuery', function($page, $params, $oldLocale, $newLocale) {
+    if ($page->baseFileName == 'your-page-filename') {
+        return YourModel::translateParams($params, $oldLocale, $newLocale);
+    }
+});
+```
+
+For a possible implementation of the `YourModel::translateParams` method look at the example under `URL parameter translation` from above.
 
 ## Conditionally extending plugins
 
@@ -235,3 +292,64 @@ Since the Twig filter will not be available all the time, we can pipe them to th
             ]
         ];
     }
+
+# User Interface
+
+#### Switching locales
+
+Users can switch between locales by clicking on the locale indicator on the right hand side of the Multi-language input. By holding the CMD / CTRL key all Multi-language Input fields will switch to the selected locale.
+
+## Integration without JQuery and October Framework files
+
+It is possible to use the front-end language switcher without using jQuery or the OctoberCMS AJAX Framework by making the AJAX API request yourself manually. The following is an example of how to do that.
+
+```Javascript
+document.querySelector('#I18N_SELECT').addEventListener('change', function () {
+    const details = {
+        _session_key: document.querySelector('input[name="_session_key"]').value,
+        _token: document.querySelector('input[name="_token"]').value,
+        locale: this.value
+    }
+
+    let formBody = []
+
+    for (var property in details) {
+        let encodedKey = encodeURIComponent(property)
+
+        let encodedValue = encodeURIComponent(details[property])
+
+        formBody.push(encodedKey + '=' + encodedValue)
+    }
+
+    formBody = formBody.join('&')
+
+    fetch(location.href + '/', {
+        method: 'POST',
+        body: formBody,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'X-OCTOBER-REQUEST-HANDLER': 'onSwitchLocale',
+            'X-OCTOBER-REQUEST-PARTIALS': '',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(res => res.json())
+    .then(res => window.location.replace(res.X_OCTOBER_REDIRECT))
+    .catch(err => console.log(err))
+})
+```
+
+The HTML:
+
+``` html
+{{ form_open() }}
+<select id='I18N_SELECT'>
+    <option value="none" hidden></option>
+    {% for code, name in locales %}
+        {% if code != activeLocale %}
+            <option value="{{code}}" name="locale">{{code | upper }}</option>
+        {% endif %}
+    {% endfor %}
+</select>
+{{ form_close() }}
+```

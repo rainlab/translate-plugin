@@ -4,6 +4,7 @@ use Lang;
 use Event;
 use Backend;
 use Cms\Classes\Page;
+use System\Models\File;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\EventRegistry;
@@ -43,18 +44,29 @@ class Plugin extends PluginBase
          * Handle translated page URLs
          */
         Page::extend(function($page) {
+            $page->addDynamicProperty('translatable', ['title', 'description', 'meta_title', 'meta_description']);
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
+            $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
+        });
+
+        /*
+         * Add translation support to file models
+         */
+        File::extend(function ($model) {
+            $model->addDynamicProperty('translatable', ['title', 'description']);
+            $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
         });
     }
 
     public function boot()
     {
         /*
-         * Set the page context for translation caching.
+         * Set the page context for translation caching with high priority.
          */
-        Event::listen('cms.page.beforeRenderPage', function($controller, $page) {
+        Event::listen('cms.page.init', function($controller, $page) {
             EventRegistry::instance()->setMessageContext($page);
-        });
+        }, 100);
 
         /*
          * Import messages defined by the theme
@@ -92,12 +104,31 @@ class Plugin extends PluginBase
                     }
             }, 10);
         }
+
+        /*
+         * Look at session for locale using middleware
+         */
+        \Cms\Classes\CmsController::extend(function($controller) {
+            $controller->middleware(\RainLab\Translate\Classes\LocaleMiddleware::class);
+        });
+
+        /**
+         * Append current locale to static page's cache keys
+         */
+        $modifyKey = function (&$key) {
+            $key = $key . '-' . Lang::getLocale();
+        };
+        Event::listen('pages.router.getCacheKey', $modifyKey);
+        Event::listen('pages.page.getMenuCacheKey', $modifyKey);
+        Event::listen('pages.snippet.getMapCacheKey', $modifyKey);
+        Event::listen('pages.snippet.getPartialMapCacheKey', $modifyKey);
     }
 
     public function registerComponents()
     {
         return [
-           'RainLab\Translate\Components\LocalePicker' => 'localePicker'
+           'RainLab\Translate\Components\LocalePicker' => 'localePicker',
+           'RainLab\Translate\Components\AlternateHrefLangElements' => 'alternateHrefLangElements'
         ];
     }
 
@@ -161,6 +192,7 @@ class Plugin extends PluginBase
             'RainLab\Translate\FormWidgets\MLRichEditor' => 'mlricheditor',
             'RainLab\Translate\FormWidgets\MLMarkdownEditor' => 'mlmarkdowneditor',
             'RainLab\Translate\FormWidgets\MLRepeater' => 'mlrepeater',
+            'RainLab\Translate\FormWidgets\MLMediaFinder' => 'mlmediafinder',
         ];
     }
 

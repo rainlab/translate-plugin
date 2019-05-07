@@ -3,7 +3,6 @@
     - create_messages_table.php
     - create_attributes_table.php
     - create_locales_table.php
-    - seed_all_tables.php
 1.0.2: Languages and Messages can now be deleted.
 1.0.3: Minor updates for latest October release.
 1.0.4: Locale cache will clear when updating a language.
@@ -33,3 +32,27 @@
 1.2.6: Fixes repeater usage with static pages plugin.
 1.2.7: Fixes placeholder usage with static pages plugin.
 1.2.8: Improvements to code for latest October build compatibility.
+1.2.9: Fixes context for translated strings when used with Static Pages.
+1.2.10: Minor UI fix to the multilingual repeater.
+1.2.11: Fixes translation not working with partials loaded via AJAX.
+1.2.12: Add support for translating the new grouped repeater feature.
+1.3.0: Added search to the translate messages page.
+1.3.1:
+    - Added reordering to languages
+    - builder_table_update_rainlab_translate_locales.php
+    - seed_all_tables.php
+1.3.2: Improved compatibility with RainLab.Pages, added ability to scan Mail Messages for translatable variables.
+1.3.3: Fix to the locale picker session handling in Build 420 onwards.
+1.3.4: Add alternate hreflang elements and adds prefixDefaultLocale setting.
+1.3.5: Fix MLRepeater bug when switching locales.
+1.3.6: Fix Middleware to use the prefixDefaultLocale setting introduced in 1.3.4
+1.3.7: Fix config reference in LocaleMiddleware
+1.3.8: Keep query string when switching locales
+1.4.0: Add importer and exporter for messages
+1.4.1: Updated Hungarian translation. Added Arabic translation. Fixed issue where default texts are overwritten by import. Fixed issue where the language switcher for repeater fields would overlap with the first repeater row.
+1.4.2: Add multilingual MediaFinder
+1.4.3: !!! Please update OctoberCMS to Build 444 before updating this plugin. Added ability to translate CMS Pages fields (e.g. title, description, meta-title, meta-description)
+1.4.4: Minor improvements to compatibility with Laravel framework.
+1.4.5: Fixed issue when using the language switcher
+1.5.0: Compatibility fix with Build 451
+1.6.0: Make File Upload widget properties translatable. Merge Repeater core changes into MLRepeater widget. Add getter method to retrieve original translate data.

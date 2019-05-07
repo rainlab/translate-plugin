@@ -1,16 +1,18 @@
-<?php
-
-return [
+<?php return [
     'plugin' => [
         'name' => 'Translate',
         'description' => 'Enables multi-lingual websites.',
         'tab' => 'Translation',
         'manage_locales' => 'Manage locales',
-        'manage_messages' => 'Manage messages'
+        'manage_messages' => 'Manage messages',
     ],
     'locale_picker' => [
         'component_name' => 'Locale Picker',
         'component_description' => 'Shows a dropdown to select a front-end language.',
+    ],
+    'alternate_hreflang' => [
+        'component_name' => 'Alternate hrefLang elements',
+        'component_description' => 'Injects the language alternatives for page as hreflang elements'
     ],
     'locale' => [
         'title' => 'Manage languages',
@@ -29,6 +31,8 @@ return [
         'is_enabled_help' => 'Disabled languages will not be available in the front-end.',
         'not_available_help' => 'There are no other languages set up.',
         'hint_locales' => 'Create new languages here for translating front-end content. The default language represents the content before it has been translated.',
+        'reorder_title' => 'Reorder languages',
+        'sort_order' => 'Sort Order',
     ],
     'messages' => [
         'title' => 'Translate messages',
@@ -49,5 +53,7 @@ return [
         'scan_messages_purge_confirm' => 'Are you sure you want to delete all messages? This cannot be undone!',
         'hint_translate' => 'Here you can translate messages used on the front-end, the fields will save automatically.',
         'hide_translated' => 'Hide translated',
+        'export_messages_link' => 'Export Messages',
+        'import_messages_link' => 'Import Messages',
     ],
 ];

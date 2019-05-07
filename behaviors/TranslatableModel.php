@@ -30,7 +30,7 @@ class TranslatableModel extends TranslatableBehavior
      * @param  string $locale
      * @return Builder
      */
-    public function scopeTransWhere($query, $index, $value, $locale = null)
+    public function scopeTransWhere($query, $index, $value, $locale = null, $operator = '=')
     {
         if (!$locale) {
             $locale = $this->translatableContext;
@@ -38,12 +38,12 @@ class TranslatableModel extends TranslatableBehavior
 
         $query->select($this->model->getTable().'.*');
 
-        $query->where(function($q) use ($index, $value) {
-            $q->where($this->model->getTable().'.'.$index, $value);
-            $q->orWhere(function($q) use ($index, $value) {
+        $query->where(function($q) use ($index, $value, $operator) {
+            $q->where($this->model->getTable().'.'.$index, $operator, $value);
+            $q->orWhere(function($q) use ($index, $value, $operator) {
                 $q
                     ->where('rainlab_translate_indexes.item', $index)
-                    ->where('rainlab_translate_indexes.value', $value)
+                    ->where('rainlab_translate_indexes.value', $operator, $value)
                 ;
             });
         });
@@ -95,7 +95,7 @@ class TranslatableModel extends TranslatableBehavior
      */
     protected function storeTranslatableBasicData($locale = null)
     {
-        $data = json_encode($this->translatableAttributes[$locale]);
+        $data = json_encode($this->translatableAttributes[$locale], JSON_UNESCAPED_UNICODE);
 
         $obj = Db::table('rainlab_translate_attributes')
             ->where('locale', $locale)
@@ -148,7 +148,7 @@ class TranslatableModel extends TranslatableBehavior
                 if ($recordExists) {
                     $obj->delete();
                 }
-                return;
+                continue;
             }
 
             if ($recordExists) {
@@ -163,7 +163,6 @@ class TranslatableModel extends TranslatableBehavior
                     'value' => $value
                 ]);
             }
-
         }
     }
 

@@ -1,16 +1,18 @@
-<?php
-
-return [
+<?php return [
     'plugin' => [
         'name' => 'Çeviri',
         'description' => 'Çoklu dil destekli websiteleri oluşturmanızı sağlar.',
         'tab' => 'Çeviri',
         'manage_locales' => 'Dilleri yönet',
-        'manage_messages' => 'Çevirileri yönet'
+        'manage_messages' => 'Çevirileri yönet',
     ],
     'locale_picker' => [
         'component_name' => 'Çoklu Dil Seçimi',
         'component_description' => 'Sitenizin dilini değiştirebileceğiniz diller listesini gösterir.',
+    ],
+    'alternate_hreflang' => [
+        'component_name' => 'Alternatif hrefLang elemanları',
+        'component_description' => 'Sayfa için dil alternatiflerini hreflang elemanları olarak ekler.',
     ],
     'locale' => [
         'title' => 'Dilleri yönet',
@@ -29,6 +31,8 @@ return [
         'is_enabled_help' => 'Pasifleştirilen diller site ön yüzünde görüntülenmez.',
         'not_available_help' => 'Başka dil ayarı yok.',
         'hint_locales' => 'Ön yüz çevirilerini yapmak için buradan dil ekleyebilirsiniz. Ön tanımlı seçilen dil, sitenin orjinal içeriğini belirtmektedir.',
+        'reorder_title' => 'Dilleri sırala',
+        'sort_order' => 'Sıralama',
     ],
     'messages' => [
         'title' => 'Metinleri çevir',
@@ -49,5 +53,7 @@ return [
         'scan_messages_purge_confirm' => 'Tüm çevirileri silmek istediğinize emin misiniz? Bu işlem geri alınamaz!',
         'hint_translate' => 'Bu kısımda site ön yüzünde görüntülenecek çeviri metinlerini bulabilirsiniz, çeviri yaptıktan sonra bir işlem yapmanıza gerek yoktur, hepsi otomatik kaydedilecek.',
         'hide_translated' => 'Çevrilen metinleri gizle',
+        'export_messages_link' => 'Metinleri Dışa Aktar',
+        'import_messages_link' => 'Metinleri İçe Aktar',
     ],
 ];

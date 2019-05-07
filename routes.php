@@ -14,34 +14,29 @@ App::before(function($request) {
 
     $translator = Translator::instance();
 
-    if (!$translator->isConfigured()) {
-        return;
-    }
-
-    if (!$translator->loadLocaleFromRequest()) {
-        $translator->loadLocaleFromSession();
-        return;
-    }
-
-    if (!$locale = $translator->getLocale()) {
+    if (
+        !$translator->isConfigured() ||
+        !$translator->loadLocaleFromRequest() ||
+        (!$locale = $translator->getLocale())
+    ) {
         return;
     }
 
     /*
      * Register routes
      */
-    Route::group(['prefix' => $locale], function() {
+    Route::group(['prefix' => $locale, 'middleware' => 'web'], function() {
         Route::any('{slug}', 'Cms\Classes\CmsController@run')->where('slug', '(.*)?');
     });
 
-    Route::any($locale, 'Cms\Classes\CmsController@run');
+    Route::any($locale, 'Cms\Classes\CmsController@run')->middleware('web');
 
     /*
      * Ensure Url::action() retains the localized URL
      * by re-registering the route after the CMS.
      */
     Event::listen('cms.route', function() use ($locale) {
-        Route::group(['prefix' => $locale], function() {
+        Route::group(['prefix' => $locale, 'middleware' => 'web'], function() {
             Route::any('{slug}', 'Cms\Classes\CmsController@run')->where('slug', '(.*)?');
         });
     });

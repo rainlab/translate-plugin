@@ -36,11 +36,12 @@
              * If Ctrl/Cmd key is pressed, find other instances and switch
              */
             if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
                 $('[data-switch-locale="'+selectedLocale+'"]').click()
             }
         })
 
-        this.$placeholder.on('keyup', function(){
+        this.$placeholder.on('input', function(){
             self.$activeField.val(this.value)
         })
 
@@ -50,6 +51,21 @@
         this.activeLocale = this.options.defaultLocale
         this.$activeField = this.getLocaleElement(this.activeLocale)
         this.$activeButton.text(this.activeLocale)
+
+        /*
+         * Handle oc.inputPreset.beforeUpdate event
+         */
+        $('[data-input-preset]', this.$el).on('oc.inputPreset.beforeUpdate', function(event, src) {
+            var sourceLocale = src.siblings('.ml-btn[data-active-locale]').text()
+            var targetLocale = $(this).data('locale-value')
+            var targetActiveLocale = $(this).siblings('.ml-btn[data-active-locale]').text()
+
+            if (sourceLocale && targetLocale && targetActiveLocale) {
+                if (targetActiveLocale !== sourceLocale)
+                    self.setLocale(sourceLocale)
+                $(this).data('update', sourceLocale === targetLocale)
+            }
+        })
     }
 
     MultiLingual.DEFAULTS = {
