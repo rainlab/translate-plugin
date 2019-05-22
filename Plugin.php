@@ -9,7 +9,7 @@ use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\EventRegistry;
 use RainLab\Translate\Classes\Translator;
-use Exception;
+use October\Rain\Router\UrlGenerator;
 
 /**
  * Translate Plugin Information File
@@ -189,23 +189,11 @@ class Plugin extends PluginBase
     public function localeUrl($url, $locale)
     {
         $translator = Translator::instance();
-        $parts = parse_url($url);
-        $path = array_get($parts, 'path');
+        $url_parts = parse_url($url);
+        $path = array_get($url_parts, 'path');
+        $parts = array();
         $parts['path'] = '/' . $translator->getPathInLocale($path, $locale);
-        return $this->build_url($parts);
-    }
-
-    public function build_url(array $parts) {
-        return (isset($parts['scheme']) ? "{$parts['scheme']}:" : '') . 
-            ((isset($parts['user']) || isset($parts['host'])) ? '//' : '') . 
-            (isset($parts['user']) ? "{$parts['user']}" : '') . 
-            (isset($parts['pass']) ? ":{$parts['pass']}" : '') . 
-            (isset($parts['user']) ? '@' : '') . 
-            (isset($parts['host']) ? "{$parts['host']}" : '') . 
-            (isset($parts['port']) ? ":{$parts['port']}" : '') . 
-            (isset($parts['path']) ? "{$parts['path']}" : '') . 
-            (isset($parts['query']) ? "?{$parts['query']}" : '') . 
-            (isset($parts['fragment']) ? "#{$parts['fragment']}" : '');
+        return UrlGenerator::buildUrl($url, $parts);
     }
 
     public function translateString($string, $params = [])
