@@ -22,6 +22,10 @@ App::before(function($request) {
         return;
     }
 
+    if (Config::get('rainlab.translate::disableLocalePrefixRoutes', false)) {
+        return;
+    }
+
     /*
      * Register routes
      */
