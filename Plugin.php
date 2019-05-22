@@ -193,7 +193,7 @@ class Plugin extends PluginBase
         $path = array_get($url_parts, 'path');
         $parts = array();
         $parts['path'] = '/' . $translator->getPathInLocale($path, $locale);
-        return UrlGenerator::buildUrl($url, $parts);
+        return UrlGenerator::buildUrl($url_parts, $parts);
     }
 
     public function translateString($string, $params = [])
