@@ -8,7 +8,6 @@ return [
     |
     | Should the default locale be prefixed by the plugin?
     |
-    |
     */
     'prefixDefaultLocale' => true,
 
@@ -30,7 +29,8 @@ return [
     | Disable locale prefix routes
     |--------------------------------------------------------------------------
     |
-    | Should we disable the locale prefix routes?
+    | Disables the automatically generated locale prefixed routes
+    | (i.e. /en/original-route) when enabled.
     |
     */
     'disableLocalePrefixRoutes' => false,
