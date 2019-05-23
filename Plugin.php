@@ -9,7 +9,6 @@ use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\EventRegistry;
 use RainLab\Translate\Classes\Translator;
-use Url;
 
 /**
  * Translate Plugin Information File
@@ -193,7 +192,7 @@ class Plugin extends PluginBase
         $path = array_get($url_parts, 'path');
         $parts = array();
         $parts['path'] = '/' . $translator->getPathInLocale($path, $locale);
-        return Url::buildUrl($url_parts, $parts);
+        return http_build_url($url_parts, $parts);
     }
 
     public function translateString($string, $params = [])
