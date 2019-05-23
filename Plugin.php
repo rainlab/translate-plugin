@@ -188,11 +188,11 @@ class Plugin extends PluginBase
     public function localeUrl($url, $locale)
     {
         $translator = Translator::instance();
-        $url_parts = parse_url($url);
-        $path = array_get($url_parts, 'path');
-        $parts = array();
-        $parts['path'] = '/' . $translator->getPathInLocale($path, $locale);
-        return http_build_url($url_parts, $parts);
+        $parts = parse_url($url);
+        $path = array_get($parts, 'path');
+        return http_build_url($parts, [
+            'path' => '/' . $translator->getPathInLocale($path, $locale)
+        ]);
     }
 
     public function translateString($string, $params = [])
