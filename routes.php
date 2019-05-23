@@ -8,6 +8,10 @@ use RainLab\Translate\Classes\Translator;
  */
 App::before(function($request) {
 
+    if (Config::get('rainlab.translate::disableLocalePrefixRoutes', false)) {
+        return;
+    }
+
     if (App::runningInBackend()) {
         return;
     }
@@ -19,10 +23,6 @@ App::before(function($request) {
         !$translator->loadLocaleFromRequest() ||
         (!$locale = $translator->getLocale())
     ) {
-        return;
-    }
-
-    if (Config::get('rainlab.translate::disableLocalePrefixRoutes', false)) {
         return;
     }
 
