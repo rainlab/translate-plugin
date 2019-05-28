@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Behaviors;
 
+use RainLab\Translate\Models\Locale;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\TranslatableBehavior;
 use October\Rain\Html\Helper as HtmlHelper;
@@ -42,6 +43,18 @@ class TranslatableCmsObject extends TranslatableBehavior
 
         $this->model->bindEvent('cmsObject.getTwigCacheKey', function($key) {
             return $this->overrideTwigCacheKey($key);
+        });
+
+        // delete all translation files associated with the default language static page
+        $this->model->bindEvent('model.afterDelete', function() use ($model) {
+            foreach (Locale::listEnabled() as $locale => $label) {
+                if ($locale == $this->translatableDefault) {
+                    continue;
+                }
+                if ($obj = $this->getCmsObjectForLocale($locale)) {
+                    $obj->delete();
+                }
+            }
         });
     }
 
@@ -213,5 +226,4 @@ class TranslatableCmsObject extends TranslatableBehavior
 
         return 'RainLab\Translate\Classes\MLCmsObject';
     }
-
 }
