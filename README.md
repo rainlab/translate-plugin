@@ -83,6 +83,23 @@ hr:
     title.home: 'Dobrodošli'
 ```
 
+You may also define the translations in a separate file PER LOCALE, where the path is relative to the theme. The following definition will source the default messages from the file **config/lang-en.yaml** inside the theme for the english locale and from the file **config/lang-fr.yaml for the french locale.
+
+    name: My Theme
+    # [...]
+
+    translate: 
+	en: config/lang-en.yaml
+	fr: config/lang-fr.yaml
+
+This is an example for the **config/lang-en.yaml** file:
+```
+site.name: 'My Website'
+nav.home: 'Home'
+nav.video: 'Video'
+title.home: 'Welcome Home'
+```
+
 In order to make these default values reflected to your frontend site, go to **Settings -> Translate messages** in the backend and hit **Scan for messages**. They will also be loaded automatically when the theme is activated.
 
 ## Content translation
