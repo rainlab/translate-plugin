@@ -8,8 +8,6 @@ return [
     |
     | Should the default locale be prefixed by the plugin?
     |
-    | ( For now only used in the alternate-hreflang component )
-    |
     */
     'prefixDefaultLocale' => true,
 
@@ -25,5 +23,16 @@ return [
     |
     */
     'cacheTimeout'        => 1440,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Disable locale prefix routes
+    |--------------------------------------------------------------------------
+    |
+    | Disables the automatically generated locale prefixed routes
+    | (i.e. /en/original-route) when enabled.
+    |
+    */
+    'disableLocalePrefixRoutes' => false,
 
 ];
