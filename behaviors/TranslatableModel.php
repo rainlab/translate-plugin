@@ -39,7 +39,7 @@ class TranslatableModel extends TranslatableBehavior
         $query->select($this->model->getTable().'.*');
 
         $query->where(function($q) use ($index, $value, $operator) {
-            $q->where($this->model->getTable().'.'.$index, $value);
+            $q->where($this->model->getTable().'.'.$index, $operator, $value);
             $q->orWhere(function($q) use ($index, $value, $operator) {
                 $q
                     ->where('rainlab_translate_indexes.item', $index)
@@ -82,6 +82,33 @@ class TranslatableModel extends TranslatableBehavior
             });
 
             return;
+        }
+
+        /** 
+         * @event model.translate.resolveComputedFields
+         * Resolve computed fields before saving
+         *
+         * Example usage:
+         *
+         * Override Model's __construct method
+         *
+         * public function __construct(array $attributes = [])
+         * {
+         *     parent::__construct($attributes);
+         *
+         *     $this->bindEvent('model.translate.resolveComputedFields', function ($locale) {
+         *         return [
+         *             'content_html' =>
+         *                 self::formatHtml($this->asExtension('TranslatableModel')
+         *                     ->getAttributeTranslated('content', $locale))
+         *         ];
+         *     });
+         * }
+         *
+         */
+        $computedFields = $this->model->fireEvent('model.translate.resolveComputedFields', [$locale], true);
+        if (is_array($computedFields)) {
+            $this->translatableAttributes[$locale] = array_merge($this->translatableAttributes[$locale], $computedFields);
         }
 
         $this->storeTranslatableBasicData($locale);

@@ -83,6 +83,23 @@ hr:
     title.home: 'Dobrodošli'
 ```
 
+You may also define the translations in a separate file PER LOCALE, where the path is relative to the theme. The following definition will source the default messages from the file **config/lang-en.yaml** inside the theme for the english locale and from the file **config/lang-fr.yaml for the french locale.
+
+    name: My Theme
+    # [...]
+
+    translate: 
+	en: config/lang-en.yaml
+	fr: config/lang-fr.yaml
+
+This is an example for the **config/lang-en.yaml** file:
+```
+site.name: 'My Website'
+nav.home: 'Home'
+nav.video: 'Video'
+title.home: 'Welcome Home'
+```
+
 In order to make these default values reflected to your frontend site, go to **Settings -> Translate messages** in the backend and hit **Scan for messages**. They will also be loaded automatically when the theme is activated.
 
 ## Content translation
@@ -199,9 +216,9 @@ The word "Contact" in French is the same so a translated URL is not given, or ne
 - /ru/контакт - Page in Russian
 - /ru/contact - 404
 
-## URL Parameter translation
+## URL parameter translation
 
-It's possible to translate URL parameters by listening to the translate.localePicker.translateParams event, which is fired when switching languages.
+It's possible to translate URL parameters by listening to the `translate.localePicker.translateParams` event, which is fired when switching languages.
 
 ```php
 Event::listen('translate.localePicker.translateParams', function($page, $params, $oldLocale, $newLocale) {
@@ -226,6 +243,21 @@ public static function translateParams($params, $oldLocale, $newLocale) {
     return $newParams;
 }
 ```
+
+## Query string translation
+
+It's possible to translate query string parameters by listening to the `translate.localePicker.translateQuery` event, which is fired when switching languages.
+
+```php
+Event::listen('translate.localePicker.translateQuery', function($page, $params, $oldLocale, $newLocale) {
+    if ($page->baseFileName == 'your-page-filename') {
+        return YourModel::translateParams($params, $oldLocale, $newLocale);
+    }
+});
+```
+
+For a possible implementation of the `YourModel::translateParams` method look at the example under `URL parameter translation` from above.
+
 ## Conditionally extending plugins
 
 #### Models

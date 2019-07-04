@@ -10,7 +10,7 @@ use System\Models\File;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\EventRegistry;
-use Exception;
+use RainLab\Translate\Classes\Translator;
 
 /**
  * Translate Plugin Information File
@@ -56,7 +56,8 @@ class Plugin extends PluginBase
          */
         File::extend(function ($model) {
             $model->addDynamicProperty('translatable', ['title', 'description']);
-            $model->extendClassWith('RainLab.Translate.Behaviors.TranslatableModel');
+            $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
         });
     }
 
@@ -201,7 +202,8 @@ class Plugin extends PluginBase
         return [
             'filters' => [
                 '_'  => [$this, 'translateString'],
-                '__' => [$this, 'translatePlural']
+                '__' => [$this, 'translatePlural'],
+                'localeUrl' => [$this, 'localeUrl'],
             ]
         ];
     }
@@ -216,6 +218,16 @@ class Plugin extends PluginBase
             'RainLab\Translate\FormWidgets\MLRepeater' => 'mlrepeater',
             'RainLab\Translate\FormWidgets\MLMediaFinder' => 'mlmediafinder',
         ];
+    }
+
+    public function localeUrl($url, $locale)
+    {
+        $translator = Translator::instance();
+        $parts = parse_url($url);
+        $path = array_get($parts, 'path');
+        return http_build_url($parts, [
+            'path' => '/' . $translator->getPathInLocale($path, $locale)
+        ]);
     }
 
     public function translateString($string, $params = [])

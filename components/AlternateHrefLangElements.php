@@ -3,6 +3,7 @@
 namespace Rainlab\Translate\Components;
 
 use Cms\Classes\ComponentBase;
+use Event;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use October\Rain\Router\Router as RainRouter;
@@ -52,6 +53,17 @@ class AlternateHrefLangElements extends ComponentBase
             $page->rewriteTranslatablePageUrl($locale);
             $router = new RainRouter;
             $params = $this->getRouter()->getParameters();
+
+            $translatedParams = Event::fire(
+                'translate.localePicker.translateParams',
+                [$page, $params, $this->oldLocale, $locale],
+                true
+            );
+
+            if ($translatedParams) {
+                $params = $translatedParams;
+            }
+
             $localeUrl = $router->urlFromPattern($page->url, $params);
         }
 

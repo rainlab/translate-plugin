@@ -55,12 +55,20 @@ class ThemeScanner
         $keys = [];
 
         foreach ($config as $locale => $messages) {
+            if (is_string($messages)) {
+                // $message is a yaml filename, load the yaml file
+                $messages = $theme->getConfigArray('translate.'.$locale);
+            }
             $keys = array_merge($keys, array_keys($messages));
         }
 
         Message::importMessages($keys);
 
         foreach ($config as $locale => $messages) {
+            if (is_string($messages)) {
+                // $message is a yaml filename, load the yaml file
+                $messages = $theme->getConfigArray('translate.'.$locale);
+            }
             Message::importMessageCodes($messages, $locale);
         }
     }

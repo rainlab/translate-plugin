@@ -64,7 +64,7 @@ class MLRepeater extends Repeater
     {
         $this->rewritePostValues();
 
-        return $this->getLocaleSaveValue($value);
+        return $this->getLocaleSaveValue(is_array($value) ? array_values($value) : $value);
     }
 
     /**
