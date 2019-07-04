@@ -1,9 +1,11 @@
 <?php namespace RainLab\Translate;
 
+use App;
 use Lang;
 use Event;
 use Backend;
 use Cms\Classes\Page;
+use Cms\Classes\Theme;
 use System\Models\File;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
@@ -109,6 +111,39 @@ class Plugin extends PluginBase
         Event::listen('pages.page.getMenuCacheKey', $modifyKey);
         Event::listen('pages.snippet.getMapCacheKey', $modifyKey);
         Event::listen('pages.snippet.getPartialMapCacheKey', $modifyKey);
+
+        if (class_exists('\RainLab\Pages\Classes\SnippetManager')) {
+            $handler = function ($controller, $template, $type) {
+                if (!$template->methodExists('getDirtyLocales')) {
+                    return;
+                }
+
+                // Get the locales that have changed
+                $dirtyLocales = $template->getDirtyLocales();
+
+                if (!empty($dirtyLocales)) {
+                    $theme = Theme::getEditTheme();
+                    $currentLocale = Lang::getLocale();
+
+                    foreach ($dirtyLocales as $locale) {
+                        if (!$template->isTranslateDirty(null, $locale)) {
+                            continue;
+                        }
+
+                        // Clear the RainLab.Pages caches for each dirty locale
+                        App::setLocale($locale);
+                        \RainLab\Pages\Classes\Page::clearCache($theme);
+                        \RainLab\Pages\Classes\SnippetManager::clearCache($theme);
+                    }
+
+                    // Restore the original locale for this request
+                    App::setLocale($currentLocale);
+                }
+            };
+
+            Event::listen('cms.template.save', $handler);
+            Event::listen('pages.object.save', $handler);
+        }
     }
 
     public function registerComponents()
