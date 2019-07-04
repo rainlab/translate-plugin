@@ -181,7 +181,8 @@ class Locale extends Model
             return self::$cacheListEnabled;
         }
 
-        $isEnabled = Cache::remember('rainlab.translate.locales', 1440, function() {
+        $expiresAt = now()->addMinutes(1440);
+        $isEnabled = Cache::remember('rainlab.translate.locales', $expiresAt, function() {
             return self::isEnabled()->order()->pluck('name', 'code')->all();
         });
 

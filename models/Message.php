@@ -239,7 +239,8 @@ class Message extends Model
             return;
         }
 
-        Cache::put(self::makeCacheKey(), self::$cache, Config::get('rainlab.translate::cacheTimeout', 1440));
+        $expiresAt = now()->addMinutes(Config::get('rainlab.translate::cacheTimeout', 1440));
+        Cache::put(self::makeCacheKey(), self::$cache, $expiresAt);
     }
 
     /**
