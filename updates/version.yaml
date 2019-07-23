@@ -56,3 +56,5 @@
 1.4.5: Fixed issue when using the language switcher
 1.5.0: Compatibility fix with Build 451
 1.6.0: Make File Upload widget properties translatable. Merge Repeater core changes into MLRepeater widget. Add getter method to retrieve original translate data.
+1.6.1: Add ability for models to provide translated computed data, add option to disable locale prefix routing
+1.6.2: Implement localeUrl filter, add per-locale theme configuration support
