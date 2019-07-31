@@ -258,6 +258,14 @@ Event::listen('translate.localePicker.translateQuery', function($page, $params, 
 
 For a possible implementation of the `YourModel::translateParams` method look at the example under `URL parameter translation` from above.
 
+## Settings Model Translateion
+
+It's possible to translate your settings model like any other model. To retrieve translated values use:
+
+```php
+Settings::instance()->getTranslateAttribute('your_attribute_name')
+```
+
 ## Conditionally extending plugins
 
 #### Models
