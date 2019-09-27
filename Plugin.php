@@ -45,12 +45,8 @@ class Plugin extends PluginBase
          */
         Page::extend(function($page) {
             $page->addDynamicProperty('translatable', ['title', 'description', 'meta_title', 'meta_description']);
-            if (!$page->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePageUrl')) {
-                $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
-            }
-            if (!$page->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePage')) {
-                $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
-            }
+            $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
+            $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
         });
 
         /*
@@ -58,12 +54,8 @@ class Plugin extends PluginBase
          */
         File::extend(function ($model) {
             $model->addDynamicProperty('translatable', ['title', 'description']);
-            if (!$model->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
-                $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
-            }
-            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
-                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
-            }
+            $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
         });
     }
 
