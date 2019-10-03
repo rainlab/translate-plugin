@@ -79,8 +79,8 @@ class TranslatableModel extends TranslatableBehavior
      * @param  string $locale
      * @return Builder
      */
-    protected function joinTranslateIndexesTable($query, $locale = null) {
-
+    protected function joinTranslateIndexesTable($query, $locale = null)
+    {
         if (!$locale) {
             $locale = $this->translatableContext;
         }
