@@ -227,11 +227,11 @@ class TranslatableModel extends TranslatableBehavior
             return $this->translatableAttributes[$locale] = [];
         }
 
-        $obj = $this->model->translations->first(function ($value, $key) use($locale) {
+        $obj = $this->model->translations->first(function ($value, $key) use ($locale) {
             return $value->attributes['locale'] === $locale;
         });
 
-        $result = $obj ? json_decode($obj['attribute_data'], true) : [];
+        $result = $obj ? json_decode($obj->attribute_data, true) : [];
 
         return $this->translatableOriginals[$locale] = $this->translatableAttributes[$locale] = $result;
     }
