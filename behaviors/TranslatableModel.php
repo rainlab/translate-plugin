@@ -31,15 +31,6 @@ class TranslatableModel extends TranslatableBehavior
         ];
     }
 
-    public function scopeTransWith($query)
-    {
-        $query->with([
-          'translations'
-        ]);
-
-        return $query;
-    }
-
     /**
      * Applies a translatable index to a basic query. This scope will join the index
      * table and cannot be executed more than once.
