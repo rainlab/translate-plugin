@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Classes;
 
+use Str;
 use RainLab\Translate\Classes\Translator;
 use October\Rain\Extension\ExtensionBase;
 use October\Rain\Html\Helper as HtmlHelper;
@@ -58,9 +59,13 @@ abstract class TranslatableBehavior extends ExtensionBase
 
         $this->initTranslatableContext();
 
-        $this->model->bindEvent('model.beforeGetAttribute', function($key) {
+        $this->model->bindEvent('model.beforeGetAttribute', function($key) use ($model) {
             if ($key !== 'translatable' && $this->isTranslatable($key)) {
-                return $this->getAttributeTranslated($key);
+                $value = $this->getAttributeTranslated($key);
+                if ($model->hasGetMutator($key)) {
+                    $value = $model->{'get'.Str::studly($key).'Attribute'}($value);
+                }
+                return $value;
             }
         });
 
