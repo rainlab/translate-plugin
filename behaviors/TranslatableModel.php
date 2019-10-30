@@ -60,6 +60,7 @@ class TranslatableModel extends TranslatableBehavior
      */
     public function scopeTransOrderBy($query, $index, $direction = 'asc', $locale = null)
     {
+
         $query->select(
             $this->model->getTable().'.*',
             Db::raw('COALESCE(rainlab_translate_indexes.value, '. $this->model->getTable() .'.'.$index.') AS translate_sorting_key')
