@@ -102,9 +102,27 @@ class TranslatableModelTest extends PluginTestCase
         $this->assertEquals(['a', 'b', 'c'], $obj->states);
     }
 
-    public function testOrderBy()
+    public function testTranslateWhere()
     {
-        $locale = Translator::instance()->getLocale();
+        $this->recycleSampleData();
+
+        $obj = CountryModel::first();
+
+        $obj->translateContext('fr');
+        $obj->name = 'Australie';
+        $obj->save();
+
+        $this->assertEquals(0, CountryModel::transWhere('name', 'Australie')->count());
+
+        Translator::instance()->setLocale('fr');
+        $this->assertEquals(1, CountryModel::transWhere('name', 'Australi')->count());
+
+        Translator::instance()->setLocale('en');
+
+    }
+
+    public function testTranslateOrderBy()
+    {
         $this->recycleSampleData();
 
         $obj = CountryModel::first();
