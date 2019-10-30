@@ -70,7 +70,7 @@ abstract class TranslatableBehavior extends ExtensionBase
             }
         });
 
-        $this->model->bindEvent('model.beforeSetAttribute', function($key, $value) {
+        $this->model->bindEvent('model.beforeSetAttribute', function($key, $value) use ($model) {
             if ($key !== 'translatable' && $this->isTranslatable($key)) {
                 $value = $this->setAttributeTranslated($key, $value);
                 if ($model->hasSetMutator($key)) {
