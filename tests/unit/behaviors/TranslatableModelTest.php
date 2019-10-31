@@ -115,7 +115,7 @@ class TranslatableModelTest extends PluginTestCase
         $this->assertEquals(0, CountryModel::transWhere('name', 'Australie')->count());
 
         Translator::instance()->setLocale('fr');
-        $this->assertEquals(1, CountryModel::transWhere('name', 'Australi')->count());
+        $this->assertEquals(1, CountryModel::transWhere('name', 'Australie')->count());
 
         Translator::instance()->setLocale('en');
 
