@@ -263,7 +263,7 @@ For a possible implementation of the `YourModel::translateParams` method look at
 It's possible to translate your settings model like any other model. To retrieve translated values use:
 
 ```php
-Settings::instance()->getTranslateAttribute('your_attribute_name')
+Settings::instance()->getAttributeTranslated('your_attribute_name')
 ```
 
 ## Conditionally extending plugins
