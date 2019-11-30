@@ -21,6 +21,16 @@ use Exception;
  */
 class TranslatableModel extends TranslatableBehavior
 {
+    public function __construct($model)
+    {
+        parent::__construct($model);
+
+        $model->morphMany['translations'] = [
+            'RainLab\Translate\Models\Attribute',
+            'name' => 'model'
+        ];
+    }
+
     /**
      * Applies a translatable index to a basic query. This scope will join the index
      * table and cannot be executed more than once.
@@ -84,7 +94,7 @@ class TranslatableModel extends TranslatableBehavior
             return;
         }
 
-        /** 
+        /**
          * @event model.translate.resolveComputedFields
          * Resolve computed fields before saving
          *
@@ -208,11 +218,9 @@ class TranslatableModel extends TranslatableBehavior
             return $this->translatableAttributes[$locale] = [];
         }
 
-        $obj = Db::table('rainlab_translate_attributes')
-            ->where('locale', $locale)
-            ->where('model_id', $this->model->getKey())
-            ->where('model_type', get_class($this->model))
-            ->first();
+        $obj = $this->model->translations->first(function ($value, $key) use ($locale) {
+            return $value->attributes['locale'] === $locale;
+        });
 
         $result = $obj ? json_decode($obj->attribute_data, true) : [];
 
