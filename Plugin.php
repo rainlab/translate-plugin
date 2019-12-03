@@ -4,10 +4,11 @@ use Lang;
 use Event;
 use Backend;
 use Cms\Classes\Page;
+use System\Models\File;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\EventRegistry;
-use Exception;
+use RainLab\Translate\Classes\Translator;
 
 /**
  * Translate Plugin Information File
@@ -43,7 +44,18 @@ class Plugin extends PluginBase
          * Handle translated page URLs
          */
         Page::extend(function($page) {
+            $page->addDynamicProperty('translatable', ['title', 'description', 'meta_title', 'meta_description']);
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
+            $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
+        });
+
+        /*
+         * Add translation support to file models
+         */
+        File::extend(function ($model) {
+            $model->addDynamicProperty('translatable', ['title', 'description']);
+            $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
         });
     }
 
@@ -155,7 +167,8 @@ class Plugin extends PluginBase
         return [
             'filters' => [
                 '_'  => [$this, 'translateString'],
-                '__' => [$this, 'translatePlural']
+                '__' => [$this, 'translatePlural'],
+                'localeUrl' => [$this, 'localeUrl'],
             ]
         ];
     }
@@ -168,7 +181,18 @@ class Plugin extends PluginBase
             'RainLab\Translate\FormWidgets\MLRichEditor' => 'mlricheditor',
             'RainLab\Translate\FormWidgets\MLMarkdownEditor' => 'mlmarkdowneditor',
             'RainLab\Translate\FormWidgets\MLRepeater' => 'mlrepeater',
+            'RainLab\Translate\FormWidgets\MLMediaFinder' => 'mlmediafinder',
         ];
+    }
+
+    public function localeUrl($url, $locale)
+    {
+        $translator = Translator::instance();
+        $parts = parse_url($url);
+        $path = array_get($parts, 'path');
+        return http_build_url($parts, [
+            'path' => '/' . $translator->getPathInLocale($path, $locale)
+        ]);
     }
 
     public function translateString($string, $params = [], $locale = null)

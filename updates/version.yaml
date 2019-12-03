@@ -50,4 +50,11 @@
 1.3.8: Keep query string when switching locales
 1.4.0: Add importer and exporter for messages
 1.4.1: Updated Hungarian translation. Added Arabic translation. Fixed issue where default texts are overwritten by import. Fixed issue where the language switcher for repeater fields would overlap with the first repeater row.
-1.4.2: The message translation filters _ and __ now have a second argument to pass the desired locale explicity
+1.4.2: Add multilingual MediaFinder
+1.4.3: !!! Please update OctoberCMS to Build 444 before updating this plugin. Added ability to translate CMS Pages fields (e.g. title, description, meta-title, meta-description)
+1.4.4: Minor improvements to compatibility with Laravel framework.
+1.4.5: Fixed issue when using the language switcher
+1.5.0: Compatibility fix with Build 451
+1.6.0: Make File Upload widget properties translatable. Merge Repeater core changes into MLRepeater widget. Add getter method to retrieve original translate data.
+1.6.1: Add ability for models to provide translated computed data, add option to disable locale prefix routing
+1.6.2: Implement localeUrl filter, add per-locale theme configuration support

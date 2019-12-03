@@ -59,13 +59,13 @@ abstract class TranslatableBehavior extends ExtensionBase
         $this->initTranslatableContext();
 
         $this->model->bindEvent('model.beforeGetAttribute', function($key) {
-            if ($this->isTranslatable($key)) {
+            if ($key !== 'translatable' && $this->isTranslatable($key)) {
                 return $this->getAttributeTranslated($key);
             }
         });
 
         $this->model->bindEvent('model.beforeSetAttribute', function($key, $value) {
-            if ($this->isTranslatable($key)) {
+            if ($key !== 'translatable' && $this->isTranslatable($key)) {
                 return $this->setAttributeTranslated($key, $value);
             }
         });
@@ -297,7 +297,7 @@ abstract class TranslatableBehavior extends ExtensionBase
      * Checks if this model has transatable attributes.
      * @return true
      */
-    public function hasTransatableAttributes()
+    public function hasTranslatableAttributes()
     {
         return is_array($this->model->translatable) &&
             count($this->model->translatable) > 0;
@@ -353,6 +353,20 @@ abstract class TranslatableBehavior extends ExtensionBase
         }
         else {
             return array_key_exists($attribute, $dirty);
+        }
+    }
+
+    /**
+     * Get the original values of the translated attributes.
+     * @param  string|null $locale If `null`, the method will get the original data for all locales.
+     * @return array|null Returns locale data as an array, or `null` if an invalid locale is specified.
+     */
+    public function getTranslatableOriginals($locale = null)
+    {
+        if (!$locale) {
+            return $this->translatableOriginals;
+        } else {
+            return $this->translatableOriginals[$locale] ?? null;
         }
     }
 

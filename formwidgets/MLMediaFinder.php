@@ -1,29 +1,33 @@
 <?php namespace RainLab\Translate\FormWidgets;
 
-use Backend\FormWidgets\RichEditor;
+use Backend\FormWidgets\MediaFinder;
 use RainLab\Translate\Models\Locale;
+use System\Classes\MediaLibrary;
 
 /**
- * ML Rich Editor
- * Renders a multi-lingual WYSIWYG editor.
+ * ML MediaFinder Form Widget
+ * Renders a multilingual media finder.
  *
  * @package rainlab\translate
- * @author Alexey Bobkov, Samuel Georges
+ * @author Sascha Aeppli
  */
-class MLRichEditor extends RichEditor
+class MLMediaFinder extends MediaFinder
 {
     use \RainLab\Translate\Traits\MLControl;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    protected $defaultAlias = 'mlricheditor';
-
-    public $originalAssetPath;
-    public $originalViewPath;
+    protected $defaultAlias = 'mlmediafinder';
 
     /**
-     * {@inheritDoc}
+     * needed to preview images, because we only get a relative path
+     * @var string path to media library
+     */
+    private $mediaPath;
+
+    /**
+     * @inheritDoc
      */
     public function init()
     {
@@ -32,7 +36,7 @@ class MLRichEditor extends RichEditor
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function render()
     {
@@ -44,19 +48,23 @@ class MLRichEditor extends RichEditor
             return $parentContent;
         }
 
-        $this->vars['richeditor'] = $parentContent;
-        return $this->makePartial('mlricheditor');
+        $this->vars['mediafinder'] = $parentContent;
+        return $this->makePartial('mlmediafinder');
     }
 
+    /**
+     * Prepares the form widget view data
+     */
     public function prepareVars()
     {
         parent::prepareVars();
         $this->prepareLocaleVars();
+        // make root path of media files accessible
+        $this->vars['mediaPath'] = $this->mediaPath = MediaLibrary::url('/');
     }
 
     /**
-     * Returns an array of translated values for this field
-     * @return array
+     * @inheritDoc
      */
     public function getSaveValue($value)
     {
@@ -64,9 +72,9 @@ class MLRichEditor extends RichEditor
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    protected function loadAssets()
+    public function loadAssets()
     {
         $this->actAsParent();
         parent::loadAssets();
@@ -74,17 +82,9 @@ class MLRichEditor extends RichEditor
 
         if (Locale::isAvailable()) {
             $this->loadLocaleAssets();
-            $this->addJs('js/mlricheditor.js');
+            $this->addJs('js/mlmediafinder.js');
+            $this->addCss('css/mlmediafinder.css');
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function onLoadPageLinksForm()
-    {
-        $this->actAsParent();
-        return parent::onLoadPageLinksForm();
     }
 
     /**
@@ -92,7 +92,7 @@ class MLRichEditor extends RichEditor
      */
     protected function getParentViewPath()
     {
-        return base_path().'/modules/backend/formwidgets/richeditor/partials';
+        return base_path().'/modules/backend/formwidgets/mediafinder/partials';
     }
 
     /**
@@ -100,6 +100,6 @@ class MLRichEditor extends RichEditor
      */
     protected function getParentAssetPath()
     {
-        return '/modules/backend/formwidgets/richeditor/assets';
+        return '/modules/backend/formwidgets/mediafinder/assets';
     }
 }

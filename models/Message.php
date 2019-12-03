@@ -99,7 +99,7 @@ class Message extends Model
      */
     public static function get($messageId, $locale = null)
     {
-        $locale = $locale ? $locale : self::$locale;
+        $locale = $locale ?: self::$locale;
         if (!$locale) {
             return $messageId;
         }
@@ -109,8 +109,8 @@ class Message extends Model
         /*
          * Found in cache
          */
-        if (array_key_exists($messageCode, self::$cache)) {
-            return self::$cache[$messageCode];
+        if (array_key_exists($locale . $messageCode, self::$cache)) {
+            return self::$cache[$locale . $messageCode];
         }
 
         /*
@@ -133,7 +133,7 @@ class Message extends Model
          * Schedule new cache and go
          */
         $msg = $item->forLocale($locale, $messageId);
-        self::$cache[$messageCode] = $msg;
+        self::$cache[$locale . $messageCode] = $msg;
         self::$hasNew = true;
 
         return $msg;
@@ -242,7 +242,8 @@ class Message extends Model
             return;
         }
 
-        Cache::put(self::makeCacheKey(), self::$cache, Config::get('rainlab.translate::cacheTimeout', 1440));
+        $expiresAt = now()->addMinutes(Config::get('rainlab.translate::cacheTimeout', 1440));
+        Cache::put(self::makeCacheKey(), self::$cache, $expiresAt);
     }
 
     /**

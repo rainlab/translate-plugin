@@ -78,18 +78,20 @@ class MLMarkdownEditor extends MarkdownEditor
         }
     }
 
-    protected function actAsParent($switch = true)
+    /**
+     * {@inheritDoc}
+     */
+    protected function getParentViewPath()
     {
-        if ($switch) {
-            $this->originalAssetPath = $this->assetPath;
-            $this->originalViewPath = $this->viewPath;
-            $this->assetPath = '/modules/backend/formwidgets/markdowneditor/assets';
-            $this->viewPath = base_path().'/modules/backend/formwidgets/markdowneditor/partials';
-        }
-        else {
-            $this->assetPath = $this->originalAssetPath;
-            $this->viewPath = $this->originalViewPath;
-        }
+        return base_path().'/modules/backend/formwidgets/markdowneditor/partials';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getParentAssetPath()
+    {
+        return '/modules/backend/formwidgets/markdowneditor/assets';
     }
 
 }
