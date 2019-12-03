@@ -44,7 +44,10 @@ class Plugin extends PluginBase
          * Handle translated page URLs
          */
         Page::extend(function($page) {
-            $page->addDynamicProperty('translatable', ['title', 'description', 'meta_title', 'meta_description']);
+            if (!$page->propertyExists('translatable')) {
+                $page->addDynamicProperty('translatable', []);
+            }
+            $page->translatable = array_merge($page->translatable, ['title', 'description', 'meta_title', 'meta_description']);
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
         });
@@ -53,7 +56,10 @@ class Plugin extends PluginBase
          * Add translation support to file models
          */
         File::extend(function ($model) {
-            $model->addDynamicProperty('translatable', ['title', 'description']);
+            if (!$model->propertyExists('translatable')) {
+                $model->addDynamicProperty('translatable', []);
+            }
+            $model->translatable = array_merge($model->translatable, ['title', 'description']);
             $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
             $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
         });
