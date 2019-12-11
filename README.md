@@ -50,6 +50,10 @@ A message can also be translated for a choice usage.
 
     {{ 'There are no apples|There are :number applies!'|__(2, { number: 'two' }) }}
 
+Or you set a locale manually by passing a second argument.
+
+    {{ 'this is always english'|_({}, 'en') }}
+
 Themes can provide default values for these messages by defining a `translate` key in the `theme.yaml` file, located in the theme directory.
 
     name: My Theme

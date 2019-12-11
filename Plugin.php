@@ -201,13 +201,13 @@ class Plugin extends PluginBase
         ]);
     }
 
-    public function translateString($string, $params = [])
+    public function translateString($string, $params = [], $locale = null)
     {
-        return Message::trans($string, $params);
+        return Message::trans($string, $params, $locale);
     }
 
-    public function translatePlural($string, $count = 0, $params = [])
+    public function translatePlural($string, $count = 0, $params = [], $locale = null)
     {
-        return Lang::choice(Message::trans($string, $params), $count, $params);
+        return Lang::choice(Message::trans($string, $params, $locale), $count, $params);
     }
 }
