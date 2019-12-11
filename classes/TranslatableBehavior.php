@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Classes;
 
+use Str;
 use RainLab\Translate\Classes\Translator;
 use October\Rain\Extension\ExtensionBase;
 use October\Rain\Html\Helper as HtmlHelper;
@@ -58,15 +59,25 @@ abstract class TranslatableBehavior extends ExtensionBase
 
         $this->initTranslatableContext();
 
-        $this->model->bindEvent('model.beforeGetAttribute', function($key) {
-            if ($key !== 'translatable' && $this->isTranslatable($key)) {
-                return $this->getAttributeTranslated($key);
+        $this->model->bindEvent('model.beforeGetAttribute', function ($key) use ($model) {
+            if ($this->isTranslatable($key)) {
+                $value = $this->getAttributeTranslated($key);
+                if ($model->hasGetMutator($key)) {
+                    $method = 'get' . Str::studly($key) . 'Attribute';
+                    $value = $model->{$method}($value);
+                }
+                return $value;
             }
         });
 
-        $this->model->bindEvent('model.beforeSetAttribute', function($key, $value) {
-            if ($key !== 'translatable' && $this->isTranslatable($key)) {
-                return $this->setAttributeTranslated($key, $value);
+        $this->model->bindEvent('model.beforeSetAttribute', function ($key, $value) use ($model) {
+            if ($this->isTranslatable($key)) {
+                $value = $this->setAttributeTranslated($key, $value);
+                if ($model->hasSetMutator($key)) {
+                    $method = 'set' . Str::studly($key) . 'Attribute';
+                    $value = $model->{$method}($value);
+                }
+                return $value;
             }
         });
 
@@ -93,7 +104,7 @@ abstract class TranslatableBehavior extends ExtensionBase
      */
     public function isTranslatable($key)
     {
-        if ($this->translatableDefault == $this->translatableContext) {
+        if ($key === 'translatable' || $this->translatableDefault == $this->translatableContext) {
             return false;
         }
 

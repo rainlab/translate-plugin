@@ -31,7 +31,7 @@ class TranslatablePage extends TranslatableBehavior
 
     public function isTranslatable($key)
     {
-        if ($this->translatableDefault == $this->translatableContext) {
+        if ($key === 'translatable' || $this->translatableDefault == $this->translatableContext) {
             return false;
         }
 
