@@ -34,6 +34,13 @@ class Plugin extends PluginBase
     public function register()
     {
         /*
+         * Adds language suffix to Mail templates.
+         */
+        Event::listen('mailer.beforeAddContent', function ($mailer, $message, $view, $data, $raw, $plain) {
+            return EventRegistry::instance()->findTranslatedMailTemplate($mailer, $message, $view, $data, $raw, $plain);
+        }, 1);
+
+        /*
          * Defer event with low priority to let others contribute before this registers.
          */
         Event::listen('backend.form.extendFieldsBefore', function($widget) {

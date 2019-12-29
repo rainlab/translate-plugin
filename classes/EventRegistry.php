@@ -4,6 +4,7 @@ use Str;
 use File;
 use Cms\Classes\Page;
 use Cms\Classes\Content;
+use System\Classes\MailManager;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
@@ -199,6 +200,32 @@ class EventRegistry
         if (($content = Content::loadCached($controller->getTheme(), $fileName)) !== null) {
             return $content;
         }
+    }
+
+    /**
+     * Adds language suffixes to Mail templates.
+     * @return boolean
+     */
+    public function findTranslatedMailTemplate($mailer, $message, $view, $data, $raw, $plain)
+    {
+        $translator = Translator::instance();
+
+        $locale = $translator->getLocale();
+        $defaultLocale = $translator->getDefaultLocale();
+
+        if ($raw !== null || $view === null || !is_string($view) || $locale === $defaultLocale) {
+            return;
+        }
+
+        $mailManager = MailManager::instance();
+        $templates = $mailManager->listRegisteredTemplates();
+
+        $localizedView = sprintf('%s-%s', $view, $locale);
+        if (!array_key_exists($localizedView, $templates)) { 
+            return;
+        }
+
+        return !$mailManager->addContentToMailer($message, $localizedView, $data, false);
     }
 
     //
