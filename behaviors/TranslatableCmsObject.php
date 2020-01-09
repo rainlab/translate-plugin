@@ -166,7 +166,8 @@ class TranslatableCmsObject extends TranslatableBehavior
     protected function isEmptyDataSet($data)
     {
         return !array_get($data, 'markup') &&
-            !count(array_filter(array_get($data, 'viewBag', [])));
+            !count(array_filter(array_get($data, 'viewBag', []))) &&
+            !count(array_filter(array_get($data, 'placeholders', [])));
     }
 
     /**
