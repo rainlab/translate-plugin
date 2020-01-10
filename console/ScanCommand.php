@@ -9,7 +9,7 @@ class ScanCommand extends Command
 {
     protected $name = 'translate:scan';
 
-    protected $description = 'Scan theme localizations files for new messages.';
+    protected $description = 'Scan theme localization files for new messages.';
 
     public function handle()
     {
