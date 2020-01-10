@@ -49,7 +49,7 @@
         'scan_messages_process' => 'This process will attempt to scan the active theme for messages that can be translated.',
         'scan_messages_process_limitations' => 'Some messages may not be captured and will only appear after the first time they are used.',
         'scan_messages_purge_label' => 'Purge all messages first',
-        'scan_messages_purge_help' => 'If checked this will delete all messages before performing the scan.',
+        'scan_messages_purge_help' => 'If checked, this will delete all messages, including their translations, before performing the scan.',
         'scan_messages_purge_confirm' => 'Are you sure you want to delete all messages? This cannot be undone!',
         'hint_translate' => 'Here you can translate messages used on the front-end, the fields will save automatically.',
         'hide_translated' => 'Hide translated',

@@ -58,3 +58,4 @@
 1.6.0: Make File Upload widget properties translatable. Merge Repeater core changes into MLRepeater widget. Add getter method to retrieve original translate data.
 1.6.1: Add ability for models to provide translated computed data, add option to disable locale prefix routing
 1.6.2: Implement localeUrl filter, add per-locale theme configuration support
+1.6.3: Add eager loading for translations, restore support for accessors & mutators

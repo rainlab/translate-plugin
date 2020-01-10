@@ -102,6 +102,29 @@ class TranslatableModelTest extends PluginTestCase
         $this->assertEquals(['a', 'b', 'c'], $obj->states);
     }
 
+    public function testGetTranslationValueEagerLoading()
+    {
+        $this->recycleSampleData();
+
+        $obj = CountryModel::first();
+        $obj->translateContext('fr');
+        $obj->name = 'Australie';
+        $obj->states = ['a', 'b', 'c'];
+        $obj->save();
+
+        $objList = CountryModel::with([
+          'translations'
+        ])->get();
+
+        $obj = $objList[0];
+        $this->assertEquals('Australia', $obj->name);
+        $this->assertEquals(['NSW', 'ACT', 'QLD'], $obj->states);
+
+        $obj->translateContext('fr');
+        $this->assertEquals('Australie', $obj->name);
+        $this->assertEquals(['a', 'b', 'c'], $obj->states);
+    }
+
     public function testTranslateWhere()
     {
         $this->recycleSampleData();
@@ -118,7 +141,6 @@ class TranslatableModelTest extends PluginTestCase
         $this->assertEquals(1, CountryModel::transWhere('name', 'Australie')->count());
 
         Translator::instance()->setLocale('en');
-
     }
 
     public function testTranslateOrderBy()
@@ -149,5 +171,4 @@ class TranslatableModelTest extends PluginTestCase
 
         Translator::instance()->setLocale('en');
     }
-
 }

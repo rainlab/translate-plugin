@@ -50,6 +50,10 @@ A message can also be translated for a choice usage.
 
     {{ 'There are no apples|There are :number applies!'|__(2, { number: 'two' }) }}
 
+Or you set a locale manually by passing a second argument.
+
+    {{ 'this is always english'|_({}, 'en') }}
+
 Themes can provide default values for these messages by defining a `translate` key in the `theme.yaml` file, located in the theme directory.
 
     name: My Theme
@@ -69,36 +73,35 @@ You may also define the translations in a separate file, where the path is relat
     # [...]
 
     translate: config/lang.yaml
-This is an example of **config/lang.yaml** file with two languages:
-```
-en:
-    site.name: 'My Website'
-    nav.home: 'Home'
-    nav.video: 'Video'
-    title.home: 'Welcome Home'
-hr:
-    site.name: 'Moje web stranice'
-    nav.home: 'Početna'
-    nav.video: 'Video'
-    title.home: 'Dobrodošli'
-```
 
-You may also define the translations in a separate file PER LOCALE, where the path is relative to the theme. The following definition will source the default messages from the file **config/lang-en.yaml** inside the theme for the english locale and from the file **config/lang-fr.yaml for the french locale.
+This is an example of **config/lang.yaml** file with two languages:
+
+    en:
+        site.name: 'My Website'
+        nav.home: 'Home'
+        nav.video: 'Video'
+        title.home: 'Welcome Home'
+    hr:
+        site.name: 'Moje web stranice'
+        nav.home: 'Početna'
+        nav.video: 'Video'
+        title.home: 'Dobrodošli'
+
+You may also define the translations in a separate file per locale, where the path is relative to the theme. The following definition will source the default messages from the file **config/lang-en.yaml** inside the theme for the english locale and from the file **config/lang-fr.yaml** for the french locale.
 
     name: My Theme
     # [...]
 
-    translate: 
+    translate:
 	en: config/lang-en.yaml
 	fr: config/lang-fr.yaml
 
 This is an example for the **config/lang-en.yaml** file:
-```
-site.name: 'My Website'
-nav.home: 'Home'
-nav.video: 'Video'
-title.home: 'Welcome Home'
-```
+
+    site.name: 'My Website'
+    nav.home: 'Home'
+    nav.video: 'Video'
+    title.home: 'Welcome Home'
 
 In order to make these default values reflected to your frontend site, go to **Settings -> Translate messages** in the backend and hit **Scan for messages**. They will also be loaded automatically when the theme is activated.
 
@@ -177,10 +180,10 @@ By default, untranslated attributes will fall back to the default locale. This b
 
 Translatable model attributes can also be declared as an index by passing the `$transatable` attribute value as an array. The first value is the attribute name, the other values represent options, in this case setting the option `index` to `true`.
 
-        public $translatable = [
-            'name',
-            ['slug', 'index' => true]
-        ];
+    public $translatable = [
+        'name',
+        ['slug', 'index' => true]
+    ];
 
 Once an attribute is indexed, you may use the `transWhere` method to apply a basic query to the model.
 
@@ -200,14 +203,12 @@ Pages in the CMS support translating the URL property. Assuming you have 3 langu
 
 There is a page with the following content:
 
-```
-url = "/contact"
+    url = "/contact"
 
-[viewBag]
-localeUrl[ru] = "/контакт"
-==
-<p>Page content</p>
-```
+    [viewBag]
+    localeUrl[ru] = "/контакт"
+    ==
+    <p>Page content</p>
 
 The word "Contact" in French is the same so a translated URL is not given, or needed. If the page has no URL override specified, then the default URL will be used. Pages will not be duplicated for a given language.
 
@@ -220,41 +221,35 @@ The word "Contact" in French is the same so a translated URL is not given, or ne
 
 It's possible to translate URL parameters by listening to the `translate.localePicker.translateParams` event, which is fired when switching languages.
 
-```php
-Event::listen('translate.localePicker.translateParams', function($page, $params, $oldLocale, $newLocale) {
-    if ($page->baseFileName == 'your-page-filename') {
-        return YourModel::translateParams($params, $oldLocale, $newLocale);
-    }
-});
-```
+    Event::listen('translate.localePicker.translateParams', function($page, $params, $oldLocale, $newLocale) {
+        if ($page->baseFileName == 'your-page-filename') {
+            return YourModel::translateParams($params, $oldLocale, $newLocale);
+        }
+    });
 
 In YourModel, one possible implementation might look like this:
 
-```php
-public static function translateParams($params, $oldLocale, $newLocale) {
-    $newParams = $params;
-    foreach ($params as $paramName => $paramValue) {
-        $records = self::transWhere($paramName, $paramValue, $oldLocale)->first();
-        if ($records) {
-            $records->translateContext($newLocale);
-            $newParams[$paramName] = $records->$paramName;
+    public static function translateParams($params, $oldLocale, $newLocale) {
+        $newParams = $params;
+        foreach ($params as $paramName => $paramValue) {
+            $records = self::transWhere($paramName, $paramValue, $oldLocale)->first();
+            if ($records) {
+                $records->translateContext($newLocale);
+                $newParams[$paramName] = $records->$paramName;
+            }
         }
+        return $newParams;
     }
-    return $newParams;
-}
-```
 
 ## Query string translation
 
 It's possible to translate query string parameters by listening to the `translate.localePicker.translateQuery` event, which is fired when switching languages.
 
-```php
-Event::listen('translate.localePicker.translateQuery', function($page, $params, $oldLocale, $newLocale) {
-    if ($page->baseFileName == 'your-page-filename') {
-        return YourModel::translateParams($params, $oldLocale, $newLocale);
-    }
-});
-```
+    Event::listen('translate.localePicker.translateQuery', function($page, $params, $oldLocale, $newLocale) {
+        if ($page->baseFileName == 'your-page-filename') {
+            return YourModel::translateParams($params, $oldLocale, $newLocale);
+        }
+    });
 
 For a possible implementation of the `YourModel::translateParams` method look at the example under `URL parameter translation` from above.
 
@@ -262,9 +257,7 @@ For a possible implementation of the `YourModel::translateParams` method look at
 
 It's possible to translate your settings model like any other model. To retrieve translated values use:
 
-```php
-Settings::instance()->getTranslateAttribute('your_attribute_name')
-```
+    Settings::instance()->getAttributeTranslated('your_attribute_name');
 
 ## Conditionally extending plugins
 
@@ -324,57 +317,51 @@ Since the Twig filter will not be available all the time, we can pipe them to th
 
 Users can switch between locales by clicking on the locale indicator on the right hand side of the Multi-language input. By holding the CMD / CTRL key all Multi-language Input fields will switch to the selected locale.
 
-## Integration without JQuery and October Framework files
+## Integration without jQuery and October Framework files
 
 It is possible to use the front-end language switcher without using jQuery or the OctoberCMS AJAX Framework by making the AJAX API request yourself manually. The following is an example of how to do that.
 
-```Javascript
-document.querySelector('#I18N_SELECT').addEventListener('change', function () {
-    const details = {
-        _session_key: document.querySelector('input[name="_session_key"]').value,
-        _token: document.querySelector('input[name="_token"]').value,
-        locale: this.value
-    }
-
-    let formBody = []
-
-    for (var property in details) {
-        let encodedKey = encodeURIComponent(property)
-
-        let encodedValue = encodeURIComponent(details[property])
-
-        formBody.push(encodedKey + '=' + encodedValue)
-    }
-
-    formBody = formBody.join('&')
-
-    fetch(location.href + '/', {
-        method: 'POST',
-        body: formBody,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'X-OCTOBER-REQUEST-HANDLER': 'onSwitchLocale',
-            'X-OCTOBER-REQUEST-PARTIALS': '',
-            'X-Requested-With': 'XMLHttpRequest'
+    document.querySelector('#languageSelect').addEventListener('change', function () {
+        const details = {
+            _session_key: document.querySelector('input[name="_session_key"]').value,
+            _token: document.querySelector('input[name="_token"]').value,
+            locale: this.value
         }
+
+        let formBody = []
+
+        for (var property in details) {
+            let encodedKey = encodeURIComponent(property)
+            let encodedValue = encodeURIComponent(details[property])
+            formBody.push(encodedKey + '=' + encodedValue)
+        }
+
+        formBody = formBody.join('&')
+
+        fetch(location.href + '/', {
+            method: 'POST',
+            body: formBody,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'X-OCTOBER-REQUEST-HANDLER': 'onSwitchLocale',
+                'X-OCTOBER-REQUEST-PARTIALS': '',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(res => res.json())
+        .then(res => window.location.replace(res.X_OCTOBER_REDIRECT))
+        .catch(err => console.log(err))
     })
-    .then(res => res.json())
-    .then(res => window.location.replace(res.X_OCTOBER_REDIRECT))
-    .catch(err => console.log(err))
-})
-```
 
 The HTML:
 
-``` html
-{{ form_open() }}
-<select id='I18N_SELECT'>
-    <option value="none" hidden></option>
-    {% for code, name in locales %}
-        {% if code != activeLocale %}
-            <option value="{{code}}" name="locale">{{code | upper }}</option>
-        {% endif %}
-    {% endfor %}
-</select>
-{{ form_close() }}
-```
+    {{ form_open() }}
+        <select id="languageSelect">
+            <option value="none" hidden></option>
+            {% for code, name in locales %}
+                {% if code != activeLocale %}
+                    <option value="{{code}}" name="locale">{{code | upper }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    {{ form_close() }}

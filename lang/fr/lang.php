@@ -10,6 +10,10 @@
         'component_name' => 'Sélection de la langue',
         'component_description' => 'Affiche un menu déroulant pour sélectionner la langue sur le site.',
     ],
+    'alternate_hreflang' => [
+        'component_name' => 'Éléments hrefLang alternatifs',
+        'component_description' => "Injecte les alternatives linguistiques pour la page en tant qu'éléments hreflang"
+    ],
     'locale' => [
         'title' => 'Gestion des langues',
         'update_title' => 'Mettre à jour la langue',
@@ -49,5 +53,7 @@
         'scan_messages_purge_confirm' => 'Êtes-vous sûr de vouloir supprimer tous les messages? Cela ne peut pas être annulé!',
         'hint_translate' => 'Vous pouvez traduire les messages affichés sur le site, les champs s\'enregistrent automatiquement.',
         'hide_translated' => 'Masquer les traductions',
+        'export_messages_link' => 'Exporter les messages',
+        'import_messages_link' => 'Importer les messages',
     ],
 ];
