@@ -7,6 +7,7 @@ use October\Rain\Database\Traits\Sluggable as BaseSluggable;
 trait Sluggable
 {
     use BaseSluggable {
+        BaseSluggable::bootSluggable as baseBootSluggable;
         BaseSluggable::getSluggableUniqueAttributeValue as baseGetSluggableUniqueAttributeValue;
         BaseSluggable::newSluggableQuery as baseNewSluggableQuery;
     }
@@ -33,21 +34,7 @@ trait Sluggable
      */
     public static function bootSluggable()
     {
-        if (!property_exists(get_called_class(), 'slugs')) {
-            throw new Exception(sprintf(
-                'You must define a $slugs property in %s to use the Sluggable trait.',
-                get_called_class()
-            ));
-        }
-
-        /*
-         * Set slugged attributes on new records and existing records if slug is missing.
-         */
-        static::extend(function ($model) {
-            $model->bindEvent('model.saveInternal', function () use ($model) {
-                $model->slugAttributes();
-            });
-        });
+        static::baseBootSluggable();
 
         static::extend(function ($model) {
             $model->bindEvent('model.translate.resolveComputedFields', function ($locale) use ($model) {
