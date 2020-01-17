@@ -64,7 +64,7 @@ class TranslatableModel extends TranslatableBehavior
         $query->leftJoin('rainlab_translate_indexes', function($join) use ($locale) {
             $join
                 ->on(Db::raw(DbDongle::cast($this->model->getQualifiedKeyName(), 'TEXT')), '=', 'rainlab_translate_indexes.model_id')
-                ->where('rainlab_translate_indexes.model_type', '=', get_class($this->model))
+                ->where('rainlab_translate_indexes.model_type', '=', $this->getClass())
                 ->where('rainlab_translate_indexes.locale', '=', $locale)
             ;
         });
@@ -137,7 +137,7 @@ class TranslatableModel extends TranslatableBehavior
         $obj = Db::table('rainlab_translate_attributes')
             ->where('locale', $locale)
             ->where('model_id', $this->model->getKey())
-            ->where('model_type', get_class($this->model));
+            ->where('model_type', $this->getClass());
 
         if ($obj->count() > 0) {
             $obj->update(['attribute_data' => $data]);
@@ -146,7 +146,7 @@ class TranslatableModel extends TranslatableBehavior
             Db::table('rainlab_translate_attributes')->insert([
                 'locale' => $locale,
                 'model_id' => $this->model->getKey(),
-                'model_type' => get_class($this->model),
+                'model_type' => $this->getClass(),
                 'attribute_data' => $data
             ]);
         }
@@ -176,7 +176,7 @@ class TranslatableModel extends TranslatableBehavior
             $obj = Db::table('rainlab_translate_indexes')
                 ->where('locale', $locale)
                 ->where('model_id', $this->model->getKey())
-                ->where('model_type', get_class($this->model))
+                ->where('model_type', $this->getClass())
                 ->where('item', $attribute);
 
             $recordExists = $obj->count() > 0;
@@ -195,7 +195,7 @@ class TranslatableModel extends TranslatableBehavior
                 Db::table('rainlab_translate_indexes')->insert([
                     'locale' => $locale,
                     'model_id' => $this->model->getKey(),
-                    'model_type' => get_class($this->model),
+                    'model_type' => $this->getClass(),
                     'item' => $attribute,
                     'value' => $value
                 ]);
@@ -225,5 +225,16 @@ class TranslatableModel extends TranslatableBehavior
         $result = $obj ? json_decode($obj->attribute_data, true) : [];
 
         return $this->translatableOriginals[$locale] = $this->translatableAttributes[$locale] = $result;
+    }
+
+    /**
+     * Returns the class name of the model. Takes any
+     * custom morphMap aliases into account.
+     *
+     * @return string
+     */
+    protected function getClass()
+    {
+        return $this->model->getMorphClass();
     }
 }
