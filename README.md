@@ -105,6 +105,14 @@ This is an example for the **config/lang-en.yaml** file:
 
 In order to make these default values reflected to your frontend site, go to **Settings -> Translate messages** in the backend and hit **Scan for messages**. They will also be loaded automatically when the theme is activated.
 
+The same operation can be performed with the `translate:scan` artisan command. It may be worth including it in a deployment script to automatically fetch updated messages:
+
+    php artisan translate:scan
+    
+Add the `--purge` option to clear old messages first:
+    
+    php artisan translate:scan --purge
+    
 ## Content translation
 
 This plugin activates a feature in the CMS that allows content files to use language suffixes, for example:
