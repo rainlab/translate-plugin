@@ -85,6 +85,7 @@ class Messages extends Controller
         $fromCode = post('locale_from', null);
         $toCode = post('locale_to', Locale::getDefault()->code);
         $this->hideTranslated = post('hide_translated', false);
+        $searchTerm = post('search');
 
         /*
          * Page vars
@@ -118,9 +119,10 @@ class Messages extends Controller
          */
         $dataSource = $widget->getDataSource();
 
-        $dataSource->bindEvent('data.getRecords', function($offset, $count) use ($selectedFrom, $selectedTo) {
+        $dataSource->bindEvent('data.getRecords', function($offset, $count) use ($selectedFrom, $selectedTo, $searchTerm) {
             $messages = $this->listMessagesForDatasource([
                 'offset' => $offset,
+                'search' => $searchTerm,
                 'count' => $count
             ]);
 
