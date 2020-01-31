@@ -1,6 +1,6 @@
 <?php namespace RainLab\Translate\Tests\Unit\Models;
 
-use PluginTestCase;
+use October\Core\Tests\PluginTestCase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\MessageExport;
 

@@ -1,7 +1,7 @@
 <?php namespace RainLab\Translate\Tests\Unit\Behaviors;
 
 use Schema;
-use PluginTestCase;
+use October\Core\Tests\PluginTestCase;
 use Model;
 use RainLab\Translate\Tests\Fixtures\Models\Country as CountryModel;
 use RainLab\Translate\Models\Locale as LocaleModel;
@@ -9,7 +9,7 @@ use October\Rain\Database\Relations\Relation;
 
 class TranslatableModelTest extends PluginTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
