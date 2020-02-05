@@ -64,3 +64,6 @@
 1.6.6:
     - Introduce migration to patch existing translations using morph map
     - migrate_morphed_attributes.php
+1.6.7:
+    - Introduce migration to patch existing indexes using morph map
+    - migrate_morphed_indexes.php
