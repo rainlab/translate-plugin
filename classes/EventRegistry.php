@@ -5,7 +5,7 @@ use File;
 use Cms\Classes\Page;
 use Cms\Classes\Content;
 use RainLab\Translate\Models\Message;
-use RainLab\Translate\Models\Locale as LocaleModel;
+use LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\ThemeScanner;
 use Exception;

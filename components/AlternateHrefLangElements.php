@@ -5,7 +5,7 @@ namespace Rainlab\Translate\Components;
 use Cms\Classes\ComponentBase;
 use Event;
 use RainLab\Translate\Classes\Translator;
-use RainLab\Translate\Models\Locale as LocaleModel;
+use LocaleModel;
 use October\Rain\Router\Router as RainRouter;
 
 class AlternateHrefLangElements extends ComponentBase

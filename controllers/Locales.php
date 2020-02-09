@@ -3,7 +3,7 @@
 use BackendMenu;
 use Backend\Classes\Controller;
 use System\Classes\SettingsManager;
-use RainLab\Translate\Models\Locale as LocaleModel;
+use LocaleModel;
 
 /**
  * Locales Back-end Controller
