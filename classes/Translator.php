@@ -5,7 +5,7 @@ use Schema;
 use Session;
 use Request;
 use Config;
-use RainLab\Translate\Models\Locale;
+use LocaleModel as Locale;
 
 /**
  * Translate class

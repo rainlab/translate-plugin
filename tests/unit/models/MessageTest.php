@@ -1,6 +1,6 @@
 <?php namespace RainLab\Translate\Tests\Unit\Models;
 
-use RainLab\Translate\Models\Locale;
+use LocaleModel as Locale;
 use RainLab\Translate\Models\Message;
 use PluginTestCase;
 use Model;

@@ -1,7 +1,7 @@
 <?php namespace RainLab\Translate\Traits;
 
 use Str;
-use RainLab\Translate\Models\Locale;
+use LocaleModel as Locale;
 use Backend\Classes\FormWidgetBase;
 use October\Rain\Html\Helper as HtmlHelper;
 

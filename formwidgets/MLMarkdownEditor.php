@@ -1,7 +1,7 @@
 <?php namespace RainLab\Translate\FormWidgets;
 
 use Backend\FormWidgets\MarkdownEditor;
-use RainLab\Translate\Models\Locale;
+use LocaleModel as Locale;
 
 /**
  * ML Markdown Editor

@@ -1,7 +1,7 @@
 <?php namespace RainLab\Translate\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
-use RainLab\Translate\Models\Locale;
+use LocaleModel as Locale;
 
 /**
  * ML Text

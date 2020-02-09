@@ -1,5 +1,7 @@
 <?php namespace RainLab\Translate;
 
+use App;
+use Illuminate\Foundation\AliasLoader;
 use Lang;
 use Event;
 use Backend;
@@ -33,6 +35,13 @@ class Plugin extends PluginBase
 
     public function register()
     {
+        $aliasLoader = AliasLoader::getInstance();
+        $aliasLoader->alias('LocaleModel', 'RainLab\Translate\Facades\Locale');
+
+        App::singleton('locale.class', function () {
+            return new Models\Locale();
+        });
+
         /*
          * Defer event with low priority to let others contribute before this registers.
          */

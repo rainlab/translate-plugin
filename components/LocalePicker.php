@@ -4,7 +4,7 @@ use Event;
 use Config;
 use Request;
 use Redirect;
-use RainLab\Translate\Models\Locale as LocaleModel;
+use LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use October\Rain\Router\Router as RainRouter;
 use Cms\Classes\ComponentBase;

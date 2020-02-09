@@ -1,7 +1,7 @@
 <?php namespace RainLab\Translate\FormWidgets;
 
 use Backend\FormWidgets\MediaFinder;
-use RainLab\Translate\Models\Locale;
+use LocaleModel as Locale;
 use System\Classes\MediaLibrary;
 
 /**

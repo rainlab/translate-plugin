@@ -1,7 +1,7 @@
 <?php namespace RainLab\Translate\Updates;
 
 use October\Rain\Database\Updates\Seeder;
-use RainLab\Translate\Models\Locale;
+use LocaleModel as Locale;
 
 class SeedAllTables extends Seeder
 {

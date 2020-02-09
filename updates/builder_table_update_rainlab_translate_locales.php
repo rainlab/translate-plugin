@@ -1,6 +1,6 @@
 <?php namespace RainLab\Translate\Updates;
 
-use RainLab\Translate\Models\Locale;
+use LocaleModel as Locale;
 use Schema;
 use October\Rain\Database\Updates\Migration;
 

@@ -1,7 +1,7 @@
 <?php namespace RainLab\Translate\FormWidgets;
 
 use Backend\FormWidgets\Repeater;
-use RainLab\Translate\Models\Locale;
+use LocaleModel as Locale;
 use October\Rain\Html\Helper as HtmlHelper;
 use ApplicationException;
 use Request;
