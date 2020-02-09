@@ -195,7 +195,7 @@ class Locale extends Model
      */
     public static function isValid($locale)
     {
-        $languages = array_keys(Locale::listEnabled());
+        $languages = array_keys(static::listEnabled());
 
         return in_array($locale, $languages);
     }
