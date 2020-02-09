@@ -17,6 +17,8 @@ use RainLab\Translate\Classes\Translator;
  */
 class Plugin extends PluginBase
 {
+    public $elevated = true;
+
     /**
      * Returns information about this plugin.
      *
@@ -36,10 +38,10 @@ class Plugin extends PluginBase
     public function register()
     {
         $aliasLoader = AliasLoader::getInstance();
-        $aliasLoader->alias('LocaleModel', 'RainLab\Translate\Facades\Locale');
+        $aliasLoader->alias('LocaleModel', '\RainLab\Translate\Facades\Locale');
 
         App::singleton('locale.class', function () {
-            return new Models\Locale();
+            return new \Rainlab\Translate\Models\Locale;
         });
 
         /*
