@@ -41,7 +41,7 @@ class Plugin extends PluginBase
         $aliasLoader->alias('LocaleModel', '\RainLab\Translate\Facades\Locale');
 
         App::singleton('locale.class', function () {
-            return new \Rainlab\Translate\Models\Locale;
+            return new \RainLab\Translate\Models\Locale;
         });
 
         /*
