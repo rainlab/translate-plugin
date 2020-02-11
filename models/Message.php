@@ -205,7 +205,7 @@ class Message extends Model
         $msg = static::get($messageId, $locale);
 
         $params = array_build($params, function($key, $value){
-            return [':'.$key, $value];
+            return [':'.$key, e($value)];
         });
 
         $msg = strtr($msg, $params);
