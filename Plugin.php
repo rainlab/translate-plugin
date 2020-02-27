@@ -76,8 +76,8 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
 
-            // For some reason translatable property may appear in model's attributes
-            // and this is undesired behavior. If it happens we need to unset the attribute to prevent
+            // For some reason `translatable` property may appear in model's attributes
+            // and this is an undesired behavior. If it happens we need to unset the attribute to prevent
             // 'Unexpected type of array when attempting to save attribute "translatable"' exception
             $model->bindEvent('model.saveInternal', static function() use ($model) {
                 if (isset($model->attributes['translatable']) && is_array($model->attributes['translatable'])) {
