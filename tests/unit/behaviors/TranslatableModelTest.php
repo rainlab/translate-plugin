@@ -6,6 +6,7 @@ use Model;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Tests\Fixtures\Models\Country as CountryModel;
 use RainLab\Translate\Models\Locale as LocaleModel;
+use October\Rain\Database\Relations\Relation;
 
 class TranslatableModelTest extends PluginTestCase
 {
@@ -170,5 +171,32 @@ class TranslatableModelTest extends PluginTestCase
         $this->assertEquals(['Allemagne', 'Australie'], $res->toArray());
 
         Translator::instance()->setLocale('en');
+    }
+  
+    public function testGetTranslationValueEagerLoadingWithMorphMap()
+    {
+        Relation::morphMap([
+            'morph.key' => CountryModel::class,
+        ]);
+
+        $this->recycleSampleData();
+
+        $obj = CountryModel::first();
+        $obj->translateContext('fr');
+        $obj->name = 'Australie';
+        $obj->states = ['a', 'b', 'c'];
+        $obj->save();
+
+        $objList = CountryModel::with([
+          'translations'
+        ])->get();
+
+        $obj = $objList[0];
+        $this->assertEquals('Australia', $obj->name);
+        $this->assertEquals(['NSW', 'ACT', 'QLD'], $obj->states);
+
+        $obj->translateContext('fr');
+        $this->assertEquals('Australie', $obj->name);
+        $this->assertEquals(['a', 'b', 'c'], $obj->states);
     }
 }

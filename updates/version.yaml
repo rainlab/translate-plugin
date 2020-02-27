@@ -59,3 +59,11 @@
 1.6.1: Add ability for models to provide translated computed data, add option to disable locale prefix routing
 1.6.2: Implement localeUrl filter, add per-locale theme configuration support
 1.6.3: Add eager loading for translations, restore support for accessors & mutators
+1.6.4: Fixes PHP 7.4 compatibility
+1.6.5: Fixes compatibility issue when other plugins use a custom model morph map
+1.6.6:
+    - Introduce migration to patch existing translations using morph map
+    - migrate_morphed_attributes.php
+1.6.7:
+    - Introduce migration to patch existing indexes using morph map
+    - migrate_morphed_indexes.php

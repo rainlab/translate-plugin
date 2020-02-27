@@ -63,6 +63,11 @@ class Plugin extends PluginBase
             $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
             $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
         });
+
+        /*
+         * Register console commands
+         */
+        $this->registerConsoleCommand('translate.scan', 'Rainlab\Translate\Console\ScanCommand');
     }
 
     public function boot()
