@@ -69,14 +69,23 @@ class Plugin extends PluginBase
         /*
          * Add translation support to theme settings
          */
-        ThemeData::extend(function ($model) {
+        ThemeData::extend(static function ($model) {
             $model->extendClassWith(TranslatableModel::class);
 
             if (!$model->propertyExists('translatable')) {
                 $model->addDynamicProperty('translatable', []);
             }
 
-            $model->bindEvent('model.afterFetch', function() use ($model) {
+            // For some reason translatable property may appear in model's attributes
+            // and this is undesired behavior. If it happens we need to unset the attribute to prevent
+            // 'Unexpected type of array when attempting to save attribute "translatable"' exception
+            $model->bindEvent('model.saveInternal', static function() use ($model) {
+                if (isset($model->attributes['translatable']) && is_array($model->attributes['translatable'])) {
+                    unset($model->attributes['translatable']);
+                }
+            });
+
+            $model->bindEvent('model.afterFetch', static function() use ($model) {
                 foreach ($model->getFormFields() as $id => $field) {
                     if (!empty($field['translatable'])) {
                         $model->translatable[] = $id;
