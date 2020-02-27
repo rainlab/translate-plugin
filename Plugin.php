@@ -5,10 +5,12 @@ use Event;
 use Backend;
 use Cms\Classes\Page;
 use System\Models\File;
+use Cms\Models\ThemeData;
 use System\Classes\PluginBase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\EventRegistry;
 use RainLab\Translate\Classes\Translator;
+use RainLab\Translate\Behaviors\TranslatableModel;
 
 /**
  * Translate Plugin Information File
@@ -62,6 +64,25 @@ class Plugin extends PluginBase
             $model->translatable = array_merge($model->translatable, ['title', 'description']);
             $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
             $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+        });
+
+        /*
+         * Add translation support to theme settings
+         */
+        ThemeData::extend(function ($model) {
+            $model->extendClassWith(TranslatableModel::class);
+
+            if (!$model->propertyExists('translatable')) {
+                $model->addDynamicProperty('translatable', []);
+            }
+
+            $model->bindEvent('model.afterFetch', function() use ($model) {
+                foreach ($model->getFormFields() as $id => $field) {
+                    if (!empty($field['translatable'])) {
+                        $model->translatable[] = $id;
+                    }
+                }
+            });
         });
 
         /*
