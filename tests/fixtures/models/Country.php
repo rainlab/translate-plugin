@@ -9,7 +9,7 @@ class Country extends Model
 {
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
 
-    public $translatable = ['name', 'states'];
+    public $translatable = [['name', 'index' => true], 'states'];
 
     /**
      * @var string The database table used by the model.
