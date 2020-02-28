@@ -67,3 +67,4 @@
 1.6.7:
     - Introduce migration to patch existing indexes using morph map
     - migrate_morphed_indexes.php
+1.6.8: Add support for transOrderBy; Add translatoin support for ThemeData; Update russian localization.
