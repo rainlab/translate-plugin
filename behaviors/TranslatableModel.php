@@ -33,7 +33,7 @@ class TranslatableModel extends TranslatableBehavior
 
     /**
      * Applies a translatable index to a basic query. This scope will join the index
-     * table and cannot be executed more than once.
+     * table and can be executed neither more than once, nor with scopeTransOrder.
      * @param  Builder $query
      * @param  string $index
      * @param  string $value
@@ -42,10 +42,6 @@ class TranslatableModel extends TranslatableBehavior
      */
     public function scopeTransWhere($query, $index, $value, $locale = null, $operator = '=')
     {
-        if (!$locale) {
-            $locale = $this->translatableContext;
-        }
-
         $query->select($this->model->getTable().'.*');
 
         $query->where(function($q) use ($index, $value, $operator) {
@@ -57,6 +53,47 @@ class TranslatableModel extends TranslatableBehavior
                 ;
             });
         });
+
+        $this->joinTranslateIndexesTable($query, $locale);
+
+        return $query;
+    }
+
+    /**
+     * Applies a sort operation with a translatable index to a basic query. This scope will join the index
+     * table and can be executed neither more than once, nor with scopeTransWhere.
+     * @param  Builder $query
+     * @param  string $index
+     * @param  string $direction
+     * @param  string $locale
+     * @return Builder
+     */
+    public function scopeTransOrderBy($query, $index, $direction = 'asc', $locale = null)
+    {
+        $query->select(
+            $this->model->getTable().'.*',
+            Db::raw('COALESCE(rainlab_translate_indexes.value, '. $this->model->getTable() .'.'.$index.') AS translate_sorting_key')
+        );
+
+        $query->orderBy('translate_sorting_key', $direction);
+
+        $this->joinTranslateIndexesTable($query, $locale);
+
+        return $query;
+    }
+
+    /**
+     * Joins the translatable indexes table to a query.
+     * This cannot be executed more than once.
+     * @param  Builder $query
+     * @param  string $locale
+     * @return Builder
+     */
+    protected function joinTranslateIndexesTable($query, $locale = null)
+    {
+        if (!$locale) {
+            $locale = $this->translatableContext;
+        }
 
         // This join will crap out if this scope executes twice, it is a known issue.
         // It should check if the join exists before applying it, this mechanism was
