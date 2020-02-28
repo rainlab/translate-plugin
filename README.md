@@ -172,6 +172,19 @@ There are ways to get and set attributes without changing the context.
 
     // Sets a single translated attribute for a language
     $user->setAttributeTranslated('name', 'Jean-Claude', 'fr');
+    
+## Theme data translation
+
+It is also possible to translate theme customisation options. Just mark your form fields with `translatable` property and the plugin will take care about everything else:
+
+    tabs:
+      fields:
+        website_name:
+          tab: Info
+          label: Website Name
+          type: text
+          default: Your website name
+          translatable: true    
 
 ## Fallback attribute values
 
