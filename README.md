@@ -46,6 +46,10 @@ Message or string translation is the conversion of adhoc strings used throughout
 
     {{ 'Hello :name!'|_({ name: 'Friend' }) }}
 
+Translated content is escaped. If you want to use HTML content in your translated string, you can use the `raw` filter.
+
+    {{ 'Title: :title', _({title: "E = MC<sup>2</sup>"})|raw }}
+
 A message can also be translated for a choice usage.
 
     {{ 'There are no apples|There are :number applies!'|__(2, { number: 'two' }) }}
