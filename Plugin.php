@@ -133,7 +133,7 @@ class Plugin extends PluginBase
 
                         // Clear the RainLab.Pages caches for each dirty locale
                         App::setLocale($locale);
-                        \RainLab\Pages\Classes\Page::clearCache($theme);
+                        \RainLab\Pages\Classes\Page::clearMenuCache($theme);
                         \RainLab\Pages\Classes\SnippetManager::clearCache($theme);
                     }
 
