@@ -9,6 +9,7 @@ use Cms\Classes\Theme;
 use System\Models\File;
 use Cms\Models\ThemeData;
 use System\Classes\PluginBase;
+use System\Classes\CombineAssets;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\EventRegistry;
 use RainLab\Translate\Classes\Translator;
@@ -91,6 +92,8 @@ class Plugin extends PluginBase
          * Register console commands
          */
         $this->registerConsoleCommand('translate.scan', 'Rainlab\Translate\Console\ScanCommand');
+
+        $this->registerAssetBundles();
     }
 
     public function boot()
@@ -250,6 +253,14 @@ class Plugin extends PluginBase
             'RainLab\Translate\FormWidgets\MLRepeater' => 'mlrepeater',
             'RainLab\Translate\FormWidgets\MLMediaFinder' => 'mlmediafinder',
         ];
+    }
+
+    protected function registerAssetBundles()
+    {
+        CombineAssets::registerCallback(function ($combiner) {
+            $combiner->registerBundle('$/rainlab/translate/assets/less/messages.less');
+            $combiner->registerBundle('$/rainlab/translate/assets/less/multilingual.less');
+        });
     }
 
     public function localeUrl($url, $locale)
