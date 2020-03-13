@@ -24,6 +24,9 @@
     }
 
     &.field-multilingual-text {
+        input.form-control {
+            padding-right:44px
+        }
         .ml-btn {
             right: 4px;
             top: 50%;
@@ -110,7 +113,10 @@
             }
         }
     }
-    .field-multilingual input.form-control {
-        padding-right:44px
+}
+
+.help-block.before-field + .field-multilingual.field-multilingual-textarea {
+    .ml-btn {
+        top:-41px;
     }
 }

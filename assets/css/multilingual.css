@@ -1,6 +1,7 @@
 .field-multilingual {position:relative}
 .field-multilingual .ml-btn {background:transparent;position:absolute;color:#7b7b7b;text-transform:uppercase;font-size:11px;letter-spacing:1px;width:44px;padding-right:0;-webkit-box-shadow:none;box-shadow:none;text-shadow:none;z-index:2}
 .field-multilingual .ml-btn:hover {color:#555}
+.field-multilingual.field-multilingual-text input.form-control {padding-right:44px}
 .field-multilingual.field-multilingual-text .ml-btn {right:4px;top:50%;margin-top:-44px;height:88px}
 .field-multilingual.field-multilingual-textarea .ml-btn {right:11px;top:-29px;text-align:right}
 .field-multilingual.field-multilingual-textarea .ml-dropdown-menu {top:1px;right:1px}
@@ -15,4 +16,4 @@
 .field-multilingual.field-multilingual-repeater.is-empty .ml-dropdown-menu {top:15px;right:-7px}
 .fancy-layout .form-tabless-fields .field-multilingual .ml-btn {color:rgba(255,255,255,0.8)}
 .fancy-layout .form-tabless-fields .field-multilingual .ml-btn:hover {color:#fff}
-.fancy-layout .field-multilingual input.form-control {padding-right:44px}
+.help-block.before-field + .field-multilingual.field-multilingual-textarea .ml-btn {top:-41px}
