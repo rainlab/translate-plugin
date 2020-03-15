@@ -68,3 +68,4 @@
     - Introduce migration to patch existing indexes using morph map
     - migrate_morphed_indexes.php
 1.6.8: Add support for transOrderBy; Add translatoin support for ThemeData; Update russian localization.
+1.6.9: Clear Static Page menu cache after saving the model; CSS fix for Text/Textarea input fields language selector.
