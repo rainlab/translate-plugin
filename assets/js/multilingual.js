@@ -28,9 +28,21 @@
         this.$dropdown     = $('ul.ml-dropdown-menu', this.$el)
         this.$placeholder  = $(this.options.placeholderField)
 
-        this.$dropdown.on('click', '[data-switch-locale]', function(event){
+        /*
+         * Init locale
+         */
+        this.activeLocale = this.options.defaultLocale
+        this.$activeField = this.getLocaleElement(this.activeLocale)
+        this.$activeButton.text(this.activeLocale)
+
+        this.$dropdown.on('click', '[data-switch-locale]', this.$activeButton, function(event){
+            var currentLocale = event.data.text();
             var selectedLocale = $(this).data('switch-locale')
-            self.setLocale(selectedLocale)
+
+            // only call setLocale() if locale has changed
+            if (selectedLocale != currentLocale) {
+                self.setLocale(selectedLocale)
+            }
 
             /*
              * If Ctrl/Cmd key is pressed, find other instances and switch
@@ -44,13 +56,6 @@
         this.$placeholder.on('input', function(){
             self.$activeField.val(this.value)
         })
-
-        /*
-         * Init locale
-         */
-        this.activeLocale = this.options.defaultLocale
-        this.$activeField = this.getLocaleElement(this.activeLocale)
-        this.$activeButton.text(this.activeLocale)
 
         /*
          * Handle oc.inputPreset.beforeUpdate event
