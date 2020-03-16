@@ -154,7 +154,7 @@ trait MLControl
         if ($this->model->methodExists($mutateMethod)) {
             $value = $this->model->$mutateMethod($locale);
         }
-        elseif ($this->model->methodExists('getAttributeTranslated')) {
+        elseif ($this->model->methodExists('getAttributeTranslated') && $this->defaultLocale->code != $locale) {
             $value = $this->model->noFallbackLocale()->getAttributeTranslated($key, $locale);
         }
         else {
