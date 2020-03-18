@@ -206,7 +206,27 @@ class Message extends Model
         $msg = static::get($messageId, $locale);
 
         $params = array_build($params, function($key, $value){
-            return [':'.$key, Html::clean($value)];
+            return [':'.$key, e($value)];
+        });
+
+        $msg = strtr($msg, $params);
+
+        return $msg;
+    }
+
+    /**
+     * Looks up and translates a message by its string WITHOUT escaping params.
+     * @param  string $messageId
+     * @param  array  $params
+     * @param  string $locale
+     * @return string
+     */
+    public static function transRaw($messageId, $params = [], $locale = null)
+    {
+        $msg = static::get($messageId, $locale);
+
+        $params = array_build($params, function($key, $value){
+            return [':'.$key, $value];
         });
 
         $msg = strtr($msg, $params);
