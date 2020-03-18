@@ -5,7 +5,6 @@ use Lang;
 use Model;
 use Cache;
 use Config;
-use Html;
 
 /**
  * Message Model
