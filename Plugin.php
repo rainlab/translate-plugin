@@ -238,6 +238,8 @@ class Plugin extends PluginBase
             'filters' => [
                 '_'  => [$this, 'translateString'],
                 '__' => [$this, 'translatePlural'],
+                'transRaw'  => [$this, 'translateRawString'],
+                'transRawPlural' => [$this, 'translateRawPlural'],
                 'localeUrl' => [$this, 'localeUrl'],
             ]
         ];
@@ -281,5 +283,15 @@ class Plugin extends PluginBase
     public function translatePlural($string, $count = 0, $params = [], $locale = null)
     {
         return Lang::choice(Message::trans($string, $params, $locale), $count, $params);
+    }
+
+    public function translateRawString($string, $params = [], $locale = null)
+    {
+        return Message::transRaw($string, $params, $locale);
+    }
+
+    public function translateRawPlural($string, $count = 0, $params = [], $locale = null)
+    {
+        return Lang::choice(Message::transRaw($string, $params, $locale), $count, $params);
     }
 }
