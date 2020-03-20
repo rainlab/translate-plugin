@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Models;
 
+use Event;
 use Str;
 use Lang;
 use Model;
@@ -282,6 +283,10 @@ class Message extends Model
      */
     protected static function makeMessageCode($messageId)
     {
+        if ($result = Event::fire('rainlab.translate.messageCode', [$messageId], true)) {
+            return $result;
+        }
+
         $separator = '.';
 
         // Convert all dashes/underscores into separator
