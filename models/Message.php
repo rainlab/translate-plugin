@@ -183,12 +183,15 @@ class Message extends Model
 
             // Do not overwrite existing translations
             if (isset($messageData[$locale])) {
+                $item->found = 1;
+                $item->save();
                 continue;
             }
 
             $messageData[$locale] = $message;
 
             $item->message_data = $messageData;
+            $item->found = 1;
             $item->save();
         }
     }
