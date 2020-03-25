@@ -10,7 +10,7 @@
             <p>
                 <?= e(trans('rainlab.translate::lang.messages.scan_messages_process')) ?>
                 <?= e(trans('rainlab.translate::lang.messages.scan_messages_process_limitations')) ?>
-                
+
             </p>
 
             <div class="form-preview">
@@ -27,6 +27,20 @@
                         </label>
                         <p class="help-block">
                             <?= e(trans('rainlab.translate::lang.messages.scan_messages_purge_help')) ?>
+                        </p>
+                    </div>
+
+                    <div class="checkbox custom-checkbox">
+                        <input
+                            type="checkbox"
+                            name="purge_deleted_messages"
+                            value="1"
+                            id="purgeDeletedMessages">
+                        <label for="purgeDeletedMessages">
+                            <?= e(trans('rainlab.translate::lang.messages.scan_messages_purge_deleted_label')) ?>
+                        </label>
+                        <p class="help-block">
+                            <?= e(trans('rainlab.translate::lang.messages.scan_messages_purge_deleted_help')) ?>
                         </p>
                     </div>
                 </div>
