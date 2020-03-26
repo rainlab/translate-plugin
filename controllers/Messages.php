@@ -74,6 +74,10 @@ class Messages extends Controller
         }
 
         ThemeScanner::scan();
+        
+        if (post('purge_deleted_messages', false)) {
+            Message::where('found', 0)->delete();
+        }
 
         Flash::success(Lang::get('rainlab.translate::lang.messages.scan_messages_success'));
 
