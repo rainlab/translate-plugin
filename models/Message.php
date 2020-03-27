@@ -86,8 +86,8 @@ class Message extends Model
         if (!$message) {
             unset($data[$locale]);
         }
-
         $this->message_data = $data;
+
         $this->save();
     }
 
@@ -126,6 +126,7 @@ class Message extends Model
         if (!$item->exists) {
             $data = [static::DEFAULT_LOCALE => $messageId];
             $item->message_data = $item->message_data ?: $data;
+
             $item->save();
         }
 
@@ -162,6 +163,8 @@ class Message extends Model
             $locale = static::DEFAULT_LOCALE;
         }
 
+        $existingIds = [];
+
         foreach ($messages as $code => $message) {
             // Ignore empties
             if (!strlen(trim($message))) {
@@ -171,7 +174,7 @@ class Message extends Model
             $code = self::makeMessageCode($code);
 
             $item = static::firstOrNew([
-                'code' => $code
+                'code' => $code,
             ]);
 
             // Do not import non-default messages that do not exist
@@ -183,8 +186,7 @@ class Message extends Model
 
             // Do not overwrite existing translations
             if (isset($messageData[$locale])) {
-                $item->found = 1;
-                $item->save();
+                $existingIds[] = $item->id;
                 continue;
             }
 
@@ -192,8 +194,11 @@ class Message extends Model
 
             $item->message_data = $messageData;
             $item->found = 1;
+
             $item->save();
         }
+
+        self::whereIn('id', $existingIds)->update(['found' => 1]);
     }
 
     /**
@@ -204,26 +209,6 @@ class Message extends Model
      * @return string
      */
     public static function trans($messageId, $params = [], $locale = null)
-    {
-        $msg = static::get($messageId, $locale);
-
-        $params = array_build($params, function($key, $value){
-            return [':'.$key, e($value)];
-        });
-
-        $msg = strtr($msg, $params);
-
-        return $msg;
-    }
-
-    /**
-     * Looks up and translates a message by its string WITHOUT escaping params.
-     * @param  string $messageId
-     * @param  array  $params
-     * @param  string $locale
-     * @return string
-     */
-    public static function transRaw($messageId, $params = [], $locale = null)
     {
         $msg = static::get($messageId, $locale);
 
