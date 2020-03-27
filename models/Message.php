@@ -281,6 +281,6 @@ class Message extends Model
      */
     public static function makeMessageCode($messageId)
     {
-        return md5(trim($messageId));
+        return md5(trim(mb_strtolower($messageId)));
     }
 }
