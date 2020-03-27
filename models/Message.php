@@ -1,6 +1,5 @@
 <?php namespace RainLab\Translate\Models;
 
-use Str;
 use Lang;
 use Model;
 use Cache;
