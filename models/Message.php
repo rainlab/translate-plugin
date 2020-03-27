@@ -104,7 +104,7 @@ class Message extends Model
             return $messageId;
         }
 
-        $messageCode = self::makeMessageCode($messageId);
+        $messageCode = self::makeMd5MessageCode($messageId);
 
         /*
          * Found in cache
@@ -168,7 +168,7 @@ class Message extends Model
                 continue;
             }
 
-            $code = self::makeMessageCode($code);
+            $code = self::makeMd5MessageCode($code);
 
             $item = static::firstOrNew([
                 'code' => $code
@@ -280,7 +280,7 @@ class Message extends Model
      * @param  string $messageId
      * @return string
      */
-    protected static function makeMessageCode($messageId)
+    public static function makeMessageCode($messageId)
     {
         $separator = '.';
 
@@ -294,5 +294,15 @@ class Message extends Model
         $messageId = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $messageId);
 
         return Str::limit(trim($messageId, $separator), 250);
+    }
+
+    /**
+     * Creates an md5 representation of the message Id
+     * @param  string $messageId
+     * @return string
+     */
+    public static function makeMd5MessageCode($messageId)
+    {
+        return md5(trim($messageId));
     }
 }
