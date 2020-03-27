@@ -36,7 +36,7 @@ class MessageTest extends PluginTestCase
         $this->assertEquals(32, strlen(Message::makeMessageCode($veryLongString)));
 
         // unicode characters
-        $this->assertEquals(Message::makeMessageCode('foo'), Message::makeMessageCode('foo　')); // ideographic space (U+3000)
-        $this->assertNotEquals(Message::makeMessageCode('ete', Message::makeMessageCode('été'));
+        $this->assertNotEquals(Message::makeMessageCode('foo'), Message::makeMessageCode('foo　')); // ideographic space (U+3000)
+        $this->assertNotEquals(Message::makeMessageCode('ete'), Message::makeMessageCode('été'));
     }
 }
