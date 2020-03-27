@@ -104,7 +104,7 @@ class Message extends Model
             return $messageId;
         }
 
-        $messageCode = self::makeMd5MessageCode($messageId);
+        $messageCode = self::makeMessageCode($messageId);
 
         /*
          * Found in cache
@@ -168,7 +168,7 @@ class Message extends Model
                 continue;
             }
 
-            $code = self::makeMd5MessageCode($code);
+            $code = self::makeMessageCode($code);
 
             $item = static::firstOrNew([
                 'code' => $code
@@ -276,32 +276,11 @@ class Message extends Model
     }
 
     /**
-     * Creates a sterile key for a message.
-     * @param  string $messageId
-     * @return string
-     */
-    public static function makeMessageCode($messageId)
-    {
-        $separator = '.';
-
-        // Convert all dashes/underscores into separator
-        $messageId = preg_replace('!['.preg_quote('_').'|'.preg_quote('-').']+!u', $separator, $messageId);
-
-        // Remove all characters that are not the separator, letters, numbers, or whitespace.
-        $messageId = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', mb_strtolower($messageId));
-
-        // Replace all separator characters and whitespace by a single separator
-        $messageId = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $messageId);
-
-        return Str::limit(trim($messageId, $separator), 250);
-    }
-
-    /**
      * Creates an md5 representation of the message Id
      * @param  string $messageId
      * @return string
      */
-    public static function makeMd5MessageCode($messageId)
+    public static function makeMessageCode($messageId)
     {
         return md5(trim($messageId));
     }
