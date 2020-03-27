@@ -33,19 +33,13 @@ class ThemeScanner
      */
     public function scanForMessages()
     {
-        $this->setMessagesAsNotFound();
+        // Set all messages initially as being not found. The scanner later
+        // sets the entries it finds as found.
+        Message::query()->update(['found' => false]);
+
         $this->scanThemeConfigForMessages();
         $this->scanThemeTemplatesForMessages();
         $this->scanMailTemplatesForMessages();
-    }
-
-    /**
-     * Sets all current messages as not found
-     * @return void
-     */
-    public function setMessagesAsNotFound()
-    {
-        Message::query()->update(['found' => 0]);
     }
 
     /**
