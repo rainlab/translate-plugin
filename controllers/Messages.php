@@ -202,7 +202,8 @@ class Messages extends Controller
                 'id' => $message->id,
                 'code' => $message->code,
                 'from' => $message->forLocale($fromCode),
-                'to' => $toContent
+                'to' => $toContent,
+                'found' => $message->found ? '' : Lang::get('rainlab.translate::lang.messages.not_found'),
             ];
         }
 
