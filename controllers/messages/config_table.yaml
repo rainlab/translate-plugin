@@ -13,3 +13,6 @@ columns:
         title: From
     to:
         title: To
+    found:
+        title: Found
+        width: 100px
