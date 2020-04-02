@@ -57,8 +57,8 @@
         'hide_translated' => 'Hide translated',
         'export_messages_link' => 'Export Messages',
         'import_messages_link' => 'Import Messages',
-        'found' => 'Found',
         'not_found' => 'Not found',
-        'found_help' => 'Whether the message was found by the scanner. If empty, that means it was found. If it was not found, this could mean the message was modified or removed.',
+        'found_help' => 'Whether any errors occurred during scanning.',
+        'found_title' => 'Scan errors',
     ],
 ];
