@@ -73,3 +73,7 @@
     - Add option to purge deleted messages when scanning messages
     - Add Scan error column on Messages page
     - update_messages_table.php
+    - Fix translations that were lost when clicking locale twice while holding ctrl key
+    - Fix error with nested fields default locale value
+    - Escape Message translate params value
+    
