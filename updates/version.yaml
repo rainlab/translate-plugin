@@ -76,4 +76,7 @@
     - Fix translations that were lost when clicking locale twice while holding ctrl key
     - Fix error with nested fields default locale value
     - Escape Message translate params value
-    
+ 1.7.0:
+    - !!! Breaking change for the Message::trans() method (params are now escaped)
+    - fix message translation documentation
+    - fix string translation key for scan errors column header
