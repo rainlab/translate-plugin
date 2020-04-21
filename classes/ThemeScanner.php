@@ -25,8 +25,19 @@ class ThemeScanner
     {
         $obj = new static;
 
-        Event::fire('translate.themeScanner.beforeScan', [$obj]);
         $obj->scanForMessages();
+
+        /**
+         * @event translate.themeScanner.afterScan
+         * Fires after theme scanning.
+         *
+         * Example usage:
+         *
+         *     Event::listen('translate.themeScanner.afterScan', function (ThemeScanner $scanner) {
+         *         // added an extra scan. Add generation files...
+         *     });
+         *
+         */
         Event::fire('translate.themeScanner.afterScan', [$obj]);
     }
 
