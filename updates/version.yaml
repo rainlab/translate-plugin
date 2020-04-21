@@ -80,3 +80,5 @@
     - !!! Breaking change for the Message::trans() method (params are now escaped)
     - fix message translation documentation
     - fix string translation key for scan errors column header
+1.7.1:
+    - Fix YAML issue with previous tag/release.
