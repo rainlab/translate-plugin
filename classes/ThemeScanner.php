@@ -28,12 +28,12 @@ class ThemeScanner
         $obj->scanForMessages();
 
         /**
-         * @event translate.themeScanner.afterScan
+         * @event rainlab.translate.themeScanner.afterScan
          * Fires after theme scanning.
          *
          * Example usage:
          *
-         *     Event::listen('translate.themeScanner.afterScan', function (ThemeScanner $scanner) {
+         *     Event::listen('rainlab.translate.themeScanner.afterScan', function (ThemeScanner $scanner) {
          *         // added an extra scan. Add generation files...
          *     });
          *
