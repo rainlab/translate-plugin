@@ -25,7 +25,7 @@ class ThemeScanner
     {
         $obj = new static;
 
-        $obj->scanForMessages();
+        $result = $obj->scanForMessages();
 
         /**
          * @event translate.themeScanner.afterScan
@@ -38,7 +38,9 @@ class ThemeScanner
          *     });
          *
          */
-        Event::fire('translate.themeScanner.afterScan', [$obj]);
+        Event::fire('rainlab.translate.themeScanner.afterScan', [$obj]);
+
+        return $result;
     }
 
     /**
