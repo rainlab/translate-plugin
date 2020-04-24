@@ -275,7 +275,8 @@ It's possible to translate query string parameters by listening to the `translat
 For a possible implementation of the `YourModel::translateParams` method look at the example under `URL parameter translation` from above.
 
 ## Extend theme scan
-      Event::listen('rainlab.translate.afterScan', function (ThemeScanner $scanner) {
+
+      Event::listen('rainlab.translate.themeScanner.afterScan', function (ThemeScanner $scanner) {
            ...
       });
 
