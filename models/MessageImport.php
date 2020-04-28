@@ -44,7 +44,7 @@ class MessageImport extends ImportModel
                     // Create empty array, if $message is new
                     $message->message_data = $message->message_data ?: [];
 
-                    if(!isset($message->message_data[Message::DEFAULT_LOCALE])) {
+                    if (!isset($message->message_data[Message::DEFAULT_LOCALE])) {
                         $result[Message::DEFAULT_LOCALE] = $code;
                     }
 
@@ -57,7 +57,6 @@ class MessageImport extends ImportModel
                     }
 
                     $message->save();
-
                 } else {
                     $this->logSkipped($index, 'No code provided');
                 }
@@ -66,5 +65,4 @@ class MessageImport extends ImportModel
             }
         }
     }
-
 }
