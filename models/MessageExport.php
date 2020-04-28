@@ -13,7 +13,7 @@ class MessageExport extends ExportModel
      * code      | default   | en    | de    | fr
      * ----------------------------------------------
      * title     | Title     | Title | Titel | Titre
-     * item.name | Name      | Name  | Name  | Prénom
+     * name      | Name      | Name  | Name  | Prénom
      * ...
      *
      * @param $columns
