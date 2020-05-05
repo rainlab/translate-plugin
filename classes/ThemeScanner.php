@@ -7,6 +7,7 @@ use Cms\Classes\Partial;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\Translator;
 use System\Models\MailTemplate;
+use Event;
 
 /**
  * Theme scanner class
@@ -24,7 +25,20 @@ class ThemeScanner
     {
         $obj = new static;
 
-        return $obj->scanForMessages();
+        $obj->scanForMessages();
+
+        /**
+         * @event rainlab.translate.themeScanner.afterScan
+         * Fires after theme scanning.
+         *
+         * Example usage:
+         *
+         *     Event::listen('rainlab.translate.themeScanner.afterScan', function (ThemeScanner $scanner) {
+         *         // added an extra scan. Add generation files...
+         *     });
+         *
+         */
+        Event::fire('rainlab.translate.themeScanner.afterScan', [$obj]);
     }
 
     /**
