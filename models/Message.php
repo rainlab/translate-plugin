@@ -61,6 +61,10 @@ class Message extends Model
             $locale = self::DEFAULT_LOCALE;
         }
 
+        if (!array_key_exists($locale, $this->message_data)) {
+            // extract more generic locale
+            list($locale) = explode('-', $locale);
+        }
         if (array_key_exists($locale, $this->message_data)) {
             return $this->message_data[$locale];
         }
