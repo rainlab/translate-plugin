@@ -253,6 +253,7 @@ class Plugin extends PluginBase
             'RainLab\Translate\FormWidgets\MLRichEditor' => 'mlricheditor',
             'RainLab\Translate\FormWidgets\MLMarkdownEditor' => 'mlmarkdowneditor',
             'RainLab\Translate\FormWidgets\MLRepeater' => 'mlrepeater',
+            'RainLab\Translate\FormWidgets\MLNestedForm' => 'mlnestedform',
             'RainLab\Translate\FormWidgets\MLMediaFinder' => 'mlmediafinder',
         ];
     }

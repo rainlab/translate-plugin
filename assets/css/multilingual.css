@@ -14,7 +14,20 @@
 .field-multilingual.field-multilingual-repeater.is-empty {padding-top:5px}
 .field-multilingual.field-multilingual-repeater.is-empty .ml-btn {top:-10px;right:5px;text-align:right}
 .field-multilingual.field-multilingual-repeater.is-empty .ml-dropdown-menu {top:15px;right:-7px}
+.field-multilingual.field-multilingual-nestedform .ml-btn {top:-27px;right:11px;text-align:right}
+.field-multilingual.field-multilingual-nestedform .ml-dropdown-menu {top:0;right:0}
 .fancy-layout .form-tabless-fields .field-multilingual .ml-btn {color:rgba(255,255,255,0.8)}
 .fancy-layout .form-tabless-fields .field-multilingual .ml-btn:hover {color:#fff}
 .fancy-layout .field-multilingual-text input.form-control {padding-right:44px}
 .help-block.before-field + .field-multilingual.field-multilingual-textarea .ml-btn {top:-41px}
+
+
+.field-multilingual.field-multilingual-nestedform.using-panel-styles > .ml-btn {
+    top: 10px;
+    right: 20px;
+}
+
+.field-multilingual.field-multilingual-nestedform.using-panel-styles > .ml-dropdown-menu {
+    top: 40px;
+    right: 5px;
+}

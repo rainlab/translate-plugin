@@ -124,23 +124,28 @@ class EventRegistry
 
             $type = array_get($config, 'type', 'text');
 
-            if ($type == 'text') {
-                $fields[$name]['type'] = 'mltext';
-            }
-            elseif ($type == 'textarea') {
-                $fields[$name]['type'] = 'mltextarea';
-            }
-            elseif ($type == 'richeditor') {
-                $fields[$name]['type'] = 'mlricheditor';
-            }
-            elseif ($type == 'markdown') {
-                $fields[$name]['type'] = 'mlmarkdowneditor';
-            }
-            elseif ($type == 'repeater') {
-                $fields[$name]['type'] = 'mlrepeater';
-            }
-            elseif ($type == 'mediafinder') {
-                $fields[$name]['type'] = 'mlmediafinder';
+            switch ($type) {
+                case 'text':
+                    $fields[$name]['type'] = 'mltext';
+                    break;
+                case 'textarea':
+                    $fields[$name]['type'] = 'mltextarea';
+                    break;
+                case 'richeditor':
+                    $fields[$name]['type'] = 'mlricheditor';
+                    break;
+                case 'markdown':
+                    $fields[$name]['type'] = 'mlmarkdowneditor';
+                    break;
+                case 'repeater':
+                    $fields[$name]['type'] = 'mlrepeater';
+                    break;
+                case 'nestedform':
+                    $fields[$name]['type'] = 'mlnestedform';
+                    break;
+                case 'mediafinder':
+                    $fields[$name]['type'] = 'mlmediafinder';
+                    break;
             }
         }
 
