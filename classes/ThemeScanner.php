@@ -164,7 +164,7 @@ class ThemeScanner
 
         $quoteChar = preg_quote("'");
 
-        preg_match_all('#{{\s*'.$quoteChar.'([^'.$quoteChar.']+)'.$quoteChar.'\s*[|]\s*_\s*(?:[|].+)?\s*}}#', $content, $match);
+        preg_match_all('#{{\s*'.$quoteChar.'([^'.$quoteChar.']+)'.$quoteChar.'\s*[|]\s*_\s*(?:[|].+)?}}#', $content, $match);
         if (isset($match[1])) {
             $messages = array_merge($messages, $match[1]);
         }
@@ -176,7 +176,7 @@ class ThemeScanner
 
         $quoteChar = preg_quote('"');
 
-        preg_match_all('#{{\s*'.$quoteChar.'([^'.$quoteChar.']+)'.$quoteChar.'\s*[|]\s*_\s*(?:[|].+)?\s*}}#', $content, $match);
+        preg_match_all('#{{\s*'.$quoteChar.'([^'.$quoteChar.']+)'.$quoteChar.'\s*[|]\s*_\s*(?:[|].+)?}}#', $content, $match);
         if (isset($match[1])) {
             $messages = array_merge($messages, $match[1]);
         }
