@@ -82,3 +82,8 @@
     - fix string translation key for scan errors column header
 1.7.1:
     - Fix YAML issue with previous tag/release.
+1.7.2:
+    - Fix regex when "|_" filter is followed by another filter
+    - Try locale without country before returning default translation
+    - Allow exporting default locale
+    - Fire 'rainlab.translate.themeScanner.afterScan' event in the theme scanner for extendability
