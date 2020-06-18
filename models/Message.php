@@ -62,9 +62,10 @@ class Message extends Model
         }
 
         if (!array_key_exists($locale, $this->message_data)) {
-            // extract more generic locale
+            // search parent locale (e.g. en-US -> en) before returning default
             list($locale) = explode('-', $locale);
         }
+
         if (array_key_exists($locale, $this->message_data)) {
             return $this->message_data[$locale];
         }
