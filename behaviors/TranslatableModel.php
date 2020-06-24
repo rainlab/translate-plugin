@@ -33,7 +33,6 @@ class TranslatableModel extends TranslatableBehavior
 
     /**
      * Applies a translatable index to a basic query. This scope will join the index
-     * table and can be executed neither more than once, nor with scopeTransOrder.
      * @param  Builder $query
      * @param  string $index
      * @param  string $value
@@ -66,7 +65,6 @@ class TranslatableModel extends TranslatableBehavior
 
     /**
      * Applies a translatable index to a basic query. This scope applies only to specific locale. This scope will join the index
-     * table and can be executed neither more than once, nor with scopeTransOrder.
      * @param  Builder $query
      * @param  string $index
      * @param  string $value
@@ -94,7 +92,6 @@ class TranslatableModel extends TranslatableBehavior
 
     /**
      * Applies a sort operation with a translatable index to a basic query. This scope will join the index
-     * table and can be executed neither more than once, nor with scopeTransWhere.
      * @param  Builder $query
      * @param  string $index
      * @param  string $direction
@@ -122,21 +119,20 @@ class TranslatableModel extends TranslatableBehavior
 
     /**
      * Joins the translatable indexes table to a query.
-     * This cannot be executed more than once.
      * @param  Builder $query
      * @param  string $locale
+     * @param  string $indexTableAlias
      * @return Builder
      */
     protected function joinTranslateIndexesTable($query, $locale, $indexTableAlias)
     {
         $joinTableWithAlias = 'rainlab_translate_indexes as ' . $indexTableAlias;
+        // check if table with same name and alias is already joined
         if (collect($query->getQuery()->joins)->contains('table', $joinTableWithAlias)) {
             return $query;
         }
-        // This join will crap out if this scope executes twice, it is a known issue.
-        // It should check if the join exists before applying it, this mechanism was
-        // not found in Laravel. So options are block joins entirely or allow once.
-        $query->leftJoin('rainlab_translate_indexes as ' . $indexTableAlias, function($join) use ($locale, $indexTableAlias) {
+
+        $query->leftJoin($joinTableWithAlias, function($join) use ($locale, $indexTableAlias) {
             $join
                 ->on(Db::raw(DbDongle::cast($this->model->getQualifiedKeyName(), 'TEXT')), '=', $indexTableAlias . '.model_id')
                 ->where($indexTableAlias . '.model_type', '=', $this->getClass())
