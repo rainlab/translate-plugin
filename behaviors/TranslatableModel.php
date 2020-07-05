@@ -46,15 +46,10 @@ class TranslatableModel extends TranslatableBehavior
 
         $query->where(function($q) use ($index, $value, $operator) {
             $q->where($this->model->getTable().'.'.$index, $operator, $value);
-            $q->orWhere(function($q) use ($index, $value, $operator) {
-                $q
-                    ->where('rainlab_translate_indexes.item', $index)
-                    ->where('rainlab_translate_indexes.value', $operator, $value)
-                ;
-            });
+            $q->orWhere('rainlab_translate_indexes.value', $operator, $value);
         });
 
-        $this->joinTranslateIndexesTable($query, $locale);
+        $this->joinTranslateIndexesTable($query, $index, $locale);
 
         return $query;
     }
@@ -77,7 +72,7 @@ class TranslatableModel extends TranslatableBehavior
 
         $query->orderBy('translate_sorting_key', $direction);
 
-        $this->joinTranslateIndexesTable($query, $locale);
+        $this->joinTranslateIndexesTable($query, $index, $locale);
 
         return $query;
     }
@@ -89,7 +84,7 @@ class TranslatableModel extends TranslatableBehavior
      * @param  string $locale
      * @return Builder
      */
-    protected function joinTranslateIndexesTable($query, $locale = null)
+    protected function joinTranslateIndexesTable($query, $index, $locale = null)
     {
         if (!$locale) {
             $locale = $this->translatableContext;
@@ -98,10 +93,11 @@ class TranslatableModel extends TranslatableBehavior
         // This join will crap out if this scope executes twice, it is a known issue.
         // It should check if the join exists before applying it, this mechanism was
         // not found in Laravel. So options are block joins entirely or allow once.
-        $query->leftJoin('rainlab_translate_indexes', function($join) use ($locale) {
+        $query->leftJoin('rainlab_translate_indexes', function($join) use ($locale, $index) {
             $join
                 ->on(Db::raw(DbDongle::cast($this->model->getQualifiedKeyName(), 'TEXT')), '=', 'rainlab_translate_indexes.model_id')
                 ->where('rainlab_translate_indexes.model_type', '=', $this->getClass())
+                ->where('rainlab_translate_indexes.item', $index)
                 ->where('rainlab_translate_indexes.locale', '=', $locale)
             ;
         });
