@@ -44,21 +44,16 @@ class TranslatableModel extends TranslatableBehavior
         if (!$locale) {
             $locale = $this->translatableContext;
         }
-        $indexTableAlias = 'rainlab_translate_indexes_' . $locale;
+        $indexTableAlias = 'rainlab_translate_indexes_' . $index . '_' . $locale;
 
         $query->select($this->model->getTable().'.*');
 
         $query->where(function($q) use ($index, $value, $operator, $indexTableAlias) {
             $q->where($this->model->getTable().'.'.$index, $operator, $value);
-            $q->orWhere(function($q) use ($index, $value, $operator, $indexTableAlias) {
-                $q
-                    ->where($indexTableAlias. '.item', $index)
-                    ->where($indexTableAlias. '.value', $operator, $value)
-                ;
-            });
+            $q->orWhere($indexTableAlias. '.value', $operator, $value);
         });
 
-        $this->joinTranslateIndexesTable($query, $locale, $indexTableAlias);
+        $this->joinTranslateIndexesTable($query, $locale, $index, $indexTableAlias);
 
         return $query;
     }
@@ -76,16 +71,15 @@ class TranslatableModel extends TranslatableBehavior
             if (!$locale) {
                 $locale = $this->translatableContext;
             }
-            $indexTableAlias = 'rainlab_translate_indexes_' . $locale;
+            $indexTableAlias = 'rainlab_translate_indexes_' . $index . '_' . $locale;
 
             $query->select($this->model->getTable().'.*');
 
             if ($locale == $this->translatableDefault) {
                 $query->where($this->model->getTable().'.'.$index, $operator, $value);
             } else {
-                $query->where($indexTableAlias . '.item', $index)
-                      ->where($indexTableAlias . '.value', $operator, $value);
-                $this->joinTranslateIndexesTable($query, $locale, $indexTableAlias);
+                $query->where($indexTableAlias . '.value', $operator, $value);
+                $this->joinTranslateIndexesTable($query, $locale, $index, $indexTableAlias);
             }
             return $query;
     }
@@ -103,7 +97,7 @@ class TranslatableModel extends TranslatableBehavior
         if (!$locale) {
             $locale = $this->translatableContext;
         }
-        $indexTableAlias = 'rainlab_translate_indexes_' . $locale;
+        $indexTableAlias = 'rainlab_translate_indexes_' . $index . '_' . $locale;
 
         $query->select(
             $this->model->getTable().'.*',
@@ -112,7 +106,7 @@ class TranslatableModel extends TranslatableBehavior
 
         $query->orderBy('translate_sorting_key', $direction);
 
-        $this->joinTranslateIndexesTable($query, $locale, $indexTableAlias);
+        $this->joinTranslateIndexesTable($query, $locale, $index, $indexTableAlias);
 
         return $query;
     }
@@ -124,7 +118,7 @@ class TranslatableModel extends TranslatableBehavior
      * @param  string $indexTableAlias
      * @return Builder
      */
-    protected function joinTranslateIndexesTable($query, $locale, $indexTableAlias)
+    protected function joinTranslateIndexesTable($query, $locale, $index, $indexTableAlias)
     {
         $joinTableWithAlias = 'rainlab_translate_indexes as ' . $indexTableAlias;
         // check if table with same name and alias is already joined
@@ -132,12 +126,12 @@ class TranslatableModel extends TranslatableBehavior
             return $query;
         }
 
-        $query->leftJoin($joinTableWithAlias, function($join) use ($locale, $indexTableAlias) {
+        $query->leftJoin($joinTableWithAlias, function($join) use ($locale, $index, $indexTableAlias) {
             $join
                 ->on(Db::raw(DbDongle::cast($this->model->getQualifiedKeyName(), 'TEXT')), '=', $indexTableAlias . '.model_id')
                 ->where($indexTableAlias . '.model_type', '=', $this->getClass())
-                ->where($indexTableAlias . '.locale', '=', $locale)
-            ;
+                ->where($indexTableAlias . '.item', '=', $index)
+                ->where($indexTableAlias . '.locale', '=', $locale);
         });
 
         return $query;
