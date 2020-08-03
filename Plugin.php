@@ -117,6 +117,10 @@ class Plugin extends PluginBase
                     if ($title) {
                         $item->title = $title;
                     }
+                    $url = array_get($item->viewBag, "localeUrl.$locale");
+                    if ($url) {
+                        $item->url = $url;
+                    }
                     if ($item->items) {
                         $item->items = $iterator($item->items);
                     }
