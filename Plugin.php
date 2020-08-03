@@ -106,6 +106,28 @@ class Plugin extends PluginBase
         }, 100);
 
         /*
+         * replace menu items title with it's translation if available
+         */
+        Event::listen('pages.menu.referencesGenerated', function (&$items) {
+            $iterator = function ($menuItems) use (&$iterator) {
+                $result = [];
+                $locale = App::getLocale();
+                foreach ($menuItems as $item) {
+                    if ($title = array_get($item->viewBag, "localeTitle.$locale")) {
+                        $item->title = $title;
+                    }
+
+                    if ($item->items) {
+                        $item->items = $iterator($item->items);
+                    }
+                    $result[] = $item;
+                }
+                return $result;
+            };
+            $items = $iterator($items);
+        });
+
+        /*
          * Import messages defined by the theme
          */
         Event::listen('cms.theme.setActiveTheme', function($code) {

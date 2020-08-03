@@ -4,6 +4,7 @@ use Str;
 use File;
 use Cms\Classes\Page;
 use Cms\Classes\Content;
+use System\Classes\PluginManager;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
@@ -31,6 +32,27 @@ class EventRegistry
 
         // Handle URL translations
         $this->registerPageUrlTranslation($widget);
+
+        // Handle RainLab.Pages MenuItem translations
+        if (PluginManager::instance()->exists('RainLab.Pages')) {
+            $this->registerMenuItemTranslation($widget);
+        }
+    }
+
+    public function registerMenuItemTranslation($widget)
+    {
+        // add localeTitle[lang] fields to MenuItem form
+        if ($widget->model instanceof \RainLab\Pages\Classes\MenuItem) {
+            // change type of formwidget for MenuItem form title to mltext
+            $widget->fields['title']['type'] = 'mltext';
+
+            foreach (LocaleModel::listAvailable() as $code => $locale) {
+                $widget->fields["viewBag[localeTitle.$code]"] = [
+                    'cssClass' => 'hidden',
+                    'attributes' => ['data-locale' => $code],
+                ];
+            }
+        }
     }
 
     //
