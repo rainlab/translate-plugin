@@ -48,6 +48,10 @@ class EventRegistry
             foreach (['title', 'url'] as $fieldName) {
                 $widget->fields[$fieldName]['type'] = 'mltext';
                 foreach (LocaleModel::listAvailable() as $code => $locale) {
+                    $defaultLocale = LocaleModel::getDefault();
+                    if (!$defaultLocale || $defaultLocale->code === $code) {
+                        continue;
+                    }
                     $key = sprintf("viewBag[locale%s.%s]", ucfirst($fieldName), $code);
                     $widget->fields[$key] = [
                         'cssClass' => 'hidden',
