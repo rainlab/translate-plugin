@@ -46,9 +46,10 @@ class EventRegistry
             // change type of formwidget for MenuItem form title to mltext
 
             $defaultLocale = LocaleModel::getDefault();
+            $availableLocales = LocaleModel::listAvailable();
             foreach (['title', 'url'] as $fieldName) {
                 $widget->fields[$fieldName]['type'] = 'mltext';
-                foreach (LocaleModel::listAvailable() as $code => $locale) {
+                foreach ($availableLocales as $code => $locale) {
                     if (!$defaultLocale || $defaultLocale->code === $code) {
                         continue;
                     }
