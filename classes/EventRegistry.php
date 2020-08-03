@@ -45,10 +45,10 @@ class EventRegistry
         if ($widget->model instanceof \RainLab\Pages\Classes\MenuItem) {
             // change type of formwidget for MenuItem form title to mltext
 
+            $defaultLocale = LocaleModel::getDefault();
             foreach (['title', 'url'] as $fieldName) {
                 $widget->fields[$fieldName]['type'] = 'mltext';
                 foreach (LocaleModel::listAvailable() as $code => $locale) {
-                    $defaultLocale = LocaleModel::getDefault();
                     if (!$defaultLocale || $defaultLocale->code === $code) {
                         continue;
                     }
