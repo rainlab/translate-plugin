@@ -53,7 +53,7 @@ class EventRegistry
                     if (!$defaultLocale || $defaultLocale->code === $code) {
                         continue;
                     }
-                    $key = sprintf("viewBag[locale%s.%s]", ucfirst($fieldName), $code);
+                    $key = sprintf("viewBag[locale][%s][%s]", $code, $fieldName);
                     $widget->fields[$key] = [
                         'cssClass' => 'hidden',
                         'attributes' => [

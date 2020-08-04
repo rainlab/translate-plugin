@@ -113,13 +113,11 @@ class Plugin extends PluginBase
                 $result = [];
                 $locale = App::getLocale();
                 foreach ($menuItems as $item) {
-                    $title = array_get($item->viewBag, "localeTitle.$locale");
-                    if ($title) {
-                        $item->title = $title;
-                    }
-                    $url = array_get($item->viewBag, "localeUrl.$locale");
-                    if ($url) {
-                        $item->url = $url;
+                    $localeFields = array_get($item->viewBag, "locale.$locale", []);
+                    foreach ($localeFields as $fieldName => $fieldValue) {
+                        if ($fieldValue) {
+                            $item->$fieldName = $fieldValue;
+                        }
                     }
                     if ($item->items) {
                         $item->items = $iterator($item->items);
