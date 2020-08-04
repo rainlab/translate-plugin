@@ -48,11 +48,13 @@ class EventRegistry
             $defaultLocale = LocaleModel::getDefault();
             $availableLocales = LocaleModel::listAvailable();
             foreach (['title', 'url'] as $fieldName) {
+                // replace title/url fields type with multi-lingual formwidgets
                 $widget->fields[$fieldName]['type'] = 'mltext';
                 foreach ($availableLocales as $code => $locale) {
                     if (!$defaultLocale || $defaultLocale->code === $code) {
                         continue;
                     }
+                    // add localized MenuItem properties under viewBag locale property array
                     $key = sprintf("viewBag[locale][%s][%s]", $code, $fieldName);
                     $widget->fields[$key] = [
                         'cssClass' => 'hidden',

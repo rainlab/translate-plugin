@@ -114,6 +114,7 @@ class Plugin extends PluginBase
                 $locale = App::getLocale();
                 foreach ($menuItems as $item) {
                     $localeFields = array_get($item->viewBag, "locale.$locale", []);
+                    // replace MenuItem properties with localized version if it exists
                     foreach ($localeFields as $fieldName => $fieldValue) {
                         if ($fieldValue) {
                             $item->$fieldName = $fieldValue;
