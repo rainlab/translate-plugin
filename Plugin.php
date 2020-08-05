@@ -109,9 +109,9 @@ class Plugin extends PluginBase
          * Populate MenuItem properties with localized values if available
          */
         Event::listen('pages.menu.referencesGenerated', function (&$items) {
-            $iterator = function ($menuItems) use (&$iterator) {
+            $locale = App::getLocale();
+            $iterator = function ($menuItems) use (&$iterator, $locale) {
                 $result = [];
-                $locale = App::getLocale();
                 foreach ($menuItems as $item) {
                     $localeFields = array_get($item->viewBag, "locale.$locale", []);
                     foreach ($localeFields as $fieldName => $fieldValue) {
