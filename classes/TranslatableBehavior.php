@@ -186,6 +186,10 @@ abstract class TranslatableBehavior extends ExtensionBase
      */
     public function getTranslateAttributes($locale)
     {
+        if (!array_key_exists($locale, $this->translatableAttributes)) {
+            $this->loadTranslatableData($locale);
+        }
+
         return array_get($this->translatableAttributes, $locale, []);
     }
 
