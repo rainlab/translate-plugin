@@ -46,22 +46,22 @@ class EventRegistry
      * @return void
     public function registerMenuItemTranslation($widget)
     {
-        // add localeTitle[lang] fields to MenuItem form
         if ($widget->model instanceof \RainLab\Pages\Classes\MenuItem) {
-            // change type of formwidget for MenuItem form title to mltext
-
             $defaultLocale = LocaleModel::getDefault();
             $availableLocales = LocaleModel::listAvailable();
-            foreach (['title', 'url'] as $fieldName) {
-                // replace title/url fields type with multi-lingual formwidgets
+            $fieldsToTranslate = ['title', 'url'];
+            
+            // Replace specified fields with multilingual versions
+            foreach ($fieldsToTranslate as $fieldName) {
                 $widget->fields[$fieldName]['type'] = 'mltext';
+                
                 foreach ($availableLocales as $code => $locale) {
                     if (!$defaultLocale || $defaultLocale->code === $code) {
                         continue;
                     }
-                    // add localized MenuItem properties under viewBag locale property array
-                    $key = sprintf("viewBag[locale][%s][%s]", $code, $fieldName);
-                    $widget->fields[$key] = [
+                    
+                    // Add data locker fields for the different locales under the `viewBag[locale]` property
+                    $widget->fields["viewBag[locale][$code][$fieldName]"] = [
                         'cssClass' => 'hidden',
                         'attributes' => [
                             'data-locale' => $code,
