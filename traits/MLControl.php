@@ -261,12 +261,19 @@ trait MLControl
         return false;
     }
 
+    /**
+     * Internal helper for method existence checks.
+     *
+     * @param  object $object
+     * @param  string $method
+     * @return boolean
+     */
     protected function objectMethodExists($object, $method)
     {
         if (method_exists($object, 'methodExists')) {
             return $object->methodExists($method);
-        } else {
-            return method_exists($object, $method);
         }
+
+        return method_exists($object, $method);
     }
 }
