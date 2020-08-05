@@ -143,6 +143,10 @@ trait MLControl
      */
     public function getLocaleValue($locale)
     {
+        if (!method_exists($this->model, 'methodExists')) {
+            return $this->formField->value;
+        }
+
         $key = $this->valueFrom ?: $this->fieldName;
 
         /*
@@ -184,6 +188,10 @@ trait MLControl
      */
     public function getLocaleSaveValue($value)
     {
+        if (!method_exists($this->model, 'methodExists')) {
+            return $value;
+        }
+
         $localeData = $this->getLocaleSaveData();
         $key = $this->valueFrom ?: $this->fieldName;
 
