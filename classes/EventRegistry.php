@@ -44,6 +44,7 @@ class EventRegistry
      *
      * @param Backend\Widgets\Form $widget
      * @return void
+     */
     public function registerMenuItemTranslation($widget)
     {
         if ($widget->model instanceof \RainLab\Pages\Classes\MenuItem) {
