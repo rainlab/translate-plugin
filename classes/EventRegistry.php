@@ -39,6 +39,11 @@ class EventRegistry
         }
     }
 
+    /**
+     * Translate RainLab.Pages MenuItem data
+     *
+     * @param Backend\Widgets\Form $widget
+     * @return void
     public function registerMenuItemTranslation($widget)
     {
         // add localeTitle[lang] fields to MenuItem form
