@@ -106,7 +106,7 @@ class Plugin extends PluginBase
         }, 100);
 
         /*
-         * replace MenuItem properties with localized version if it exists
+         * Populate MenuItem properties with localized values if available
          */
         Event::listen('pages.menu.referencesGenerated', function (&$items) {
             $iterator = function ($menuItems) use (&$iterator) {
