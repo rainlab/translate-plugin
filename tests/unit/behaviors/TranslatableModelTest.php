@@ -1,8 +1,8 @@
 <?php namespace RainLab\Translate\Tests\Unit\Behaviors;
 
-use Schema;
-use October\Core\Tests\PluginTestCase;
 use Model;
+use Schema;
+use PluginTestCase;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Tests\Fixtures\Models\Country as CountryModel;
 use RainLab\Translate\Models\Locale as LocaleModel;
@@ -172,7 +172,7 @@ class TranslatableModelTest extends PluginTestCase
 
         Translator::instance()->setLocale('en');
     }
-  
+
     public function testGetTranslationValueEagerLoadingWithMorphMap()
     {
         Relation::morphMap([

@@ -2,7 +2,7 @@
 
 use RainLab\Translate\Models\Locale;
 use RainLab\Translate\Models\Message;
-use October\Core\Tests\PluginTestCase;
+use PluginTestCase;
 use Model;
 
 class MessageTest extends PluginTestCase

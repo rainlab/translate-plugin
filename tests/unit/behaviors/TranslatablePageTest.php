@@ -1,12 +1,12 @@
 <?php namespace RainLab\Translate\Tests\Unit\Behaviors;
 
 use File;
+use PluginTestCase;
 use October\Rain\Halcyon\Model;
 use October\Rain\Filesystem\Filesystem;
 use October\Rain\Halcyon\Datasource\FileDatasource;
 use October\Rain\Halcyon\Datasource\Resolver;
 use RainLab\Translate\Tests\Fixtures\Classes\TranslatablePage;
-use October\Core\Tests\PluginTestCase;
 
 class TranslatablePageTest extends PluginTestCase
 {
