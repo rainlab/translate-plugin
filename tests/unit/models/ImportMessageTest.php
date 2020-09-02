@@ -1,6 +1,6 @@
 <?php namespace RainLab\Translate\Tests\Unit\Models;
 
-use October\Core\Tests\PluginTestCase;
+use PluginTestCase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\MessageImport;
 
@@ -70,5 +70,26 @@ class ImportMessageTest extends PluginTestCase
         $this->assertEquals(1, $stats->skippedCount);
         $this->assertEquals(true, $stats->hasMessages);
         $this->assertEquals(Message::count(), 0);
+    }
+
+    public function testDefaultLocaleIsImported()
+    {
+        $messageImport = new MessageImport();
+        $data = [
+            ['code' => 'test.me', 'x' => 'foo bar', 'de' => 'Neu 2', 'en' => 'new 2']
+        ];
+
+        $messageImport->importData($data);
+
+        $stats = $messageImport->getResultStats();
+        $this->assertEquals(1, $stats->created);
+        $this->assertEquals(0, $stats->updated);
+        $this->assertEquals(0, $stats->skippedCount);
+        $this->assertEquals(false, $stats->hasMessages);
+        $this->assertEquals(Message::count(), 1);
+
+        $message = Message::where('code', 'test.me')->first();
+
+        $this->assertEquals('foo bar', $message->message_data['x']);
     }
 }

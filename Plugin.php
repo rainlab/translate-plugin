@@ -1,11 +1,15 @@
 <?php namespace RainLab\Translate;
 
+use App;
 use Lang;
 use Event;
 use Backend;
 use Cms\Classes\Page;
+use Cms\Classes\Theme;
 use System\Models\File;
+use Cms\Models\ThemeData;
 use System\Classes\PluginBase;
+use System\Classes\CombineAssets;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\EventRegistry;
 use RainLab\Translate\Classes\Translator;
@@ -65,9 +69,31 @@ class Plugin extends PluginBase
         });
 
         /*
+         * Add translation support to theme settings
+         */
+        ThemeData::extend(static function ($model) {
+            if (!$model->propertyExists('translatable')) {
+                $model->addDynamicProperty('translatable', []);
+            }
+
+            $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+
+            $model->bindEvent('model.afterFetch', static function() use ($model) {
+                foreach ($model->getFormFields() as $id => $field) {
+                    if (!empty($field['translatable'])) {
+                        $model->translatable[] = $id;
+                    }
+                }
+            });
+        });
+
+        /*
          * Register console commands
          */
         $this->registerConsoleCommand('translate.scan', 'Rainlab\Translate\Console\ScanCommand');
+
+        $this->registerAssetBundles();
     }
 
     public function boot()
@@ -78,6 +104,30 @@ class Plugin extends PluginBase
         Event::listen('cms.page.init', function($controller, $page) {
             EventRegistry::instance()->setMessageContext($page);
         }, 100);
+
+        /*
+         * Populate MenuItem properties with localized values if available
+         */
+        Event::listen('pages.menu.referencesGenerated', function (&$items) {
+            $locale = App::getLocale();
+            $iterator = function ($menuItems) use (&$iterator, $locale) {
+                $result = [];
+                foreach ($menuItems as $item) {
+                    $localeFields = array_get($item->viewBag, "locale.$locale", []);
+                    foreach ($localeFields as $fieldName => $fieldValue) {
+                        if ($fieldValue) {
+                            $item->$fieldName = $fieldValue;
+                        }
+                    }
+                    if ($item->items) {
+                        $item->items = $iterator($item->items);
+                    }
+                    $result[] = $item;
+                }
+                return $result;
+            };
+            $items = $iterator($items);
+        });
 
         /*
          * Import messages defined by the theme
@@ -121,6 +171,39 @@ class Plugin extends PluginBase
         Event::listen('pages.page.getMenuCacheKey', $modifyKey);
         Event::listen('pages.snippet.getMapCacheKey', $modifyKey);
         Event::listen('pages.snippet.getPartialMapCacheKey', $modifyKey);
+
+        if (class_exists('\RainLab\Pages\Classes\SnippetManager')) {
+            $handler = function ($controller, $template, $type) {
+                if (!$template->methodExists('getDirtyLocales')) {
+                    return;
+                }
+
+                // Get the locales that have changed
+                $dirtyLocales = $template->getDirtyLocales();
+
+                if (!empty($dirtyLocales)) {
+                    $theme = Theme::getEditTheme();
+                    $currentLocale = Lang::getLocale();
+
+                    foreach ($dirtyLocales as $locale) {
+                        if (!$template->isTranslateDirty(null, $locale)) {
+                            continue;
+                        }
+
+                        // Clear the RainLab.Pages caches for each dirty locale
+                        App::setLocale($locale);
+                        \RainLab\Pages\Classes\Page::clearMenuCache($theme);
+                        \RainLab\Pages\Classes\SnippetManager::clearCache($theme);
+                    }
+
+                    // Restore the original locale for this request
+                    App::setLocale($currentLocale);
+                }
+            };
+
+            Event::listen('cms.template.save', $handler);
+            Event::listen('pages.object.save', $handler);
+        }
     }
 
     public function registerComponents()
@@ -179,6 +262,8 @@ class Plugin extends PluginBase
             'filters' => [
                 '_'  => [$this, 'translateString'],
                 '__' => [$this, 'translatePlural'],
+                'transRaw'  => [$this, 'translateRawString'],
+                'transRawPlural' => [$this, 'translateRawPlural'],
                 'localeUrl' => [$this, 'localeUrl'],
             ]
         ];
@@ -194,6 +279,14 @@ class Plugin extends PluginBase
             'RainLab\Translate\FormWidgets\MLRepeater' => 'mlrepeater',
             'RainLab\Translate\FormWidgets\MLMediaFinder' => 'mlmediafinder',
         ];
+    }
+
+    protected function registerAssetBundles()
+    {
+        CombineAssets::registerCallback(function ($combiner) {
+            $combiner->registerBundle('$/rainlab/translate/assets/less/messages.less');
+            $combiner->registerBundle('$/rainlab/translate/assets/less/multilingual.less');
+        });
     }
 
     public function localeUrl($url, $locale)
@@ -214,5 +307,15 @@ class Plugin extends PluginBase
     public function translatePlural($string, $count = 0, $params = [], $locale = null)
     {
         return Lang::choice(Message::trans($string, $params, $locale), $count, $params);
+    }
+
+    public function translateRawString($string, $params = [], $locale = null)
+    {
+        return Message::transRaw($string, $params, $locale);
+    }
+
+    public function translateRawPlural($string, $count = 0, $params = [], $locale = null)
+    {
+        return Lang::choice(Message::transRaw($string, $params, $locale), $count, $params);
     }
 }

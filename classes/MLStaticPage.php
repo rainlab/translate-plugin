@@ -91,4 +91,15 @@ class MLStaticPage extends MLCmsObject
         $this->attributes['code'] = trim($result);
         $this->attributes['placeholders'] = $placeholders;
     }
+
+    /**
+     * Disables safe mode check for static pages.
+     *
+     * This allows developers to use placeholders in layouts even if safe mode is enabled.
+     *
+     * @return void
+     */
+    protected function checkSafeMode()
+    {
+    }
 }

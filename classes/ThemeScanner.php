@@ -7,6 +7,7 @@ use Cms\Classes\Partial;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\Translator;
 use System\Models\MailTemplate;
+use Event;
 
 /**
  * Theme scanner class
@@ -24,7 +25,20 @@ class ThemeScanner
     {
         $obj = new static;
 
-        return $obj->scanForMessages();
+        $obj->scanForMessages();
+
+        /**
+         * @event rainlab.translate.themeScanner.afterScan
+         * Fires after theme scanning.
+         *
+         * Example usage:
+         *
+         *     Event::listen('rainlab.translate.themeScanner.afterScan', function (ThemeScanner $scanner) {
+         *         // added an extra scan. Add generation files...
+         *     });
+         *
+         */
+        Event::fire('rainlab.translate.themeScanner.afterScan', [$obj]);
     }
 
     /**
@@ -33,6 +47,10 @@ class ThemeScanner
      */
     public function scanForMessages()
     {
+        // Set all messages initially as being not found. The scanner later
+        // sets the entries it finds as found.
+        Message::query()->update(['found' => false]);
+
         $this->scanThemeConfigForMessages();
         $this->scanThemeTemplatesForMessages();
         $this->scanMailTemplatesForMessages();
@@ -146,7 +164,7 @@ class ThemeScanner
 
         $quoteChar = preg_quote("'");
 
-        preg_match_all('#{{\s*'.$quoteChar.'([^'.$quoteChar.']+)'.$quoteChar.'\s*[|]\s*_\s*}}#', $content, $match);
+        preg_match_all('#{{\s*'.$quoteChar.'([^'.$quoteChar.']+)'.$quoteChar.'\s*[|]\s*_\s*(?:[|].+)?}}#', $content, $match);
         if (isset($match[1])) {
             $messages = array_merge($messages, $match[1]);
         }
@@ -158,7 +176,7 @@ class ThemeScanner
 
         $quoteChar = preg_quote('"');
 
-        preg_match_all('#{{\s*'.$quoteChar.'([^'.$quoteChar.']+)'.$quoteChar.'\s*[|]\s*_\s*}}#', $content, $match);
+        preg_match_all('#{{\s*'.$quoteChar.'([^'.$quoteChar.']+)'.$quoteChar.'\s*[|]\s*_\s*(?:[|].+)?}}#', $content, $match);
         if (isset($match[1])) {
             $messages = array_merge($messages, $match[1]);
         }

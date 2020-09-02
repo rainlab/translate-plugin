@@ -1,8 +1,9 @@
 <?php namespace RainLab\Translate\Tests\Unit\Models;
 
-use October\Core\Tests\PluginTestCase;
+use PluginTestCase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\MessageExport;
+use RainLab\Translate\Models\Locale;
 
 class ExportMessageTest extends PluginTestCase
 {
@@ -80,4 +81,18 @@ class ExportMessageTest extends PluginTestCase
         ]);
     }
 
+    public function testGetColumns()
+    {
+        Locale::unguard();
+        Locale::create(['code' => 'de', 'name' => 'German', 'is_enabled' => true]);
+
+        $columns = MessageExport::getColumns();
+
+        $this->assertEquals([
+            MessageExport::CODE_COLUMN_NAME => MessageExport::CODE_COLUMN_NAME,
+            Message::DEFAULT_LOCALE => MessageExport::DEFAULT_COLUMN_NAME,
+            'en' => 'en',
+            'de' => 'de',
+        ], $columns);
+    }
 }
