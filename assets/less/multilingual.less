@@ -38,12 +38,12 @@
     &.field-multilingual-textarea {
         .ml-btn {
             right: 11px;
-            top: -29px;
+            top: 5px;
             text-align: right;
         }
 
         .ml-dropdown-menu {
-            top: 1px;
+            top: 39px;
             right: 1px;
         }
     }
@@ -123,3 +123,15 @@
         top: -41px;
     }
 }
+
+div[data-control="multilingual"] textarea.form-control.field-textarea {
+    // increase padding on the right so that the textarea content does not overlap with the language button
+    padding-right: 36px;
+
+    // remove scrollbars to prevent interference with the language button
+    scrollbar-width: thin;
+    &::-webkit-scrollbar {
+        width: 0;
+    }
+}
+
