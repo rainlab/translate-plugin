@@ -36,10 +36,17 @@
     }
 
     &.field-multilingual-textarea {
+        textarea {
+            // increase padding on the right so that the textarea content does not overlap with the language button
+            padding-right: 30px;
+        }
+
         .ml-btn {
-            right: 11px;
+            right: 13px;
             top: 5px;
+            width: 24px;
             text-align: right;
+            padding-left: 4px;
         }
 
         .ml-dropdown-menu {
@@ -123,15 +130,3 @@
         top: -41px;
     }
 }
-
-div[data-control="multilingual"] textarea.form-control.field-textarea {
-    // increase padding on the right so that the textarea content does not overlap with the language button
-    padding-right: 36px;
-
-    // remove scrollbars to prevent interference with the language button
-    scrollbar-width: thin;
-    &::-webkit-scrollbar {
-        width: 0;
-    }
-}
-
