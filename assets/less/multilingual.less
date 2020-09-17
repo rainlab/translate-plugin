@@ -36,14 +36,21 @@
     }
 
     &.field-multilingual-textarea {
+        textarea {
+            // increase padding on the right so that the textarea content does not overlap with the language button
+            padding-right: 30px;
+        }
+
         .ml-btn {
-            right: 11px;
-            top: -29px;
+            right: 13px;
+            top: 5px;
+            width: 24px;
             text-align: right;
+            padding-left: 4px;
         }
 
         .ml-dropdown-menu {
-            top: 1px;
+            top: 39px;
             right: 1px;
         }
     }
