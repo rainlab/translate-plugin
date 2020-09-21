@@ -275,21 +275,14 @@ class EventRegistry
         }
 
         if (App::runningInBackend()) {
-            list($defaultLocale) = explode('-', Request::getDefaultLocale());
             list($locale) = explode('-', App::getLocale());
         } else {
-            $translator = Translator::instance();
-            $locale = $translator->getLocale();
-            $defaultLocale = $translator->getDefaultLocale();
+            $locale = Translator::instance()->getLocale();
         }
-
-        if ($locale === $defaultLocale) {
-            return;
-        }
-
-        $view = sprintf('%s-%s', $view, $locale);
 
         $factory = Mail::getViewFactory();
+        $view = sprintf('%s-%s', $view, $locale);
+
         if (!$factory->exists($view)) {
             return;
         }
