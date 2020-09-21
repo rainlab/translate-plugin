@@ -1,15 +1,19 @@
 <?php namespace RainLab\Translate\Classes;
 
-use Str;
+use App;
+use Exception;
 use File;
+use Mail;
+use Request;
+use Str;
 use Cms\Classes\Page;
 use Cms\Classes\Content;
+use System\Classes\MailManager;
 use System\Classes\PluginManager;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\ThemeScanner;
-use Exception;
 
 /**
  * Registrant class for bootstrapping events
@@ -262,5 +266,35 @@ class EventRegistry
         return $templates->filter(function($template) use ($extensions) {
             return !Str::endsWith($template->getBaseFileName(), $extensions);
         });
+    }
+
+    public function addLocalizedContent($mailer, $message, $view, $data, $raw, $plain)
+    {
+        if ($raw !== null || $view === null || !is_string($view)) {
+            return;
+        }
+
+        if (App::runningInBackend()) {
+            list($defaultLocale) = explode('-', Request::getDefaultLocale());
+            list($locale) = explode('-', App::getLocale());
+        } else {
+            $translator = Translator::instance();
+            $locale = $translator->getLocale();
+            $defaultLocale = $translator->getDefaultLocale();
+        }
+
+        if ($locale === $defaultLocale) {
+            return;
+        }
+
+        $view = sprintf('%s-%s', $view, $locale);
+
+        $factory = Mail::getViewFactory();
+        if (!$factory->exists($view)) {
+            return;
+        }
+
+        $mailManager = MailManager::instance();
+        return !$mailManager->addContentToMailer($message, $view, $data, false);
     }
 }
