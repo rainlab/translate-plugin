@@ -3,8 +3,6 @@
 use App;
 use Exception;
 use File;
-use Mail;
-use Request;
 use Str;
 use Cms\Classes\Page;
 use Cms\Classes\Content;
@@ -280,9 +278,9 @@ class EventRegistry
             $locale = Translator::instance()->getLocale();
         }
 
-        $factory = Mail::getViewFactory();
         $view = sprintf('%s-%s', $view, $locale);
 
+        $factory = $mailer->getViewFactory();
         if (!$factory->exists($view)) {
             return;
         }
