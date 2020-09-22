@@ -268,7 +268,7 @@ class EventRegistry
 
     public function addLocalizedContent($mailer, $message, $view, $data, $raw, $plain)
     {
-        if ($raw !== null || $view === null || !is_string($view)) {
+        if (isset($raw) || (!isset($view) && !isset($plain))) {
             return;
         }
 
@@ -278,14 +278,26 @@ class EventRegistry
             $locale = Translator::instance()->getLocale();
         }
 
-        $view = sprintf('%s-%s', $view, $locale);
-
         $factory = $mailer->getViewFactory();
-        if (!$factory->exists($view)) {
+
+        if (isset($view)) {
+            $view = sprintf('%s-%s', $view, $locale);
+            if (!$factory->exists($view)) {
+                $view = null;
+            }
+        }
+
+        if (isset($plain)) {
+            $plain = sprintf('%s-%s', $plain, $locale);
+            if (!$factory->exists($plain)) {
+                $plain = null;
+            }
+        }
+
+        if (($code = $view ?: $plain) === null) {
             return;
         }
 
-        $mailManager = MailManager::instance();
-        return !$mailManager->addContentToMailer($message, $view, $data, false);
+        return !MailManager::instance()->addContentToMailer($message, $code, $data, $view === null);
     }
 }
