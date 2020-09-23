@@ -272,11 +272,7 @@ class EventRegistry
             return;
         }
 
-        if (App::runningInBackend()) {
-            list($locale) = explode('-', App::getLocale());
-        } else {
-            $locale = Translator::instance()->getLocale();
-        }
+        list($locale) = explode('-', App::getLocale());
 
         $factory = $mailer->getViewFactory();
 
