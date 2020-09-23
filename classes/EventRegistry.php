@@ -266,7 +266,7 @@ class EventRegistry
         });
     }
 
-    public function addLocalizedContent($mailer, $message, $view, $data, $raw, $plain)
+    public function findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain)
     {
         if (isset($raw) || (!isset($view) && !isset($plain))) {
             return;

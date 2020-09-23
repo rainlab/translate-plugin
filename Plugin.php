@@ -41,7 +41,7 @@ class Plugin extends PluginBase
          * Load localize version of mail templates (akin to localized CMS content files)
          */
         Event::listen('mailer.beforeAddContent', function ($mailer, $message, $view, $data, $raw, $plain) {
-            return EventRegistry::instance()->addLocalizedContent($mailer, $message, $view, $data, $raw, $plain);
+            return EventRegistry::instance()->findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain);
         }, 1);
 
         /*
