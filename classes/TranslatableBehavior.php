@@ -156,10 +156,7 @@ abstract class TranslatableBehavior extends ExtensionBase
                 $this->loadTranslatableData($locale);
             }
 
-            if (
-                $this->hasTranslation($key, $locale)
-                && !(method_exists($this->model, 'isJsonable') && $this->model->isJsonable($key))
-            ) {
+            if ($this->hasTranslation($key, $locale) && !$this->attributeStoredAsJson($key)) {
                 $result = $this->getAttributeFromData($this->translatableAttributes[$locale], $key);
             }
             elseif ($this->translatableUseFallback) {
@@ -170,11 +167,7 @@ abstract class TranslatableBehavior extends ExtensionBase
         /*
          * Handle jsonable attributes, default locale may return the value as a string
          */
-        if (
-            is_string($result) &&
-            method_exists($this->model, 'isJsonable') &&
-            $this->model->isJsonable($key)
-        ) {
+        if ( is_string($result) && $this->attributeStoredAsJson($key)) {
             $result = json_decode($result, true);
             $result = $this->getNestedTranslations($key, $result, $locale);
         }
@@ -474,6 +467,13 @@ abstract class TranslatableBehavior extends ExtensionBase
             $result .= $i == 0 ? $key : '['.$key.']';
         }
         return $result;
+    }
+
+    protected function attributeStoredAsJson($key)
+    {
+        return
+            (method_exists($this->model, 'isJsonable') && $this->model->isJsonable($key)) ||
+            (method_exists($this->model, 'getCast') && $this->model->getCast($key) === 'array');
     }
 
     /**
