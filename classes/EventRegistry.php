@@ -266,6 +266,16 @@ class EventRegistry
         });
     }
 
+    /**
+     * Adds language suffixes to mail view files.
+     * @param  \October\Rain\Mail\Mailer $mailer
+     * @param  \Illuminate\Mail\Message $message
+     * @param  string $view
+     * @param  array $data
+     * @param  string $raw
+     * @param  string $plain
+     * @return string|null
+     */
     public function findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain)
     {
         if (isset($raw) || (!isset($view) && !isset($plain))) {
@@ -291,17 +301,26 @@ class EventRegistry
         return !MailManager::instance()->addContentToMailer($message, $code, $data, $view === null);
     }
 
+
+    /**
+     * Search mail view files based on locale
+     * @param  \October\Rain\Mail\Mailer $mailer
+     * @param  \Illuminate\Mail\Message $message
+     * @param  string $code
+     * @param  string $locale
+     * @return string|null
+     */
     public function getLocalizedView($factory, $code, $locale)
     {
-        $localizedView = sprintf('%s-%s', $code, $locale);
-
-        if ($factory->exists($localizedView)) {
-            return $localizedView;
-        }
+        $searchPaths[] = $locale;
 
         if (str_contains($locale, '-')) {
-            list($locale) = explode('-', $locale);
-            $localizedView = sprintf('%s-%s', $code, $locale);
+            list($country) = explode('-', $locale);
+            $searchPaths[] = $country;
+        }
+
+        foreach ($searchPaths as $path) {
+            $localizedView = sprintf('%s-%s', $code, $path);
 
             if ($factory->exists($localizedView)) {
                 return $localizedView;
