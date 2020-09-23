@@ -156,21 +156,15 @@ abstract class TranslatableBehavior extends ExtensionBase
                 $this->loadTranslatableData($locale);
             }
 
-            if ($this->hasTranslation($key, $locale)) {
+            if (
+                $this->hasTranslation($key, $locale)
+                && !(method_exists($this->model, 'isJsonable') && $this->model->isJsonable($key))
+            ) {
                 $result = $this->getAttributeFromData($this->translatableAttributes[$locale], $key);
             }
             elseif ($this->translatableUseFallback) {
                 $result = $this->getAttributeFromData($this->model->attributes, $key);
             }
-        }
-
-        // fetch the original json data (with no translations)
-        if (
-            is_array($result)
-            && method_exists($this->model, 'isJsonable')
-            && $this->model->isJsonable($key)
-        ) {
-            $result = $this->getAttributeFromData($this->model->attributes, $key);
         }
 
         /*
