@@ -107,7 +107,6 @@ abstract class TranslatableBehavior extends ExtensionBase
         if ($key === 'translatable' || $this->translatableDefault == $this->translatableContext) {
             return false;
         }
-
         return in_array($key, $this->model->getTranslatableAttributes());
     }
 
@@ -165,6 +164,15 @@ abstract class TranslatableBehavior extends ExtensionBase
             }
         }
 
+        // fetch the original json data (with no translations)
+        if (
+            is_array($result)
+            && method_exists($this->model, 'isJsonable')
+            && $this->model->isJsonable($key)
+        ) {
+            $result = $this->getAttributeFromData($this->model->attributes, $key);
+        }
+
         /*
          * Handle jsonable attributes, default locale may return the value as a string
          */
@@ -174,8 +182,24 @@ abstract class TranslatableBehavior extends ExtensionBase
             $this->model->isJsonable($key)
         ) {
             $result = json_decode($result, true);
+            $result = $this->getNestedTranslations($key, $result, $locale);
         }
 
+        return $result;
+    }
+
+    function getNestedTranslations($name, $array, $locale)
+    {
+        $result = [];
+        foreach (array_dot($array) as $key => $value) {
+            $nameKey = $this->dotNotationToHtmlArray($name.'.'.$key);
+            if ( $this->isTranslatable($nameKey) ) {
+                if ($translatedValue = $this->getAttributeTranslated($nameKey, $locale)) {
+                    $value = $translatedValue;
+                }
+            }
+            array_set($result, $key, $value);
+        }
         return $result;
     }
 
@@ -447,6 +471,15 @@ abstract class TranslatableBehavior extends ExtensionBase
         $keyArray = HtmlHelper::nameToArray($attribute);
 
         return array_get($data, implode('.', $keyArray));
+    }
+
+    protected function dotNotationToHtmlArray($dotArray)
+    {
+        $result = '';
+        foreach (explode('.', $dotArray) as $i => $key) {
+            $result .= $i == 0 ? $key : '['.$key.']';
+        }
+        return $result;
     }
 
     /**
