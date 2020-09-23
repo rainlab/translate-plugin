@@ -272,22 +272,16 @@ class EventRegistry
             return;
         }
 
-        list($locale) = explode('-', isset($data['_current_locale']) ? $data['_current_locale'] : App::getLocale());
+        $locale = strtolower(isset($data['_current_locale']) ? $data['_current_locale'] : App::getLocale());
 
         $factory = $mailer->getViewFactory();
 
         if (isset($view)) {
-            $view = sprintf('%s-%s', $view, $locale);
-            if (!$factory->exists($view)) {
-                $view = null;
-            }
+            $view = $this->getLocalizedView($factory, $view, $locale);
         }
 
         if (isset($plain)) {
-            $plain = sprintf('%s-%s', $plain, $locale);
-            if (!$factory->exists($plain)) {
-                $plain = null;
-            }
+            $plain = $this->getLocalizedView($factory, $plain, $locale);
         }
 
         if (($code = $view ?: $plain) === null) {
@@ -295,5 +289,24 @@ class EventRegistry
         }
 
         return !MailManager::instance()->addContentToMailer($message, $code, $data, $view === null);
+    }
+
+    public function getLocalizedView($factory, $code, $locale)
+    {
+        $localizedView = sprintf('%s-%s', $code, $locale);
+
+        if ($factory->exists($localizedView)) {
+            return $localizedView;
+        }
+
+        if (str_contains($locale, '-')) {
+            list($locale) = explode('-', $locale);
+            $localizedView = sprintf('%s-%s', $code, $locale);
+
+            if ($factory->exists($localizedView)) {
+                return $localizedView;
+            }
+        }
+        return;
     }
 }
