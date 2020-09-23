@@ -272,7 +272,7 @@ class EventRegistry
             return;
         }
 
-        list($locale) = explode('-', App::getLocale());
+        list($locale) = explode('-', isset($data['_current_locale']) ? $data['_current_locale'] : App::getLocale());
 
         $factory = $mailer->getViewFactory();
 
