@@ -175,11 +175,18 @@ abstract class TranslatableBehavior extends ExtensionBase
         return $result;
     }
 
-    function getNestedTranslations($name, $array, $locale)
+    /**
+     * Returns all translated attribute values for the nested properties in json array.
+     * @param  string $attribute
+     * @param  array $data
+     * @param  string $locale
+     * @return array
+     */
+    function getNestedTranslations($attribute, $data, $locale)
     {
         $result = [];
-        foreach (array_dot($array) as $key => $value) {
-            $nameKey = $this->dotNotationToHtmlArray($name.'.'.$key);
+        foreach (array_dot($data) as $key => $value) {
+            $nameKey = $this->dotNotationToHtmlArray($attribute.'.'.$key);
             if ( $this->isTranslatable($nameKey) ) {
                 if ($translatedValue = $this->getAttributeTranslated($nameKey, $locale)) {
                     $value = $translatedValue;
@@ -460,6 +467,12 @@ abstract class TranslatableBehavior extends ExtensionBase
         return array_get($data, implode('.', $keyArray));
     }
 
+    /**
+     * Converts a dot notation array into an html notation array
+     * (i.e. my.dot.notation.array -> my[dot][notation][array])
+     * @param  string $dotArray
+     * @return string
+     */
     protected function dotNotationToHtmlArray($dotArray)
     {
         $result = '';
@@ -469,11 +482,16 @@ abstract class TranslatableBehavior extends ExtensionBase
         return $result;
     }
 
-    protected function attributeStoredAsJson($key)
+    /**
+     * Determine if an attribute is stored as json
+     * @param  string $attribute
+     * @return bool
+     */
+    protected function attributeStoredAsJson($attribute)
     {
         return
-            (method_exists($this->model, 'isJsonable') && $this->model->isJsonable($key)) ||
-            (method_exists($this->model, 'hasCast') && $this->model->hasCast($key, 'array') );
+            (method_exists($this->model, 'isJsonable') && $this->model->isJsonable($attribute)) ||
+            (method_exists($this->model, 'hasCast') && $this->model->hasCast($attribute, 'array'));
     }
 
     /**
