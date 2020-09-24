@@ -473,7 +473,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     {
         return
             (method_exists($this->model, 'isJsonable') && $this->model->isJsonable($key)) ||
-            (method_exists($this->model, 'getCast') && $this->model->getCast($key) === 'array');
+            (method_exists($this->model, 'hasCast') && $this->model->hasCast($key, 'array') );
     }
 
     /**
