@@ -107,7 +107,7 @@ abstract class TranslatableBehavior extends ExtensionBase
         if ($key === 'translatable' || $this->translatableDefault == $this->translatableContext) {
             return false;
         }
-        return in_array($key, $this->model->getTranslatableAttributes());
+        return $this->attributeStoredAsJson($key) || in_array($key, $this->model->getTranslatableAttributes());
     }
 
     /**
