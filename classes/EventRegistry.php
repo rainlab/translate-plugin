@@ -315,8 +315,8 @@ class EventRegistry
         $searchPaths[] = $locale;
 
         if (str_contains($locale, '-')) {
-            list($country) = explode('-', $locale);
-            $searchPaths[] = $country;
+            list($lang) = explode('-', $locale);
+            $searchPaths[] = $lang;
         }
 
         foreach ($searchPaths as $path) {
