@@ -174,7 +174,9 @@ class EventRegistry
 
             $type = array_get($config, 'type', 'text');
 
-            $fields[$name]['type'] = $typesMap[$type];
+            if (array_key_exists($type, $typesMap)) {
+                $fields[$name]['type'] = $typesMap[$type];
+            }
         }
 
         return $fields;
