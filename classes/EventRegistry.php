@@ -149,6 +149,15 @@ class EventRegistry
      */
     protected function processFormMLFields($fields, $model)
     {
+        $typesMap = [
+            'markdown'    => 'mlmarkdowneditor',
+            'mediafinder' => 'mlmediafinder',
+            'repeater'    => 'mlrepeater',
+            'richeditor'  => 'mlricheditor',
+            'text'        => 'mltext',
+            'textarea'    => 'mltextarea',
+        ];
+
         $translatable = array_flip($model->getTranslatableAttributes());
 
         /*
@@ -165,23 +174,8 @@ class EventRegistry
 
             $type = array_get($config, 'type', 'text');
 
-            if ($type == 'text') {
-                $fields[$name]['type'] = 'mltext';
-            }
-            elseif ($type == 'textarea') {
-                $fields[$name]['type'] = 'mltextarea';
-            }
-            elseif ($type == 'richeditor') {
-                $fields[$name]['type'] = 'mlricheditor';
-            }
-            elseif ($type == 'markdown') {
-                $fields[$name]['type'] = 'mlmarkdowneditor';
-            }
-            elseif ($type == 'repeater') {
-                $fields[$name]['type'] = 'mlrepeater';
-            }
-            elseif ($type == 'mediafinder') {
-                $fields[$name]['type'] = 'mlmediafinder';
+            if (array_key_exists($type, $typesMap)) {
+                $fields[$name]['type'] = $typesMap[$type];
             }
         }
 
