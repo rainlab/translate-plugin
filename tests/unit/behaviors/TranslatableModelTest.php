@@ -32,7 +32,6 @@ class TranslatableModelTest extends PluginTestCase
             $table->string('name')->nullable();
             $table->string('code')->nullable();
             $table->text('states')->nullable();
-            $table->boolean('found')->default(1);
             $table->timestamps();
         });
 
