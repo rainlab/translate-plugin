@@ -30,6 +30,7 @@ class MessageImport extends ImportModel
     public function importData($results, $sessionKey = null)
     {
         $codeName = MessageExport::CODE_COLUMN_NAME;
+        $defaultName = Message::DEFAULT_LOCALE;
 
         foreach ($results as $index => $result) {
             try {
@@ -44,8 +45,9 @@ class MessageImport extends ImportModel
                     // Create empty array, if $message is new
                     $message->message_data = $message->message_data ?: [];
 
-                    if (!isset($message->message_data[Message::DEFAULT_LOCALE])) {
-                        $result[Message::DEFAULT_LOCALE] = $code;
+                    if (!isset($message->message_data[$defaultName])) {
+                        $default = (isset($result[$defaultName]) && !empty($result[$defaultName])) ? $result[$defaultName] : $code;
+                        $result[$defaultName] = $default;
                     }
 
                     $message->message_data = array_merge($message->message_data, $result);
