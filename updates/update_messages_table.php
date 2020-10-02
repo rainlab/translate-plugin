@@ -28,7 +28,10 @@ class UpdateMessagesTable extends Migration
         }
 
         if (Schema::hasColumn(self::TABLE_NAME, 'found')) {
-            Schema::dropColumn(['found']);
+            Schema::table(self::TABLE_NAME, function($table)
+            {
+                $table->dropColumn(['found']);
+            });
         }
     }
 }
