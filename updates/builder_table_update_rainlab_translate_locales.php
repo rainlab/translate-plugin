@@ -34,8 +34,11 @@ class BuilderTableUpdateRainlabTranslateLocales extends Migration
             return;
         }
 
-        if (Schema::hasColumn(self::TABLE_NAME, 'found')) {
-            Schema::dropColumn(['sort_order']);
+        if (Schema::hasColumn(self::TABLE_NAME, 'sort_order')) {
+            Schema::table(self::TABLE_NAME, function($table)
+            {
+                $table->dropColumn(['sort_order']);
+            });
         }
     }
 }
