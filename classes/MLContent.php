@@ -8,6 +8,8 @@
  */
 class MLContent extends MLCmsObject
 {
+    protected $allowedExtensions = ['htm', 'txt', 'md'];
+
     public static function findLocale($locale, $page)
     {
         if (!$page->exists) {
