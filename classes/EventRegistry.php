@@ -279,7 +279,7 @@ class EventRegistry
     public function findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain)
     {
         if (isset($raw) || (!isset($view) && !isset($plain))) {
-            return;
+            return null;
         }
 
         $locale = strtolower(isset($data['_current_locale']) ? $data['_current_locale'] : App::getLocale());
@@ -295,7 +295,7 @@ class EventRegistry
         }
 
         if (($code = $view ?: $plain) === null) {
-            return;
+            return null;
         }
 
         return !MailManager::instance()->addContentToMailer($message, $code, $data, $view === null);
@@ -326,6 +326,6 @@ class EventRegistry
                 return $localizedView;
             }
         }
-        return;
+        return null;
     }
 }
