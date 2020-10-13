@@ -282,7 +282,7 @@ class EventRegistry
             return null;
         }
 
-        $locale = strtolower(isset($data['_current_locale']) ? $data['_current_locale'] : App::getLocale());
+        $locale = !empty($data['_current_locale']) ? $data['_current_locale'] : App::getLocale();
 
         $factory = $mailer->getViewFactory();
 
@@ -312,6 +312,8 @@ class EventRegistry
      */
     public function getLocalizedView($factory, $code, $locale)
     {
+        $locale = strtolower($locale);
+
         $searchPaths[] = $locale;
 
         if (str_contains($locale, '-')) {
