@@ -278,7 +278,8 @@ class EventRegistry
      */
     public function findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain)
     {
-        if (isset($raw) || (!isset($view) && !isset($plain))) {
+        // should we handle this when raw is provided?
+        if (!empty($raw)) {
             return null;
         }
 
@@ -294,11 +295,13 @@ class EventRegistry
             $plain = $this->getLocalizedView($factory, $plain, $locale);
         }
 
-        if (($code = $view ?: $plain) === null) {
+        $code = $view ?: $plain;
+        if (empty($code)) {
             return null;
         }
 
-        return !MailManager::instance()->addContentToMailer($message, $code, $data, $view === null);
+        $plainOnly = empty($view);
+        return !MailManager::instance()->addContentToMailer($message, $code, $data, $plainOnly);
     }
 
 
