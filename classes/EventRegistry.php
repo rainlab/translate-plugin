@@ -278,7 +278,7 @@ class EventRegistry
      */
     public function findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain)
     {
-        // should we handle this when raw is provided?
+        // There is no need to localize raw templates
         if (!empty($raw)) {
             return null;
         }
@@ -301,7 +301,12 @@ class EventRegistry
         }
 
         $plainOnly = empty($view);
-        return !MailManager::instance()->addContentToMailer($message, $code, $data, $plainOnly);
+
+        $result = MailManager::instance()->addContentToMailer($message, $code, $data, $plainOnly);
+        if (!$result) {
+            // prevent the caller who fired the event from continuing to send the mail.
+            return false;
+        }
     }
 
 
