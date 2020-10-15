@@ -280,7 +280,7 @@ class EventRegistry
     {
         // Raw content cannot be localized at this level
         if (!empty($raw)) {
-            return null;
+            return;
         }
 
         // Get the locale to use for this template
