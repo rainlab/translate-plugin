@@ -283,6 +283,7 @@ class EventRegistry
             return null;
         }
 
+        // Get the locale to use for this template
         $locale = !empty($data['_current_locale']) ? $data['_current_locale'] : App::getLocale();
 
         $factory = $mailer->getViewFactory();
