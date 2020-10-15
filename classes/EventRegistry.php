@@ -274,7 +274,7 @@ class EventRegistry
      * @param  array $data
      * @param  string $raw
      * @param  string $plain
-     * @return string|null
+     * @return bool|void Will return false if the translation process successfully replaced the original message with a translated version to prevent the original version from being processed.
      */
     public function findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain)
     {
