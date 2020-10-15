@@ -303,7 +303,7 @@ class EventRegistry
         $plainOnly = empty($view);
 
         $result = MailManager::instance()->addContentToMailer($message, $code, $data, $plainOnly);
-        if (!$result) {
+        if ($result) {
             // prevent the caller who fired the event from continuing to send the mail.
             return false;
         }
