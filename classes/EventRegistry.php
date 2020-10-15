@@ -278,7 +278,7 @@ class EventRegistry
      */
     public function findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain)
     {
-        // There is no need to localize raw templates
+        // Raw content cannot be localized at this level
         if (!empty($raw)) {
             return null;
         }
