@@ -288,7 +288,7 @@ class EventRegistry
 
         $factory = $mailer->getViewFactory();
 
-        if (isset($view)) {
+        if (!empty($view)) {
             $view = $this->getLocalizedView($factory, $view, $locale);
         }
 
