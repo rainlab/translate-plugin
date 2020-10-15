@@ -292,7 +292,7 @@ class EventRegistry
             $view = $this->getLocalizedView($factory, $view, $locale);
         }
 
-        if (isset($plain)) {
+        if (!empty($plain)) {
             $plain = $this->getLocalizedView($factory, $plain, $locale);
         }
 
