@@ -303,11 +303,8 @@ class EventRegistry
 
         $plainOnly = empty($view);
 
-        $result = MailManager::instance()->addContentToMailer($message, $code, $data, $plainOnly);
-        if ($result) {
-            // prevent the caller who fired the event from continuing to send the mail.
-            return false;
-        }
+        // If the content swap process succeeded, return false prevent the original content from being processed
+        return !MailManager::instance()->addContentToMailer($message, $code, $data, $plainOnly);
     }
 
 
