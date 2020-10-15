@@ -274,24 +274,25 @@ class EventRegistry
      * @param  array $data
      * @param  string $raw
      * @param  string $plain
-     * @return string|null
+     * @return bool|void Will return false if the translation process successfully replaced the original message with a translated version to prevent the original version from being processed.
      */
     public function findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain)
     {
-        // There is no need to localize raw templates
+        // Raw content cannot be localized at this level
         if (!empty($raw)) {
-            return null;
+            return;
         }
 
+        // Get the locale to use for this template
         $locale = !empty($data['_current_locale']) ? $data['_current_locale'] : App::getLocale();
 
         $factory = $mailer->getViewFactory();
 
-        if (isset($view)) {
+        if (!empty($view)) {
             $view = $this->getLocalizedView($factory, $view, $locale);
         }
 
-        if (isset($plain)) {
+        if (!empty($plain)) {
             $plain = $this->getLocalizedView($factory, $plain, $locale);
         }
 
