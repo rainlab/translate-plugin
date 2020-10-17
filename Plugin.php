@@ -37,6 +37,13 @@ class Plugin extends PluginBase
 
     public function register()
     {
+        /* 
+         * Load localized version of mail templates (akin to localized CMS content files)
+         */
+        Event::listen('mailer.beforeAddContent', function ($mailer, $message, $view, $data, $raw, $plain) {
+            return EventRegistry::instance()->findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain);
+        }, 1);
+
         /*
          * Defer event with low priority to let others contribute before this registers.
          */

@@ -113,13 +113,13 @@ Add the `--purge` option to clear old messages first:
     
     php artisan translate:scan --purge
     
-## Content translation
+## Content & mail template translation
 
-This plugin activates a feature in the CMS that allows content files to use language suffixes, for example:
+This plugin activates a feature in the CMS that allows content & mail template files to use language suffixes, for example:
 
-* **welcome.htm** will contain the content in the default language.
-* **welcome.ru.htm** will contain the content in Russian.
-* **welcome.fr.htm** will contain the content in French.
+* **welcome.htm** will contain the content or mail template in the default language.
+* **welcome.ru.htm** will contain the content or mail template in Russian.
+* **welcome.fr.htm** will contain the content or mail template in French.
 
 ## Model translation
 
