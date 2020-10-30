@@ -1,6 +1,4 @@
-<?php
-
-return [
+<?php return [
     'plugin' => [
         'name' => 'Tłumaczenia',
         'description' => 'Umożliwia tworzenie stron wielojęzycznych.',
@@ -10,7 +8,11 @@ return [
     ],
     'locale_picker' => [
         'component_name' => 'Lista języków',
-        'component_description' => 'Wyświetla wybieralną listę języków strony.',
+        'component_description' => 'Wyświetla menu wyboru języków strony.',
+    ],
+    'alternate_hreflang' => [
+        'component_name' => 'Alternatywne ustawienia hreflang',
+        'component_description' => 'Ustawia alternatywne języki dla strony jako parametry hreflang'
     ],
     'locale' => [
         'title' => 'Zarządzaj językami',
@@ -18,8 +20,9 @@ return [
         'create_title' => 'Stwórz język',
         'select_label' => 'Wybierz język',
         'default_suffix' => 'domyślny',
-        'unset_default' => 'Język ":locale" jest już domyślny i nie można tego zmienić.',
-        'disabled_default' => 'Język ":locale" jest wyłączony nie można zostać domyślnym.',
+        'unset_default' => 'Język ":locale" jest już domyślny i nie można go zmienić.',
+        'delete_default' => 'Język ":locale" jest już domyślny i nie może zostać usunięty.',
+        'disabled_default' => 'Język ":locale" jest wyłączony i nie można go ustawić jako domyślny.',
         'name' => 'Nazwa',
         'code' => 'Kod',
         'is_default' => 'Domyślny',
@@ -28,19 +31,34 @@ return [
         'is_enabled_help' => 'Wyłączone języki nie będą dostępne na stronie.',
         'not_available_help' => 'Nie skonfigurowano innych języków.',
         'hint_locales' => 'Stwórz nowe języki, na które chcesz tłumaczyć treść strony. Domyślny język to język treści strony przed tłumaczeniem. ',
+        'reorder_title' => 'Zmień kolejność języków',
+        'sort_order' => 'Sortowanie',
     ],
     'messages' => [
         'title' => 'Tłumacz Treść',
         'description' => 'Tłumaczenie treści strony',
-        'clear_cache_link' => 'Wyczyć Cache',
+        'clear_cache_link' => 'Wyczyść Cache',
         'clear_cache_loading' => 'Czyszczenie cache...',
         'clear_cache_success' => 'Pomyślnie wyczyszczono cache aplikacji!',
         'clear_cache_hint' => 'Jeśli nie widzisz zmian na stronie, kliknij przycisk <strong>Wyczyść cache</strong>.',
         'scan_messages_link' => 'Skanuj treść',
+        'scan_messages_begin_scan' => 'Rozpocznij skanowanie',
         'scan_messages_loading' => 'Szukanie nowych pozycji...',
         'scan_messages_success' => 'Skanowanie plików motywu zakończyło się powodzeniem!',
         'scan_messages_hint' => 'Kliknięcie przycisku <strong>Skanuj treść</strong> rozpocznie skanowanie w poszukiwaniu nowych pozycji do przetłumaczenia.',
+        'scan_messages_process' => 'Ten proces podejmie próbę przeskanowania aktywnego motywu w poszukiwaniu wiadomości, które można przetłumaczyć.',
+        'scan_messages_process_limitations' => 'Niektóre wiadomości mogą nie zostać przechwycone i pojawią się dopiero po pierwszym użyciu.',
+        'scan_messages_purge_label' => 'Najpierw usuń wszystkie wiadomości',
+        'scan_messages_purge_help' => 'Zaznaczenie tej opcji spowoduje usunięcie wszystkich wiadomości, w tym ich tłumaczeń, przed wykonaniem skanowania.',
+        'scan_messages_purge_confirm' => 'Czy jesteś pewny że chcesz usunąć wszystkie wiadomości? Po usunięciu nie będzie można ich przywrócić',
+        'scan_messages_purge_deleted_label' => 'Usuń utracone wiadomości po zeskanowaniu',
+        'scan_messages_purge_deleted_help' => 'Jeśli ta opcja jest zaznaczona, po zakończeniu skanowania wszystkie wiadomości, których skaner nie znalazł (w tym ich tłumaczenia) zostaną usunięte. Po zaznaczeniu tej opcji nie będzie możliwości przywrócenia zmian!',
         'hint_translate' => 'Możesz tu przetłumaczyć treść strony. Pola zapisują się automatycznie.',
         'hide_translated' => 'Ukryj przetłumaczone',
+        'export_messages_link' => 'Wyeksportuj treść',
+        'import_messages_link' => 'Zaimportuj treść',
+        'not_found' => 'Nie znaleziono',
+        'found_help' => 'Wystąpiły błędy podczas skanowania',
+        'found_title' => 'Błąd skanowania',
     ],
 ];
