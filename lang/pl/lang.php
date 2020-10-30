@@ -1,4 +1,6 @@
-<?php return [
+<?php 
+
+return [
     'plugin' => [
         'name' => 'Tłumaczenia',
         'description' => 'Umożliwia tworzenie stron wielojęzycznych.',
