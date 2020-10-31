@@ -45,7 +45,7 @@ jobs:
         with:
           php-version: ${{ matrix.phpVersions }}
           extensions: ${{ env.phpExtensions }}
-          tools: composer
+          tools: composer:v1
           coverage: none
 
       - name: Install October CMS
