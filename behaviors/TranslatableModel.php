@@ -32,7 +32,7 @@ class TranslatableModel extends TranslatableBehavior
     }
 
     /**
-     * Applies a translatable index to a basic query. This scope will join the index
+     * Applies a translatable index to a basic query. This scope will join the index table.
      * @param  Builder $query
      * @param  string $index
      * @param  string $value
