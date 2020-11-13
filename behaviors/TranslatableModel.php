@@ -46,6 +46,8 @@ class TranslatableModel extends TranslatableBehavior
             $locale = $this->translatableContext;
         }
 
+        // Separate query into two separate queries for improved performance
+        // @see https://github.com/rainlab/translate-plugin/pull/623
         $translateIndexes = DB::table('rainlab_translate_indexes')
             ->where('rainlab_translate_indexes.model_type', '=', $this->getClass())
             ->where('rainlab_translate_indexes.locale', '=', $locale)
@@ -53,7 +55,7 @@ class TranslatableModel extends TranslatableBehavior
             ->where('rainlab_translate_indexes.value', $operator, $value)
             ->pluck('model_id');
 
-        if($translateIndexes->count()) {
+        if ($translateIndexes->count()) {
             $query->whereIn($this->model->getQualifiedKeyName(), $translateIndexes);
         } else {
             $query->where($index, $operator, $value);
