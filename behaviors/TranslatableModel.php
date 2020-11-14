@@ -48,7 +48,7 @@ class TranslatableModel extends TranslatableBehavior
 
         // Separate query into two separate queries for improved performance
         // @see https://github.com/rainlab/translate-plugin/pull/623
-        $translateIndexes = DB::table('rainlab_translate_indexes')
+        $translateIndexes = Db::table('rainlab_translate_indexes')
             ->where('rainlab_translate_indexes.model_type', '=', $this->getClass())
             ->where('rainlab_translate_indexes.locale', '=', $locale)
             ->where('rainlab_translate_indexes.item', $index)
