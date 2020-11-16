@@ -107,8 +107,7 @@ abstract class TranslatableBehavior extends ExtensionBase
         if ($key === 'translatable' || $this->translatableDefault == $this->translatableContext) {
             return false;
         }
-
-        return in_array($key, $this->model->getTranslatableAttributes());
+        return $this->attributeStoredAsJson($key) || in_array($key, $this->model->getTranslatableAttributes());
     }
 
     /**
@@ -157,7 +156,7 @@ abstract class TranslatableBehavior extends ExtensionBase
                 $this->loadTranslatableData($locale);
             }
 
-            if ($this->hasTranslation($key, $locale)) {
+            if ($this->hasTranslation($key, $locale) && !$this->attributeStoredAsJson($key)) {
                 $result = $this->getAttributeFromData($this->translatableAttributes[$locale], $key);
             }
             elseif ($this->translatableUseFallback) {
@@ -168,14 +167,33 @@ abstract class TranslatableBehavior extends ExtensionBase
         /*
          * Handle jsonable attributes, default locale may return the value as a string
          */
-        if (
-            is_string($result) &&
-            method_exists($this->model, 'isJsonable') &&
-            $this->model->isJsonable($key)
-        ) {
+        if ( is_string($result) && $this->attributeStoredAsJson($key)) {
             $result = json_decode($result, true);
+            $result = $this->getNestedTranslations($key, $result, $locale);
         }
 
+        return $result;
+    }
+
+    /**
+     * Returns all translated attribute values for the nested properties in json array.
+     * @param  string $attribute
+     * @param  array $data
+     * @param  string $locale
+     * @return array
+     */
+    function getNestedTranslations($attribute, $data, $locale)
+    {
+        $result = [];
+        foreach (array_dot($data) as $key => $value) {
+            $nameKey = $this->dotNotationToHtmlArray($attribute.'.'.$key);
+            if ( $this->isTranslatable($nameKey) ) {
+                if ($translatedValue = $this->getAttributeTranslated($nameKey, $locale)) {
+                    $value = $translatedValue;
+                }
+            }
+            array_set($result, $key, $value);
+        }
         return $result;
     }
 
@@ -447,6 +465,33 @@ abstract class TranslatableBehavior extends ExtensionBase
         $keyArray = HtmlHelper::nameToArray($attribute);
 
         return array_get($data, implode('.', $keyArray));
+    }
+
+    /**
+     * Converts a dot notation array into an html notation array
+     * (i.e. my.dot.notation.array -> my[dot][notation][array])
+     * @param  string $dotArray
+     * @return string
+     */
+    protected function dotNotationToHtmlArray($dotArray)
+    {
+        $result = '';
+        foreach (explode('.', $dotArray) as $i => $key) {
+            $result .= $i == 0 ? $key : '['.$key.']';
+        }
+        return $result;
+    }
+
+    /**
+     * Determine if an attribute is stored as json
+     * @param  string $attribute
+     * @return bool
+     */
+    protected function attributeStoredAsJson($attribute)
+    {
+        return
+            (method_exists($this->model, 'isJsonable') && $this->model->isJsonable($attribute)) ||
+            (method_exists($this->model, 'hasCast') && $this->model->hasCast($attribute, 'array'));
     }
 
     /**
