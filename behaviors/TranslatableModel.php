@@ -32,7 +32,8 @@ class TranslatableModel extends TranslatableBehavior
     }
 
     /**
-     * Applies a translatable index to a basic query. This scope will join the index table.
+     * Applies a translatable index to a basic query. This scope will join the index
+     * table and can be executed neither more than once, nor with scopeTransOrder.
      * @param  Builder $query
      * @param  string $index
      * @param  string $value
@@ -41,47 +42,21 @@ class TranslatableModel extends TranslatableBehavior
      */
     public function scopeTransWhere($query, $index, $value, $locale = null, $operator = '=')
     {
-        if (!$locale) {
-            $locale = $this->translatableContext;
-        }
-        $indexTableAlias = 'rainlab_translate_indexes_' . $index . '_' . $locale;
-
         $query->select($this->model->getTable().'.*');
 
-        $query->where(function($q) use ($index, $value, $operator, $indexTableAlias) {
+        $query->where(function($q) use ($index, $value, $operator) {
             $q->where($this->model->getTable().'.'.$index, $operator, $value);
-            $q->orWhere($indexTableAlias. '.value', $operator, $value);
+            $q->orWhere(function($q) use ($index, $value, $operator) {
+                $q
+                    ->where('rainlab_translate_indexes.item', $index)
+                    ->where('rainlab_translate_indexes.value', $operator, $value)
+                ;
+            });
         });
 
-        $this->joinTranslateIndexesTable($query, $locale, $index, $indexTableAlias);
+        $this->joinTranslateIndexesTable($query, $locale);
 
         return $query;
-    }
-
-    /**
-     * Applies a translatable index to a basic query. This scope applies only to specific locale. This scope will join the index table.
-     * @param  Builder $query
-     * @param  string $index
-     * @param  string $value
-     * @param  string $locale
-     * @return Builder
-     */
-    public function scopeTransWhereSpecificLocale($query, $index, $value, $locale = null, $operator = '=')
-    {
-            if (!$locale) {
-                $locale = $this->translatableContext;
-            }
-            $indexTableAlias = 'rainlab_translate_indexes_' . $index . '_' . $locale;
-
-            $query->select($this->model->getTable().'.*');
-
-            if ($locale == $this->translatableDefault) {
-                $query->where($this->model->getTable().'.'.$index, $operator, $value);
-            } else {
-                $query->where($indexTableAlias . '.value', $operator, $value);
-                $this->joinTranslateIndexesTable($query, $locale, $index, $indexTableAlias);
-            }
-            return $query;
     }
 
     /**
