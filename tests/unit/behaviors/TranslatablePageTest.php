@@ -22,6 +22,14 @@ class TranslatablePageTest extends PluginTestCase
         $resolver = new Resolver(['theme1' => $datasource]);
         $resolver->setDefaultDatasource('theme1');
         Model::setDatasourceResolver($resolver);
+
+        TranslatablePage::extend(function($page) {
+            if (!$page->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePage')) {
+                $page->addDynamicProperty('translatable', ['title']);
+                $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
+            }
+        });
+
     }
 
     public function tearDown(): void
