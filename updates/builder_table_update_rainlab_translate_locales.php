@@ -6,12 +6,20 @@ use October\Rain\Database\Updates\Migration;
 
 class BuilderTableUpdateRainlabTranslateLocales extends Migration
 {
+    const TABLE_NAME = 'rainlab_translate_locales';
+
     public function up()
     {
-        Schema::table('rainlab_translate_locales', function($table)
-        {
-            $table->integer('sort_order')->default(0);
-        });
+        if (!Schema::hasTable(self::TABLE_NAME)) {
+            return;
+        }
+
+        if (!Schema::hasColumn(self::TABLE_NAME, 'found')) {
+            Schema::table(self::TABLE_NAME, function($table)
+            {
+                $table->integer('sort_order')->default(0);
+            });
+        }
 
         $locales = Locale::all();
         foreach($locales as $locale) {
@@ -19,12 +27,18 @@ class BuilderTableUpdateRainlabTranslateLocales extends Migration
             $locale->save();
         }
     }
-    
+
     public function down()
     {
-        Schema::table('rainlab_translate_locales', function($table)
-        {
-            $table->dropColumn('sort_order');
-        });
+        if (!Schema::hasTable(self::TABLE_NAME)) {
+            return;
+        }
+
+        if (Schema::hasColumn(self::TABLE_NAME, 'sort_order')) {
+            Schema::table(self::TABLE_NAME, function($table)
+            {
+                $table->dropColumn(['sort_order']);
+            });
+        }
     }
 }

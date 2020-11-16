@@ -42,19 +42,24 @@ class TranslatableModel extends TranslatableBehavior
      */
     public function scopeTransWhere($query, $index, $value, $locale = null, $operator = '=')
     {
-        $query->select($this->model->getTable().'.*');
+        if (!$locale) {
+            $locale = $this->translatableContext;
+        }
 
-        $query->where(function($q) use ($index, $value, $operator) {
-            $q->where($this->model->getTable().'.'.$index, $operator, $value);
-            $q->orWhere(function($q) use ($index, $value, $operator) {
-                $q
-                    ->where('rainlab_translate_indexes.item', $index)
-                    ->where('rainlab_translate_indexes.value', $operator, $value)
-                ;
-            });
-        });
+        // Separate query into two separate queries for improved performance
+        // @see https://github.com/rainlab/translate-plugin/pull/623
+        $translateIndexes = Db::table('rainlab_translate_indexes')
+            ->where('rainlab_translate_indexes.model_type', '=', $this->getClass())
+            ->where('rainlab_translate_indexes.locale', '=', $locale)
+            ->where('rainlab_translate_indexes.item', $index)
+            ->where('rainlab_translate_indexes.value', $operator, $value)
+            ->pluck('model_id');
 
-        $this->joinTranslateIndexesTable($query, $locale);
+        if ($translateIndexes->count()) {
+            $query->whereIn($this->model->getQualifiedKeyName(), $translateIndexes);
+        } else {
+            $query->where($index, $operator, $value);
+        }
 
         return $query;
     }

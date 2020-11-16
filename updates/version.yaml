@@ -87,3 +87,9 @@
     - Try locale without country before returning default translation
     - Allow exporting default locale
     - Fire 'rainlab.translate.themeScanner.afterScan' event in the theme scanner for extendability
+1.7.3:
+    - Make plugin ready for Laravel 6 update
+    - Add support for translating RainLab.Pages MenuItem properties (requires RainLab.Pages v1.3.6)
+    - Restore multilingual button position for textarea
+    - Fix translatableAttributes
+    

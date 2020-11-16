@@ -36,8 +36,6 @@ class MLRepeater extends Repeater
      */
     public function render()
     {
-        $this->isAvailable = Locale::isAvailable();
-
         $this->actAsParent();
         $parentContent = parent::render();
         $this->actAsParent(false);
