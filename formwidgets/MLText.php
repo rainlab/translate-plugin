@@ -32,8 +32,6 @@ class MLText extends FormWidgetBase
      */
     public function render()
     {
-        $this->isAvailable = Locale::isAvailable();
-
         $this->prepareLocaleVars();
 
         if ($this->isAvailable) {
