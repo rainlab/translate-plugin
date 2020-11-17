@@ -54,16 +54,16 @@ class Plugin extends PluginBase
         /*
          * Handle translated page URLs
          */
-        Page::extend(function($page) {
-            if (!$page->propertyExists('translatable')) {
-                $page->addDynamicProperty('translatable', []);
+        Page::extend(function($model) {
+            if (!$model->propertyExists('translatable')) {
+                $model->addDynamicProperty('translatable', []);
             }
-            $page->translatable = array_merge($page->translatable, ['title', 'description', 'meta_title', 'meta_description']);
-            if (!$page->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePageUrl')) {
-                $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
+            $model->translatable = array_merge($model->translatable, ['title', 'description', 'meta_title', 'meta_description']);
+            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePageUrl')) {
+                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
             }
-            if (!$page->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePage')) {
-                $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
+            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePage')) {
+                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
             }
         });
 
@@ -75,10 +75,10 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
             $model->translatable = array_merge($model->translatable, ['title', 'description']);
-            if (!$page->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
+            if (!$model->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
                 $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
             }
-            if (!$page->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
+            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
                 $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
             }
         });
@@ -91,10 +91,10 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
 
-            if (!$page->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
+            if (!$model->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
                 $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
             }
-            if (!$page->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
+            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
                 $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
             }
 
