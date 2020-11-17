@@ -65,8 +65,7 @@ class TranslatableModel extends TranslatableBehavior
     }
 
     /**
-     * Applies a sort operation with a translatable index to a basic query. This scope will join the index
-     * table and can be executed neither more than once, nor with scopeTransWhere.
+     * Applies a sort operation with a translatable index to a basic query. This scope will join the index table.
      * @param  Builder $query
      * @param  string $index
      * @param  string $direction
@@ -75,40 +74,44 @@ class TranslatableModel extends TranslatableBehavior
      */
     public function scopeTransOrderBy($query, $index, $direction = 'asc', $locale = null)
     {
+        if (!$locale) {
+            $locale = $this->translatableContext;
+        }
+        $indexTableAlias = 'rainlab_translate_indexes_' . $index . '_' . $locale;
+
         $query->select(
             $this->model->getTable().'.*',
-            Db::raw('COALESCE(rainlab_translate_indexes.value, '. $this->model->getTable() .'.'.$index.') AS translate_sorting_key')
+            Db::raw('COALESCE(' . $indexTableAlias . '.value, '. $this->model->getTable() .'.'.$index.') AS translate_sorting_key')
         );
 
         $query->orderBy('translate_sorting_key', $direction);
 
-        $this->joinTranslateIndexesTable($query, $locale);
+        $this->joinTranslateIndexesTable($query, $locale, $index, $indexTableAlias);
 
         return $query;
     }
 
     /**
      * Joins the translatable indexes table to a query.
-     * This cannot be executed more than once.
      * @param  Builder $query
      * @param  string $locale
+     * @param  string $indexTableAlias
      * @return Builder
      */
-    protected function joinTranslateIndexesTable($query, $locale = null)
+    protected function joinTranslateIndexesTable($query, $locale, $index, $indexTableAlias)
     {
-        if (!$locale) {
-            $locale = $this->translatableContext;
+        $joinTableWithAlias = 'rainlab_translate_indexes as ' . $indexTableAlias;
+        // check if table with same name and alias is already joined
+        if (collect($query->getQuery()->joins)->contains('table', $joinTableWithAlias)) {
+            return $query;
         }
 
-        // This join will crap out if this scope executes twice, it is a known issue.
-        // It should check if the join exists before applying it, this mechanism was
-        // not found in Laravel. So options are block joins entirely or allow once.
-        $query->leftJoin('rainlab_translate_indexes', function($join) use ($locale) {
+        $query->leftJoin($joinTableWithAlias, function($join) use ($locale, $index, $indexTableAlias) {
             $join
-                ->on(Db::raw(DbDongle::cast($this->model->getQualifiedKeyName(), 'TEXT')), '=', 'rainlab_translate_indexes.model_id')
-                ->where('rainlab_translate_indexes.model_type', '=', $this->getClass())
-                ->where('rainlab_translate_indexes.locale', '=', $locale)
-            ;
+                ->on(Db::raw(DbDongle::cast($this->model->getQualifiedKeyName(), 'TEXT')), '=', $indexTableAlias . '.model_id')
+                ->where($indexTableAlias . '.model_type', '=', $this->getClass())
+                ->where($indexTableAlias . '.item', '=', $index)
+                ->where($indexTableAlias . '.locale', '=', $locale);
         });
 
         return $query;

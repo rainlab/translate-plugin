@@ -60,7 +60,9 @@ class Plugin extends PluginBase
             }
             $page->translatable = array_merge($page->translatable, ['title', 'description', 'meta_title', 'meta_description']);
             $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
-            $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
+            if (!$page->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePage')) {
+                $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
+            }
         });
 
         /*
