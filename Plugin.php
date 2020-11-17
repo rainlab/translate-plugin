@@ -59,7 +59,9 @@ class Plugin extends PluginBase
                 $page->addDynamicProperty('translatable', []);
             }
             $page->translatable = array_merge($page->translatable, ['title', 'description', 'meta_title', 'meta_description']);
-            $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
+            if (!$page->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePageUrl')) {
+                $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
+            }
             if (!$page->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePage')) {
                 $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
             }
@@ -73,8 +75,12 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
             $model->translatable = array_merge($model->translatable, ['title', 'description']);
-            $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
-            $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+            if (!$page->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
+                $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            }
+            if (!$page->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
+                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+            }
         });
 
         /*
@@ -85,8 +91,12 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
 
-            $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
-            $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+            if (!$page->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
+                $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            }
+            if (!$page->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
+                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+            }
 
             $model->bindEvent('model.afterFetch', static function() use ($model) {
                 foreach ($model->getFormFields() as $id => $field) {
