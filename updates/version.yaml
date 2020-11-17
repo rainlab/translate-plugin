@@ -92,4 +92,11 @@
     - Add support for translating RainLab.Pages MenuItem properties (requires RainLab.Pages v1.3.6)
     - Restore multilingual button position for textarea
     - Fix translatableAttributes
-    
+1.7.4:
+    - Faster version of transWhere
+    - Mail templates/views can now be localized
+    - Fix messages table layout on mobile
+    - Fix scopeTransOrderBy duplicates
+    - Polish localization updates
+    - Turkish localization updates
+    - Add Greek language localization
