@@ -35,4 +35,14 @@ return [
     */
     'disableLocalePrefixRoutes' => false,
 
+    /*
+    |--------------------------------------------------------------------------
+    | enables fallback to parent locale
+    |--------------------------------------------------------------------------
+    | 
+    | if enabled a locale like 'de-ch' will fallback to 'de' first
+    | before using the default language.
+    |
+    */
+    'enableParentLocaleFallback' => false,
 ];
