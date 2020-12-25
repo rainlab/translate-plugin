@@ -160,18 +160,28 @@ abstract class TranslatableBehavior extends ExtensionBase
 
             if ($this->hasTranslation($key, $locale)) {
                 $result = $this->getAttributeFromData($this->translatableAttributes[$locale], $key);
-            } else {
+            } elseif ($this->translatableUseFallback) {
+                $parentLocaleFallbackEnabled = Config::get('rainlab.translate::enableParentLocaleFallback');
                 $localeParts = explode('-', $locale);
-                $fallbackEnabled = Config::get('rainlab.translate::enableParentLocaleFallback');
+                if ($parentLocaleFallbackEnabled && count($localeParts) > 0) {
+                    $parentLocale = $localeParts[0];
+                    if ($parentLocale === $this->translatableDefault) {
+                        // If parent locale is the default locale
+                        $result = $this->getAttributeFromData($this->model->attributes, $key);
+                    } else {
+                        // Load translatable data for parent locale
+                        $this->loadTranslatableData($parentLocale);
 
-                if ($fallbackEnabled && count($localeParts) > 0) {
-                    $this->loadTranslatableData($localeParts[0]);
-                }
-              
-                if ($fallbackEnabled && count($localeParts) > 0 && $this->hasTranslation($key, $localeParts[0])) {
-                    $result = $this->getAttributeFromData($this->translatableAttributes[$localeParts[0]], $key);
-                }
-                elseif ($this->translatableUseFallback) {
+                        if ($this->hasTranslation($key, $parentLocale)) {
+                            // If translation in parent locale exists
+                            $result = $this->getAttributeFromData($this->translatableAttributes[$parentLocale], $key);
+                        } else {
+                            // Fallback to default locale
+                            $result = $this->getAttributeFromData($this->model->attributes, $key);
+                        }
+                    }
+                } else {
+                    // Fallback to default locale
                     $result = $this->getAttributeFromData($this->model->attributes, $key);
                 }
             }
