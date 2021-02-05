@@ -100,3 +100,7 @@
     - Polish localization updates
     - Turkish localization updates
     - Add Greek language localization
+1.8.0:
+    - !!! Potential breaking change with Message Ids
+    - migrate_message_code.php
+
