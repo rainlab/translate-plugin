@@ -35,4 +35,15 @@ return [
     */
     'disableLocalePrefixRoutes' => false,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Case Insensitive Message Ids
+    |--------------------------------------------------------------------------
+    |
+    | Should Message Ids be Case sensitive
+    | (defaults to false)
+    |
+    */
+    'caseSensitiveIds' => false,
+
 ];
