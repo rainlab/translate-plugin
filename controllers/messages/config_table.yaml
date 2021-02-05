@@ -13,3 +13,5 @@ columns:
         title: From
     to:
         title: To
+    found:
+        title: Scan errors

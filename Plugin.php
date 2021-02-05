@@ -37,6 +37,13 @@ class Plugin extends PluginBase
 
     public function register()
     {
+        /* 
+         * Load localized version of mail templates (akin to localized CMS content files)
+         */
+        Event::listen('mailer.beforeAddContent', function ($mailer, $message, $view, $data, $raw, $plain) {
+            return EventRegistry::instance()->findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain);
+        }, 1);
+
         /*
          * Defer event with low priority to let others contribute before this registers.
          */
@@ -47,13 +54,17 @@ class Plugin extends PluginBase
         /*
          * Handle translated page URLs
          */
-        Page::extend(function($page) {
-            if (!$page->propertyExists('translatable')) {
-                $page->addDynamicProperty('translatable', []);
+        Page::extend(function($model) {
+            if (!$model->propertyExists('translatable')) {
+                $model->addDynamicProperty('translatable', []);
             }
-            $page->translatable = array_merge($page->translatable, ['title', 'description', 'meta_title', 'meta_description']);
-            $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
-            $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
+            $model->translatable = array_merge($model->translatable, ['title', 'description', 'meta_title', 'meta_description']);
+            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePageUrl')) {
+                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
+            }
+            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePage')) {
+                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
+            }
         });
 
         /*
@@ -64,8 +75,12 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
             $model->translatable = array_merge($model->translatable, ['title', 'description']);
-            $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
-            $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+            if (!$model->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
+                $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            }
+            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
+                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+            }
         });
 
         /*
@@ -76,8 +91,12 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
 
-            $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
-            $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+            if (!$model->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
+                $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            }
+            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
+                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+            }
 
             $model->bindEvent('model.afterFetch', static function() use ($model) {
                 foreach ($model->getFormFields() as $id => $field) {
@@ -104,6 +123,30 @@ class Plugin extends PluginBase
         Event::listen('cms.page.init', function($controller, $page) {
             EventRegistry::instance()->setMessageContext($page);
         }, 100);
+
+        /*
+         * Populate MenuItem properties with localized values if available
+         */
+        Event::listen('pages.menu.referencesGenerated', function (&$items) {
+            $locale = App::getLocale();
+            $iterator = function ($menuItems) use (&$iterator, $locale) {
+                $result = [];
+                foreach ($menuItems as $item) {
+                    $localeFields = array_get($item->viewBag, "locale.$locale", []);
+                    foreach ($localeFields as $fieldName => $fieldValue) {
+                        if ($fieldValue) {
+                            $item->$fieldName = $fieldValue;
+                        }
+                    }
+                    if ($item->items) {
+                        $item->items = $iterator($item->items);
+                    }
+                    $result[] = $item;
+                }
+                return $result;
+            };
+            $items = $iterator($items);
+        });
 
         /*
          * Import messages defined by the theme

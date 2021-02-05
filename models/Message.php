@@ -60,6 +60,11 @@ class Message extends Model
             $locale = self::DEFAULT_LOCALE;
         }
 
+        if (!array_key_exists($locale, $this->message_data)) {
+            // search parent locale (e.g. en-US -> en) before returning default
+            list($locale) = explode('-', $locale);
+        }
+
         if (array_key_exists($locale, $this->message_data)) {
             return $this->message_data[$locale];
         }
@@ -161,6 +166,8 @@ class Message extends Model
             $locale = static::DEFAULT_LOCALE;
         }
 
+        $existingIds = [];
+
         foreach ($messages as $code => $message) {
             // Ignore empties
             if (!strlen(trim($message))) {
@@ -180,16 +187,22 @@ class Message extends Model
 
             $messageData = $item->exists || $item->message_data ? $item->message_data : [];
 
-            // Do not overwrite existing translations
+            // Do not overwrite existing translations.
             if (isset($messageData[$locale])) {
+                $existingIds[] = $item->id;
                 continue;
             }
 
             $messageData[$locale] = $message;
 
             $item->message_data = $messageData;
+            $item->found = true;
+
             $item->save();
         }
+
+        // Set all messages found by the scanner as found
+        self::whereIn('id', $existingIds)->update(['found' => true]);
     }
 
     /**

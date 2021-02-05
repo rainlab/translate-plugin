@@ -1,14 +1,17 @@
 <?php namespace RainLab\Translate\Classes;
 
-use Str;
+use App;
+use Exception;
 use File;
+use Str;
 use Cms\Classes\Page;
 use Cms\Classes\Content;
+use System\Classes\MailManager;
+use System\Classes\PluginManager;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\ThemeScanner;
-use Exception;
 
 /**
  * Registrant class for bootstrapping events
@@ -31,6 +34,46 @@ class EventRegistry
 
         // Handle URL translations
         $this->registerPageUrlTranslation($widget);
+
+        // Handle RainLab.Pages MenuItem translations
+        if (PluginManager::instance()->exists('RainLab.Pages')) {
+            $this->registerMenuItemTranslation($widget);
+        }
+    }
+
+    /**
+     * Translate RainLab.Pages MenuItem data
+     *
+     * @param Backend\Widgets\Form $widget
+     * @return void
+     */
+    public function registerMenuItemTranslation($widget)
+    {
+        if ($widget->model instanceof \RainLab\Pages\Classes\MenuItem) {
+            $defaultLocale = LocaleModel::getDefault();
+            $availableLocales = LocaleModel::listAvailable();
+            $fieldsToTranslate = ['title', 'url'];
+            
+            // Replace specified fields with multilingual versions
+            foreach ($fieldsToTranslate as $fieldName) {
+                $widget->fields[$fieldName]['type'] = 'mltext';
+                
+                foreach ($availableLocales as $code => $locale) {
+                    if (!$defaultLocale || $defaultLocale->code === $code) {
+                        continue;
+                    }
+                    
+                    // Add data locker fields for the different locales under the `viewBag[locale]` property
+                    $widget->fields["viewBag[locale][$code][$fieldName]"] = [
+                        'cssClass' => 'hidden',
+                        'attributes' => [
+                            'data-locale' => $code,
+                            'data-field-name' => $fieldName,
+                        ],
+                    ];
+                }
+            }
+        }
     }
 
     //
@@ -108,6 +151,15 @@ class EventRegistry
      */
     protected function processFormMLFields($fields, $model)
     {
+        $typesMap = [
+            'markdown'    => 'mlmarkdowneditor',
+            'mediafinder' => 'mlmediafinder',
+            'repeater'    => 'mlrepeater',
+            'richeditor'  => 'mlricheditor',
+            'text'        => 'mltext',
+            'textarea'    => 'mltextarea',
+        ];
+
         $translatable = array_flip($model->getTranslatableAttributes());
 
         /*
@@ -124,23 +176,8 @@ class EventRegistry
 
             $type = array_get($config, 'type', 'text');
 
-            if ($type == 'text') {
-                $fields[$name]['type'] = 'mltext';
-            }
-            elseif ($type == 'textarea') {
-                $fields[$name]['type'] = 'mltextarea';
-            }
-            elseif ($type == 'richeditor') {
-                $fields[$name]['type'] = 'mlricheditor';
-            }
-            elseif ($type == 'markdown') {
-                $fields[$name]['type'] = 'mlmarkdowneditor';
-            }
-            elseif ($type == 'repeater') {
-                $fields[$name]['type'] = 'mlrepeater';
-            }
-            elseif ($type == 'mediafinder') {
-                $fields[$name]['type'] = 'mlmediafinder';
+            if (array_key_exists($type, $typesMap)) {
+                $fields[$name]['type'] = $typesMap[$type];
             }
         }
 
@@ -221,5 +258,78 @@ class EventRegistry
         return $templates->filter(function($template) use ($extensions) {
             return !Str::endsWith($template->getBaseFileName(), $extensions);
         });
+    }
+
+    /**
+     * Adds language suffixes to mail view files.
+     * @param  \October\Rain\Mail\Mailer $mailer
+     * @param  \Illuminate\Mail\Message $message
+     * @param  string $view
+     * @param  array $data
+     * @param  string $raw
+     * @param  string $plain
+     * @return bool|void Will return false if the translation process successfully replaced the original message with a translated version to prevent the original version from being processed.
+     */
+    public function findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain)
+    {
+        // Raw content cannot be localized at this level
+        if (!empty($raw)) {
+            return;
+        }
+
+        // Get the locale to use for this template
+        $locale = !empty($data['_current_locale']) ? $data['_current_locale'] : App::getLocale();
+
+        $factory = $mailer->getViewFactory();
+
+        if (!empty($view)) {
+            $view = $this->getLocalizedView($factory, $view, $locale);
+        }
+
+        if (!empty($plain)) {
+            $plain = $this->getLocalizedView($factory, $plain, $locale);
+        }
+
+        $code = $view ?: $plain;
+        if (empty($code)) {
+            return null;
+        }
+
+        $plainOnly = empty($view);
+
+        if (MailManager::instance()->addContentToMailer($message, $code, $data, $plainOnly)) {
+            // the caller who fired the event is expecting a FALSE response to halt the event
+            return false;
+        }
+    }
+
+
+    /**
+     * Search mail view files based on locale
+     * @param  \October\Rain\Mail\Mailer $mailer
+     * @param  \Illuminate\Mail\Message $message
+     * @param  string $code
+     * @param  string $locale
+     * @return string|null
+     */
+    public function getLocalizedView($factory, $code, $locale)
+    {
+        $locale = strtolower($locale);
+
+        $searchPaths[] = $locale;
+
+        if (str_contains($locale, '-')) {
+            list($lang) = explode('-', $locale);
+            $searchPaths[] = $lang;
+        }
+
+        foreach ($searchPaths as $path) {
+            $localizedView = sprintf('%s-%s', $code, $path);
+
+            if ($factory->exists($localizedView)) {
+                return $localizedView;
+            }
+        }
+        return null;
     }
 }

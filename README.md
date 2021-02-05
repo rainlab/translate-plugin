@@ -40,7 +40,7 @@ If translated, the text above will appear as whatever language is selected by th
 
 Message or string translation is the conversion of adhoc strings used throughout the site. A message can be translated with parameters.
 
-    {{ site.name|_ }}
+    {{ 'site.name'|_ }}
 
     {{ 'Welcome to our website!'|_ }}
 
@@ -113,13 +113,13 @@ Add the `--purge` option to clear old messages first:
     
     php artisan translate:scan --purge
     
-## Content translation
+## Content & mail template translation
 
-This plugin activates a feature in the CMS that allows content files to use language suffixes, for example:
+This plugin activates a feature in the CMS that allows content & mail template files to use language suffixes, for example:
 
-* **welcome.htm** will contain the content in the default language.
-* **welcome.ru.htm** will contain the content in Russian.
-* **welcome.fr.htm** will contain the content in French.
+* **welcome.htm** will contain the content or mail template in the default language.
+* **welcome.ru.htm** will contain the content or mail template in Russian.
+* **welcome.fr.htm** will contain the content or mail template in French.
 
 ## Model translation
 
@@ -273,6 +273,12 @@ It's possible to translate query string parameters by listening to the `translat
     });
 
 For a possible implementation of the `YourModel::translateParams` method look at the example under `URL parameter translation` from above.
+
+## Extend theme scan
+
+      Event::listen('rainlab.translate.themeScanner.afterScan', function (ThemeScanner $scanner) {
+           ...
+      });
 
 ## Settings model translation
 

@@ -34,6 +34,11 @@
         this.toHeader = null
 
         /*
+         * Template for the "found" header (title)
+         */
+        this.foundHeader = null
+
+        /*
          * The table widget element
          */
         this.tableElement = null
@@ -76,14 +81,16 @@
             $toolbar.prepend(Mustache.render(this.tableToolbar.html()))
         }
 
-        this.setTitleContents = function(fromEl, toEl) {
+        this.setTitleContents = function(fromEl, toEl, foundEl) {
             if (fromEl) this.fromHeader = $(fromEl)
             if (toEl) this.toHeader = $(toEl)
+            if (foundEl) this.foundHeader = $(foundEl)
             if (!this.tableElement) return
 
             var $headers = $('table.headers th', this.tableElement)
             $headers.eq(0).html(this.fromHeader.html())
             $headers.eq(1).html(Mustache.render(this.toHeader.html(), { hideTranslated: this.hideTranslated } ))
+            $headers.eq(2).html(this.foundHeader.html())
         }
 
         this.setTableElement = function(el) {

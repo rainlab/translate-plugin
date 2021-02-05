@@ -1,18 +1,18 @@
 <?php namespace RainLab\Translate\Tests\Unit\Behaviors;
 
 use File;
+use PluginTestCase;
 use October\Rain\Halcyon\Model;
 use October\Rain\Filesystem\Filesystem;
 use October\Rain\Halcyon\Datasource\FileDatasource;
 use October\Rain\Halcyon\Datasource\Resolver;
 use RainLab\Translate\Tests\Fixtures\Classes\TranslatablePage;
-use PluginTestCase;
 
 class TranslatablePageTest extends PluginTestCase
 {
     public $themePath;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -29,9 +29,10 @@ class TranslatablePageTest extends PluginTestCase
                 $page->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
             }
         });
+
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         File::deleteDirectory($this->themePath.'/pages');
     }

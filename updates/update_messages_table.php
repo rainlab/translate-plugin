@@ -1,12 +1,11 @@
 <?php namespace RainLab\Translate\Updates;
 
-use RainLab\Translate\Models\Locale;
 use Schema;
 use October\Rain\Database\Updates\Migration;
 
-class BuilderTableUpdateRainlabTranslateLocales extends Migration
+class UpdateMessagesTable extends Migration
 {
-    const TABLE_NAME = 'rainlab_translate_locales';
+    const TABLE_NAME = 'rainlab_translate_messages';
 
     public function up()
     {
@@ -17,14 +16,8 @@ class BuilderTableUpdateRainlabTranslateLocales extends Migration
         if (!Schema::hasColumn(self::TABLE_NAME, 'found')) {
             Schema::table(self::TABLE_NAME, function($table)
             {
-                $table->integer('sort_order')->default(0);
+                $table->boolean('found')->default(1);
             });
-        }
-
-        $locales = Locale::all();
-        foreach($locales as $locale) {
-            $locale->sort_order = $locale->id;
-            $locale->save();
         }
     }
 
@@ -34,10 +27,10 @@ class BuilderTableUpdateRainlabTranslateLocales extends Migration
             return;
         }
 
-        if (Schema::hasColumn(self::TABLE_NAME, 'sort_order')) {
+        if (Schema::hasColumn(self::TABLE_NAME, 'found')) {
             Schema::table(self::TABLE_NAME, function($table)
             {
-                $table->dropColumn(['sort_order']);
+                $table->dropColumn(['found']);
             });
         }
     }
