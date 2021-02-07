@@ -101,6 +101,6 @@
     - Turkish localization updates
     - Add Greek language localization
 1.8.0:
-    - !!! Potential breaking change with Message Ids
+    - "!!! Potential breaking change with Message Ids. Message Ids are now encoded using `md5()` to generate the Message code. Message Ids that contain characters other than letters, numbers, white spaces and `.` might have previously been sharing a Message translation due to their resulting Message code being equal. These sharing are no longer going to happen. Furthermore, if you were querying the Message model directly by code, those queries will now fail since the codes are now 32 hexadecimal characters (md5 hash of the Message Id)."
     - migrate_message_code.php
 
