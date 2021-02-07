@@ -1,26 +1,29 @@
 <?php namespace RainLab\Translate\Updates;
 
+use Db;
 use Str;
 use October\Rain\Database\Updates\Migration;
 use RainLab\Translate\Models\Message;
 
 class MigrateMessageCode extends Migration
 {
+    protected $table = 'rainlab_translate_messages';
+
     public function up()
     {
-        foreach (Message::all() as $message) {
-            $default_message = $message->message_data['x'];
-            $message->code = Message::makeMessageCode($default_message);
-            $message->save();
+        foreach (Db::table($this->table)->get() as $message) {
+            $default_message = json_decode($message->message_data)->x;
+            $code = Message::makeMessageCode($default_message);
+            Db::table($this->table)->where('id', $message->id)->update(['code' => $code]);
         }
     }
 
     public function down()
     {
-        foreach (Message::all() as $message) {
-            $default_message = $message->message_data['x'];
-            $message->code = static::makeLegacyMessageCode($default_message);
-            $message->save();
+        foreach (Db::table($this->table)->get() as $message) {
+            $default_message = json_decode($message->message_data)->x;
+            $code = static::makeLegacyMessageCode($default_message);
+            Db::table($this->table)->where('id', $message->id)->update(['code' => $code]);
         }
     }
 
