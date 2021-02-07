@@ -294,10 +294,6 @@ class Message extends Model
      */
     public static function makeMessageCode($messageId)
     {
-        if (Config::get('rainlab.translate::caseSensitiveIds', false)) {
-            return md5(trim($messageId));
-        } else {
-            return md5(mb_strtolower(trim($messageId)));
-        }
+        return md5(mb_strtolower(trim($messageId)));
     }
 }
