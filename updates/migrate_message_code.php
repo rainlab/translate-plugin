@@ -1,13 +1,20 @@
 <?php namespace RainLab\Translate\Updates;
 
+use Schema;
 use Str;
 use October\Rain\Database\Updates\Migration;
 use RainLab\Translate\Models\Message;
 
 class MigrateMessageCode extends Migration
 {
+    const TABLE_NAME = 'rainlab_translate_messages';
+
     public function up()
     {
+        if (!Schema::hasTable(self::TABLE_NAME)) {
+            return;
+        }
+
         foreach (Message::all() as $message) {
             $default_message = $message->message_data['x'];
             $message->code = Message::makeMessageCode($default_message);
@@ -17,6 +24,10 @@ class MigrateMessageCode extends Migration
 
     public function down()
     {
+        if (!Schema::hasTable(self::TABLE_NAME)) {
+            return;
+        }
+
         foreach (Message::all() as $message) {
             $default_message = $message->message_data['x'];
             $message->code = static::makeLegacyMessageCode($default_message);

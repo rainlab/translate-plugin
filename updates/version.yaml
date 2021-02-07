@@ -102,3 +102,4 @@
     - Add Greek language localization
 1.8.0:
     - "!!! Potential breaking change: Message codes are now MD5 hashed versions of the original string. See github.com/rainlab/translate-plugin/pull/566 for details."
+    - migrate_message_code.php
