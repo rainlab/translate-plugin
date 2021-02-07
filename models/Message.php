@@ -288,12 +288,12 @@ class Message extends Model
     }
 
     /**
-     * Creates an md5 representation of the message Id
-     * @param  string $messageId
+     * Get the code for the provided message (32 character hexadecimal MD5-hashed version)
+     * @param  string $message
      * @return string
      */
-    public static function makeMessageCode($messageId)
+    public static function makeMessageCode($message)
     {
-        return md5(mb_strtolower(trim($messageId)));
+        return md5(mb_strtolower(trim($message)));
     }
 }

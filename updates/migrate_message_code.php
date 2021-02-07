@@ -11,10 +11,6 @@ class MigrateMessageCode extends Migration
 
     public function up()
     {
-        if (!Schema::hasTable(self::TABLE_NAME)) {
-            return;
-        }
-
         foreach (Message::all() as $message) {
             $default_message = $message->message_data['x'];
             $message->code = Message::makeMessageCode($default_message);
@@ -50,5 +46,4 @@ class MigrateMessageCode extends Migration
 
         return Str::limit(trim($messageId, $separator), 250);
     }
-
 }
