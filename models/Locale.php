@@ -1,10 +1,8 @@
 <?php namespace RainLab\Translate\Models;
 
 use Lang;
-use File;
 use Cache;
 use Model;
-use Config;
 use ApplicationException;
 use ValidationException;
 
@@ -49,7 +47,7 @@ class Locale extends Model
     /**
      * @var self Default locale cache.
      */
-    private static $defaultLocale;
+    protected static $defaultLocale;
 
     public function afterCreate()
     {
@@ -88,6 +86,14 @@ class Locale extends Model
 
         $this->newQuery()->where('id', $this->id)->update(['is_default' => true]);
         $this->newQuery()->where('id', '<>', $this->id)->update(['is_default' => false]);
+    }
+
+    /**
+     * External modifier to force the default locale.
+     */
+    public static function forceDefault($locale)
+    {
+        self::$defaultLocale = $locale;
     }
 
     /**
