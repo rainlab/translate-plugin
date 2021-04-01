@@ -54,11 +54,12 @@ class AlternateHrefLangElements extends ComponentBase
             $router = new RainRouter;
             $params = $this->getRouter()->getParameters();
 
-            $translatedParams = Event::fire(
-                'translate.localePicker.translateParams',
-                [$page, $params, $this->oldLocale, $locale],
-                true
-            );
+            $translatedParams = Event::fire('translate.localePicker.translateParams', [
+                $page,
+                $params,
+                $this->oldLocale,
+                $locale
+            ], true);
 
             if ($translatedParams) {
                 $params = $translatedParams;

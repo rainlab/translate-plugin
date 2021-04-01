@@ -59,6 +59,7 @@ class Translator
         }
 
         App::setLocale($locale);
+
         $this->activeLocale = $locale;
 
         if ($remember) {

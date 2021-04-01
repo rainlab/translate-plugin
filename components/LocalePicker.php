@@ -30,7 +30,7 @@ class LocalePicker extends ComponentBase
      * @var string The active locale name.
      */
     public $activeLocaleName;
-    
+
     /**
      * @var The active locale code before switching.
      */
@@ -80,7 +80,7 @@ class LocalePicker extends ComponentBase
 
         // Remember the current locale before switching to the requested one
         $this->oldLocale = $this->translator->getLocale();
-        
+
         $this->translator->setLocale($locale);
 
         $pageUrl = $this->withPreservedQueryString($this->makeLocaleUrlFromPage($locale), $locale);
@@ -133,7 +133,6 @@ class LocalePicker extends ComponentBase
          * Static Page
          */
         if (isset($page->apiBag['staticPage'])) {
-
             $staticPage = $page->apiBag['staticPage'];
 
             $staticPage->rewriteTranslatablePageUrl($locale);
@@ -149,7 +148,7 @@ class LocalePicker extends ComponentBase
             $router = new RainRouter;
 
             $params = $this->getRouter()->getParameters();
-                        
+
             /**
              * @event translate.localePicker.translateParams
              * Enables manipulating the URL parameters
@@ -164,14 +163,18 @@ class LocalePicker extends ComponentBase
              *         }
              *     });
              *
-             */            
-            $translatedParams = Event::fire('translate.localePicker.translateParams', 
-                                            [$page, $params, $this->oldLocale, $locale], true);
-            
+             */
+            $translatedParams = Event::fire('translate.localePicker.translateParams', [
+                $page,
+                $params,
+                $this->oldLocale,
+                $locale
+            ], true);
+
             if ($translatedParams) {
                 $params = $translatedParams;
             }
-            
+
             $localeUrl = $router->urlFromPattern($page->url, $params);
         }
 
@@ -187,7 +190,7 @@ class LocalePicker extends ComponentBase
      * @return string
      */
     protected function withPreservedQueryString($pageUrl, $locale)
-    {       
+    {
         $page = $this->getPage();
         $query = request()->query();
 
@@ -206,9 +209,13 @@ class LocalePicker extends ComponentBase
          *     });
          *
          */
-        $translatedQuery = Event::fire('translate.localePicker.translateQuery', 
-                                        [$page, $query, $this->oldLocale, $locale], true);
-        
+        $translatedQuery = Event::fire('translate.localePicker.translateQuery', [
+            $page,
+            $query,
+            $this->oldLocale,
+            $locale
+        ], true);
+
         $query = http_build_query($translatedQuery ?: $query);
 
         return $query ? $pageUrl . '?' . $query : $pageUrl;
