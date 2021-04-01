@@ -3,6 +3,7 @@
 use Lang;
 use Cache;
 use Model;
+use Config;
 use ApplicationException;
 use ValidationException;
 
@@ -89,19 +90,6 @@ class Locale extends Model
     }
 
     /**
-     * forceDefault is a modifier to force the default locale, it can be called
-     * internally by plugins to lock it down as a solution to a known issue
-     * @see https://github.com/rainlab/translate-plugin/issues/231
-     */
-    public static function forceDefault($code)
-    {
-        $locale = new self;
-        $locale->name = $locale->code = $code;
-        $locale->is_default = $locale->is_enabled = true;
-        self::$defaultLocale = $locale;
-    }
-
-    /**
      * Returns the default locale defined.
      * @return self
      */
@@ -109,6 +97,13 @@ class Locale extends Model
     {
         if (self::$defaultLocale !== null) {
             return self::$defaultLocale;
+        }
+
+        if ($forceDefault = Config::get('rainlab.translate::forceDefaultLocale')) {
+            $locale = new self;
+            $locale->name = $locale->code = $forceDefault;
+            $locale->is_default = $locale->is_enabled = true;
+            return self::$defaultLocale = $locale;
         }
 
         return self::$defaultLocale = self::where('is_default', true)
