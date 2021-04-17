@@ -37,7 +37,7 @@ class Plugin extends PluginBase
 
     public function register()
     {
-        /* 
+        /*
          * Load localized version of mail templates (akin to localized CMS content files)
          */
         Event::listen('mailer.beforeAddContent', function ($mailer, $message, $view, $data, $raw, $plain) {
@@ -75,8 +75,8 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
             $model->translatable = array_merge($model->translatable, ['title', 'description']);
-            if (!$model->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
-                $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\Purgeable')) {
+                $model->extendClassWith('RainLab\Translate\Behaviors\Purgeable');
             }
             if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
                 $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
@@ -91,8 +91,8 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
 
-            if (!$model->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
-                $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\Purgeable')) {
+                $model->extendClassWith('RainLab\Translate\Behaviors\Purgeable');
             }
             if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
                 $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
