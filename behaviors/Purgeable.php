@@ -13,8 +13,6 @@ class Purgeable extends \October\Rain\Extension\ExtensionBase
 
     protected $model;
 
-    protected static $purgableShownDeprecation = false;
-
     public function __construct($parent)
     {
         $this->model = $parent;
@@ -47,11 +45,6 @@ class Purgeable extends \October\Rain\Extension\ExtensionBase
         $model->bindEvent('model.saveInternal', function () use ($model) {
             $model->purgeAttributes();
         });
-
-        if (!static::$purgableShownDeprecation) {
-            traceLog('Class October\Rain\Database\Behaviors\Purgeable is deprecated. If you require this class, please copy it to your codebase locally.');
-            static::$purgableShownDeprecation = true;
-        }
     }
 
     /**
