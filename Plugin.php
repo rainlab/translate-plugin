@@ -68,6 +68,26 @@ class Plugin extends PluginBase
         });
 
         /*
+         * Extension logic for October CMS v1.0
+         */
+        if (!class_exists('System')) {
+            $this->extendLegacyPlatform();
+        }
+
+        /*
+         * Register console commands
+         */
+        $this->registerConsoleCommand('translate.scan', 'Rainlab\Translate\Console\ScanCommand');
+
+        $this->registerAssetBundles();
+    }
+
+    /**
+     * extendLegacyPlatform will add the legacy features expected in v1.0
+     */
+    protected function extendLegacyPlatform()
+    {
+        /*
          * Add translation support to file models
          */
         File::extend(function ($model) {
@@ -75,8 +95,8 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
             $model->translatable = array_merge($model->translatable, ['title', 'description']);
-            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\Purgeable')) {
-                $model->extendClassWith('RainLab\Translate\Behaviors\Purgeable');
+            if (!$model->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
+                $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
             }
             if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
                 $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
@@ -91,8 +111,8 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
 
-            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\Purgeable')) {
-                $model->extendClassWith('RainLab\Translate\Behaviors\Purgeable');
+            if (!$model->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
+                $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
             }
             if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
                 $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
@@ -106,13 +126,6 @@ class Plugin extends PluginBase
                 }
             });
         });
-
-        /*
-         * Register console commands
-         */
-        $this->registerConsoleCommand('translate.scan', 'Rainlab\Translate\Console\ScanCommand');
-
-        $this->registerAssetBundles();
     }
 
     public function boot()

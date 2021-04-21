@@ -326,6 +326,10 @@ abstract class TranslatableBehavior extends ExtensionBase
     {
         $translatable = [];
 
+        if (!is_array($this->model->translatable)) {
+            return [];
+        }
+
         foreach ($this->model->translatable as $attribute) {
             $translatable[] = is_array($attribute) ? array_shift($attribute) : $attribute;
         }

@@ -2,10 +2,7 @@
 
 use Db;
 use DbDongle;
-use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\TranslatableBehavior;
-use ApplicationException;
-use Exception;
 
 /**
  * Translatable model extension
@@ -29,6 +26,30 @@ class TranslatableModel extends TranslatableBehavior
             'RainLab\Translate\Models\Attribute',
             'name' => 'model'
         ];
+
+        // October v2.0
+        if (class_exists('System')) {
+            $this->extendFileModels('attachOne');
+            $this->extendFileModels('attachMany');
+        }
+    }
+
+    /**
+     * extendFileModels will swap the standard File model with MLFile instead
+     */
+    protected function extendFileModels(string $relationGroup): void
+    {
+        foreach ($this->model->$relationGroup as $relationName => $relationObj) {
+            $relationClass = is_array($relationObj) ? $relationObj[0] : $relationObj;
+            if ($relationClass === \System\Models\File::class) {
+                if (is_array($relationObj)) {
+                    $this->model->$relationGroup[$relationName][0] = \RainLab\Translate\Models\MLFile::class;
+                }
+                else {
+                    $this->model->$relationGroup[$relationName] = \RainLab\Translate\Models\MLFile::class;
+                }
+            }
+        }
     }
 
     /**
