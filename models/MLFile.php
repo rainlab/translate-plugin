@@ -13,7 +13,9 @@ class MLFile extends FileBase
     /**
      * @var array implement behaviors
      */
-    public $implement = ['RainLab.Translate.Behaviors.TranslatableModel'];
+    public $implement = [
+        \RainLab\Translate\Behaviors\TranslatableModel::class
+    ];
 
     /**
      * @var array translatable attributes

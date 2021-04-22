@@ -73,6 +73,14 @@ class Plugin extends PluginBase
         if (!class_exists('System')) {
             $this->extendLegacyPlatform();
         }
+        /*
+         * Extension logic for October CMS v2.0
+         */
+        else {
+            Event::listen('cms.theme.createThemeDataModel', function($attributes) {
+                return new \RainLab\Translate\Models\MLThemeData($attributes);
+            });
+        }
 
         /*
          * Register console commands
