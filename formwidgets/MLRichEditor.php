@@ -23,6 +23,11 @@ class MLRichEditor extends RichEditor
     public $originalViewPath;
 
     /**
+     * @var bool legacyMode disables the Vue integration
+     */
+    public $legacyMode = true;
+
+    /**
      * {@inheritDoc}
      */
     public function init()
