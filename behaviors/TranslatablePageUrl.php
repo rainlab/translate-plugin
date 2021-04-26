@@ -3,8 +3,6 @@
 use App;
 use RainLab\Translate\Classes\Translator;
 use October\Rain\Extension\ExtensionBase;
-use ApplicationException;
-use Exception;
 
 /**
  * Translatable page URL model extension

@@ -52,8 +52,8 @@ class Plugin extends PluginBase
         }, -1);
 
         /*
-         * Handle translated page URLs
-         */
+        * Handle translated page URLs
+        */
         Page::extend(function($model) {
             if (!$model->propertyExists('translatable')) {
                 $model->addDynamicProperty('translatable', []);
@@ -79,6 +79,12 @@ class Plugin extends PluginBase
         else {
             Event::listen('cms.theme.createThemeDataModel', function($attributes) {
                 return new \RainLab\Translate\Models\MLThemeData($attributes);
+            });
+
+            Event::listen('cms.template.getTemplateToolbarSettingsButtons', function($extension, $dataHolder) {
+                if ($dataHolder->templateType === 'page') {
+                    EventRegistry::instance()->extendEditorPageToolbar($dataHolder);
+                }
             });
         }
 

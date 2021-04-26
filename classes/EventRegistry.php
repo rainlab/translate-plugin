@@ -24,6 +24,67 @@ class EventRegistry
     use \October\Rain\Support\Traits\Singleton;
 
     //
+    // Editor
+    //
+
+    public function extendEditorPageToolbar($dataHolder)
+    {
+        $locales = LocaleModel::listAvailable();
+        $defaultLocale = LocaleModel::getDefault()->code ?? null;
+
+        $properties = [];
+        foreach ($locales as $locale => $label) {
+            if ($locale == $defaultLocale) {
+                continue;
+            }
+
+            $properties[] = [
+                'property' => 'localeUrl['.$locale.']',
+                'title' => 'cms::lang.editor.url',
+                'tab' => $label,
+                'type' => 'string',
+            ];
+
+            $properties[] = [
+                'property' => 'localeTitle['.$locale.']',
+                'title' => 'cms::lang.editor.title',
+                'tab' => $label,
+                'type' => 'string',
+            ];
+
+            $properties[] = [
+                'property' => 'localeDescription['.$locale.']',
+                'title' => 'cms::lang.editor.description',
+                'tab' => $label,
+                'type' => 'string',
+            ];
+
+            $properties[] = [
+                'property' => 'localeMeta_title['.$locale.']',
+                'title' => 'cms::lang.editor.meta_title',
+                'tab' => $label,
+                'type' => 'string',
+            ];
+
+            $properties[] = [
+                'property' => 'localeMeta_description['.$locale.']',
+                'title' => 'cms::lang.editor.meta_description',
+                'tab' => $label,
+                'type' => 'string',
+            ];
+        }
+
+        $dataHolder->buttons[] = [
+            // 'button' => 'rainlab.pages::lang.snippet.partialtab',
+            'button' => 'Translate',
+            'icon' => 'octo-icon-code-snippet',
+            'popupTitle' => 'Translate Page Properties',
+            'useViewBag' => true,
+            'properties' => $properties
+        ];
+    }
+
+    //
     // Utility
     //
 
@@ -53,16 +114,16 @@ class EventRegistry
             $defaultLocale = LocaleModel::getDefault();
             $availableLocales = LocaleModel::listAvailable();
             $fieldsToTranslate = ['title', 'url'];
-            
+
             // Replace specified fields with multilingual versions
             foreach ($fieldsToTranslate as $fieldName) {
                 $widget->fields[$fieldName]['type'] = 'mltext';
-                
+
                 foreach ($availableLocales as $code => $locale) {
                     if (!$defaultLocale || $defaultLocale->code === $code) {
                         continue;
                     }
-                    
+
                     // Add data locker fields for the different locales under the `viewBag[locale]` property
                     $widget->fields["viewBag[locale][$code][$fieldName]"] = [
                         'cssClass' => 'hidden',
