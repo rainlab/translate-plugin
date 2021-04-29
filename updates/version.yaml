@@ -69,7 +69,9 @@
     - migrate_morphed_indexes.php
 1.6.8: Add support for transOrderBy; Add translation support for ThemeData; Update russian localization.
 1.6.9: Clear Static Page menu cache after saving the model; CSS fix for Text/Textarea input fields language selector.
-1.6.10: Add option to purge deleted messages when scanning messages, Add Scan error column on Messages page, update_messages_table.php, Fix translations that were lost when clicking locale twice while holding ctrl key, Fix error with nested fields default locale value, Escape Message translate params value.
+1.6.10:
+    - Add option to purge deleted messages when scanning messages, Add Scan error column on Messages page, Fix translations that were lost when clicking locale twice while holding ctrl key, Fix error with nested fields default locale value, Escape Message translate params value.
+    - update_messages_table.php
 1.7.0: "!!! Breaking change for the Message::trans() method (params are now escaped), fix message translation documentation, fix string translation key for scan errors column header."
 1.7.1: Fix YAML issue with previous tag/release.
 1.7.2: Fix regex when "|_" filter is followed by another filter, Try locale without country before returning default translation, Allow exporting default locale, Fire 'rainlab.translate.themeScanner.afterScan' event in the theme scanner for extendability.
