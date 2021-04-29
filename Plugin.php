@@ -311,13 +311,17 @@ class Plugin extends PluginBase
 
     public function registerFormWidgets()
     {
+        $mediaFinderClass = class_exists('System')
+            ? 'RainLab\Translate\FormWidgets\MLMediaFinderv2'
+            : 'RainLab\Translate\FormWidgets\MLMediaFinder';
+
         return [
             'RainLab\Translate\FormWidgets\MLText' => 'mltext',
             'RainLab\Translate\FormWidgets\MLTextarea' => 'mltextarea',
             'RainLab\Translate\FormWidgets\MLRichEditor' => 'mlricheditor',
             'RainLab\Translate\FormWidgets\MLMarkdownEditor' => 'mlmarkdowneditor',
             'RainLab\Translate\FormWidgets\MLRepeater' => 'mlrepeater',
-            'RainLab\Translate\FormWidgets\MLMediaFinder' => 'mlmediafinder',
+            $mediaFinderClass => 'mlmediafinder',
         ];
     }
 
