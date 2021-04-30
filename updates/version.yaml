@@ -81,3 +81,4 @@
 1.8.1: Minor bugfix
 1.8.2: Fixes translated file models and theme data for v2.0. The parent model must implement translatable behavior for their related file models to be translated.
 1.8.4: Fixes the multilingual mediafinder to work with the media module.
+1.8.6: Fixes invisible checkboxes when scanning for messages.
