@@ -83,3 +83,4 @@
 1.8.4: Fixes the multilingual mediafinder to work with the media module.
 1.8.6: Fixes invisible checkboxes when scanning for messages.
 1.8.7: Fixes Markdown editor translation.
+1.8.8: Fixes Laravel compatibility in custom Repeater.

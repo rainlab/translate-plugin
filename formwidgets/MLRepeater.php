@@ -149,7 +149,7 @@ class MLRepeater extends Repeater
         $key = implode('.', HtmlHelper::nameToArray($this->formField->getName()));
         $requestData = Request::all();
         array_set($requestData, $key, $data);
-        Request::merge($requestData);
+        $this->mergeWithPost($requestData);
 
         $this->processItems();
     }
@@ -207,6 +207,15 @@ class MLRepeater extends Repeater
 
         $requestData = Request::all();
         array_set($requestData, $fieldName, json_encode($data));
-        Request::merge($requestData);
+        $this->mergeWithPost($requestData);
+    }
+
+    /**
+     * mergeWithPost will apply postback values globally
+     */
+    protected function mergeWithPost(array $values): void
+    {
+        Request::merge($values);
+        $_POST = array_merge($_POST, $values);
     }
 }
