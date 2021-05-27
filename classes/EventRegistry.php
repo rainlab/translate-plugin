@@ -39,45 +39,44 @@ class EventRegistry
             }
 
             $properties[] = [
-                'property' => 'localeUrl['.$locale.']',
+                'property' => 'localeUrl.'.$locale,
                 'title' => 'cms::lang.editor.url',
                 'tab' => $label,
                 'type' => 'string',
             ];
 
             $properties[] = [
-                'property' => 'localeTitle['.$locale.']',
+                'property' => 'localeTitle.'.$locale,
                 'title' => 'cms::lang.editor.title',
                 'tab' => $label,
                 'type' => 'string',
             ];
 
             $properties[] = [
-                'property' => 'localeDescription['.$locale.']',
+                'property' => 'localeDescription.'.$locale,
                 'title' => 'cms::lang.editor.description',
                 'tab' => $label,
-                'type' => 'string',
+                'type' => 'text',
             ];
 
             $properties[] = [
-                'property' => 'localeMeta_title['.$locale.']',
+                'property' => 'localeMeta_title.'.$locale,
                 'title' => 'cms::lang.editor.meta_title',
                 'tab' => $label,
                 'type' => 'string',
             ];
 
             $properties[] = [
-                'property' => 'localeMeta_description['.$locale.']',
+                'property' => 'localeMeta_description.'.$locale,
                 'title' => 'cms::lang.editor.meta_description',
                 'tab' => $label,
-                'type' => 'string',
+                'type' => 'text',
             ];
         }
 
         $dataHolder->buttons[] = [
-            // 'button' => 'rainlab.pages::lang.snippet.partialtab',
-            'button' => 'Translate',
-            'icon' => 'octo-icon-code-snippet',
+            'button' => 'rainlab.translate::lang.plugin.name',
+            'icon' => 'octo-icon-globe',
             'popupTitle' => 'Translate Page Properties',
             'useViewBag' => true,
             'properties' => $properties
