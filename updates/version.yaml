@@ -84,3 +84,4 @@
 1.8.6: Fixes invisible checkboxes when scanning for messages.
 1.8.7: Fixes Markdown editor translation.
 1.8.8: Fixes Laravel compatibility in custom Repeater.
+1.9.0: Restores ability to translate URLs with CMS Editor in October v2.0
