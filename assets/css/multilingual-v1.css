@@ -1,0 +1,13 @@
+/*
+ * Legacy styles for October v1.0
+ */
+
+/* Fancy layout */
+
+.fancy-layout .form-tabless-fields .field-multilingual .ml-btn {
+    color: rgba(255,255,255,0.8);
+}
+
+.fancy-layout .form-tabless-fields .field-multilingual .ml-btn:hover {
+    color: #fff;
+}

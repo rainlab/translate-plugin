@@ -134,6 +134,10 @@ trait MLControl
     {
         $this->addJs('/plugins/rainlab/translate/assets/js/multilingual.js', 'RainLab.Translate');
         $this->addCss('/plugins/rainlab/translate/assets/css/multilingual.css', 'RainLab.Translate');
+
+        if (!class_exists('System')) {
+            $this->addCss('/plugins/rainlab/translate/assets/css/multilingual-v1.css', 'RainLab.Translate');
+        }
     }
 
     /**
