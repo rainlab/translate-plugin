@@ -10,13 +10,16 @@ class MLContent extends MLCmsObject
 {
     protected $allowedExtensions = ['htm', 'txt', 'md'];
 
+    /**
+     * findLocale for this ML object
+     */
     public static function findLocale($locale, $page)
     {
         if (!$page->exists) {
             return null;
         }
 
-        $fileName = $page->getOriginal('fileName');
+        $fileName = $page->getOriginal('fileName') ?: $page->fileName;
 
         $fileName = static::addLocaleToFileName($fileName, $locale);
 
