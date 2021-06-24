@@ -29,6 +29,10 @@ class EventRegistry
 
     public function extendEditorPageToolbar($dataHolder)
     {
+        if (!LocaleModel::isAvailable()) {
+            return;
+        }
+
         $locales = LocaleModel::listAvailable();
         $defaultLocale = LocaleModel::getDefault()->code ?? null;
 
