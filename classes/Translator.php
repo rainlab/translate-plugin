@@ -189,7 +189,7 @@ class Translator
             array_shift($segments);
         };
 
-        return implode('/', $segments);
+        return htmlspecialchars(implode('/', $segments), ENT_QUOTES, 'UTF-8');
     }
 
     //
