@@ -60,7 +60,7 @@
     <?php if ($selectedTo !== null): ?>
         <div class="header-hide-translated custom-checkbox">
             <input type="checkbox" id="hideTranslated" name="hide_translated" value="1" {{#hideTranslated}}checked{{/hideTranslated}} />
-            <label for="hideTranslated"><?= e(trans('rainlab.translate::lang.messages.hide_translated')) ?></label>
+            <label class="storm-icon-pseudo" for="hideTranslated"><?= e(trans('rainlab.translate::lang.messages.hide_translated')) ?></label>
         </div>
     <?php endif ?>
 </script>
