@@ -53,9 +53,14 @@ return [
         'scan_messages_purge_label' => 'Szövegek törlése a művelet előtt',
         'scan_messages_purge_help' => 'Amennyiben bejelöli, úgy minden szöveg törlésre kerül a beolvasást megelőzően.',
         'scan_messages_purge_confirm' => 'Biztos, hogy töröljük az összes szöveget?',
+        'scan_messages_purge_deleted_label' => 'Törölje a hiányzó üzeneteket a vizsgálat után',
+        'scan_messages_purge_deleted_help' => 'Ha be van jelölve, akkor a keresés befejezése után minden olyan üzenet törlődik, amelyet a keresés nem talált. A művelet nem visszavonható!',
         'hint_translate' => 'Itt fordíthatja le a látogatók által elérhető oldalon megjelenő szövegeket. A beírt változtatások automatikusan mentésre kerülnek.',
         'hide_translated' => 'Lefordítottak elrejtése',
         'export_messages_link' => 'Szövegek exportálása',
-        'import_messages_link' => 'Szövegek importálása'
+        'import_messages_link' => 'Szövegek importálása',
+        'not_found' => 'Nem található',
+        'found_help' => 'Történt-e hiba a keresés során.',
+        'found_title' => 'Hibák',
     ]
 ];
