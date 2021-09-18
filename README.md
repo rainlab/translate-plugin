@@ -108,11 +108,11 @@ In order to make these default values reflected to your frontend site, go to **S
 The same operation can be performed with the `translate:scan` artisan command. It may be worth including it in a deployment script to automatically fetch updated messages:
 
     php artisan translate:scan
-    
+
 Add the `--purge` option to clear old messages first:
-    
+
     php artisan translate:scan --purge
-    
+
 ## Content & mail template translation
 
 This plugin activates a feature in the CMS that allows content & mail template files to use language suffixes, for example:
@@ -172,7 +172,7 @@ There are ways to get and set attributes without changing the context.
 
     // Sets a single translated attribute for a language
     $user->setAttributeTranslated('name', 'Jean-Claude', 'fr');
-    
+
 ## Theme data translation
 
 It is also possible to translate theme customisation options. Just mark your form fields with `translatable` property and the plugin will take care about everything else:
@@ -184,7 +184,7 @@ It is also possible to translate theme customisation options. Just mark your for
           label: Website Name
           type: text
           default: Your website name
-          translatable: true    
+          translatable: true
 
 ## Fallback attribute values
 
@@ -387,7 +387,7 @@ The HTML:
             <option value="none" hidden></option>
             {% for code, name in locales %}
                 {% if code != activeLocale %}
-                    <option value="{{code}}" name="locale">{{code | upper }}</option>
+                    <option value="{{code}}" name="locale">{{code|upper}}</option>
                 {% endif %}
             {% endfor %}
         </select>
