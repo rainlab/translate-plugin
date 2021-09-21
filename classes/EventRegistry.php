@@ -190,15 +190,15 @@ class EventRegistry
             return;
         }
 
-        if (!empty($widget->config->fields) && !$widget->isNested) {
+        if (!empty($widget->fields) && !$widget->isNested) {
             $widget->fields = $this->processFormMLFields($widget->fields, $model);
         }
 
-        if (!empty($widget->config->tabs['fields'])) {
+        if (!empty($widget->tabs['fields'])) {
             $widget->tabs['fields'] = $this->processFormMLFields($widget->tabs['fields'], $model);
         }
 
-        if (!empty($widget->config->secondaryTabs['fields'])) {
+        if (!empty($widget->secondaryTabs['fields'])) {
             $widget->secondaryTabs['fields'] = $this->processFormMLFields($widget->secondaryTabs['fields'], $model);
         }
     }
