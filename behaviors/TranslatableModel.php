@@ -32,6 +32,19 @@ class TranslatableModel extends TranslatableBehavior
             $this->extendFileModels('attachOne');
             $this->extendFileModels('attachMany');
         }
+
+        // Clean up indexes when this model is deleted
+        $model->bindEvent('model.beforeDelete', function() use ($model) {
+            Db::table('rainlab_translate_attributes')
+                ->where('model_id', $model->getKey())
+                ->where('model_type', get_class($model))
+                ->delete();
+
+            Db::table('rainlab_translate_indexes')
+                ->where('model_id', $model->getKey())
+                ->where('model_type', get_class($model))
+                ->delete();
+        });
     }
 
     /**
