@@ -82,7 +82,6 @@ class EventRegistry
             'button' => 'rainlab.translate::lang.plugin.name',
             'icon' => 'octo-icon-globe',
             'popupTitle' => 'Translate Page Properties',
-            'useViewBag' => true,
             'properties' => $properties
         ];
     }
