@@ -66,6 +66,24 @@ class ThemeScanner
             return;
         }
 
+        // Import messages from primary theme
+        $this->scanThemeConfigForMessagesInternal($theme);
+
+        // October v2.0
+        if (class_exists('System')) {
+
+            // Import messages from parent theme
+            if ($parentTheme = $theme->getParentTheme()) {
+                $this->scanThemeConfigForMessagesInternal($parentTheme);
+            }
+        }
+    }
+
+    /**
+     * scanThemeConfigForMessagesInternal
+     */
+    protected function scanThemeConfigForMessagesInternal(Theme $theme)
+    {
         $config = $theme->getConfigArray('translate');
 
         if (!count($config)) {

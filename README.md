@@ -93,8 +93,8 @@ You may also define the translations in a separate file per locale, where the pa
     # [...]
 
     translate:
-	en: config/lang-en.yaml
-	fr: config/lang-fr.yaml
+        en: config/lang-en.yaml
+        fr: config/lang-fr.yaml
 
 This is an example for the **config/lang-en.yaml** file:
 
