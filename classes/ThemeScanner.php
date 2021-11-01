@@ -61,13 +61,22 @@ class ThemeScanner
      * Scans the theme configuration for defined messages
      * @return void
      */
-    public function scanThemeConfigForMessages($themeCode)
+    public function scanThemeConfigForMessages($themeCode = null)
     {
-        if (!Theme::exists($themeCode)) {
-            return;
-        }
+        if (!$themeCode) {
+            $theme = Theme::getActiveTheme();
 
-        $theme = Theme::load($themeCode);
+            if (!$theme) {
+                return;
+            }
+        }
+        else {
+            if (!Theme::exists($themeCode)) {
+                return;
+            }
+
+            $theme = Theme::load($themeCode);
+        }
 
         // October v2.0
         if (class_exists('System') && $theme->hasParentTheme()) {
