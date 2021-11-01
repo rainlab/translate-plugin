@@ -179,7 +179,7 @@ class Plugin extends PluginBase
          * Import messages defined by the theme
          */
         Event::listen('cms.theme.setActiveTheme', function($code) {
-            EventRegistry::instance()->importMessagesFromTheme();
+            EventRegistry::instance()->importMessagesFromTheme($code);
         });
 
         /*

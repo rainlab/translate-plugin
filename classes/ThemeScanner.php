@@ -7,6 +7,7 @@ use Cms\Classes\Partial;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\Translator;
 use System\Models\MailTemplate;
+use Exception;
 use Event;
 
 /**
@@ -60,22 +61,27 @@ class ThemeScanner
      * Scans the theme configuration for defined messages
      * @return void
      */
-    public function scanThemeConfigForMessages()
+    public function scanThemeConfigForMessages($themeCode)
     {
-        if (!$theme = Theme::getActiveTheme()) {
+        if (!Theme::exists($themeCode)) {
             return;
         }
 
-        // Import messages from primary theme
-        $this->scanThemeConfigForMessagesInternal($theme);
+        $theme = Theme::load($themeCode);
 
         // October v2.0
-        if (class_exists('System')) {
+        if (class_exists('System') && $theme->hasParentTheme()) {
+            $parentTheme = $theme->getParentTheme();
 
-            // Import messages from parent theme
-            if ($parentTheme = $theme->getParentTheme()) {
+            try {
+                $this->scanThemeConfigForMessagesInternal($theme);
+            }
+            catch (Exception $ex) {
                 $this->scanThemeConfigForMessagesInternal($parentTheme);
             }
+        }
+        else {
+            $this->scanThemeConfigForMessagesInternal($theme);
         }
     }
 

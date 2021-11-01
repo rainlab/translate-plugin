@@ -1,10 +1,10 @@
 <?php namespace RainLab\Translate\Classes;
 
 use App;
-use Exception;
-use File;
 use Str;
+use File;
 use Cms\Classes\Page;
+use Cms\Classes\Theme;
 use Cms\Classes\Content;
 use System\Classes\MailManager;
 use System\Classes\PluginManager;
@@ -12,6 +12,7 @@ use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\ThemeScanner;
+use Exception;
 
 /**
  * Registrant class for bootstrapping events
@@ -252,12 +253,12 @@ class EventRegistry
     //
 
     /**
-     * Import messages defined by the theme
+     * importMessagesFromTheme
      */
-    public function importMessagesFromTheme()
+    public function importMessagesFromTheme($themeCode)
     {
         try {
-            (new ThemeScanner)->scanThemeConfigForMessages();
+            (new ThemeScanner)->scanThemeConfigForMessages($themeCode);
         }
         catch (Exception $ex) {}
     }
