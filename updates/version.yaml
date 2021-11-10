@@ -87,3 +87,4 @@
 1.9.0: Restores ability to translate URLs with CMS Editor in October v2.0
 1.9.1: Minor styling improvements
 1.9.2: Fixes issue creating new content in CMS Editor
+1.9.3: Improves support when using child themes
