@@ -7,21 +7,8 @@ use RainLab\Translate\Classes\Translator;
  * Adds a custom route to check for the locale prefix.
  */
 App::before(function ($request) {
-    if (Config::get('rainlab.translate::disableLocalePrefixRoutes', false)) {
-        return;
-    }
-
-    if (App::runningInBackend()) {
-        return;
-    }
-
-    $translator = Translator::instance();
-
-    if (
-        !$translator->isConfigured() ||
-        !$translator->loadLocaleFromRequest() ||
-        (!$locale = $translator->getLocale())
-    ) {
+    $locale = Translator::instance()->handleLocaleRoute();
+    if (!$locale) {
         return;
     }
 

@@ -8,7 +8,6 @@ return [
     |--------------------------------------------------------------------------
     |
     | Always use the defined locale code as the default.
-    | Related to https://github.com/rainlab/translate-plugin/issues/231
     |
     */
     'forceDefaultLocale' => env('TRANSLATE_FORCE_LOCALE', null),
