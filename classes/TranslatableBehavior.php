@@ -121,6 +121,17 @@ abstract class TranslatableBehavior extends ExtensionBase
 
         return $this->model;
     }
+    
+    /**
+     * Enables translation fallback locale.
+     * @return self
+     */
+    public function withFallbackLocale()
+    {
+        $this->translatableUseFallback = true;
+
+        return $this->model;
+    }
 
     /**
      * Returns a translated attribute value.
