@@ -216,6 +216,6 @@ class Locale extends Model
         Cache::forget('rainlab.translate.defaultLocale');
         self::$cacheListEnabled = null;
         self::$cacheListAvailable = null;
-        self::$cacheByCode = null;
+        self::$cacheByCode = [];
     }
 }
