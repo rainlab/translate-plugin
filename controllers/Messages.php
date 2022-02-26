@@ -45,7 +45,6 @@ class Messages extends Controller
 
     public function index()
     {
-        $this->bodyClass = 'slim-container breadcrumb-flush';
         $this->pageTitle = 'rainlab.translate::lang.messages.title';
         $this->prepareTable();
     }

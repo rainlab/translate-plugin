@@ -284,7 +284,8 @@ class Plugin extends PluginBase
                 'url' => Backend::url('rainlab/translate/locales'),
                 'order' => 550,
                 'category' => 'rainlab.translate::lang.plugin.name',
-                'permissions' => ['rainlab.translate.manage_locales']
+                'permissions' => ['rainlab.translate.manage_locales'],
+                'keywords' => 'translate',
             ],
             'messages' => [
                 'label' => 'rainlab.translate::lang.messages.title',
@@ -293,7 +294,8 @@ class Plugin extends PluginBase
                 'url' => Backend::url('rainlab/translate/messages'),
                 'order' => 551,
                 'category' => 'rainlab.translate::lang.plugin.name',
-                'permissions' => ['rainlab.translate.manage_messages']
+                'permissions' => ['rainlab.translate.manage_messages'],
+                'keywords' => 'translate',
             ]
         ];
     }

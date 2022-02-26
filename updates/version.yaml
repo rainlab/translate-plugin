@@ -89,3 +89,4 @@ v1.9.1: Minor styling improvements
 v1.9.2: Fixes issue creating new content in CMS Editor
 v1.9.3: Improves support when using child themes
 v1.10.0: Adds new multilingual nested form widget. Adds withFallbackLocale method.
+v1.10.1: Improve support with October v2.0
