@@ -5,8 +5,7 @@ use RainLab\Translate\Models\Locale;
 use System\Classes\MediaLibrary;
 
 /**
- * ML MediaFinder Form Widget
- * Renders a multilingual media finder.
+ * MLMediaFinder renders a multilingual media finder.
  *
  * @package rainlab\translate
  * @author Sascha Aeppli

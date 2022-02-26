@@ -4,8 +4,7 @@ use Backend\Classes\FormWidgetBase;
 use RainLab\Translate\Models\Locale;
 
 /**
- * ML Text
- * Renders a multi-lingual text field.
+ * MLText renders a multi-lingual text field.
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges

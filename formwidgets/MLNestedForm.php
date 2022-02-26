@@ -1,25 +1,25 @@
 <?php namespace RainLab\Translate\FormWidgets;
 
-use Backend\FormWidgets\Repeater;
+use Backend\FormWidgets\NestedForm;
 use RainLab\Translate\Models\Locale;
 use October\Rain\Html\Helper as HtmlHelper;
 use ApplicationException;
 use Request;
 
 /**
- * MLRepeater Renders a multi-lingual repeater field.
+ * MLNestedForm renders a multi-lingual nested form field.
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
  */
-class MLRepeater extends Repeater
+class MLNestedForm extends NestedForm
 {
     use \RainLab\Translate\Traits\MLControl;
 
     /**
      * {@inheritDoc}
      */
-    protected $defaultAlias = 'mlrepeater';
+    protected $defaultAlias = 'mlnestedform';
 
     /**
      * {@inheritDoc}
@@ -27,6 +27,7 @@ class MLRepeater extends Repeater
     public function init()
     {
         parent::init();
+
         $this->initLocale();
     }
 
@@ -43,18 +44,23 @@ class MLRepeater extends Repeater
             return $parentContent;
         }
 
-        $this->vars['repeater'] = $parentContent;
-        return $this->makePartial('mlrepeater');
+        $this->vars['nestedform'] = $parentContent;
+
+        return $this->makePartial('mlnestedform');
     }
 
+    /**
+     * prepareVars for viewing
+     */
     public function prepareVars()
     {
         parent::prepareVars();
+
         $this->prepareLocaleVars();
     }
 
     /**
-     * Returns an array of translated values for this field
+     * getSaveValue returns an array of translated values for this field
      * @return array
      */
     public function getSaveValue($value)
@@ -75,7 +81,7 @@ class MLRepeater extends Repeater
 
         if (Locale::isAvailable()) {
             $this->loadLocaleAssets();
-            $this->addJs('js/mlrepeater.js');
+            $this->addJs('js/mlnestedform.js');
         }
     }
 
@@ -84,7 +90,7 @@ class MLRepeater extends Repeater
      */
     protected function getParentViewPath()
     {
-        return base_path().'/modules/backend/formwidgets/repeater/partials';
+        return base_path().'/modules/backend/formwidgets/nestedform/partials';
     }
 
     /**
@@ -92,87 +98,49 @@ class MLRepeater extends Repeater
      */
     protected function getParentAssetPath()
     {
-        return '/modules/backend/formwidgets/repeater/assets';
+        return '/modules/backend/formwidgets/nestedform/assets';
     }
 
-    public function onAddItem()
-    {
-        $this->actAsParent();
-        return parent::onAddItem();
-    }
-
+    /**
+     * onSwitchItemLocale handler
+     */
     public function onSwitchItemLocale()
     {
-        if (!$locale = post('_repeater_locale')) {
-            throw new ApplicationException('Unable to find a repeater locale for: '.$locale);
+        if (!$locale = post('_nestedform_locale')) {
+            throw new ApplicationException('Unable to find a nested form locale for: '.$locale);
         }
 
         // Store previous value
-        $previousLocale = post('_repeater_previous_locale');
+        $previousLocale = post('_nestedform_previous_locale');
         $previousValue = $this->getPrimarySaveDataAsArray();
 
         // Update widget to show form for switched locale
         $lockerData = $this->getLocaleSaveDataAsArray($locale) ?: [];
-        $this->reprocessLocaleItems($lockerData);
-
-        foreach ($this->formWidgets as $key => $widget) {
-            $value = array_shift($lockerData);
-            if (!$value) {
-                unset($this->formWidgets[$key]);
-            }
-            else {
-                $widget->setFormValues($value);
-            }
-        }
+        $this->formWidget->setFormValues($lockerData);
 
         $this->actAsParent();
         $parentContent = parent::render();
         $this->actAsParent(false);
 
         return [
-            '#'.$this->getId('mlRepeater') => $parentContent,
+            '#'.$this->getId('mlNestedForm') => $parentContent,
             'updateValue' => json_encode($previousValue),
             'updateLocale' => $previousLocale,
         ];
     }
 
     /**
-     * Ensure that the current locale data is processed by the repeater instead of the original non-translated data
-     * @return void
+     * getPrimarySaveDataAsArray gets the active values from the selected locale.
      */
-    protected function reprocessLocaleItems($data)
+    protected function getPrimarySaveDataAsArray(): array
     {
-        $this->formWidgets = [];
-
-        $this->formField->value = $data;
-
-        $key = implode('.', HtmlHelper::nameToArray($this->formField->getName()));
-
-        $requestData = Request::all();
-
-        array_set($requestData, $key, $data);
-
-        $this->mergeWithPost($requestData);
-
-        $this->processItems();
+        return post($this->formField->getName()) ?: [];
     }
 
     /**
-     * Gets the active values from the selected locale.
-     * @return array
+     * getLocaleSaveDataAsArray returns the stored locale data as an array.
      */
-    protected function getPrimarySaveDataAsArray()
-    {
-        $data = post($this->formField->getName()) ?: [];
-
-        return $this->processSaveValue($data);
-    }
-
-    /**
-     * Returns the stored locale data as an array.
-     * @return array
-     */
-    protected function getLocaleSaveDataAsArray($locale)
+    protected function getLocaleSaveDataAsArray($locale): ?array
     {
         $saveData = array_get($this->getLocaleSaveData(), $locale, []);
 
@@ -184,17 +152,14 @@ class MLRepeater extends Repeater
     }
 
     /**
-     * Since the locker does always contain the latest values, this method
-     * will take the save data from the repeater and merge it in to the
-     * locker based on which ever locale is selected using an item map
-     * @return void
+     * rewritePostValues since the locker does always contain the latest values,
+     * this method will take the save data from the nested form and merge it in to
+     * the locker based on which ever locale is selected using an item map
      */
-    protected function rewritePostValues()
+    protected function rewritePostValues(): void
     {
-        /*
-         * Get the selected locale at postback
-         */
-        $data = post('RLTranslateRepeaterLocale');
+        // Get the selected locale at postback
+        $data = post('RLTranslateNestedFormLocale');
         $fieldName = implode('.', HtmlHelper::nameToArray($this->fieldName));
         $locale = array_get($data, $fieldName);
 
@@ -202,9 +167,7 @@ class MLRepeater extends Repeater
             return;
         }
 
-        /*
-         * Splice the save data in to the locker data for selected locale
-         */
+        // Splice the save data in to the locker data for selected locale
         $data = $this->getPrimarySaveDataAsArray();
         $fieldName = 'RLTranslate.'.$locale.'.'.implode('.', HtmlHelper::nameToArray($this->fieldName));
 

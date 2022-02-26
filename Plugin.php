@@ -59,11 +59,11 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
             $model->translatable = array_merge($model->translatable, ['title', 'description', 'meta_title', 'meta_description']);
-            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePageUrl')) {
-                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatablePageUrl');
+            if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatablePageUrl::class)) {
+                $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatablePageUrl::class);
             }
-            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatablePage')) {
-                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatablePage');
+            if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatablePage::class)) {
+                $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatablePage::class);
             }
         });
 
@@ -91,7 +91,7 @@ class Plugin extends PluginBase
         /*
          * Register console commands
          */
-        $this->registerConsoleCommand('translate.scan', 'Rainlab\Translate\Console\ScanCommand');
+        $this->registerConsoleCommand('translate.scan', \Rainlab\Translate\Console\ScanCommand::class);
 
         $this->registerAssetBundles();
     }
@@ -109,11 +109,11 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
             $model->translatable = array_merge($model->translatable, ['title', 'description']);
-            if (!$model->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
-                $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            if (!$model->isClassExtendedWith(\October\Rain\Database\Behaviors\Purgeable::class)) {
+                $model->extendClassWith(\October\Rain\Database\Behaviors\Purgeable::class);
             }
-            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
-                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+            if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatableModel::class)) {
+                $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatableModel::class);
             }
         });
 
@@ -125,11 +125,11 @@ class Plugin extends PluginBase
                 $model->addDynamicProperty('translatable', []);
             }
 
-            if (!$model->isClassExtendedWith('October\Rain\Database\Behaviors\Purgeable')) {
-                $model->extendClassWith('October\Rain\Database\Behaviors\Purgeable');
+            if (!$model->isClassExtendedWith(\October\Rain\Database\Behaviors\Purgeable::class)) {
+                $model->extendClassWith(\October\Rain\Database\Behaviors\Purgeable::class);
             }
-            if (!$model->isClassExtendedWith('RainLab\Translate\Behaviors\TranslatableModel')) {
-                $model->extendClassWith('RainLab\Translate\Behaviors\TranslatableModel');
+            if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatableModel::class)) {
+                $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatableModel::class);
             }
 
             $model->bindEvent('model.afterFetch', static function() use ($model) {
@@ -255,8 +255,8 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
-           'RainLab\Translate\Components\LocalePicker' => 'localePicker',
-           'RainLab\Translate\Components\AlternateHrefLangElements' => 'alternateHrefLangElements'
+           \RainLab\Translate\Components\LocalePicker::class => 'localePicker',
+           \RainLab\Translate\Components\AlternateHrefLangElements::class => 'alternateHrefLangElements'
         ];
     }
 
@@ -278,21 +278,21 @@ class Plugin extends PluginBase
     {
         return [
             'locales' => [
-                'label'       => 'rainlab.translate::lang.locale.title',
+                'label' => 'rainlab.translate::lang.locale.title',
                 'description' => 'rainlab.translate::lang.plugin.description',
-                'icon'        => 'icon-language',
-                'url'         => Backend::url('rainlab/translate/locales'),
-                'order'       => 550,
-                'category'    => 'rainlab.translate::lang.plugin.name',
+                'icon' => 'icon-language',
+                'url' => Backend::url('rainlab/translate/locales'),
+                'order' => 550,
+                'category' => 'rainlab.translate::lang.plugin.name',
                 'permissions' => ['rainlab.translate.manage_locales']
             ],
             'messages' => [
-                'label'       => 'rainlab.translate::lang.messages.title',
+                'label' => 'rainlab.translate::lang.messages.title',
                 'description' => 'rainlab.translate::lang.messages.description',
-                'icon'        => 'icon-list-alt',
-                'url'         => Backend::url('rainlab/translate/messages'),
-                'order'       => 551,
-                'category'    => 'rainlab.translate::lang.plugin.name',
+                'icon' => 'icon-list-alt',
+                'url' => Backend::url('rainlab/translate/messages'),
+                'order' => 551,
+                'category' => 'rainlab.translate::lang.plugin.name',
                 'permissions' => ['rainlab.translate.manage_messages']
             ]
         ];
@@ -315,22 +315,29 @@ class Plugin extends PluginBase
         ];
     }
 
+    /**
+     * registerFormWidgets for multi-lingual
+     */
     public function registerFormWidgets()
     {
         $mediaFinderClass = class_exists('System')
-            ? 'RainLab\Translate\FormWidgets\MLMediaFinderv2'
-            : 'RainLab\Translate\FormWidgets\MLMediaFinder';
+            ? \RainLab\Translate\FormWidgets\MLMediaFinderv2::class
+            : \RainLab\Translate\FormWidgets\MLMediaFinder::class;
 
         return [
-            'RainLab\Translate\FormWidgets\MLText' => 'mltext',
-            'RainLab\Translate\FormWidgets\MLTextarea' => 'mltextarea',
-            'RainLab\Translate\FormWidgets\MLRichEditor' => 'mlricheditor',
-            'RainLab\Translate\FormWidgets\MLMarkdownEditor' => 'mlmarkdowneditor',
-            'RainLab\Translate\FormWidgets\MLRepeater' => 'mlrepeater',
+            \RainLab\Translate\FormWidgets\MLText::class => 'mltext',
+            \RainLab\Translate\FormWidgets\MLTextarea::class => 'mltextarea',
+            \RainLab\Translate\FormWidgets\MLRichEditor::class => 'mlricheditor',
+            \RainLab\Translate\FormWidgets\MLMarkdownEditor::class => 'mlmarkdowneditor',
+            \RainLab\Translate\FormWidgets\MLRepeater::class => 'mlrepeater',
+            \RainLab\Translate\FormWidgets\MLNestedForm::class => 'mlnestedform',
             $mediaFinderClass => 'mlmediafinder',
         ];
     }
 
+    /**
+     * registerAssetBundles for compilation
+     */
     protected function registerAssetBundles()
     {
         CombineAssets::registerCallback(function ($combiner) {
@@ -339,31 +346,49 @@ class Plugin extends PluginBase
         });
     }
 
+    /**
+     * localeUrl builds a localized URL
+     */
     public function localeUrl($url, $locale)
     {
         $translator = Translator::instance();
+
         $parts = parse_url($url);
+
         $path = array_get($parts, 'path');
+
         return http_build_url($parts, [
             'path' => '/' . $translator->getPathInLocale($path, $locale)
         ]);
     }
 
+    /**
+     * translateString
+     */
     public function translateString($string, $params = [], $locale = null)
     {
         return Message::trans($string, $params, $locale);
     }
 
+    /**
+     * translatePlural
+     */
     public function translatePlural($string, $count = 0, $params = [], $locale = null)
     {
         return Lang::choice(Message::trans($string, $params, $locale), $count, $params);
     }
 
+    /**
+     * translateRawString
+     */
     public function translateRawString($string, $params = [], $locale = null)
     {
         return Message::transRaw($string, $params, $locale);
     }
 
+    /**
+     * translateRawPlural
+     */
     public function translateRawPlural($string, $count = 0, $params = [], $locale = null)
     {
         return Lang::choice(Message::transRaw($string, $params, $locale), $count, $params);

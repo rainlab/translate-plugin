@@ -5,6 +5,9 @@ use Symfony\Component\Console\Input\InputOption;
 use RainLab\Translate\Classes\ThemeScanner;
 use RainLab\Translate\Models\Message;
 
+/**
+ * ScanCommand
+ */
 class ScanCommand extends Command
 {
     protected $name = 'translate:scan';

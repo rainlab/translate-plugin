@@ -4,8 +4,7 @@ use Backend\FormWidgets\RichEditor;
 use RainLab\Translate\Models\Locale;
 
 /**
- * ML Rich Editor
- * Renders a multi-lingual WYSIWYG editor.
+ * MLRichEditor renders a multi-lingual WYSIWYG editor.
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
@@ -19,7 +18,14 @@ class MLRichEditor extends RichEditor
      */
     protected $defaultAlias = 'mlricheditor';
 
+    /**
+     * @var string originalAssetPath
+     */
     public $originalAssetPath;
+
+    /**
+     * @var string originalViewPath
+     */
     public $originalViewPath;
 
     /**
@@ -53,6 +59,9 @@ class MLRichEditor extends RichEditor
         return $this->makePartial('mlricheditor');
     }
 
+    /**
+     * prepareVars
+     */
     public function prepareVars()
     {
         parent::prepareVars();

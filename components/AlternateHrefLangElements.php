@@ -11,14 +11,13 @@ use Cms\Classes\ComponentBase;
  */
 class AlternateHrefLangElements extends ComponentBase
 {
-
     /**
      * componentDetails
      */
     public function componentDetails()
     {
         return [
-            'name'        => 'rainlab.translate::lang.alternate_hreflang.component_name',
+            'name' => 'rainlab.translate::lang.alternate_hreflang.component_name',
             'description' => 'rainlab.translate::lang.alternate_hreflang.component_description'
         ];
     }

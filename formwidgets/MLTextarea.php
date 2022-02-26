@@ -4,8 +4,7 @@ use Backend\Classes\FormWidgetBase;
 use RainLab\Translate\Models\Locale;
 
 /**
- * ML Textarea
- * Renders a multi-lingual textarea field.
+ * MLTextarea renders a multi-lingual textarea field.
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
@@ -63,5 +62,4 @@ class MLTextarea extends FormWidgetBase
     {
         $this->loadLocaleAssets();
     }
-
 }

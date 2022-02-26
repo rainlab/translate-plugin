@@ -4,7 +4,6 @@ use App;
 use Str;
 use File;
 use Cms\Classes\Page;
-use Cms\Classes\Theme;
 use Cms\Classes\Content;
 use System\Classes\MailManager;
 use System\Classes\PluginManager;
@@ -15,7 +14,7 @@ use RainLab\Translate\Classes\ThemeScanner;
 use Exception;
 
 /**
- * Registrant class for bootstrapping events
+ * EventRegistry for bootstrapping events
  *
  * @package october\system
  * @author Alexey Bobkov, Samuel Georges
@@ -28,6 +27,9 @@ class EventRegistry
     // Editor
     //
 
+    /**
+     * extendEditorPageToolbar
+     */
     public function extendEditorPageToolbar($dataHolder)
     {
         if (!LocaleModel::isAvailable()) {
@@ -91,6 +93,9 @@ class EventRegistry
     // Utility
     //
 
+    /**
+     * registerFormFieldReplacements
+     */
     public function registerFormFieldReplacements($widget)
     {
         // Replace with ML Controls for translatable attributes
@@ -106,10 +111,8 @@ class EventRegistry
     }
 
     /**
-     * Translate RainLab.Pages MenuItem data
-     *
+     * registerMenuItemTranslation for RainLab.Pages MenuItem data
      * @param Backend\Widgets\Form $widget
-     * @return void
      */
     public function registerMenuItemTranslation($widget)
     {
@@ -144,6 +147,9 @@ class EventRegistry
     // Translate URLs
     //
 
+    /**
+     * registerPageUrlTranslation
+     */
     public function registerPageUrlTranslation($widget)
     {
         if (!$model = $widget->model) {
@@ -169,10 +175,14 @@ class EventRegistry
     //
 
     /**
-     * Automatically replace form fields for multi lingual equivalents
+     * registerModelTranslation automatically replaces form fields for multi-lingual equivalents
      */
     public function registerModelTranslation($widget)
     {
+        if ($widget->isNested) {
+            return;
+        }
+
         if (!$model = $widget->model) {
             return;
         }
@@ -182,19 +192,18 @@ class EventRegistry
         }
 
         if (
-            !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableModel') &&
-            !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatablePage') &&
-            !$model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableCmsObject')
+            !$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatableModel::class) &&
+            !$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatablePage::class) &&
+            !$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatableCmsObject::class)
         ) {
             return;
         }
-
 
         if (!$model->hasTranslatableAttributes()) {
             return;
         }
 
-        if (!empty($widget->fields) && !$widget->isNested) {
+        if (!empty($widget->fields)) {
             $widget->fields = $this->processFormMLFields($widget->fields, $model);
         }
 
@@ -208,7 +217,7 @@ class EventRegistry
     }
 
     /**
-     * Helper function to replace standard fields with multi lingual equivalents
+     * processFormMLFields function to replace standard fields with multi-lingual equivalents
      * @param  array $fields
      * @param  Model $model
      * @return array
@@ -216,12 +225,13 @@ class EventRegistry
     protected function processFormMLFields($fields, $model)
     {
         $typesMap = [
-            'markdown'    => 'mlmarkdowneditor',
+            'text' => 'mltext',
+            'textarea' => 'mltextarea',
+            'richeditor' => 'mlricheditor',
+            'markdown' => 'mlmarkdowneditor',
+            'repeater' => 'mlrepeater',
+            'nestedform' => 'mlnestedform',
             'mediafinder' => 'mlmediafinder',
-            'repeater'    => 'mlrepeater',
-            'richeditor'  => 'mlricheditor',
-            'text'        => 'mltext',
-            'textarea'    => 'mltextarea',
         ];
 
         $translatable = array_flip($model->getTranslatableAttributes());
@@ -268,7 +278,7 @@ class EventRegistry
     //
 
     /**
-     * Set the page context for translation caching.
+     * setMessageContext for translation caching.
      */
     public function setMessageContext($page)
     {
@@ -282,7 +292,7 @@ class EventRegistry
     }
 
     /**
-     * Adds language suffixes to content files.
+     * findTranslatedContentFile adds language suffixes to content files.
      * @return string|null
      */
     public function findTranslatedContentFile($controller, $fileName)
@@ -307,7 +317,7 @@ class EventRegistry
     //
 
     /**
-     * Removes localized content files from templates collection
+     * pruneTranslatedContentTemplates removes localized content files from templates collection
      * @param \October\Rain\Database\Collection $templates
      * @return \October\Rain\Database\Collection
      */
@@ -325,7 +335,7 @@ class EventRegistry
     }
 
     /**
-     * Adds language suffixes to mail view files.
+     * findLocalizedMailViewContent adds language suffixes to mail view files.
      * @param  \October\Rain\Mail\Mailer $mailer
      * @param  \Illuminate\Mail\Message $message
      * @param  string $view
@@ -367,9 +377,8 @@ class EventRegistry
         }
     }
 
-
     /**
-     * Search mail view files based on locale
+     * getLocalizedView searches mail view files based on locale
      * @param  \October\Rain\Mail\Mailer $mailer
      * @param  \Illuminate\Mail\Message $message
      * @param  string $code

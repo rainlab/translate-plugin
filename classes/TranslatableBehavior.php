@@ -13,7 +13,6 @@ use October\Rain\Html\Helper as HtmlHelper;
  */
 abstract class TranslatableBehavior extends ExtensionBase
 {
-
     /**
      * @var \October\Rain\Database\Model Reference to the extended model.
      */
@@ -121,7 +120,7 @@ abstract class TranslatableBehavior extends ExtensionBase
 
         return $this->model;
     }
-    
+
     /**
      * Enables translation fallback locale.
      * @return self

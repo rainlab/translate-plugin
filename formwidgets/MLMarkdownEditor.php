@@ -4,8 +4,7 @@ use Backend\FormWidgets\MarkdownEditor;
 use RainLab\Translate\Models\Locale;
 
 /**
- * ML Markdown Editor
- * Renders a multi-lingual Markdown editor.
+ * MLMarkdownEditor renders a multi-lingual Markdown editor.
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
@@ -19,7 +18,14 @@ class MLMarkdownEditor extends MarkdownEditor
      */
     protected $defaultAlias = 'mlmarkdowneditor';
 
+    /**
+     * @var string originalAssetPath
+     */
     public $originalAssetPath;
+
+    /**
+     * @var string originalViewPath
+     */
     public $originalViewPath;
 
     /**
@@ -98,5 +104,4 @@ class MLMarkdownEditor extends MarkdownEditor
     {
         return '/modules/backend/formwidgets/markdowneditor/assets';
     }
-
 }

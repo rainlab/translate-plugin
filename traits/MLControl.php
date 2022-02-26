@@ -2,12 +2,10 @@
 
 use Str;
 use RainLab\Translate\Models\Locale;
-use Backend\Classes\FormWidgetBase;
 use October\Rain\Html\Helper as HtmlHelper;
 
 /**
- * Generic ML Control
- * Renders a multi-lingual control.
+ * MLControl is a generic ML Control for rendering a multi-lingual control.
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges

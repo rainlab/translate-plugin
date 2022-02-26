@@ -6,14 +6,17 @@ use System\Classes\SettingsManager;
 use RainLab\Translate\Models\Locale as LocaleModel;
 
 /**
- * Locales Back-end Controller
+ * Locales Backend Controller
  */
 class Locales extends Controller
 {
+    /**
+     * implement the TranslatableModel behavior softly
+     */
     public $implement = [
-        'Backend.Behaviors.ListController',
-        'Backend.Behaviors.FormController',
-        'Backend.Behaviors.ReorderController',
+        \Backend\Behaviors\ListController::class,
+        \Backend\Behaviors\FormController::class,
+        \Backend\Behaviors\ReorderController::class,
     ];
 
     public $listConfig = 'config_list.yaml';
