@@ -228,7 +228,6 @@ class Plugin extends PluginBase
                 $dirtyLocales = $template->getDirtyLocales();
 
                 if (!empty($dirtyLocales)) {
-                    $theme = Theme::getEditTheme();
                     $currentLocale = Lang::getLocale();
 
                     foreach ($dirtyLocales as $locale) {
@@ -238,8 +237,7 @@ class Plugin extends PluginBase
 
                         // Clear the RainLab.Pages caches for each dirty locale
                         App::setLocale($locale);
-                        \RainLab\Pages\Classes\Page::clearMenuCache($theme);
-                        \RainLab\Pages\Classes\SnippetManager::clearCache($theme);
+                        \RainLab\Pages\Plugin::clearCache();
                     }
 
                     // Restore the original locale for this request
