@@ -95,12 +95,27 @@ class MLRepeater extends Repeater
         return '/modules/backend/formwidgets/repeater/assets';
     }
 
+    /**
+     * onAddItem
+     */
     public function onAddItem()
     {
         $this->actAsParent();
         return parent::onAddItem();
     }
 
+    /**
+     * onDuplicateItem
+     */
+    public function onDuplicateItem()
+    {
+        $this->actAsParent();
+        return parent::onDuplicateItem();
+    }
+
+    /**
+     * onSwitchItemLocale
+     */
     public function onSwitchItemLocale()
     {
         if (!$locale = post('_repeater_locale')) {
