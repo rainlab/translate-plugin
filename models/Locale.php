@@ -137,10 +137,7 @@ class Locale extends Model
      */
     public function scopeIsEnabled($query)
     {
-        return $query
-            ->whereNotNull('is_enabled')
-            ->where('is_enabled', true)
-        ;
+        return $query->where('is_enabled', true);
     }
 
     /**
