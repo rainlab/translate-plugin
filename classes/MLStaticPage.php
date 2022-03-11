@@ -53,8 +53,21 @@ class MLStaticPage extends MLCmsObject
                 continue;
             }
 
-            $bodyNode = $node->getNode('body');
-            $result[$node->getAttribute('name')] = trim($bodyNode->getAttribute('data'));
+            // October CMS v2.2 and above
+            if (class_exists('System') && version_compare(\System::VERSION, '2.1') === 1) {
+                $names = $node->getNode('names');
+                $values = $node->getNode('values');
+                $isCapture = $node->getAttribute('capture');
+                if ($isCapture) {
+                    $name = $names->getNode(0);
+                    $result[$name->getAttribute('name')] = trim($values->getAttribute('data'));
+                }
+            }
+            // Legacy PutNode support
+            else {
+                $values = $node->getNode('body');
+                $result[$node->getAttribute('name')] = trim($values->getAttribute('data'));
+            }
         }
 
         $this->attributes['placeholders'] = $result;
