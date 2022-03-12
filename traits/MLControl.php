@@ -13,27 +13,27 @@ use October\Rain\Html\Helper as HtmlHelper;
 trait MLControl
 {
     /**
-     * @var boolean Determines whether translation services are available
+     * @var boolean isAvailable determines whether translation services are available
      */
     public $isAvailable;
 
     /**
-     * @var string Stores the original asset path when acting as the parent control
+     * @var string originalAssetPath stores the original asset path when acting as the parent control
      */
     public $originalAssetPath;
 
     /**
-     * @var string Stores the original view path when acting as the parent control
+     * @var string originalViewPath stores the original view path when acting as the parent control
      */
     public $originalViewPath;
 
     /**
-     * @var RainLab\Translate\Models\Locale Object
+     * @var RainLab\Translate\Models\Locale defaultLocale object
      */
     protected $defaultLocale;
 
     /**
-     * Initialize control
+     * initLocale initializes the control
      * @return void
      */
     public function initLocale()
@@ -43,7 +43,7 @@ trait MLControl
     }
 
     /**
-     * Returns the parent control's view path
+     * getParentViewPath returns the parent control's view path
      *
      * @return string
      */
@@ -53,7 +53,7 @@ trait MLControl
     }
 
     /**
-     * Returns the parent control's asset path
+     * getParentAssetPath returns the parent control's asset path
      *
      * @return string
      */
@@ -63,7 +63,7 @@ trait MLControl
     }
 
     /**
-     * Swap the asset & view paths with the parent control's to
+     * actAsParent swaps the asset & view paths with the parent control's to
      * act as the parent control
      *
      * @param boolean $switch Defaults to true, determines whether to act as the parent or revert to current
@@ -91,7 +91,7 @@ trait MLControl
     }
 
     /**
-     * Used by child classes to render in context of this view path.
+     * makeMLPartial is used by child classes to render in context of this view path.
      * @param string $partial The view to load.
      * @param array $params Parameter variables to pass to the view.
      * @return string The view contents.
@@ -107,16 +107,7 @@ trait MLControl
     }
 
     /**
-     * {@deprecated} 1.4.1 Replaced by makeMLPartial
-     */
-    public function makeParentPartial($partial, $params = [])
-    {
-        traceLog('Method makeParentPartial has been deprecated, use makeMLPartial instead.');
-        return $this->makeMLPartial($partial, $params);
-    }
-
-    /**
-     * Prepares the list data
+     * prepareLocaleVars prepares the list data
      */
     public function prepareLocaleVars()
     {
@@ -126,7 +117,7 @@ trait MLControl
     }
 
     /**
-     * Loads assets specific to ML Controls
+     * loadLocaleAssets loads assets specific to ML Controls
      */
     public function loadLocaleAssets()
     {
@@ -139,7 +130,7 @@ trait MLControl
     }
 
     /**
-     * Returns a translated value for a given locale.
+     * getLocaleValue returns a translated value for a given locale.
      * @param  string $locale
      * @return string
      */
@@ -167,7 +158,7 @@ trait MLControl
     }
 
     /**
-     * If translation is unavailable, render the original field type (text).
+     * makeRenderFormField if translation is unavailable, render the original field type (text).
      */
     protected function makeRenderFormField()
     {
@@ -210,7 +201,7 @@ trait MLControl
     }
 
     /**
-     * Returns an array of translated values for this field
+     * getLocaleSaveData returns an array of translated values for this field
      * @return array
      */
     public function getLocaleSaveData()
@@ -234,7 +225,7 @@ trait MLControl
     }
 
     /**
-     * Returns the fallback field type.
+     * getFallbackType returns the fallback field type.
      * @return string
      */
     public function getFallbackType()
@@ -243,13 +234,16 @@ trait MLControl
     }
 
     /**
-     * Returns true if widget is a repeater, or the field is specified
+     * isLocaleFieldJsonable returns true if widget is a repeater, or the field is specified
      * as jsonable in the model.
      * @return bool
      */
     public function isLocaleFieldJsonable()
     {
-        if ($this instanceof \Backend\FormWidgets\Repeater) {
+        if (
+            $this instanceof \Backend\FormWidgets\Repeater ||
+            $this instanceof \Backend\FormWidgets\NestedForm
+        ) {
             return true;
         }
 
@@ -264,7 +258,7 @@ trait MLControl
     }
 
     /**
-     * Internal helper for method existence checks.
+     * objectMethodExists is an internal helper for method existence checks.
      *
      * @param  object $object
      * @param  string $method

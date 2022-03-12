@@ -52,7 +52,7 @@ class MLMediaFinderv2 extends MediaFinder
     }
 
     /**
-     * Prepares the form widget view data
+     * prepareVars prepares the form widget view data
      */
     public function prepareVars()
     {

@@ -66,7 +66,7 @@ class MLMarkdownEditor extends MarkdownEditor
     }
 
     /**
-     * Returns an array of translated values for this field
+     * getSaveValue returns an array of translated values for this field
      * @return array
      */
     public function getSaveValue($value)

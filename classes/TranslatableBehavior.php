@@ -491,24 +491,4 @@ abstract class TranslatableBehavior extends ExtensionBase
      * @return array
      */
     abstract protected function loadTranslatableData($locale = null);
-
-    /**
-     * @deprecated setTranslateAttribute is deprecated, use setAttributeTranslated instead.
-     * @todo Remove method if year >= 2017
-     */
-    public function setTranslateAttribute($key, $value, $locale = null)
-    {
-        traceLog(static::class . '::setTranslateAttribute is deprecated, use setAttributeTranslated instead.');
-        return $this->setAttributeTranslated($key, $value, $locale);
-    }
-
-    /**
-     * @deprecated getTranslateAttribute is deprecated, use getAttributeTranslated instead.
-     * @todo Remove method if year >= 2017
-     */
-    public function getTranslateAttribute($key, $locale = null)
-    {
-        traceLog(static::class . '::getTranslateAttribute is deprecated, use getAttributeTranslated instead.');
-        return $this->getAttributeTranslated($key, $locale);
-    }
 }

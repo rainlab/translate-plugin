@@ -91,3 +91,4 @@ v1.9.3: Improves support when using child themes
 v1.10.0: Adds new multilingual nested form widget. Adds withFallbackLocale method.
 v1.10.1: Improve support with October v2.0
 v1.10.2: Improve support with October v2.2
+v1.10.3: Multilingual control improvements

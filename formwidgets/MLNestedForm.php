@@ -67,7 +67,7 @@ class MLNestedForm extends NestedForm
     {
         $this->rewritePostValues();
 
-        return $this->getLocaleSaveValue(is_array($value) ? array_values($value) : $value);
+        return $this->getLocaleSaveValue($value);
     }
 
     /**
