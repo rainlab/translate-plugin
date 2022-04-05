@@ -81,7 +81,7 @@ class MLMediaFinderv2 extends MediaFinder
 
         if (Locale::isAvailable()) {
             $this->loadLocaleAssets();
-            $this->addJs('../../mlmediafinder/assets/js/mlmediafinder.js');
+            $this->addJs('js/mlmediafinder.js');
             $this->addCss('../../mlmediafinder/assets/css/mlmediafinder.css');
         }
     }

@@ -247,6 +247,10 @@ trait MLControl
             return true;
         }
 
+        if ($this instanceof \Media\FormWidgets\MediaFinder && $this->maxItems !== 1) {
+            return true;
+        }
+
         if (
             method_exists($this->model, 'isJsonable') &&
             $this->model->isJsonable($this->fieldName)

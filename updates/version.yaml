@@ -92,3 +92,4 @@ v1.10.0: Adds new multilingual nested form widget. Adds withFallbackLocale metho
 v1.10.1: Improve support with October v2.0
 v1.10.2: Improve support with October v2.2
 v1.10.3: Multilingual control improvements
+v1.10.4: Improve media finder support with October v2.2

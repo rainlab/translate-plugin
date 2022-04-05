@@ -3,6 +3,7 @@
     <?php
         $value = $this->getLocaleValue($code);
         $value = $this->isLocaleFieldJsonable() ? json_encode($value) : $value;
+        if (is_array($value)) $value = array_first($value);
     ?>
     <input
         type="hidden"
