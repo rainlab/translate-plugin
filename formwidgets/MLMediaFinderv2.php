@@ -67,7 +67,11 @@ class MLMediaFinderv2 extends MediaFinder
      */
     public function getSaveValue($value)
     {
-        return $this->getLocaleSaveValue($value);
+        if ($this->isAvailable) {
+            return $this->getLocaleSaveValue($value);
+        }
+
+        return parent::getSaveValue($value);
     }
 
     /**
