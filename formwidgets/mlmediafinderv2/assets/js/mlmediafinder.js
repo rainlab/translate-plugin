@@ -91,29 +91,35 @@
 
             try {
                 localeValueArr = JSON.parse(localeValue);
+                if (!$.isArray(localeValueArr)) {
+                    localeValueArr = [localeValueArr];
+                }
             }
             catch(e) {
                 isMulti = false;
             }
 
+            mediaFinder.$filesContainer.empty();
+
             if (isMulti) {
-                mediaFinder.$filesContainer.empty();
                 $.each(localeValueArr, function(k, v) {
-                    var path = v ? self.options.mediaPath + v : '';
-                    items.push({
-                        path: v,
-                        publicUrl: path,
-                        title: v.substring(1)
-                    });
+                    if (v) {
+                        items.push({
+                            path: v,
+                            publicUrl: self.options.mediaPath + v,
+                            title: v.substring(1)
+                        });
+                    }
                 });
             }
             else {
-                var path = localeValue ? this.options.mediaPath + localeValue : '';
-                items = [{
-                    path: localeValue,
-                    publicUrl: path,
-                    title: localeValue.substring(1)
-                }];
+                if (localeValue) {
+                    items = [{
+                        path: localeValue,
+                        publicUrl: this.options.mediaPath + localeValue,
+                        title: localeValue.substring(1)
+                    }];
+                }
             }
 
             mediaFinder.addItems(items);
