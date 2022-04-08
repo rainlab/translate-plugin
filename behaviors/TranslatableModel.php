@@ -34,7 +34,7 @@ class TranslatableModel extends TranslatableBehavior
         }
 
         // Clean up indexes when this model is deleted
-        $model->bindEvent('model.beforeDelete', function() use ($model) {
+        $model->bindEvent('model.afterDelete', function() use ($model) {
             Db::table('rainlab_translate_attributes')
                 ->where('model_id', $model->getKey())
                 ->where('model_type', get_class($model))
