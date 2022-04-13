@@ -50,7 +50,7 @@ class TranslatableModel extends TranslatableBehavior
     /**
      * extendFileModels will swap the standard File model with MLFile instead
      */
-    protected function extendFileModels(string $relationGroup): void
+    protected function extendFileModels(string $relationGroup)
     {
         foreach ($this->model->$relationGroup as $relationName => $relationObj) {
             $relationClass = is_array($relationObj) ? $relationObj[0] : $relationObj;

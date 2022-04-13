@@ -156,7 +156,7 @@ class MLNestedForm extends NestedForm
      * this method will take the save data from the nested form and merge it in to
      * the locker based on which ever locale is selected using an item map
      */
-    protected function rewritePostValues(): void
+    protected function rewritePostValues()
     {
         // Get the selected locale at postback
         $data = post('RLTranslateNestedFormLocale');
@@ -179,7 +179,7 @@ class MLNestedForm extends NestedForm
     /**
      * mergeWithPost will apply postback values globally
      */
-    protected function mergeWithPost(array $values): void
+    protected function mergeWithPost(array $values)
     {
         Request::merge($values);
         $_POST = array_merge($_POST, $values);

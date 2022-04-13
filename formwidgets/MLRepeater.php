@@ -231,7 +231,7 @@ class MLRepeater extends Repeater
     /**
      * mergeWithPost will apply postback values globally
      */
-    protected function mergeWithPost(array $values): void
+    protected function mergeWithPost(array $values)
     {
         Request::merge($values);
         $_POST = array_merge($_POST, $values);
