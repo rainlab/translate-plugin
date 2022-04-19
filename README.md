@@ -118,8 +118,8 @@ Add the `--purge` option to clear old messages first:
 This plugin activates a feature in the CMS that allows content & mail template files to use language suffixes, for example:
 
 * **welcome.htm** will contain the content or mail template in the default language.
-* **welcome.ru.htm** will contain the content or mail template in Russian.
-* **welcome.fr.htm** will contain the content or mail template in French.
+* **welcome-ru.htm** will contain the content or mail template in Russian.
+* **welcome-fr.htm** will contain the content or mail template in French.
 
 ## Model translation
 
