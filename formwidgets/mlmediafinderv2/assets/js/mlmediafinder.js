@@ -23,7 +23,8 @@
         this.options   = options
         this.$el       = $(element)
         this.$mediafinder = $('[data-control=mediafinder]', this.$el)
-        this.$findValue = $('[data-find-value]', this.$el)
+        this.$dataLocker = $('[data-data-locker]', this.$el)
+        this.isMulti = this.$mediafinder.hasClass('is-multi')
 
         $.oc.foundation.controlUtils.markDisposable(element)
         Base.call(this)
@@ -44,8 +45,9 @@
         this.$el.multiLingual()
         this.$el.on('setLocale.oc.multilingual', this.proxy(this.onSetLocale))
         this.$el.one('dispose-control', this.proxy(this.dispose))
+
         // Listen for change event from mediafinder
-        this.$findValue.on('change', this.proxy(this.setValue))
+        this.$dataLocker.on('change', this.proxy(this.setValue))
 
         // Stop here for preview mode
         if (this.options.isPreview) {
@@ -53,19 +55,14 @@
         }
     }
 
-    // Simplify setPath
-    MLMediaFinder.prototype.setValue = function(e) {
-        this.setPath($(e.target).val())
-    }
-
     MLMediaFinder.prototype.dispose = function() {
         this.$el.off('setLocale.oc.multilingual', this.proxy(this.onSetLocale));
         this.$el.off('dispose-control', this.proxy(this.dispose));
-        this.$findValue.off('change', this.proxy(this.setValue));
+        this.$dataLocker.off('change', this.proxy(this.setValue));
 
         this.$el.removeData('oc.mlMediaFinder');
 
-        this.$findValue = null;
+        this.$dataLocker = null;
         this.$mediafinder = null;
         this.$el = null;
 
@@ -76,15 +73,30 @@
         BaseProto.dispose.call(this)
     }
 
+    MLMediaFinder.prototype.setValue = function(e) {
+        var mediafinder = this.$mediafinder.data('oc.mediaFinder'),
+            value = mediafinder.getValue();
+
+        if (value) {
+            if (this.isMulti) {
+                value = JSON.stringify(value);
+            }
+            else {
+                value = value[0];
+            }
+        }
+
+        this.setPath(value);
+    }
+
     MLMediaFinder.prototype.onSetLocale = function(e, locale, localeValue) {
         this.setPath(localeValue)
     }
 
     MLMediaFinder.prototype.setPath = function(localeValue) {
         if (typeof localeValue === 'string') {
-
             var self = this,
-                isMulti = this.$mediafinder.hasClass('is-multi'),
+                isMulti = this.isMulti,
                 mediaFinder = this.$mediafinder.data('oc.mediaFinder'),
                 items = [],
                 localeValueArr = [];
