@@ -1,18 +1,16 @@
 <div id="scanMessagesPopup">
     <?= Form::open(['id' => 'scanMessagesForm']) ?>
-        <div class="modal-header">
+        <div class="modal-header flex-row-reverse">
             <button type="button" class="close" data-dismiss="popup">&times;</button>
             <h4 class="modal-title"><?= e(trans('rainlab.translate::lang.messages.scan_messages_link')) ?></h4>
         </div>
 
         <div class="modal-body">
-
             <p>
                 <?= e(trans('rainlab.translate::lang.messages.scan_messages_process')) ?>
                 <?= e(trans('rainlab.translate::lang.messages.scan_messages_process_limitations')) ?>
 
             </p>
-
             <div class="form-preview">
                 <div class="form-group">
                     <!-- Checkbox -->
@@ -25,7 +23,7 @@
                         <label for="purgeMessages" class="storm-icon-pseudo">
                             <?= e(trans('rainlab.translate::lang.messages.scan_messages_purge_label')) ?>
                         </label>
-                        <p class="help-block">
+                        <p class="help-block form-text">
                             <?= e(trans('rainlab.translate::lang.messages.scan_messages_purge_help')) ?>
                         </p>
                     </div>
@@ -39,7 +37,7 @@
                         <label for="purgeDeletedMessages" class="storm-icon-pseudo">
                             <?= e(trans('rainlab.translate::lang.messages.scan_messages_purge_deleted_label')) ?>
                         </label>
-                        <p class="help-block">
+                        <p class="help-block form-text">
                             <?= e(trans('rainlab.translate::lang.messages.scan_messages_purge_deleted_help')) ?>
                         </p>
                     </div>

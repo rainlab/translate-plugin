@@ -42,7 +42,7 @@
         'clear_cache_success' => 'Cleared the application cache successfully!',
         'clear_cache_hint' => 'You may need to click <strong>Clear cache</strong> to see the changes on the front-end.',
         'scan_messages_link' => 'Scan for Messages',
-        'scan_messages_begin_scan' => 'Begin scan',
+        'scan_messages_begin_scan' => 'Begin Scan',
         'scan_messages_loading' => 'Scanning for new messages...',
         'scan_messages_success' => 'Scanned theme template files successfully!',
         'scan_messages_hint' => 'Clicking <strong>Scan for messages</strong> will check the active theme files for any new messages to translate.',

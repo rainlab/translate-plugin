@@ -42,7 +42,7 @@
         'clear_cache_success' => 'De applicatie cache is succesvol geleegd.',
         'clear_cache_hint' => 'Het kan zijn dat het nodig is om op <strong>cache legen</strong>" te klikken om wijzigingen op de website te zien.',
         'scan_messages_link' => 'Zoek naar nieuwe berichten',
-        'scan_messages_begin_scan' => 'Begin scan',
+        'scan_messages_begin_scan' => 'Begin Scan',
         'scan_messages_loading' => 'Zoeken naar nieuwe berichten...',
         'scan_messages_success' => 'De thema bestanden zijn succesvol gescand!',
         'scan_messages_hint' => 'Klikken op <strong>Zoeken naar nieuwe berichten</strong> controleert de bestanden van het huidige thema op nieuwe berichten om te vertalen.',
