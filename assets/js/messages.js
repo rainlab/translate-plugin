@@ -77,6 +77,10 @@
                 return
             }
 
+            if (!this.tableToolbar.length) {
+                return;
+            }
+
             $toolbar.addClass('message-buttons-added')
             $toolbar.prepend(Mustache.render(this.tableToolbar.html()))
         }
@@ -86,6 +90,10 @@
             if (toEl) this.toHeader = $(toEl)
             if (foundEl) this.foundHeader = $(foundEl)
             if (!this.tableElement) return
+
+            if (!this.toHeader.length) {
+                return;
+            }
 
             var $headers = $('table.headers th', this.tableElement)
             $headers.eq(0).html(this.fromHeader.html())
