@@ -2,7 +2,7 @@
 .field-multilingual .ml-btn{background:transparent;position:absolute;color:#7b7b7b;text-transform:uppercase;font-size:11px;letter-spacing:1px;width:44px;padding-right:0;-webkit-box-shadow:none;box-shadow:none;text-shadow:none;z-index:2}
 .field-multilingual .ml-btn:hover{color:#555}
 .field-multilingual.field-multilingual-text .form-control{padding-right:44px}
-.field-multilingual.field-multilingual-text .ml-btn{right:4px;top:50%;margin-top:-44px;height:88px}
+.field-multilingual.field-multilingual-text .ml-btn{right:4px;top:50%;margin-top:-22px;height:44px}
 .field-multilingual.field-multilingual-textarea textarea{padding-right:30px}
 .field-multilingual.field-multilingual-textarea .ml-btn{right:25px;top:5px;width:24px;text-align:right;padding-left:4px}
 .field-multilingual.field-multilingual-textarea .ml-dropdown-menu{top:39px;right:1px}
