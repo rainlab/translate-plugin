@@ -83,7 +83,9 @@ class ThemeScanner
             $parentTheme = $theme->getParentTheme();
 
             try {
-                $this->scanThemeConfigForMessagesInternal($theme);
+                if (!$this->scanThemeConfigForMessagesInternal($theme)) {
+                    $this->scanThemeConfigForMessagesInternal($parentTheme);
+                }
             }
             catch (Exception $ex) {
                 $this->scanThemeConfigForMessagesInternal($parentTheme);
@@ -102,7 +104,7 @@ class ThemeScanner
         $config = $theme->getConfigArray('translate');
 
         if (!count($config)) {
-            return;
+            return false;
         }
 
         $translator = Translator::instance();
