@@ -84,7 +84,7 @@ class TranslatableModel extends TranslatableBehavior
 
     /**
      * scopeTransWhereNoFallback is identical to scopeTransWhere except it will not
-     * use a fallback query when there are no idexes found.
+     * use a fallback query when there are no indexes found.
      * @see scopeTransWhere
      */
     public function scopeTransWhereNoFallback($query, $index, $value, $locale = null, $operator = '=')
