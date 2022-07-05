@@ -15,7 +15,7 @@ use Cms\Classes\ComponentBase;
 class LocalePicker extends ComponentBase
 {
     /**
-     * @var RainLab\Translate\Classes\Translator Translator object.
+     * @var \RainLab\Translate\Classes\Translator Translator object.
      */
     protected $translator;
 
