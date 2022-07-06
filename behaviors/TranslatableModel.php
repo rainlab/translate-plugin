@@ -89,6 +89,11 @@ class TranslatableModel extends TranslatableBehavior
      */
     public function scopeTransWhereNoFallback($query, $index, $value, $locale = null, $operator = '=')
     {
+        // Ignore translatable indexes in default locale context
+        if(($locale ?: $this->translatableContext) === $this->translatableDefault) {
+            return $query->where($index, $operator, $value);
+        }
+        
         return $this->transWhereInternal($query, $index, $value, [
             'locale' => $locale,
             'operator' => $operator,
