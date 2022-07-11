@@ -119,6 +119,7 @@
                         items.push({
                             path: v,
                             publicUrl: self.options.mediaPath + v,
+                            thumbUrl: self.options.mediaPath + v,
                             title: v.substring(1)
                         });
                     }
@@ -129,6 +130,7 @@
                     items = [{
                         path: localeValue,
                         publicUrl: this.options.mediaPath + localeValue,
+                        thumbUrl: this.options.mediaPath + localeValue,
                         title: localeValue.substring(1)
                     }];
                 }
