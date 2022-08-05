@@ -94,9 +94,9 @@ class EventRegistry
     //
 
     /**
-     * registerFormFieldReplacements
+     * registerFormFieldAdjustments
      */
-    public function registerFormFieldReplacements($widget)
+    public function registerFormFieldAdjustments($widget)
     {
         // Replace with ML Controls for translatable attributes
         $this->registerModelTranslation($widget);
@@ -217,28 +217,17 @@ class EventRegistry
     }
 
     /**
-     * processFormMLFields function to replace standard fields with multi-lingual equivalents
+     * processFormMLFields function to flag multilingual fields as translatable
      * @param  array $fields
      * @param  Model $model
      * @return array
      */
     protected function processFormMLFields($fields, $model)
     {
-        $typesMap = [
-            'text' => 'mltext',
-            'textarea' => 'mltextarea',
-            'richeditor' => 'mlricheditor',
-            'markdown' => 'mlmarkdowneditor',
-            'repeater' => 'mlrepeater',
-            'nestedform' => 'mlnestedform',
-            'mediafinder' => 'mlmediafinder',
-        ];
-
         $translatable = array_flip($model->getTranslatableAttributes());
 
-        /*
-         * Special: A custom field "markup_html" is used for Content templates.
-         */
+        // Special: A custom field "markup_html" is used for Content templates.
+        // @todo review if this is still needed -sg
         if ($model instanceof Content && array_key_exists('markup', $translatable)) {
             $translatable['markup_html'] = true;
         }
@@ -248,11 +237,7 @@ class EventRegistry
                 continue;
             }
 
-            $type = array_get($config, 'type', 'text');
-
-            if (array_key_exists($type, $typesMap)) {
-                $fields[$name]['type'] = $typesMap[$type];
-            }
+            $fields[$name]['translatable'] = true;
         }
 
         return $fields;

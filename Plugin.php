@@ -46,7 +46,7 @@ class Plugin extends PluginBase
 
         // Defer event with low priority to let others contribute before this registers.
         Event::listen('backend.form.extendFieldsBefore', function($widget) {
-            EventRegistry::instance()->registerFormFieldReplacements($widget);
+            EventRegistry::instance()->registerFormFieldAdjustments($widget);
         }, -1);
 
         // Handle translated page URLs
