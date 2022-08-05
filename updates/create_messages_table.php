@@ -14,6 +14,7 @@ class CreateMessagesTable extends Migration
             $table->increments('id');
             $table->string('code')->index()->nullable();
             $table->mediumText('message_data')->nullable();
+            $table->boolean('found')->default(1);
         });
     }
 

@@ -2,24 +2,13 @@ v1.0.1:
     - First version of Translate
     - create_messages_table.php
     - create_attributes_table.php
+    - create_indexes_table.php
 v1.1.0: Introduce compatibility with RainLab.Pages plugin.
 v1.2.0: CMS pages now support translating the URL.
-v1.2.4:
-    - Translatable attributes can now be declared as indexes.
-    - create_indexes_table.php
 v1.3.0: Added search to the translate messages page.
 v1.4.0: Add importer and exporter for messages
 v1.5.0: Compatibility fix with Build 451
 v1.6.0: Make File Upload widget properties translatable. Merge Repeater core changes into MLRepeater widget. Add getter method to retrieve original translate data.
-v1.6.6:
-    - Introduce migration to patch existing translations using morph map
-    - migrate_morphed_attributes.php
-v1.6.7:
-    - Introduce migration to patch existing indexes using morph map
-    - migrate_morphed_indexes.php
-v1.6.10:
-    - Add option to purge deleted messages when scanning messages, Add Scan error column on Messages page, Fix translations that were lost when clicking locale twice while holding ctrl key, Fix error with nested fields default locale value, Escape Message translate params value.
-    - update_messages_table.php
 v1.7.0: Breaking change for the Message::trans() method (params are now escaped), fix message translation documentation, fix string translation key for scan errors column header.
 v1.8.0: Adds initial support for October v2.0
 v1.9.0: Restores ability to translate URLs with CMS Editor in October v2.0

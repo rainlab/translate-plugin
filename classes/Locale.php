@@ -1,7 +1,6 @@
 <?php namespace RainLab\Translate\Classes;
 
 use Site;
-use Cache;
 use Model;
 use Config;
 use October\Rain\Element\ElementBase;
@@ -142,12 +141,7 @@ class Locale extends ElementBase
             return self::$cacheListEnabled;
         }
 
-        $expiresAt = now()->addMinutes(1440);
-        $isEnabled = Cache::remember('rainlab.translate.locales', $expiresAt, function() {
-            return self::listLocales()->where('is_enabled', true)->pluck('name', 'code')->all();
-        });
-
-        return self::$cacheListEnabled = $isEnabled;
+        return self::$cacheListEnabled = self::listLocales()->where('is_enabled', true)->pluck('name', 'code')->all();
     }
 
     /**
@@ -166,8 +160,6 @@ class Locale extends ElementBase
      */
     public static function clearCache()
     {
-        Cache::forget('rainlab.translate.locales');
-        Cache::forget('rainlab.translate.defaultLocale');
         self::$cacheFromSites = null;
         self::$cacheListEnabled = null;
         self::$cacheListAvailable = null;

@@ -65,11 +65,17 @@ class LocalePicker extends ComponentBase
         ];
     }
 
+    /**
+     * init
+     */
     public function init()
     {
         $this->translator = Translator::instance();
     }
 
+    /**
+     * onRun
+     */
     public function onRun()
     {
         if ($redirect = $this->redirectForceUrl()) {
@@ -81,6 +87,9 @@ class LocalePicker extends ComponentBase
         $this->page['activeLocaleName'] = $this->activeLocaleName = array_get($this->locales, $this->activeLocale);
     }
 
+    /**
+     * onSwitchLocale
+     */
     public function onSwitchLocale()
     {
         if (!$locale = post('locale')) {
@@ -100,6 +109,9 @@ class LocalePicker extends ComponentBase
         return Redirect::to($pageUrl);
     }
 
+    /**
+     * redirectForceUrl
+     */
     protected function redirectForceUrl()
     {
         if (
@@ -122,13 +134,14 @@ class LocalePicker extends ComponentBase
                     $locale
                 )
             );
-        } elseif ( $locale == $this->translator->getDefaultLocale()) {
+        }
+        elseif ( $locale == $this->translator->getDefaultLocale()) {
             return;
-        } else {
+        }
+        else {
             $this->translator->setLocale($this->translator->getDefaultLocale());
             return;
         }
-
     }
 
     /**
