@@ -22,6 +22,8 @@ Navigate to **System → Sites** and create a site for each locale used by the w
 
 - Theme translation is still managed by this plugin.
 
+## Breaking Changes
+
 ### Middleware class is replaced
 
 If using PHP routes to determine locale, the `RainLab\Translate\Classes\LocaleMiddleware` class is replaced by the `System\Middleware\ActiveSite` middleware class.

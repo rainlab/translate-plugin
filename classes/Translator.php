@@ -122,37 +122,6 @@ class Translator
     //
 
     /**
-     * handleLocaleRoute will check if the route contains a translated locale prefix (/en/)
-     * and return that locale to be registered with the router.
-     * @return string
-     */
-    public function handleLocaleRoute()
-    {
-        if (Config::get('rainlab.translate::disableLocalePrefixRoutes', false)) {
-            return '';
-        }
-
-        if (App::runningInBackend()) {
-            return '';
-        }
-
-        if (!$this->isConfigured()) {
-            return '';
-        }
-
-        if (!$this->loadLocaleFromRequest()) {
-            return '';
-        }
-
-        $locale = $this->getLocale();
-        if (!$locale) {
-            return '';
-        }
-
-        return $locale;
-    }
-
-    /**
      * Sets the locale based on the first URI segment.
      * @return bool
      */
