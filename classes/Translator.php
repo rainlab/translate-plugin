@@ -43,8 +43,8 @@ class Translator
      */
     public function init()
     {
-        $this->defaultLocale = Site::getSiteLocaleFromContext();
-        $this->activeLocale = $this->defaultLocale;
+        $this->defaultLocale = Locale::getDefaultSiteLocale();
+        $this->activeLocale = Locale::getSiteLocaleFromContext();
     }
 
     /**

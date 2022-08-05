@@ -3,7 +3,6 @@
 use App;
 use Str;
 use File;
-use Cms\Classes\Page;
 use Cms\Classes\Content;
 use System\Classes\MailManager;
 use System\Classes\PluginManager;
@@ -101,9 +100,6 @@ class EventRegistry
         // Replace with ML Controls for translatable attributes
         $this->registerModelTranslation($widget);
 
-        // Handle URL translations
-        $this->registerPageUrlTranslation($widget);
-
         // Handle RainLab.Pages MenuItem translations
         if (PluginManager::instance()->exists('RainLab.Pages')) {
             $this->registerMenuItemTranslation($widget);
@@ -140,33 +136,6 @@ class EventRegistry
                     ];
                 }
             }
-        }
-    }
-
-    //
-    // Translate URLs
-    //
-
-    /**
-     * registerPageUrlTranslation
-     */
-    public function registerPageUrlTranslation($widget)
-    {
-        if (!$model = $widget->model) {
-            return;
-        }
-
-        if (
-            $model instanceof Page &&
-            isset($widget->fields['settings[url]'])
-        ) {
-            $widget->fields['settings[url]']['type'] = 'mltext';
-        }
-        elseif (
-            $model instanceof \RainLab\Pages\Classes\Page &&
-            isset($widget->fields['viewBag[url]'])
-        ) {
-            $widget->fields['viewBag[url]']['type'] = 'mltext';
         }
     }
 

@@ -6,7 +6,7 @@ use RainLab\Translate\Classes\TranslatableBehavior;
 use October\Rain\Html\Helper as HtmlHelper;
 
 /**
- * Translatable CMS Object extension
+ * TranslatableCmsObject extension
  *
  * Usage:
  *
@@ -25,12 +25,12 @@ class TranslatableCmsObject extends TranslatableBehavior
 {
 
     /**
-     * @var array Data store for translated viewbag attributes.
+     * @var array translatableViewBag data store for translated viewbag attributes.
      */
     protected $translatableViewBag = [];
 
     /**
-     * Constructor
+     * __construct
      * @param \October\Rain\Database\Model $model The extended model.
      */
     public function __construct($model)
@@ -59,8 +59,7 @@ class TranslatableCmsObject extends TranslatableBehavior
     }
 
     /**
-     * Merge the viewBag array for the base and translated objects.
-     * @return void
+     * mergeViewBagAttributes array for the base and translated objects.
      */
     protected function mergeViewBagAttributes()
     {
@@ -194,6 +193,9 @@ class TranslatableCmsObject extends TranslatableBehavior
         return $this->translatableOriginals[$locale] = $this->translatableAttributes[$locale] = $result;
     }
 
+    /**
+     * getCmsObjectForLocale
+     */
     protected function getCmsObjectForLocale($locale)
     {
         if ($locale == $this->translatableDefault) {
@@ -225,6 +227,6 @@ class TranslatableCmsObject extends TranslatableBehavior
             return $this->model->translatableModel;
         }
 
-        return 'RainLab\Translate\Classes\MLCmsObject';
+        return \RainLab\Translate\Classes\MLCmsObject::class;
     }
 }

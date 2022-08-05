@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Classes;
 
+use App;
 use Site;
 use Model;
 use Config;
@@ -35,6 +36,36 @@ class Locale extends ElementBase
      * @var self Default locale cache.
      */
     protected static $defaultLocale;
+
+    /**
+     * getDefaultSiteLocale
+     */
+    public static function getDefaultSiteLocale()
+    {
+        $site = Site::getPrimarySite();
+
+        if (!$site || !$site->active_locale) {
+            return Config::get('app.locale', 'en');
+        }
+
+        return $site->active_locale;
+    }
+
+    /**
+     * getSiteLocaleFromContext
+     */
+    public static function getSiteLocaleFromContext()
+    {
+        $site = App::runningInBackend()
+            ? Site::getEditSite()
+            : Site::getActiveSite();
+
+        if (!$site || !$site->active_locale) {
+            return Config::get('app.locale', 'en');
+        }
+
+        return $site->active_locale;
+    }
 
     /**
      * listLocales builds a collection of locales based on site definitions
