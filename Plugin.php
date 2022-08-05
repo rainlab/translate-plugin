@@ -26,11 +26,11 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'rainlab.translate::lang.plugin.name',
-            'description' => 'rainlab.translate::lang.plugin.description',
-            'author'      => 'Alexey Bobkov, Samuel Georges',
-            'icon'        => 'icon-language',
-            'homepage'    => 'https://github.com/rainlab/translate-plugin'
+            'name' => 'Translate',
+            'description' => 'Enables multi-lingual websites.',
+            'author' => 'Alexey Bobkov, Samuel Georges',
+            'icon' => 'icon-language',
+            'homepage' => 'https://github.com/rainlab/translate-plugin'
         ];
     }
 
@@ -257,11 +257,11 @@ class Plugin extends PluginBase
         return [
             'locales' => [
                 'label' => 'rainlab.translate::lang.locale.title',
-                'description' => 'rainlab.translate::lang.plugin.description',
+                'description' => 'Enables multi-lingual websites.',
                 'icon' => 'icon-language',
                 'url' => Backend::url('rainlab/translate/locales'),
                 'order' => 550,
-                'category' => 'rainlab.translate::lang.plugin.name',
+                'category' => 'Translate',
                 'permissions' => ['rainlab.translate.manage_locales'],
                 'keywords' => 'translate',
             ],
@@ -271,7 +271,7 @@ class Plugin extends PluginBase
                 'icon' => 'icon-list-alt',
                 'url' => Backend::url('rainlab/translate/messages'),
                 'order' => 551,
-                'category' => 'rainlab.translate::lang.plugin.name',
+                'category' => 'Translate',
                 'permissions' => ['rainlab.translate.manage_messages'],
                 'keywords' => 'translate',
             ]

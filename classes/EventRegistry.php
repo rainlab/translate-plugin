@@ -82,7 +82,7 @@ class EventRegistry
         }
 
         $dataHolder->buttons[] = [
-            'button' => 'rainlab.translate::lang.plugin.name',
+            'button' => 'Translate',
             'icon' => 'octo-icon-globe',
             'popupTitle' => 'Translate Page Properties',
             'properties' => $properties
