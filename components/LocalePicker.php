@@ -42,7 +42,7 @@ class LocalePicker extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'rainlab.translate::lang.locale_picker.component_name',
+            'name' => 'rainlab.translate::lang.locale_picker.component_name',
             'description' => 'rainlab.translate::lang.locale_picker.component_description',
         ];
     }
@@ -51,10 +51,10 @@ class LocalePicker extends ComponentBase
     {
         return [
             'forceUrl' => [
-                'title'       => 'Force URL schema',
+                'title' => 'Force URL schema',
                 'description' => 'Always prefix the URL with a language code.',
-                'default'     => 0,
-                'type'        => 'checkbox'
+                'default' => 0,
+                'type' => 'checkbox'
             ],
         ];
     }
