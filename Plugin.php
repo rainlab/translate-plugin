@@ -5,8 +5,6 @@ use Lang;
 use Event;
 use Backend;
 use Cms\Classes\Page;
-use System\Models\File;
-use Cms\Models\ThemeData;
 use System\Classes\PluginBase;
 use System\Classes\CombineAssets;
 use RainLab\Translate\Models\Message;
@@ -20,7 +18,6 @@ class Plugin extends PluginBase
 {
     /**
      * pluginDetails returns information about this plugin.
-     *
      * @return array
      */
     public function pluginDetails()
@@ -63,70 +60,23 @@ class Plugin extends PluginBase
             }
         });
 
-        // Extension logic for October CMS v1.0
-        if (!class_exists('System')) {
-            $this->extendLegacyPlatform();
-        }
-        // Extension logic for October CMS v2.0
-        else {
-            Event::listen('cms.theme.createThemeDataModel', function($attributes) {
-                return new \RainLab\Translate\Models\MLThemeData($attributes);
-            });
+        // Translate theme data
+        Event::listen('cms.theme.createThemeDataModel', function($attributes) {
+            return new \RainLab\Translate\Models\MLThemeData($attributes);
+        });
 
-            Event::listen('cms.template.getTemplateToolbarSettingsButtons', function($extension, $dataHolder) {
-                if ($dataHolder->templateType === 'page') {
-                    EventRegistry::instance()->extendEditorPageToolbar($dataHolder);
-                }
-            });
-        }
+        // Translate editor pages
+        Event::listen('cms.template.getTemplateToolbarSettingsButtons', function($extension, $dataHolder) {
+            if ($dataHolder->templateType === 'page') {
+                EventRegistry::instance()->extendEditorPageToolbar($dataHolder);
+            }
+        });
 
         // Register console commands
         $this->registerConsoleCommand('translate.scan', \Rainlab\Translate\Console\ScanCommand::class);
 
         // Register asset bundles
         $this->registerAssetBundles();
-    }
-
-    /**
-     * extendLegacyPlatform will add the legacy features expected in v1.0
-     */
-    protected function extendLegacyPlatform()
-    {
-        // Adds translation support to file models
-        File::extend(function ($model) {
-            if (!$model->propertyExists('translatable')) {
-                $model->addDynamicProperty('translatable', []);
-            }
-            $model->translatable = array_merge($model->translatable, ['title', 'description']);
-            if (!$model->isClassExtendedWith(\October\Rain\Database\Behaviors\Purgeable::class)) {
-                $model->extendClassWith(\October\Rain\Database\Behaviors\Purgeable::class);
-            }
-            if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatableModel::class)) {
-                $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatableModel::class);
-            }
-        });
-
-        // Adds translation support to theme settings
-        ThemeData::extend(static function ($model) {
-            if (!$model->propertyExists('translatable')) {
-                $model->addDynamicProperty('translatable', []);
-            }
-
-            if (!$model->isClassExtendedWith(\October\Rain\Database\Behaviors\Purgeable::class)) {
-                $model->extendClassWith(\October\Rain\Database\Behaviors\Purgeable::class);
-            }
-            if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatableModel::class)) {
-                $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatableModel::class);
-            }
-
-            $model->bindEvent('model.afterFetch', static function() use ($model) {
-                foreach ($model->getFormFields() as $id => $field) {
-                    if (!empty($field['translatable'])) {
-                        $model->translatable[] = $id;
-                    }
-                }
-            });
-        });
     }
 
     /**
@@ -292,26 +242,6 @@ class Plugin extends PluginBase
                 'transRawPlural' => [$this, 'translateRawPlural'],
                 'localeUrl' => [$this, 'localeUrl'],
             ]
-        ];
-    }
-
-    /**
-     * registerFormWidgets for multi-lingual
-     */
-    public function registerFormWidgets()
-    {
-        $mediaFinderClass = class_exists('System')
-            ? \RainLab\Translate\FormWidgets\MLMediaFinderv2::class
-            : \RainLab\Translate\FormWidgets\MLMediaFinder::class;
-
-        return [
-            \RainLab\Translate\FormWidgets\MLText::class => 'mltext',
-            \RainLab\Translate\FormWidgets\MLTextarea::class => 'mltextarea',
-            \RainLab\Translate\FormWidgets\MLRichEditor::class => 'mlricheditor',
-            \RainLab\Translate\FormWidgets\MLMarkdownEditor::class => 'mlmarkdowneditor',
-            \RainLab\Translate\FormWidgets\MLRepeater::class => 'mlrepeater',
-            \RainLab\Translate\FormWidgets\MLNestedForm::class => 'mlnestedform',
-            $mediaFinderClass => 'mlmediafinder',
         ];
     }
 
