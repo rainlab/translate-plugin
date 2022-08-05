@@ -1,6 +1,6 @@
 <?php namespace RainLab\Translate\Behaviors;
 
-use RainLab\Translate\Models\Locale;
+use RainLab\Translate\Classes\Locale;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\TranslatableBehavior;
 use October\Rain\Html\Helper as HtmlHelper;

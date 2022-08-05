@@ -1,11 +1,12 @@
 <?php namespace RainLab\Translate\Classes;
 
 use App;
+use Site;
 use Config;
 use Schema;
 use Session;
 use Request;
-use RainLab\Translate\Models\Locale;
+use RainLab\Translate\Classes\Locale;
 
 /**
  * Translator class
@@ -42,7 +43,7 @@ class Translator
      */
     public function init()
     {
-        $this->defaultLocale = $this->isConfigured() ? array_get(Locale::getDefault(), 'code', 'en') : 'en';
+        $this->defaultLocale = Site::getSiteLocaleFromContext();
         $this->activeLocale = $this->defaultLocale;
     }
 
@@ -120,22 +121,6 @@ class Translator
     //
     // Request handling
     //
-
-    /**
-     * Sets the locale based on the first URI segment.
-     * @return bool
-     */
-    public function loadLocaleFromRequest()
-    {
-        $locale = Request::segment(1);
-
-        if (!Locale::isValid($locale)) {
-            return false;
-        }
-
-        $this->setLocale($locale);
-        return true;
-    }
 
     /**
      * Returns the current path prefixed with language code.

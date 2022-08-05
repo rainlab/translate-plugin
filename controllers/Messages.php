@@ -6,7 +6,7 @@ use RainLab\Translate\Models\MessageExport;
 use BackendMenu;
 use Backend\Classes\Controller;
 use RainLab\Translate\Models\Message;
-use RainLab\Translate\Models\Locale;
+use RainLab\Translate\Classes\Locale;
 use RainLab\Translate\Classes\ThemeScanner;
 use System\Helpers\Cache as CacheHelper;
 use System\Classes\SettingsManager;

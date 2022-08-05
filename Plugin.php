@@ -238,7 +238,6 @@ class Plugin extends PluginBase
     {
         CombineAssets::registerCallback(function ($combiner) {
             $combiner->registerBundle('$/rainlab/translate/assets/less/messages.less');
-            $combiner->registerBundle('$/rainlab/translate/assets/less/multilingual.less');
         });
     }
 

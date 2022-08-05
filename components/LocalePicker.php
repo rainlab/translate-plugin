@@ -4,7 +4,7 @@ use Event;
 use Config;
 use Request;
 use Redirect;
-use RainLab\Translate\Models\Locale as LocaleModel;
+use RainLab\Translate\Classes\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use October\Rain\Router\Router as RainRouter;
 use Cms\Classes\ComponentBase;
@@ -39,6 +39,9 @@ class LocalePicker extends ComponentBase
      */
     public $oldLocale;
 
+    /**
+     * componentDetails
+     */
     public function componentDetails()
     {
         return [
@@ -47,6 +50,9 @@ class LocalePicker extends ComponentBase
         ];
     }
 
+    /**
+     * defineProperties
+     */
     public function defineProperties()
     {
         return [
@@ -98,8 +104,9 @@ class LocalePicker extends ComponentBase
     {
         if (
             Request::ajax() ||
-            !$this->property('forceUrl') ||
-            $this->translator->loadLocaleFromRequest()
+            !$this->property('forceUrl')
+            // ||
+            // $this->translator->loadLocaleFromRequest()
         ) {
             return;
         }

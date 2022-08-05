@@ -2,7 +2,7 @@
 
 use Event;
 use RainLab\Translate\Classes\Translator;
-use RainLab\Translate\Models\Locale as LocaleModel;
+use RainLab\Translate\Classes\Locale as LocaleModel;
 use October\Rain\Router\Router as RainRouter;
 use Cms\Classes\ComponentBase;
 

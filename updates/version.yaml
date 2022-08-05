@@ -2,17 +2,12 @@ v1.0.1:
     - First version of Translate
     - create_messages_table.php
     - create_attributes_table.php
-    - create_locales_table.php
 v1.1.0: Introduce compatibility with RainLab.Pages plugin.
 v1.2.0: CMS pages now support translating the URL.
 v1.2.4:
     - Translatable attributes can now be declared as indexes.
     - create_indexes_table.php
 v1.3.0: Added search to the translate messages page.
-v1.3.1:
-    - Added reordering to languages
-    - builder_table_update_rainlab_translate_locales.php
-    - seed_all_tables.php
 v1.4.0: Add importer and exporter for messages
 v1.5.0: Compatibility fix with Build 451
 v1.6.0: Make File Upload widget properties translatable. Merge Repeater core changes into MLRepeater widget. Add getter method to retrieve original translate data.

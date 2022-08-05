@@ -7,7 +7,7 @@ use October\Rain\Filesystem\Filesystem;
 use October\Rain\Halcyon\Datasource\FileDatasource;
 use October\Rain\Halcyon\Datasource\Resolver;
 use RainLab\Translate\Tests\Fixtures\Classes\Feature as FeatureModel;
-use RainLab\Translate\Models\Locale as LocaleModel;
+use RainLab\Translate\Classes\Locale as LocaleModel;
 
 class TranslatableCmsObjectTest extends PluginTestCase
 {

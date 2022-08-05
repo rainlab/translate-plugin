@@ -8,7 +8,7 @@ use Cms\Classes\Content;
 use System\Classes\MailManager;
 use System\Classes\PluginManager;
 use RainLab\Translate\Models\Message;
-use RainLab\Translate\Models\Locale as LocaleModel;
+use RainLab\Translate\Classes\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\ThemeScanner;
 use Exception;
