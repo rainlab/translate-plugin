@@ -1,7 +1,6 @@
 <?php namespace RainLab\Translate\Classes;
 
 use App;
-use Site;
 use Config;
 use Schema;
 use Session;
