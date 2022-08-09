@@ -119,7 +119,7 @@ class EventRegistry
 
             // Replace specified fields with multilingual versions
             foreach ($fieldsToTranslate as $fieldName) {
-                $widget->fields[$fieldName]['type'] = 'mltext';
+                $widget->fields[$fieldName]['translatable'] = true;
 
                 foreach ($availableLocales as $code => $locale) {
                     if (!$defaultLocale || $defaultLocale->code === $code) {
