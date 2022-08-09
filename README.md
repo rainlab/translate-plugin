@@ -460,3 +460,7 @@ The HTML:
     </select>
 {{ form_close() }}
 ```
+
+### License
+
+This plugin is an official extension of the October CMS platform and is free to use if you have a platform license. See [EULA license](LICENSE.md) for more details.
