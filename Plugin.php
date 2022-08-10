@@ -4,11 +4,11 @@ use App;
 use Lang;
 use Event;
 use Backend;
-use Cms\Classes\Page;
 use System\Classes\PluginBase;
 use System\Classes\CombineAssets;
 use RainLab\Translate\Models\Message;
-use RainLab\Translate\Classes\EventRegistry;
+use RainLab\Translate\Classes\EventCoreRegistry;
+use RainLab\Translate\Classes\EventPluginRegistry;
 use RainLab\Translate\Classes\Translator;
 
 /**
@@ -36,44 +36,8 @@ class Plugin extends PluginBase
      */
     public function register()
     {
-        // Load localized version of mail templates (akin to localized CMS content files)
-        Event::listen('mailer.beforeAddContent', function ($mailer, $message, $view, $data, $raw, $plain) {
-            return EventRegistry::instance()->findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain);
-        }, 1);
-
-        // Defer event with low priority to let others contribute before this registers.
-        Event::listen('backend.form.extendFieldsBefore', function($widget) {
-            EventRegistry::instance()->registerFormFieldAdjustments($widget);
-        }, -1);
-
-        // Handle translated page URLs
-        Page::extend(function($model) {
-            if (!$model->propertyExists('translatable')) {
-                $model->addDynamicProperty('translatable', []);
-            }
-
-            $model->translatable = array_merge($model->translatable, ['title', 'description', 'meta_title', 'meta_description']);
-
-            if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatablePageUrl::class)) {
-                $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatablePageUrl::class);
-            }
-
-            if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatablePage::class)) {
-                $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatablePage::class);
-            }
-        });
-
-        // Translate theme data
-        Event::listen('cms.theme.createThemeDataModel', function($attributes) {
-            return new \RainLab\Translate\Models\MLThemeData($attributes);
-        });
-
-        // Translate editor pages
-        Event::listen('cms.template.getTemplateToolbarSettingsButtons', function($extension, $dataHolder) {
-            if ($dataHolder->templateType === 'page') {
-                EventRegistry::instance()->extendEditorPageToolbar($dataHolder);
-            }
-        });
+        EventCoreRegistry::instance()->registerEvents();
+        EventPluginRegistry::instance()->registerEvents();
 
         // Register console commands
         $this->registerConsoleCommand('translate.scan', \Rainlab\Translate\Console\ScanCommand::class);
@@ -87,48 +51,30 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
+        EventCoreRegistry::instance()->bootEvents();
+        EventPluginRegistry::instance()->bootEvents();
+
         // Set the page context for translation caching with high priority.
         Event::listen('cms.page.init', function($controller, $page) {
-            EventRegistry::instance()->setMessageContext($page);
+            EventCoreRegistry::instance()->setMessageContext($page);
         }, 100);
 
-        // Populate MenuItem properties with localized values if available
-        Event::listen('pages.menu.referencesGenerated', function (&$items) {
-            $locale = App::getLocale();
-            $iterator = function ($menuItems) use (&$iterator, $locale) {
-                $result = [];
-                foreach ($menuItems as $item) {
-                    $localeFields = array_get($item->viewBag, "locale.$locale", []);
-                    foreach ($localeFields as $fieldName => $fieldValue) {
-                        if ($fieldValue) {
-                            $item->$fieldName = $fieldValue;
-                        }
-                    }
-                    if ($item->items) {
-                        $item->items = $iterator($item->items);
-                    }
-                    $result[] = $item;
-                }
-                return $result;
-            };
-            $items = $iterator($items);
-        });
 
         // Import messages defined by the theme
         Event::listen('cms.theme.setActiveTheme', function($code) {
-            EventRegistry::instance()->importMessagesFromTheme($code);
+            EventCoreRegistry::instance()->importMessagesFromTheme($code);
         });
 
         // Adds language suffixes to content files.
         Event::listen('cms.page.beforeRenderContent', function($controller, $fileName) {
-            return EventRegistry::instance()
+            return EventCoreRegistry::instance()
                 ->findTranslatedContentFile($controller, $fileName)
             ;
         });
 
         // Prune localized content files from template list
         Event::listen('pages.content.templateList', function($widget, $templates) {
-            return EventRegistry::instance()
+            return EventCoreRegistry::instance()
                 ->pruneTranslatedContentTemplates($templates)
             ;
         });
