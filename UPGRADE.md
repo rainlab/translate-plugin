@@ -6,7 +6,11 @@ Since October CMS v3.1, a multisite feature is introduced that supercedes many f
 
 ## Upgrade Instructions
 
-Navigate to **System → Sites** and create a site for each locale used by the website. Continue using this plugin as normal.
+1. Navigate to **System → Sites** and create a site for each locale used by the website.
+
+2. Replace the `localePicker` and `alternateHrefLangElements` components used in the front end.
+
+3. Continue using this plugin as normal.
 
 ## Key Differences
 
@@ -27,3 +31,47 @@ Navigate to **System → Sites** and create a site for each locale used by the w
 ### Middleware class is replaced
 
 If using PHP routes to determine locale, the `RainLab\Translate\Classes\LocaleMiddleware` class is replaced by the `System\Middleware\ActiveSite` middleware class.
+
+### CMS Components replaced
+
+The the `localePicker` and `alternateHrefLangElements` components provided by this plugin have been replaced by the `sitePicker` component.
+
+Here is the sample code to replace the `localePicker` component:
+
+```twig
+<select class="form-control" onchange="window.location.assign(this.value)">
+    {% for site in sitePicker.sites %}
+        <option value="{{ site.url }}" {{ this.site.code == site.code ? 'selected' }}>{{ site.name }}</option>
+    {% endfor %}
+</select>
+```
+
+Here is the sample code to replace the `alternateHrefLangElements` component:
+
+```twig
+{% for site in sitePicker.sites %}
+    <link rel="alternate" hreflang="{{ site.locale }}" href="{{ site.url }}" />
+{% endfor %}
+```
+
+#### Events Updated
+
+The `translate.localePicker.translateQuery` event has been replaced by the `cms.sitePicker.overrideQuery`. The arguments are the same except the site definition is passed instead of the locale code, use the `hard_locale` attribute of the site definition to obtain the locale.
+
+```php
+Event::listen('cms.sitePicker.overrideParams', function($page, $params, $currentSite, $proposedSite) {
+    if ($page->baseFileName == 'your-page-filename') {
+        return YourModel::overrideParams($params, $currentSite->hard_locale, $proposedSite->hard_locale);
+    }
+});
+```
+
+The `translate.localePicker.translateParams` event has been replaced by the `cms.sitePicker.overrideParams` event. The arguments are the same except the site definition is passed instead of the locale code, use the `hard_locale` attribute of the site definition to obtain the locale.
+
+```php
+Event::listen('cms.sitePicker.overrideQuery', function($page, $params, $currentSite, $proposedSite) {
+    if ($page->baseFileName == 'your-page-filename') {
+        return YourModel::translateQuery($params, $currentSite->hard_locale, $proposedSite->hard_locale);
+    }
+});
+```
