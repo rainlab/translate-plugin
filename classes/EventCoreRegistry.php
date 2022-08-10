@@ -53,7 +53,10 @@ class EventCoreRegistry
             if ($page->hasTranslatablePageUrl($proposedSite->hard_locale)) {
                 return $page->getSettingsUrlAttributeTranslated($proposedSite->hard_locale);
             }
-        });
+            else {
+                return $page->getOriginalUrlAttributeTranslated();
+            }
+        }, -1);
     }
 
     /**

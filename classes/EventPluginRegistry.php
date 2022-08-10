@@ -19,6 +19,7 @@ class EventPluginRegistry
      */
     public function registerEvents()
     {
+        $this->extendStaticPagesCmsSitePicker();
         $this->extendStaticPagesBackendFormFields();
     }
 
@@ -28,6 +29,24 @@ class EventPluginRegistry
     public function bootEvents()
     {
         $this->extendStaticPagesMenuReferences();
+    }
+
+    /**
+     * extendStaticPagesCmsSitePicker changes the sitepicker to support translated static page URLs
+     */
+    protected function extendStaticPagesCmsSitePicker()
+    {
+        Event::listen('cms.sitePicker.overridePattern', function($page, $pattern, $currentSite, $proposedSite) {
+            if (isset($page->apiBag['staticPage'])) {
+                $staticPage = $page->apiBag['staticPage'];
+                if ($staticPage->hasTranslatablePageUrl($proposedSite->hard_locale)) {
+                    return $staticPage->getSettingsUrlAttributeTranslated($proposedSite->hard_locale);
+                }
+                else {
+                    return $staticPage->getOriginalUrlAttributeTranslated();
+                }
+            }
+        });
     }
 
     /**

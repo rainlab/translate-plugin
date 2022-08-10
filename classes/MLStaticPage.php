@@ -1,7 +1,7 @@
 <?php namespace RainLab\Translate\Classes;
 
 /**
- * Represents a multi-lingual Static Page object.
+ * MLStaticPage represents a multi-lingual Static Page object used by the pages plugin.
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges

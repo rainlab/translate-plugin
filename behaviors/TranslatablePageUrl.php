@@ -17,22 +17,22 @@ use October\Rain\Extension\ExtensionBase;
 class TranslatablePageUrl extends ExtensionBase
 {
     /**
-     * @var \October\Rain\Database\Model Reference to the extended model.
+     * @var \October\Rain\Database\Model model reference
      */
     protected $model;
 
     /**
-     * @var string Active language for translations.
+     * @var string translatableContext active language for translations.
      */
     protected $translatableContext;
 
     /**
-     * @var string Default system language.
+     * @var string translatableDefault system language.
      */
     protected $translatableDefault;
 
     /**
-     * @var string Default page URL.
+     * @var string translatableDefaultUrl original page url
      */
     protected $translatableDefaultUrl;
 
@@ -100,9 +100,19 @@ class TranslatablePageUrl extends ExtensionBase
      */
     public function getSettingsUrlAttributeTranslated($locale)
     {
-        $defaults = ($locale == $this->translatableDefault) ? $this->translatableDefaultUrl : null;
+        $defaults = $locale === $this->translatableDefault
+            ? $this->translatableDefaultUrl
+            : null;
 
         return array_get($this->model->attributes, 'viewBag.localeUrl.'.$locale, $defaults);
+    }
+
+    /**
+     * getOriginalUrlAttributeTranslated
+     */
+    public function getOriginalUrlAttributeTranslated()
+    {
+        return $this->translatableDefaultUrl;
     }
 
     /**

@@ -23,7 +23,6 @@ use October\Rain\Html\Helper as HtmlHelper;
  */
 class TranslatableCmsObject extends TranslatableBehavior
 {
-
     /**
      * @var array translatableViewBag data store for translated viewbag attributes.
      */
