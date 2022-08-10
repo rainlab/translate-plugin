@@ -43,12 +43,7 @@ class Locale extends ElementBase
     public static function getDefaultSiteLocale()
     {
         $site = Site::getPrimarySite();
-
-        if (!$site || !$site->locale) {
-            return Config::get('app.locale', 'en');
-        }
-
-        return $site->locale;
+        return $site ? $site->hard_locale : '';
     }
 
     /**
@@ -60,11 +55,7 @@ class Locale extends ElementBase
             ? Site::getEditSite()
             : Site::getActiveSite();
 
-        if (!$site || !$site->locale) {
-            return Config::get('app.locale', 'en');
-        }
-
-        return $site->locale;
+        return $site ? $site->hard_locale : '';
     }
 
     /**
@@ -79,7 +70,10 @@ class Locale extends ElementBase
         $foundLocales = [];
         $locales = [];
         foreach (Site::listSites() as $site) {
-            $localeCode = $site->locale;
+            $localeCode = $site->hard_locale;
+            if (!$localeCode) {
+                continue;
+            }
 
             // Prevent duplicates
             if (isset($foundLocales[$localeCode])) {
@@ -89,18 +83,8 @@ class Locale extends ElementBase
             $locale = new self;
             $locale->is_enabled = $site->is_enabled;
             $locale->name = $site->name;
-
-            if ($site->is_primary) {
-                $locale->is_default = true;
-                $locale->code = $localeCode ?: Config::get('app.locale', 'en');
-            }
-            elseif ($localeCode) {
-                $locale->is_default = false;
-                $locale->code = $localeCode;
-            }
-            else {
-                continue;
-            }
+            $locale->code = $localeCode;
+            $locale->is_default = $site->is_primary;
 
             $foundLocales[$localeCode] = true;
             $locales[] = $locale;
