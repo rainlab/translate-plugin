@@ -78,6 +78,7 @@ class EventPluginRegistry
             }
         }, -1);
 
+        // Load Page URL
         Event::listen('pages.object.load', function($controller, $template, $type) {
             if ($type === 'page') {
                 $template->rewriteTranslatablePageUrl();
@@ -85,9 +86,36 @@ class EventPluginRegistry
             }
         });
 
+        // Save Page URL
         Event::listen('pages.object.fillObject', function($controller, $template, &$data, $type) {
             if ($type === 'page') {
-                $locale = Translator::instance()->getLocale();
+                $locale = $template->translateContext();
+                $originalData = $template->getOriginal();
+                $localeUrls = $originalData['viewBag']['localeUrl'] ?? [];
+
+                // Handle translated URL
+                if ($template->shouldTranslate()) {
+                    $wantUrl = $data['settings']['viewBag']['url'] ?? '';
+                    $haveUrl = $originalData['viewBag']['url'] ?? '';
+                    if ($wantUrl != $haveUrl) {
+                        $localeUrls[$locale] = $wantUrl;
+                    }
+                    else {
+                        unset($localeUrls[$locale]);
+                    }
+
+                    array_set($data, 'settings.viewBag.url', $haveUrl);
+                }
+
+                array_set($data, 'settings.viewBag.localeUrl', $localeUrls);
+            }
+        });
+
+        // Save View Bag
+        Event::listen('pages.object.fillObject', function($controller, $template, &$data, $type) {
+            if ($type === 'page' && $template->shouldTranslate()) {
+                $locale = $template->translateContext();
+                $originalData = $template->getOriginal();
 
                 // Set the translated values to the model
                 foreach ($template->getTranslatableAttributes() as $key) {
@@ -95,14 +123,34 @@ class EventPluginRegistry
                     $studKey = Str::studly(implode(' ', HtmlHelper::nameToArray($key)));
                     $mutateMethod = 'set'.$studKey.'AttributeTranslated';
 
+                    // Only work with view bag and placeholders
+                    if (!starts_with($dotKey, 'viewBag.') && !starts_with($dotKey, 'placeholders.')) {
+                        continue;
+                    }
+
+                    // Locate translated value
                     $value = starts_with($dotKey, 'viewBag.')
-                        ? array_pull($data['settings'], $dotKey, -1)
-                        : array_pull($data, $dotKey, -1);
+                        ? array_get($data['settings'], $dotKey, -1)
+                        : array_get($data, $dotKey, -1);
+
+                    // Reset to original value
+                    if (starts_with($dotKey, 'viewBag.')) {
+                        array_set($data['settings'], $dotKey, array_get($originalData, $dotKey));
+                    }
+                    else {
+                        array_set($data, $dotKey, array_get($originalData, $dotKey));
+                    }
+
+                    // Determine if this is worth saving
+                    if (starts_with($dotKey, 'placeholders.') && !trim((string) $value)) {
+                        continue;
+                    }
 
                     if ($value === -1) {
                         continue;
                     }
 
+                    // Store translated value
                     if ($this->objectMethodExists($template, $mutateMethod)) {
                         $template->$mutateMethod($value, $locale);
                     }

@@ -97,13 +97,21 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Checks if an attribute should be translated or not.
+     * shouldTranslate determines if the context is applying translated values
+     */
+    public function shouldTranslate()
+    {
+        return $this->translatableContext !== $this->translatableDefault;
+    }
+
+    /**
+     * isTranslatable checks if an attribute should be translated or not.
      * @param  string  $key
      * @return boolean
      */
     public function isTranslatable($key)
     {
-        if ($key === 'translatable' || $this->translatableDefault == $this->translatableContext) {
+        if ($key === 'translatable' || !$this->shouldTranslate()) {
             return false;
         }
 
@@ -269,7 +277,7 @@ abstract class TranslatableBehavior extends ExtensionBase
         }
 
         // Saving the default locale, no need to restore anything
-        if ($this->translatableContext == $this->translatableDefault) {
+        if (!$this->shouldTranslate()) {
             return;
         }
 
