@@ -121,17 +121,6 @@ class Plugin extends PluginBase
     }
 
     /**
-     * registerComponents
-     */
-    public function registerComponents()
-    {
-        return [
-           \RainLab\Translate\Components\LocalePicker::class => 'localePicker',
-           \RainLab\Translate\Components\AlternateHrefLangElements::class => 'alternateHrefLangElements'
-        ];
-    }
-
-    /**
      * registerPermissions
      */
     public function registerPermissions()
