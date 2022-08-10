@@ -37,8 +37,8 @@ class TranslatablePageUrl extends ExtensionBase
     protected $translatableDefaultUrl;
 
     /**
-     * Constructor
-     * @param \October\Rain\Database\Model $model The extended model.
+     * __construct using the extended model.
+     * @param \October\Rain\Database\Model $model
      */
     public function __construct($model)
     {
@@ -55,28 +55,8 @@ class TranslatablePageUrl extends ExtensionBase
         });
     }
 
-    protected function setModelUrl($value)
-    {
-        if ($this->model instanceof \RainLab\Pages\Classes\Page) {
-            array_set($this->model->attributes, 'viewBag.url', $value);
-        }
-        else {
-            $this->model->url = $value;
-        }
-    }
-
-    protected function getModelUrl()
-    {
-        if ($this->model instanceof \RainLab\Pages\Classes\Page) {
-            return array_get($this->model->attributes, 'viewBag.url');
-        }
-        else {
-            return $this->model->url;
-        }
-    }
-
     /**
-     * Initializes this class, sets the default language code to use.
+     * initTranslatableContext, sets the default language code to use.
      * @return void
      */
     public function initTranslatableContext()
@@ -87,8 +67,8 @@ class TranslatablePageUrl extends ExtensionBase
     }
 
     /**
-     * Checks if a translated URL exists and rewrites it, this method
-     * should only be called from the context of front-end.
+     * rewriteTranslatablePageUrl checks if a translated URL exists and rewrites it,
+     * this method should only be called from the context of front-end.
      * @return void
      */
     public function rewriteTranslatablePageUrl($locale = null)
@@ -96,7 +76,7 @@ class TranslatablePageUrl extends ExtensionBase
         $locale = $locale ?: $this->translatableContext;
         $localeUrl = $this->translatableDefaultUrl;
 
-        if ($locale != $this->translatableDefault) {
+        if ($locale !== $this->translatableDefault) {
             $localeUrl = $this->getSettingsUrlAttributeTranslated($locale) ?: $localeUrl;
         }
 
@@ -104,7 +84,7 @@ class TranslatablePageUrl extends ExtensionBase
     }
 
     /**
-     * Determines if a locale has a translated URL.
+     * hasTranslatablePageUrl determines if a locale has a translated URL.
      * @return bool
      */
     public function hasTranslatablePageUrl($locale = null)
@@ -115,7 +95,7 @@ class TranslatablePageUrl extends ExtensionBase
     }
 
     /**
-     * Mutator detected by MLControl
+     * getSettingsUrlAttributeTranslated
      * @return string
      */
     public function getSettingsUrlAttributeTranslated($locale)
@@ -126,48 +106,28 @@ class TranslatablePageUrl extends ExtensionBase
     }
 
     /**
-     * Mutator detected by MLControl
-     * @return void
+     * setModelUrl
      */
-    public function setSettingsUrlAttributeTranslated($value, $locale)
+    protected function setModelUrl($value)
     {
-        if ($locale == $this->translatableDefault) {
-            return;
+        if ($this->model instanceof \RainLab\Pages\Classes\Page) {
+            array_set($this->model->attributes, 'viewBag.url', $value);
         }
-
-        if ($value == $this->translatableDefaultUrl) {
-            return;
+        else {
+            $this->model->url = $value;
         }
-
-        /*
-         * The CMS controller will purge attributes just before saving, this
-         * will ensure the attributes are injected after this logic.
-         */
-        $this->model->bindEventOnce('model.beforeSave', function() use ($value, $locale) {
-            if (!$value) {
-                array_forget($this->model->attributes, 'viewBag.localeUrl.'.$locale);
-            }
-            else {
-                array_set($this->model->attributes, 'viewBag.localeUrl.'.$locale, $value);
-            }
-        });
     }
 
     /**
-     * Mutator detected by MLControl, proxy for Static Pages plugin.
-     * @return string
+     * getModelUrl
      */
-    public function getViewBagUrlAttributeTranslated($locale)
+    protected function getModelUrl()
     {
-        return $this->getSettingsUrlAttributeTranslated($locale);
-    }
-
-    /**
-     * Mutator detected by MLControl, proxy for Static Pages plugin.
-     * @return void
-     */
-    public function setViewBagUrlAttributeTranslated($value, $locale)
-    {
-        $this->setSettingsUrlAttributeTranslated($value, $locale);
+        if ($this->model instanceof \RainLab\Pages\Classes\Page) {
+            return array_get($this->model->attributes, 'viewBag.url');
+        }
+        else {
+            return $this->model->url;
+        }
     }
 }

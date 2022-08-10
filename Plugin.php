@@ -51,10 +51,13 @@ class Plugin extends PluginBase
             if (!$model->propertyExists('translatable')) {
                 $model->addDynamicProperty('translatable', []);
             }
+
             $model->translatable = array_merge($model->translatable, ['title', 'description', 'meta_title', 'meta_description']);
+
             if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatablePageUrl::class)) {
                 $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatablePageUrl::class);
             }
+
             if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatablePage::class)) {
                 $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatablePage::class);
             }

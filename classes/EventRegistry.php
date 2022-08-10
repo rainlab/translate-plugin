@@ -113,28 +113,11 @@ class EventRegistry
     public function registerMenuItemTranslation($widget)
     {
         if ($widget->model instanceof \RainLab\Pages\Classes\MenuItem) {
-            $defaultLocale = LocaleModel::getDefault();
-            $availableLocales = LocaleModel::listAvailable();
             $fieldsToTranslate = ['title', 'url'];
 
             // Replace specified fields with multilingual versions
             foreach ($fieldsToTranslate as $fieldName) {
                 $widget->fields[$fieldName]['translatable'] = true;
-
-                foreach ($availableLocales as $code => $locale) {
-                    if (!$defaultLocale || $defaultLocale->code === $code) {
-                        continue;
-                    }
-
-                    // Add data locker fields for the different locales under the `viewBag[locale]` property
-                    $widget->fields["viewBag[locale][$code][$fieldName]"] = [
-                        'cssClass' => 'hidden',
-                        'attributes' => [
-                            'data-locale' => $code,
-                            'data-field-name' => $fieldName,
-                        ],
-                    ];
-                }
             }
         }
     }

@@ -44,11 +44,11 @@ class Locale extends ElementBase
     {
         $site = Site::getPrimarySite();
 
-        if (!$site || !$site->active_locale) {
+        if (!$site || !$site->locale) {
             return Config::get('app.locale', 'en');
         }
 
-        return $site->active_locale;
+        return $site->locale;
     }
 
     /**
@@ -60,11 +60,11 @@ class Locale extends ElementBase
             ? Site::getEditSite()
             : Site::getActiveSite();
 
-        if (!$site || !$site->active_locale) {
+        if (!$site || !$site->locale) {
             return Config::get('app.locale', 'en');
         }
 
-        return $site->active_locale;
+        return $site->locale;
     }
 
     /**
@@ -79,7 +79,7 @@ class Locale extends ElementBase
         $foundLocales = [];
         $locales = [];
         foreach (Site::listSites() as $site) {
-            $localeCode = $site->active_locale;
+            $localeCode = $site->locale;
 
             // Prevent duplicates
             if (isset($foundLocales[$localeCode])) {
