@@ -11,7 +11,7 @@ use October\Rain\Extension\ExtensionBase;
  *
  * In the model class definition:
  *
- *   public $implement = ['@RainLab.Translate.Behaviors.TranslatablePageUrl'];
+ *   public $implement = ['@'.\RainLab\Translate\Behaviors\TranslatablePageUrl::class];
  *
  */
 class TranslatablePageUrl extends ExtensionBase
@@ -113,6 +113,52 @@ class TranslatablePageUrl extends ExtensionBase
     public function getOriginalUrlAttributeTranslated()
     {
         return $this->translatableDefaultUrl;
+    }
+
+    /**
+     * Mutator detected by MLControl
+     * @return void
+     */
+    public function setSettingsUrlAttributeTranslated($value, $locale)
+    {
+        if ($locale == $this->translatableDefault) {
+            return;
+        }
+
+        if ($value == $this->translatableDefaultUrl) {
+            return;
+        }
+
+        /*
+         * The CMS controller will purge attributes just before saving, this
+         * will ensure the attributes are injected after this logic.
+         */
+        $this->model->bindEventOnce('model.beforeSave', function() use ($value, $locale) {
+            if (!$value) {
+                array_forget($this->model->attributes, 'viewBag.localeUrl.'.$locale);
+            }
+            else {
+                array_set($this->model->attributes, 'viewBag.localeUrl.'.$locale, $value);
+            }
+        });
+    }
+
+    /**
+     * Mutator detected by MLControl, proxy for Static Pages plugin.
+     * @return string
+     */
+    public function getViewBagUrlAttributeTranslated($locale)
+    {
+        return $this->getSettingsUrlAttributeTranslated($locale);
+    }
+
+    /**
+     * Mutator detected by MLControl, proxy for Static Pages plugin.
+     * @return void
+     */
+    public function setViewBagUrlAttributeTranslated($value, $locale)
+    {
+        $this->setSettingsUrlAttributeTranslated($value, $locale);
     }
 
     /**

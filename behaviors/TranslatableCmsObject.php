@@ -1,9 +1,7 @@
 <?php namespace RainLab\Translate\Behaviors;
 
 use RainLab\Translate\Classes\Locale;
-use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\TranslatableBehavior;
-use October\Rain\Html\Helper as HtmlHelper;
 
 /**
  * TranslatableCmsObject extension
@@ -44,7 +42,7 @@ class TranslatableCmsObject extends TranslatableBehavior
             return $this->overrideTwigCacheKey($key);
         });
 
-        // delete all translation files associated with the default language static page
+        // Delete all translation files associated with the default language static page
         $this->model->bindEvent('model.afterDelete', function() use ($model) {
             foreach (Locale::listEnabled() as $locale => $label) {
                 if ($locale == $this->translatableDefault) {
@@ -77,7 +75,7 @@ class TranslatableCmsObject extends TranslatableBehavior
     }
 
     /**
-     * Translated CMS objects need their own unique cache key in twig.
+     * overrideTwigCacheKey translated CMS objects need their own unique cache key in twig.
      * @return string|null
      */
     protected function overrideTwigCacheKey($key)
@@ -102,7 +100,7 @@ class TranslatableCmsObject extends TranslatableBehavior
     }
 
     /**
-     * If the parent model file name is changed, this should
+     * syncTranslatableFileNames if the parent model file name is changed, this should
      * be reflected in the translated models also.
      */
     protected function syncTranslatableFileNames()
@@ -121,7 +119,7 @@ class TranslatableCmsObject extends TranslatableBehavior
     }
 
     /**
-     * Saves the translation data in the join table.
+     * storeTranslatableData saves the translation data in the join table.
      * @param  string $locale
      * @return void
      */
@@ -157,7 +155,7 @@ class TranslatableCmsObject extends TranslatableBehavior
     }
 
     /**
-     * Returns true if all attributes are empty (false when converted to booleans).
+     * isEmptyDataSet returns true if all attributes are empty (false when converted to booleans).
      * @param  array $data
      * @return bool
      */
@@ -169,7 +167,7 @@ class TranslatableCmsObject extends TranslatableBehavior
     }
 
     /**
-     * Loads the translation data from the join table.
+     * loadTranslatableData loads the translation data from the join table.
      * @param  string $locale
      * @return array
      */
@@ -206,7 +204,7 @@ class TranslatableCmsObject extends TranslatableBehavior
     }
 
     /**
-     * Internal method, prepare the form model object
+     * createModel is an internal method, prepare the form model object
      * @return Model
      */
     protected function createModel()
@@ -217,7 +215,7 @@ class TranslatableCmsObject extends TranslatableBehavior
     }
 
     /**
-     * Returns a collection of fields that will be hashed.
+     * getTranslatableModelClass returns a collection of fields that will be hashed.
      * @return array
      */
     public function getTranslatableModelClass()

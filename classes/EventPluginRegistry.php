@@ -1,8 +1,10 @@
 <?php namespace RainLab\Translate\Classes;
 
+use Str;
 use App;
 use Event;
 use System\Classes\PluginManager;
+use October\Rain\Html\Helper as HtmlHelper;
 
 /**
  * EventPluginRegistry for bootstrapping events related to plugins
@@ -61,15 +63,55 @@ class EventPluginRegistry
                 return;
             }
 
+            $fieldsToTranslate = [];
+            if ($widget->model instanceof \RainLab\Pages\Classes\Page) {
+                $fieldsToTranslate = ['viewBag[url]'];
+            }
+
             if ($widget->model instanceof \RainLab\Pages\Classes\MenuItem) {
                 $fieldsToTranslate = ['title', 'url'];
+            }
 
-                // Replace specified fields with multilingual versions
-                foreach ($fieldsToTranslate as $fieldName) {
-                    $widget->fields[$fieldName]['translatable'] = true;
-                }
+            // Replace specified fields with multilingual versions
+            foreach ($fieldsToTranslate as $fieldName) {
+                $widget->fields[$fieldName]['translatable'] = true;
             }
         }, -1);
+
+        Event::listen('pages.object.load', function($controller, $template, $type) {
+            if ($type === 'page') {
+                $template->rewriteTranslatablePageUrl();
+                $template->viewBag['url'] = array_get($template->attributes, 'viewBag.url');
+            }
+        });
+
+        Event::listen('pages.object.fillObject', function($controller, $template, &$data, $type) {
+            if ($type === 'page') {
+                $locale = Translator::instance()->getLocale();
+
+                // Set the translated values to the model
+                foreach ($template->getTranslatableAttributes() as $key) {
+                    $dotKey = implode('.', HtmlHelper::nameToArray($key));
+                    $studKey = Str::studly(implode(' ', HtmlHelper::nameToArray($key)));
+                    $mutateMethod = 'set'.$studKey.'AttributeTranslated';
+
+                    $value = starts_with($dotKey, 'viewBag.')
+                        ? array_pull($data['settings'], $dotKey, -1)
+                        : array_pull($data, $dotKey, -1);
+
+                    if ($value === -1) {
+                        continue;
+                    }
+
+                    if ($this->objectMethodExists($template, $mutateMethod)) {
+                        $template->$mutateMethod($value, $locale);
+                    }
+                    elseif ($this->objectMethodExists($template, 'setAttributeTranslated')) {
+                        $template->setAttributeTranslated($key, $value, $locale);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -97,5 +139,21 @@ class EventPluginRegistry
             };
             $items = $iterator($items);
         });
+    }
+
+    /**
+     * objectMethodExists is an internal helper for method existence checks.
+     *
+     * @param  object $object
+     * @param  string $method
+     * @return boolean
+     */
+    protected function objectMethodExists($object, $method)
+    {
+        if (method_exists($object, 'methodExists')) {
+            return $object->methodExists($method);
+        }
+
+        return method_exists($object, $method);
     }
 }
