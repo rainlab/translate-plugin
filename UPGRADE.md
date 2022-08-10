@@ -16,9 +16,9 @@ Since October CMS v3.1, a multisite feature is introduced that supercedes many f
 
 - The "Languages" settings area is replaced by the "Sites" settings area. This is where available sites are defined, including the available languages.
 
-- The per-field language picker is replaced by a per-site language picker. The translator selects the active language globally and can perform comparisons using multiple browser tabs. It is possible to retain per-field language pickers as a separate plugin (out of scope).
+- The per-field language picker is replaced by a per-site language picker. The translator selects the active language globally and can perform comparisons using multiple browser tabs.
 
-- Storing the locale in the session is no longer used and must be determined by the site definition, as a hostname or route prefix. Provisions are made for session-based site selection to exist as a separate plugin (out of scope).
+- Storing the locale in the session is no longer used and must be determined by the site definition, as a hostname or route prefix.
 
 ## Key Similarities
 
@@ -34,7 +34,7 @@ If using PHP routes to determine locale, the `RainLab\Translate\Classes\LocaleMi
 
 ### CMS Components replaced
 
-The the `localePicker` and `alternateHrefLangElements` components provided by this plugin have been replaced by the `sitePicker` component.
+The `localePicker` and `alternateHrefLangElements` components provided by this plugin have been replaced by the `sitePicker` component.
 
 Here is the sample code to replace the `localePicker` component:
 
@@ -54,7 +54,7 @@ Here is the sample code to replace the `alternateHrefLangElements` component:
 {% endfor %}
 ```
 
-#### Events Updated
+### Events Updated
 
 The `translate.localePicker.translateQuery` event has been replaced by the `cms.sitePicker.overrideQuery`. The arguments are the same except the site definition is passed instead of the locale code, use the `hard_locale` attribute of the site definition to obtain the locale.
 
