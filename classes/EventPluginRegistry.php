@@ -62,6 +62,10 @@ class EventPluginRegistry
             if (!PluginManager::instance()->exists('RainLab.Pages')) {
                 return;
             }
+            
+            if ($widget->isNested) {
+                return;
+            }
 
             $fieldsToTranslate = [];
             if ($widget->model instanceof \RainLab\Pages\Classes\Page) {
