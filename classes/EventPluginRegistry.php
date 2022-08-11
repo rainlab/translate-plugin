@@ -25,6 +25,7 @@ class EventPluginRegistry
     {
         $this->extendStaticPagesCmsSitePicker();
         $this->extendStaticPagesBackendFormFields();
+        $this->extendStaticMenusBackendFormFields();
     }
 
     /**
@@ -59,10 +60,13 @@ class EventPluginRegistry
      */
     protected function extendStaticPagesBackendFormFields()
     {
-        // Defer event with low priority to let others contribute before this registers.
+        // Make the URL field translatable since it has a custom behavior
         Event::listen('backend.form.extendFieldsBefore', function($widget) {
-            // Handle RainLab.Pages MenuItem translations
             if (!PluginManager::instance()->exists('RainLab.Pages')) {
+                return;
+            }
+
+            if (!$widget->model instanceof \RainLab\Pages\Classes\Page) {
                 return;
             }
 
@@ -70,19 +74,7 @@ class EventPluginRegistry
                 return;
             }
 
-            $fieldsToTranslate = [];
-            if ($widget->model instanceof \RainLab\Pages\Classes\Page) {
-                $fieldsToTranslate = ['viewBag[url]'];
-            }
-
-            if ($widget->model instanceof \RainLab\Pages\Classes\MenuItem) {
-                $fieldsToTranslate = ['title', 'url'];
-            }
-
-            // Replace specified fields with multilingual versions
-            foreach ($fieldsToTranslate as $fieldName) {
-                $widget->fields[$fieldName]['translatable'] = true;
-            }
+            $widget->fields['viewBag[url]']['translatable'] = true;
         }, -1);
 
         // Load Page URL
@@ -137,11 +129,11 @@ class EventPluginRegistry
 
                     // Locate translated value, pull and replace with original value
                     if (starts_with($dotKey, 'viewBag.')) {
-                        $value = array_get($data['settings'], $dotKey, -1);
+                        $value = array_get($data['settings'], $dotKey);
                         array_set($data['settings'], $dotKey, array_get($originalData, $dotKey, $value));
                     }
                     else {
-                        $value = array_get($data, $dotKey, -1);
+                        $value = array_get($data, $dotKey);
                         array_set($data, $dotKey, array_get($originalData, $dotKey, $value));
                     }
 
@@ -150,7 +142,7 @@ class EventPluginRegistry
                         continue;
                     }
 
-                    if ($value === -1) {
+                    if ($value === null) {
                         continue;
                     }
 
@@ -160,6 +152,74 @@ class EventPluginRegistry
                     }
                     elseif ($this->objectMethodExists($template, 'setAttributeTranslated')) {
                         $template->setAttributeTranslated($key, $value, $locale);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * extendStaticMenusBackendFormFields
+     */
+    protected function extendStaticMenusBackendFormFields()
+    {
+        $fieldsToTranslate = ['title', 'url'];
+
+        // Defer event with low priority to let others contribute before this registers.
+        Event::listen('backend.form.extendFieldsBefore', function($widget) use ($fieldsToTranslate) {
+            // Handle RainLab.Pages MenuItem translations
+            if (!PluginManager::instance()->exists('RainLab.Pages')) {
+                return;
+            }
+
+            if (!$widget->model instanceof \RainLab\Pages\Classes\MenuItem) {
+                return;
+            }
+
+            // Replace specified fields with multilingual versions
+            foreach ($fieldsToTranslate as $fieldName) {
+                $widget->fields[$fieldName]['translatable'] = true;
+            }
+        }, -1);
+
+        // Load Menu Fields
+        Event::listen('pages.object.load', function($controller, $template, $type) use ($fieldsToTranslate) {
+            if ($type === 'menu' && ($locale = $this->objectShouldTranslate())) {
+                foreach ($template->attributes['items'] as &$item) {
+                    foreach ($fieldsToTranslate as $fieldName) {
+                        if (isset($item[$fieldName])) {
+                            $item[$fieldName] = array_get($item['viewBag'], "locale.$locale.$fieldName", $item[$fieldName]);
+                        }
+                    }
+                }
+            }
+        });
+
+        // Save View Bag
+        Event::listen('pages.object.fillObject', function($controller, $template, &$data, $type) use ($fieldsToTranslate) {
+            if ($type === 'menu' && ($locale = $this->objectShouldTranslate())) {
+                $originalData = $template->getOriginal()['items'] ?? [];
+
+                foreach ($data['itemData'] as $index => &$item) {
+                    $originalItem = $originalData[$index] ?? [];
+
+                    foreach ($fieldsToTranslate as $fieldName) {
+                        // Locate translated value
+                        $value = array_get($item, $fieldName);
+                        if ($value === null) {
+                            continue;
+                        }
+
+                        // Set the default locale value
+                        $originalValue = array_get($originalItem, $fieldName, $value);
+                        array_set($item, $fieldName, $originalValue);
+
+                        // Store in item's view bag, if its different
+                        if ($originalValue != $value) {
+                            $localeData = array_get($originalItem['viewBag'] ?? [], 'locale', []);
+                            $localeData[$locale][$fieldName] = $value;
+                            array_set($item['viewBag'], 'locale', $localeData);
+                        }
                     }
                 }
             }
@@ -209,6 +269,23 @@ class EventPluginRegistry
                 return !Str::endsWith($template->getBaseFileName(), $extensions);
             });
         });
+    }
+
+    /**
+     * objectShouldTranslate is a helper function to determine if translations are used
+     * and if so, returns the active locale
+     */
+    protected function objectShouldTranslate(): string
+    {
+        $translate = Translator::instance();
+        $locale = $translate->getLocale();
+        $localeDefault = $translate->getDefaultLocale();
+        $shouldTranslate = $locale !== $localeDefault;
+        if (!$shouldTranslate) {
+            return '';
+        }
+
+        return $locale;
     }
 
     /**
