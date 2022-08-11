@@ -2,46 +2,51 @@
 
 Enables multi-lingual sites.
 
-## Selecting a language
+## Selecting a Language
 
-Different languages can be set up in the back-end area, with a single default language selected. This activates the use of the language on the front-end and in the back-end UI.
+Different languages can be set up in the admin panel using the **Settings → Sites** area. Each site should use a different locale to be considered a language.
 
-A visitor can select a language by prefixing the language code to the URL, this is then stored in the user's session as their chosen language. For example:
+The visitor can select a language by prefixing the language code to the URL or using a dedicated hostname. For example:
 
-* `http://website/ru/` will display the site in Russian
-* `http://website/fr/` will display the site in French
-* `http://website/` will display the site in the default language or the user's chosen language.
+* `http://website.tld/` will display the site in the default language
+* `http://website.tld/ru/` will display the site in Russian
+* `http://website.tld/fr/` will display the site in French
 
 ## Language Picker Component
 
-A visitor can select their chosen language using the `LocalePicker` component. This component will display a simple dropdown that changes the page language depending on the selection.
+A visitor can select their chosen language using the native `SitePicker` component that is included in the October CMS core. This component will display a simple dropdown that changes the page language depending on the selection.
 
 ```twig
 title = "Home"
 url = "/"
 
-[localePicker]
+[sitePicker]
 ==
 
 <h3>{{ 'Please select your language:'|_ }}</h3>
-{% component 'localePicker' %}
+<select class="form-control" onchange="window.location.assign(this.value)">
+    {% for site in sitePicker.sites %}
+        <option value="{{ site.url }}" {{ this.site.code == site.code ? 'selected' }}>{{ site.name }}</option>
+    {% endfor %}
+</select>
 ```
 
 If translated, the text above will appear as whatever language is selected by the user. The dropdown is very basic and is intended to be restyled. A simpler example might be:
 
 ```html
-
 [...]
 ==
 
 <p>
     Switch language to:
-    <a href="#" data-request="onSwitchLocale" data-request-data="locale: 'en'">English</a>,
-    <a href="#" data-request="onSwitchLocale" data-request-data="locale: 'ru'">Russian</a>
+
+    {% for site in sitePicker.sites %}
+        <a href="{{ site.url }}">{{ site.name }}</a>
+    {% endfor %}
 </p>
 ```
 
-## Message translation
+## Message Translation
 
 Message or string translation is the conversion of adhoc strings used throughout the site. A message can be translated with parameters.
 
@@ -146,14 +151,16 @@ This plugin activates a feature in the CMS that allows content & mail template f
 * **welcome-ru.htm** will contain the content or mail template in Russian.
 * **welcome-fr.htm** will contain the content or mail template in French.
 
-## Model translation
+## Model Translation
 
-Models can have their attributes translated by using the `RainLab.Translate.Behaviors.TranslatableModel` behavior and specifying which attributes to translate in the class.
+Models can have their attributes translated by using the `RainLab\Translate\Behaviors\TranslatableModel` behavior and specifying which attributes to translate in the class.
 
 ```php
 class User
 {
-    public $implement = ['RainLab.Translate.Behaviors.TranslatableModel'];
+    public $implement = [
+        \RainLab\Translate\Behaviors\TranslatableModel::class
+    ];
 
     public $translatable = ['name'];
 }
@@ -225,7 +232,7 @@ tabs:
             translatable: true
 ```
 
-## Fallback attribute values
+## Fallback Attribute Values
 
 By default, untranslated attributes will fall back to the default locale. This behavior can be disabled by calling the `noFallbackLocale` method.
 
@@ -238,7 +245,7 @@ $user->noFallbackLocale()->lang('fr');
 $user->name;
 ```
 
-## Indexed attributes
+## Indexed Attributes
 
 Translatable model attributes can also be declared as an index by passing the `$transatable` attribute value as an array. The first value is the attribute name, the other values represent options, in this case setting the option `index` to `true`.
 
@@ -261,7 +268,7 @@ The `transWhere` method accepts a third argument to explicitly pass a locale val
 Post::transWhere('slug', 'hello-world', 'en')->first();
 ```
 
-## URL translation
+## URL Translation
 
 Pages in the CMS support translating the URL property. Assuming you have 3 languages set up:
 
@@ -287,19 +294,19 @@ The word "Contact" in French is the same so a translated URL is not given, or ne
 - /ru/контакт - Page in Russian
 - /ru/contact - 404
 
-## URL parameter translation
+## URL Parameter Translation
 
-It's possible to translate URL parameters by listening to the `translate.localePicker.translateParams` event, which is fired when switching languages.
+It's possible to translate URL parameters by listening to the `cms.sitePicker.overrideParams` event, which is fired when discovering language URLs.
 
 ```php
-Event::listen('translate.localePicker.translateParams', function($page, $params, $oldLocale, $newLocale) {
+Event::listen('cms.sitePicker.overrideParams', function($page, $params, $oldSite, $newSite) {
     if ($page->baseFileName == 'your-page-filename') {
-        return YourModel::translateParams($params, $oldLocale, $newLocale);
+        return MyModel::translateParams($params, $oldSite->hard_locale, $newSite->hard_locale);
     }
 });
 ```
 
-In YourModel, one possible implementation might look like this:
+In `MyModel`, one possible implementation might look like this:
 
 ```php
 public static function translateParams($params, $oldLocale, $newLocale)
@@ -316,21 +323,21 @@ public static function translateParams($params, $oldLocale, $newLocale)
 }
 ```
 
-## Query string translation
+## Query String Translation
 
-It's possible to translate query string parameters by listening to the `translate.localePicker.translateQuery` event, which is fired when switching languages.
+It's possible to translate query string parameters by listening to the `cms.sitePicker.overrideQuery` event, which is fired when switching languages.
 
 ```php
-Event::listen('translate.localePicker.translateQuery', function($page, $params, $oldLocale, $newLocale) {
+Event::listen('cms.sitePicker.overrideQuery', function($page, $params, $oldSite, $newSite) {
     if ($page->baseFileName == 'your-page-filename') {
-        return YourModel::translateParams($params, $oldLocale, $newLocale);
+        return MyModel::translateParams($params, $oldSite->hard_locale, $newSite->hard_locale);
     }
 });
 ```
 
-For a possible implementation of the `YourModel::translateParams` method look at the example under `URL parameter translation` from above.
+For a possible implementation of the `MyModel::translateParams` method look at the example under `URL parameter translation` from above.
 
-## Extend theme scan
+## Extend Theme Scan
 
 ```php
 Event::listen('rainlab.translate.themeScanner.afterScan', function (ThemeScanner $scanner) {
@@ -338,7 +345,7 @@ Event::listen('rainlab.translate.themeScanner.afterScan', function (ThemeScanner
 });
 ```
 
-## Settings model translation
+## Settings Model Translation
 
 It's possible to translate your settings model like any other model. To retrieve translated values use:
 
@@ -346,7 +353,7 @@ It's possible to translate your settings model like any other model. To retrieve
 Settings::instance()->getAttributeTranslated('your_attribute_name');
 ```
 
-## Conditionally extending plugins
+## Conditionally Extending Plugins
 
 #### Models
 
@@ -364,7 +371,7 @@ class Post extends Model
     /**
      * Softly implement the TranslatableModel behavior.
      */
-    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $implement = ['@'.\RainLab\Translate\Behaviors\TranslatableModel::class];
 
     /**
      * @var array Attributes that support translation, if available.
@@ -404,62 +411,9 @@ public function registerMarkupTags()
 
 # User Interface
 
-#### Switching locales
+#### Switching Locales
 
-Users can switch between locales by clicking on the locale indicator on the right hand side of the Multi-language input. By holding the CMD / CTRL key all Multi-language Input fields will switch to the selected locale.
-
-## Integration without jQuery and October Framework files
-
-It is possible to use the front-end language switcher without using jQuery or the OctoberCMS AJAX Framework by making the AJAX API request yourself manually. The following is an example of how to do that.
-
-```js
-document.querySelector('#languageSelect').addEventListener('change', function () {
-    const details = {
-        _session_key: document.querySelector('input[name="_session_key"]').value,
-        _token: document.querySelector('input[name="_token"]').value,
-        locale: this.value
-    }
-
-    let formBody = []
-
-    for (var property in details) {
-        let encodedKey = encodeURIComponent(property)
-        let encodedValue = encodeURIComponent(details[property])
-        formBody.push(encodedKey + '=' + encodedValue)
-    }
-
-    formBody = formBody.join('&')
-
-    fetch(location.href + '/', {
-        method: 'POST',
-        body: formBody,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'X-OCTOBER-REQUEST-HANDLER': 'onSwitchLocale',
-            'X-OCTOBER-REQUEST-PARTIALS': '',
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(res => res.json())
-    .then(res => window.location.replace(res.X_OCTOBER_REDIRECT))
-    .catch(err => console.log(err))
-})
-```
-
-The HTML:
-
-```html
-{{ form_open() }}
-    <select id="languageSelect">
-        <option value="none" hidden></option>
-        {% for code, name in locales %}
-            {% if code != activeLocale %}
-                <option value="{{code}}" name="locale">{{code|upper}}</option>
-            {% endif %}
-        {% endfor %}
-    </select>
-{{ form_close() }}
-```
+Users can switch between locales by clicking on the site selection menu in the backend panel. This will add a `_site_id` query value to the URL, allowing for multiple browser tabs to be used.
 
 ### License
 
