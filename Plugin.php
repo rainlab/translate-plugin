@@ -65,20 +65,6 @@ class Plugin extends PluginBase
             EventCoreRegistry::instance()->importMessagesFromTheme($code);
         });
 
-        // Adds language suffixes to content files.
-        Event::listen('cms.page.beforeRenderContent', function($controller, $fileName) {
-            return EventCoreRegistry::instance()
-                ->findTranslatedContentFile($controller, $fileName)
-            ;
-        });
-
-        // Prune localized content files from template list
-        Event::listen('pages.content.templateList', function($widget, $templates) {
-            return EventCoreRegistry::instance()
-                ->pruneTranslatedContentTemplates($templates)
-            ;
-        });
-
         // Append current locale to static page's cache keys
         $modifyKey = function (&$key) {
             $key = $key . '-' . Lang::getLocale();

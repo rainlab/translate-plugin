@@ -41,7 +41,7 @@ class EventCoreRegistry
      */
     public function bootEvents()
     {
-
+        $this->extendCmsContentObject();
     }
 
     /**
@@ -241,6 +241,26 @@ class EventCoreRegistry
         }, 1);
     }
 
+    /**
+     * extendCmsContentObject adds language suffixes to content files.
+     */
+    protected function extendCmsContentObject()
+    {
+        Event::listen('cms.page.beforeRenderContent', function($controller, $fileName) {
+            if (!strlen(File::extension($fileName))) {
+                $fileName .= '.htm';
+            }
+
+            // Splice the active locale in to the filename
+            // - content.htm -> content.en.htm
+            $locale = Translator::instance()->getLocale();
+            $fileName = substr_replace($fileName, '.'.$locale, strrpos($fileName, '.'), 0);
+            if (($content = Content::loadCached($controller->getTheme(), $fileName)) !== null) {
+                return $content;
+            }
+        });
+    }
+
     //
     // Theme
     //
@@ -274,48 +294,9 @@ class EventCoreRegistry
         Message::setContext($translator->getLocale(), $page->url);
     }
 
-    /**
-     * findTranslatedContentFile adds language suffixes to content files.
-     * @return string|null
-     */
-    public function findTranslatedContentFile($controller, $fileName)
-    {
-        if (!strlen(File::extension($fileName))) {
-            $fileName .= '.htm';
-        }
-
-        /*
-         * Splice the active locale in to the filename
-         * - content.htm -> content.en.htm
-         */
-        $locale = Translator::instance()->getLocale();
-        $fileName = substr_replace($fileName, '.'.$locale, strrpos($fileName, '.'), 0);
-        if (($content = Content::loadCached($controller->getTheme(), $fileName)) !== null) {
-            return $content;
-        }
-    }
-
     //
     // Static pages
     //
-
-    /**
-     * pruneTranslatedContentTemplates removes localized content files from templates collection
-     * @param \October\Rain\Database\Collection $templates
-     * @return \October\Rain\Database\Collection
-     */
-    public function pruneTranslatedContentTemplates($templates)
-    {
-        $locales = LocaleModel::listAvailable();
-
-        $extensions = array_map(function($ext) {
-            return '.'.$ext;
-        }, array_keys($locales));
-
-        return $templates->filter(function($template) use ($extensions) {
-            return !Str::endsWith($template->getBaseFileName(), $extensions);
-        });
-    }
 
     /**
      * findLocalizedMailViewContent adds language suffixes to mail view files.
