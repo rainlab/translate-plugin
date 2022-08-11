@@ -33,10 +33,7 @@ url = "/"
 
 If translated, the text above will appear as whatever language is selected by the user. The dropdown is very basic and is intended to be restyled. A simpler example might be:
 
-```html
-[...]
-==
-
+```twig
 <p>
     Switch language to:
 

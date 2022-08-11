@@ -1,8 +1,8 @@
-# Upgrading from v1 to v2
+# Upgrading from Translate v1 to v2
 
-This guide can be used to help migrate from v1 of this plugin to v2. It should be straight forward to migrate from v1 to v2 without any major disruptions.
+This guide can be used to help migrate from RainLab.Translate v1 to v2. It should be straight forward process without any major disruptions.
 
-Since October CMS v3.1, a multisite feature is introduced that supercedes many functions provided by this plugin. The existing data structures are still used in v2 of this plugin. All translations are carried across and no "retranslation" or modifying existing plugins should be needed.
+Beginning from October CMS v3.1, a multisite feature was introduced that supercedes many functions provided by the RainLab.Translate plugin. The existing data structures are preserved so all translations are carried across and no "retranslation" or modifying existing plugins should be needed.
 
 ## Upgrade Instructions
 
