@@ -7,7 +7,8 @@ use System\Classes\PluginManager;
 use October\Rain\Html\Helper as HtmlHelper;
 
 /**
- * EventPluginRegistry for bootstrapping events related to plugins
+ * EventPluginRegistry for bootstrapping events related to plugins,
+ * mostly the Static Pages plugin.
  *
  * @package october\system
  * @author Alexey Bobkov, Samuel Georges
@@ -62,7 +63,7 @@ class EventPluginRegistry
             if (!PluginManager::instance()->exists('RainLab.Pages')) {
                 return;
             }
-            
+
             if ($widget->isNested) {
                 return;
             }
@@ -100,7 +101,7 @@ class EventPluginRegistry
                 // Handle translated URL
                 if ($template->shouldTranslate()) {
                     $wantUrl = $data['settings']['viewBag']['url'] ?? '';
-                    $haveUrl = $originalData['viewBag']['url'] ?? '';
+                    $haveUrl = $originalData['viewBag']['url'] ?? $wantUrl;
                     if ($wantUrl != $haveUrl) {
                         $localeUrls[$locale] = $wantUrl;
                     }
@@ -132,17 +133,14 @@ class EventPluginRegistry
                         continue;
                     }
 
-                    // Locate translated value
-                    $value = starts_with($dotKey, 'viewBag.')
-                        ? array_get($data['settings'], $dotKey, -1)
-                        : array_get($data, $dotKey, -1);
-
-                    // Reset to original value
+                    // Locate translated value, pull and replace with original value
                     if (starts_with($dotKey, 'viewBag.')) {
-                        array_set($data['settings'], $dotKey, array_get($originalData, $dotKey));
+                        $value = array_get($data['settings'], $dotKey, -1);
+                        array_set($data['settings'], $dotKey, array_get($originalData, $dotKey, $value));
                     }
                     else {
-                        array_set($data, $dotKey, array_get($originalData, $dotKey));
+                        $value = array_get($data, $dotKey, -1);
+                        array_set($data, $dotKey, array_get($originalData, $dotKey, $value));
                     }
 
                     // Determine if this is worth saving
