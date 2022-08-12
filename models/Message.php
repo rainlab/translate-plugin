@@ -1,9 +1,6 @@
 <?php namespace RainLab\Translate\Models;
 
-use Str;
-use Lang;
 use Model;
-use Cache;
 use RainLab\Translate\Classes\Locale;
 
 /**
@@ -25,6 +22,11 @@ class Message extends Model
      * @var array List of attribute names which are json encoded and decoded from the database.
      */
     protected $jsonable = ['data'];
+
+    /**
+     * @var int lastFindCount
+     */
+    protected static $lastFindCount;
 
     /**
      * updateMessage
@@ -104,17 +106,28 @@ class Message extends Model
             $result = $messages[$locale] ?? [];
         }
 
-        // Count
-        if ($count) {
-            $result = $this->applyCountToResult($result, $count, $offset);
-        }
-
         // Search
         if ($search) {
             $result = $this->applySearchToResult($result, $search);
         }
 
+        // Remember count
+        self::$lastFindCount = count($result);
+
+        // Count
+        if ($count) {
+            $result = $this->applyCountToResult($result, $count, $offset);
+        }
+
         return $result;
+    }
+
+    /**
+     * getLastCount
+     */
+    public static function getLastCount(): int
+    {
+        return self::$lastFindCount;
     }
 
     /**
@@ -122,7 +135,7 @@ class Message extends Model
      */
     public function applyCountToResult($result, $count, $offset)
     {
-        return $result;
+        return array_slice($result, $offset ?: 0, $count);
     }
 
     /**
@@ -130,6 +143,15 @@ class Message extends Model
      */
     public function applySearchToResult($result, $search)
     {
+        foreach ($result as $key => $message) {
+            if (
+                stripos($message, $search) === false &&
+                stripos($key, $search) === false
+            ) {
+                unset($result[$key]);
+            }
+        }
+
         return $result;
     }
 }

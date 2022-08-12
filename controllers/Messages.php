@@ -161,7 +161,7 @@ class Messages extends Controller
         });
 
         $dataSource->bindEvent('data.getCount', function() {
-            return Message::count();
+            return Message::getLastCount();
         });
 
         $dataSource->bindEvent('data.updateRecord', function($key, $data) {
@@ -210,33 +210,5 @@ class Messages extends Controller
         }
 
         return $data;
-    }
-
-    /**
-     * updateTableData
-     */
-    protected function updateTableData($message, $data)
-    {
-        if (!$message) {
-            return;
-        }
-
-        $fromCode = post('locale_from');
-        $toCode = post('locale_to');
-
-        // @todo This should be unified to a single save()
-        if ($fromCode) {
-            $fromValue = array_get($data, 'from');
-            if ($fromValue != $message->forLocale($fromCode)) {
-                $message->toLocale($fromCode, $fromValue);
-            }
-        }
-
-        if ($toCode) {
-            $toValue = array_get($data, 'to');
-            if ($toValue != $message->forLocale($toCode)) {
-                $message->toLocale($toCode, $toValue);
-            }
-        }
     }
 }
