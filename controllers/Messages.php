@@ -23,12 +23,24 @@ class Messages extends Controller
         \Backend\Behaviors\ImportExportController::class,
     ];
 
+    /**
+     * @var mixed importExportConfig
+     */
     public $importExportConfig = 'config_import_export.yaml';
 
+    /**
+     * @var mixed requiredPermissions
+     */
     public $requiredPermissions = ['rainlab.translate.manage_messages'];
 
+    /**
+     * @var mixed hideTranslated
+     */
     protected $hideTranslated = false;
 
+    /**
+     * __construct
+     */
     public function __construct()
     {
         parent::__construct();
@@ -43,18 +55,27 @@ class Messages extends Controller
         $this->exportColumns = MessageExport::getColumns();
     }
 
+    /**
+     * index
+     */
     public function index()
     {
         $this->pageTitle = 'rainlab.translate::lang.messages.title';
         $this->prepareTable();
     }
 
+    /**
+     * onRefresh
+     */
     public function onRefresh()
     {
         $this->prepareTable();
         return ['#messagesContainer' => $this->makePartial('messages')];
     }
 
+    /**
+     * onClearCache
+     */
     public function onClearCache()
     {
         CacheHelper::clear();
@@ -62,11 +83,17 @@ class Messages extends Controller
         Flash::success(Lang::get('rainlab.translate::lang.messages.clear_cache_success'));
     }
 
+    /**
+     * onLoadScanMessagesForm
+     */
     public function onLoadScanMessagesForm()
     {
         return $this->makePartial('scan_messages_form');
     }
 
+    /**
+     * onScanMessages
+     */
     public function onScanMessages()
     {
         if (post('purge_messages', false)) {
@@ -84,6 +111,9 @@ class Messages extends Controller
         return $this->onRefresh();
     }
 
+    /**
+     * prepareTable
+     */
     public function prepareTable()
     {
         $fromCode = post('locale_from', null);
@@ -95,7 +125,7 @@ class Messages extends Controller
          */
         $this->vars['hideTranslated'] = $this->hideTranslated;
         $this->vars['defaultLocale'] = Locale::getDefault();
-        $this->vars['locales'] = Locale::all();
+        $this->vars['locales'] = Locale::listLocales()->all();
         $this->vars['selectedFrom'] = $selectedFrom = Locale::findByCode($fromCode);
         $this->vars['selectedTo'] = $selectedTo = Locale::findByCode($toCode);
 
@@ -160,11 +190,17 @@ class Messages extends Controller
         $this->vars['table'] = $widget;
     }
 
+    /**
+     * isHideTranslated
+     */
     protected function isHideTranslated()
     {
         return post('hide_translated', false);
     }
 
+    /**
+     * listMessagesForDatasource
+     */
     protected function listMessagesForDatasource($options = [])
     {
         extract(array_merge([
@@ -186,6 +222,9 @@ class Messages extends Controller
         return $query->get();
     }
 
+    /**
+     * processTableData
+     */
     protected function processTableData($messages, $from, $to)
     {
         $fromCode = $from ? $from->code : null;
@@ -210,6 +249,9 @@ class Messages extends Controller
         return $data;
     }
 
+    /**
+     * updateTableData
+     */
     protected function updateTableData($message, $data)
     {
         if (!$message) {

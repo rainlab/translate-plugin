@@ -1,6 +1,7 @@
 <?php namespace RainLab\Translate\Models;
 
 use Backend\Models\ExportModel;
+use RainLab\Translate\Classes\Locale;
 
 class MessageExport extends ExportModel
 {
@@ -47,6 +48,6 @@ class MessageExport extends ExportModel
         return array_merge([
             self::CODE_COLUMN_NAME => self::CODE_COLUMN_NAME,
             Message::DEFAULT_LOCALE => self::DEFAULT_COLUMN_NAME,
-        ], Locale::lists(self::CODE_COLUMN_NAME, self::CODE_COLUMN_NAME));
+        ], Locale::listLocales()->pluck(self::CODE_COLUMN_NAME, self::CODE_COLUMN_NAME)->all());
     }
 }
