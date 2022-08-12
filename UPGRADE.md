@@ -10,6 +10,8 @@ Beginning from October CMS v3.1, a multisite feature was introduced that superce
 
 2. Replace the `localePicker` and `alternateHrefLangElements` components used in the front end.
 
+3. Migrate theme messages using `php artisan translate:migratev1` (non destructive).
+
 3. Continue using this plugin as normal.
 
 ## Key Differences

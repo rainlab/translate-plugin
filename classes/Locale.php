@@ -107,6 +107,14 @@ class Locale extends ElementBase
     }
 
     /**
+     * all
+     */
+    public static function all()
+    {
+        return static::listLocales()->all();
+    }
+
+    /**
      * findByCode finds a locale by its code, cached.
      * @param  string $code
      * @return Model

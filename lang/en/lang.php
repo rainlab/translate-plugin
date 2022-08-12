@@ -56,7 +56,5 @@
     'export_messages_link' => 'Export Messages',
     'import_messages_link' => 'Import Messages',
     'not_found' => 'Not found',
-    'found_help' => 'Whether any errors occurred during scanning.',
-    'found_title' => 'Scan errors',
   ],
 ];

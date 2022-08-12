@@ -11,7 +11,7 @@ use Exception;
 use Event;
 
 /**
- * Theme scanner class
+ * ThemeScanner class
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
@@ -19,8 +19,7 @@ use Event;
 class ThemeScanner
 {
     /**
-     * Helper method for scanForMessages()
-     * @return void
+     * scan is a helper method for scanForMessages()
      */
     public static function scan()
     {
@@ -43,8 +42,7 @@ class ThemeScanner
     }
 
     /**
-     * Scans theme templates and config for messages.
-     * @return void
+     * scanForMessages in theme templates and config.
      */
     public function scanForMessages()
     {

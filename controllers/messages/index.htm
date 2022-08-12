@@ -16,7 +16,6 @@
     </div>
 
     <!-- Passable fields -->
-    <input type="hidden" name="locale_from" value="<?= $selectedFrom ? $selectedFrom->code : '' ?>" />
     <input type="hidden" name="locale_to" value="<?= $selectedTo ? $selectedTo->code : '' ?>" />
 
 <?= Form::close() ?>
@@ -31,4 +30,3 @@ $(document).render(function(){
 })
 
 </script>
-

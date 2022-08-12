@@ -41,6 +41,7 @@ class Plugin extends PluginBase
 
         // Register console commands
         $this->registerConsoleCommand('translate.scan', \Rainlab\Translate\Console\ScanCommand::class);
+        $this->registerConsoleCommand('translate.migratev1', \Rainlab\Translate\Console\MigrateV1Command::class);
 
         // Register asset bundles
         $this->registerAssetBundles();
@@ -58,7 +59,6 @@ class Plugin extends PluginBase
         Event::listen('cms.page.init', function($controller, $page) {
             EventCoreRegistry::instance()->setMessageContext($page);
         }, 100);
-
 
         // Import messages defined by the theme
         Event::listen('cms.theme.setActiveTheme', function($code) {

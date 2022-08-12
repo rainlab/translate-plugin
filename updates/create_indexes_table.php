@@ -5,7 +5,6 @@ use October\Rain\Database\Updates\Migration;
 
 class CreateIndexesTable extends Migration
 {
-
     public function up()
     {
         Schema::create('rainlab_translate_indexes', function($table)
@@ -24,5 +23,4 @@ class CreateIndexesTable extends Migration
     {
         Schema::dropIfExists('rainlab_translate_indexes');
     }
-
 }
