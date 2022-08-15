@@ -1,7 +1,6 @@
 <?php return [
   'plugin' => [
     'manage_locales' => 'Manage locales',
-    'manage_messages' => 'Manage messages',
   ],
   'locale_picker' => [
     'component_name' => 'Selección de idioma',
@@ -25,8 +24,6 @@
     'hint_locales' => 'Crear nuevos idiomas aquí para traducir el contenido de front-end. El idioma por defecto representa el contenido antes de que haya sido traducido.',
   ],
   'messages' => [
-    'title' => 'Traducir mensajes',
-    'description' => 'Editar mensajes',
     'clear_cache_link' => 'Limpiar cache',
     'clear_cache_loading' => 'Borrado de la memoria caché de aplicaciones ...',
     'clear_cache_success' => 'Se ha borrado la memoria cache dela aplicación con éxito',

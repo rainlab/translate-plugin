@@ -6,6 +6,7 @@ use Event;
 use Backend;
 use System\Classes\PluginBase;
 use System\Classes\CombineAssets;
+use System\Classes\SettingsManager;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\EventCoreRegistry;
 use RainLab\Translate\Classes\EventPluginRegistry;
@@ -113,8 +114,8 @@ class Plugin extends PluginBase
     {
         return [
             'rainlab.translate.manage_messages' => [
-                'tab' => 'rainlab.translate::lang.plugin.tab',
-                'label' => 'rainlab.translate::lang.plugin.manage_messages'
+                'tab' => 'Translation',
+                'label' => 'Manage messages'
             ]
         ];
     }
@@ -126,12 +127,12 @@ class Plugin extends PluginBase
     {
         return [
             'messages' => [
-                'label' => 'rainlab.translate::lang.messages.title',
-                'description' => 'rainlab.translate::lang.messages.description',
+                'label' => 'Translate Messages',
+                'description' => 'Update messages used by the theme',
                 'icon' => 'icon-list-alt',
                 'url' => Backend::url('rainlab/translate/messages'),
                 'order' => 551,
-                'category' => 'Translate',
+                'category' => SettingsManager::CATEGORY_CMS,
                 'permissions' => ['rainlab.translate.manage_messages'],
                 'keywords' => 'translate',
             ]

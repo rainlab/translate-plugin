@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => '翻译',
     'manage_locales' => '管理语言环境',
-    'manage_messages' => '管理消息',
   ],
   'locale_picker' => [
     'component_name' => '语言环境选择器',
@@ -33,8 +31,6 @@
     'sort_order' => '排序顺序',
   ],
   'messages' => [
-    'title' => '翻译消息',
-    'description' => '更新消息',
     'clear_cache_link' => '清除缓存',
     'clear_cache_loading' => '清除应用程序缓存...',
     'clear_cache_success' => '清除应用缓存成功！',

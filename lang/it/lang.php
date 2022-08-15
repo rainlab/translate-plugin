@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => 'Traduzioni',
     'manage_locales' => 'Gestisci lingue',
-    'manage_messages' => 'Gestisci messaggi',
   ],
   'locale_picker' => [
     'component_name' => 'Selezione lingua',
@@ -29,8 +27,6 @@
     'sort_order' => 'Criterio di ordinamento',
   ],
   'messages' => [
-    'title' => 'Traduci messaggi',
-    'description' => 'Aggiorna messaggi',
     'clear_cache_link' => 'Pulisci cache',
     'clear_cache_loading' => 'Pulizia della cache dell\'applicazione in corso...',
     'clear_cache_success' => 'La cache è stata pulita con successo!',

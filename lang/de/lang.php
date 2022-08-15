@@ -1,7 +1,6 @@
 <?php return [
   'plugin' => [
     'manage_locales' => 'Sprachen verwalten',
-    'manage_messages' => 'Übersetzungen verwalten',
   ],
   'locale_picker' => [
     'component_name' => 'Sprachauswahl',
@@ -27,8 +26,6 @@
     'sort_order' => 'Sortierung',
   ],
   'messages' => [
-    'title' => 'Übersetzungen verwalten',
-    'description' => 'Inhalte verwalten und übersetzen',
     'clear_cache_link' => 'Cache leeren',
     'clear_cache_loading' => 'Leere Application-Cache...',
     'clear_cache_success' => 'Application-Cache erfolgreich geleert!',

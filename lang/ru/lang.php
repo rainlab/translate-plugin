@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => 'Перевод',
     'manage_locales' => 'Управление языками',
-    'manage_messages' => 'Управление сообщениями',
   ],
   'locale_picker' => [
     'component_name' => 'Выбор языка',
@@ -33,8 +31,6 @@
     'sort_order' => 'Порядок сортировки',
   ],
   'messages' => [
-    'title' => 'Перевод сообщений',
-    'description' => 'Перевод статических сообщений в шаблоне',
     'clear_cache_link' => 'Очистить кэш',
     'clear_cache_loading' => 'Очистка кэша приложения...',
     'clear_cache_success' => 'Очистка кэша завершена успешно!',

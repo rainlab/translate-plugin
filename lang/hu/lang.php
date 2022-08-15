@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => 'Fordítás',
     'manage_locales' => 'Nyelvek kezelése',
-    'manage_messages' => 'Szövegek fordítása',
   ],
   'locale_picker' => [
     'component_name' => 'Nyelvi választó',
@@ -33,8 +31,6 @@
     'sort_order' => 'Sorrend',
   ],
   'messages' => [
-    'title' => 'Szövegek',
-    'description' => 'Nyelvi változatok menedzselése.',
     'clear_cache_link' => 'Gyorsítótár kiürítése',
     'clear_cache_loading' => 'A weboldal gyorsítótár kiürítése...',
     'clear_cache_success' => 'Sikerült a weboldal gyorsítótár kiürítése!',

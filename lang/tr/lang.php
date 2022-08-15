@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => 'Çeviri',
     'manage_locales' => 'Dilleri yönet',
-    'manage_messages' => 'Çevirileri yönet',
   ],
   'locale_picker' => [
     'component_name' => 'Çoklu Dil Seçimi',
@@ -33,8 +31,6 @@
     'sort_order' => 'Sıralama',
   ],
   'messages' => [
-    'title' => 'Metinleri çevir',
-    'description' => 'Metinler ve çevirileri',
     'clear_cache_link' => 'Önbelleği temizle',
     'clear_cache_loading' => 'Önbellek temizleniyor..',
     'clear_cache_success' => 'Önbellek temizlendi!',

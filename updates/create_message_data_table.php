@@ -9,7 +9,6 @@ class CreateMessageDataTable extends Migration
     {
         Schema::create('rainlab_translate_message_data', function($table)
         {
-            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('locale')->index()->nullable();
             $table->longText('data')->nullable();

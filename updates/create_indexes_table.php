@@ -9,7 +9,6 @@ class CreateIndexesTable extends Migration
     {
         Schema::create('rainlab_translate_indexes', function($table)
         {
-            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('locale')->index();
             $table->string('model_id')->index()->nullable();

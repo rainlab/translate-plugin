@@ -1,5 +1,9 @@
 {
     "Translate": "Translate",
     "Enables multi-lingual websites.": "Enables multi-lingual websites.",
-    "Translate Page Properties": "Translate Page Properties"
+    "Translate Page Properties": "Translate Page Properties",
+    "Translate Messages": "Translate Messages",
+    "Update messages used by the theme": "Update messages used by the theme",
+    "Translation": "Translation",
+    "Manage messages": "Manage messages"
 }

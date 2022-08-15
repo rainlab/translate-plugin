@@ -56,7 +56,7 @@ class Messages extends Controller
      */
     public function index()
     {
-        $this->pageTitle = 'rainlab.translate::lang.messages.title';
+        $this->pageTitle = 'Translate Messages';
         $this->prepareTable();
     }
 

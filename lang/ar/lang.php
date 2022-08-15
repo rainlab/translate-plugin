@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => 'ترجمة',
     'manage_locales' => 'إدارة اللغات',
-    'manage_messages' => 'إدارة النصوص',
   ],
   'locale_picker' => [
     'component_name' => 'محدد اللغات',
@@ -33,8 +31,6 @@
     'sort_order' => 'اتجاه الترتيب',
   ],
   'messages' => [
-    'title' => 'ترجمة النصوص',
-    'description' => 'تحديث النصوص',
     'clear_cache_link' => 'مسح المخبآت',
     'clear_cache_loading' => 'يتم مسح مخبآت التطبيق...',
     'clear_cache_success' => 'تم مسح مخبآت التطبيق بنجاح!',

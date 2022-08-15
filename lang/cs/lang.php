@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => 'Překlad',
     'manage_locales' => 'Správa jazyků',
-    'manage_messages' => 'Správa překladů',
   ],
   'locale_picker' => [
     'component_name' => 'Výběr jazyka',
@@ -26,8 +24,6 @@
     'hint_locales' => 'Zde můžete přidat nový jazyk pro překlad webových stránek. Výchozí jazyk reprezentuje obsah stránek ještě před překladem.',
   ],
   'messages' => [
-    'title' => 'Překlad textů',
-    'description' => 'Upravit text',
     'clear_cache_link' => 'Vymazat cache',
     'clear_cache_loading' => 'Mazání aplikační cache...',
     'clear_cache_success' => 'Aplikační cache úspěšně vymazána!',

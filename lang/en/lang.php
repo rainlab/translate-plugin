@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => 'Translation',
     'manage_locales' => 'Manage locales',
-    'manage_messages' => 'Manage messages',
   ],
   'locale_picker' => [
     'component_name' => 'Locale Picker',
@@ -33,8 +31,6 @@
     'sort_order' => 'Sort Order',
   ],
   'messages' => [
-    'title' => 'Translate Messages',
-    'description' => 'Update messages',
     'clear_cache_link' => 'Clear Cache',
     'clear_cache_loading' => 'Clearing application cache...',
     'clear_cache_success' => 'Cleared the application cache successfully!',
@@ -52,7 +48,7 @@
     'scan_messages_purge_deleted_label' => 'Purge missing messages after scan',
     'scan_messages_purge_deleted_help' => 'If checked, after the scan is done, any messages the scanner did not find, including their translations, will be deleted. This cannot be undone!',
     'hint_translate' => 'Here you can translate messages used on the front-end, the fields will save automatically.',
-    'hide_translated' => 'Hide translated',
+    'hide_translated' => 'Hide Translated',
     'export_messages_link' => 'Export Messages',
     'import_messages_link' => 'Import Messages',
     'not_found' => 'Not found',

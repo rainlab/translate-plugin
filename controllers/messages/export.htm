@@ -1,7 +1,7 @@
 <?php Block::put('breadcrumb') ?>
     <ul>
         <li><a href="<?= Backend::url('system/settings') ?>"><?= __("Settings") ?></a></li>
-        <li><a href="<?= Backend::url('rainlab/translate/messages') ?>"><?= e(trans('rainlab.translate::lang.messages.title')) ?></a></li>
+        <li><a href="<?= Backend::url('rainlab/translate/messages') ?>"><?= __("Translate Messages") ?></a></li>
         <li><?= e(trans($this->pageTitle)) ?></li>
     </ul>
 <?php Block::endPut() ?>

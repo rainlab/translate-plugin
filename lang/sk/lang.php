@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => 'Preklad',
     'manage_locales' => 'Spravovať jazyky',
-    'manage_messages' => 'Spravovať správy',
   ],
   'locale_picker' => [
     'component_name' => 'Výber jazyka',
@@ -33,8 +31,6 @@
     'sort_order' => 'Smer zoradenia',
   ],
   'messages' => [
-    'title' => 'Preložiť správy',
-    'description' => 'Aktualizovať správy',
     'clear_cache_link' => 'Vymazať vyrovnávaciu pamäť',
     'clear_cache_loading' => 'Čistenie vyrovnávacej pamäte aplikácie...',
     'clear_cache_success' => 'Vyrovnávacia pamäť aplikácie vyčistená!',

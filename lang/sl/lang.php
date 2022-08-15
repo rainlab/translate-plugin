@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => 'Večjezičnost',
     'manage_locales' => 'Upravljanje jezikov',
-    'manage_messages' => 'Upravljanje besedil',
   ],
   'locale_picker' => [
     'component_name' => 'Izbirnik jezikov',
@@ -33,8 +31,6 @@
     'sort_order' => 'Vrstni red',
   ],
   'messages' => [
-    'title' => 'Prevajanje besedil',
-    'description' => 'Urejanje prevodov besedil.',
     'clear_cache_link' => 'Počisti predpomnilnik',
     'clear_cache_loading' => 'Praznenje predpomnilnika aplikacije...',
     'clear_cache_success' => 'Predpomnilnik aplikacije je uspešno izpraznjen!',

@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => 'Tłumaczenie',
     'manage_locales' => 'Zarządzaj językami',
-    'manage_messages' => 'Zarządzaj treścią',
   ],
   'locale_picker' => [
     'component_name' => 'Lista języków',
@@ -33,8 +31,6 @@
     'sort_order' => 'Sortowanie',
   ],
   'messages' => [
-    'title' => 'Tłumacz Treść',
-    'description' => 'Tłumaczenie treści strony',
     'clear_cache_link' => 'Wyczyść Cache',
     'clear_cache_loading' => 'Czyszczenie cache...',
     'clear_cache_success' => 'Pomyślnie wyczyszczono cache aplikacji!',

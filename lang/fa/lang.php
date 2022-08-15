@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => 'ترجمه',
     'manage_locales' => 'مدیریت مناطق',
-    'manage_messages' => 'مدیریت پیغام ها',
   ],
   'locale_picker' => [
     'component_name' => 'انتخابگر منطقه',
@@ -26,8 +24,6 @@
     'hint_locales' => 'زبان جدیدی را جهت ترجمه محتوی ایجاد نمایید.',
   ],
   'messages' => [
-    'title' => 'ترجمه پیغام ها',
-    'description' => 'به روز رسانی پیغام ها',
     'clear_cache_link' => 'پاکسازی حافظه کش',
     'clear_cache_loading' => 'در حال پاکسازی حافظه کش برنامه...',
     'clear_cache_success' => 'عملیات پاکسازی حافظه کش به اتمام رسید.',

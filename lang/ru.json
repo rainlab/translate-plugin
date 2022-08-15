@@ -1,4 +1,8 @@
 {
     "Translate": "Translate",
-    "Enables multi-lingual websites.": "Настройки мультиязычности сайта."
+    "Enables multi-lingual websites.": "Настройки мультиязычности сайта.",
+    "Translate Messages": "Перевод сообщений",
+    "Update messages used by the theme": "Перевод статических сообщений в шаблоне",
+    "Translation": "Перевод",
+    "Manage messages": "Управление сообщениями"
 }

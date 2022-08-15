@@ -1,8 +1,6 @@
 <?php return [
   'plugin' => [
-    'tab' => 'Vertalingen',
     'manage_locales' => 'Beheer talen',
-    'manage_messages' => 'Beheer vertaalde berichten',
   ],
   'locale_picker' => [
     'component_name' => 'Taalkeuze menu',
@@ -33,8 +31,6 @@
     'sort_order' => 'Volgorde',
   ],
   'messages' => [
-    'title' => 'Vertaal berichten',
-    'description' => 'Wijzig berichten',
     'clear_cache_link' => 'Leeg cache',
     'clear_cache_loading' => 'Applicatie cache legen...',
     'clear_cache_success' => 'De applicatie cache is succesvol geleegd.',
