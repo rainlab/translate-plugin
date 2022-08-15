@@ -15,8 +15,6 @@
     "This process will attempt to scan the active theme for messages that can be translated.": "This process will attempt to scan the active theme for messages that can be translated.",
     "Purge all messages first": "Purge all messages first",
     "If checked, this will delete all messages, including their translations, before performing the scan.": "If checked, this will delete all messages, including their translations, before performing the scan.",
-    "Purge missing messages after scan": "Purge missing messages after scan",
-    "If checked, after the scan is done, any messages the scanner did not find, including their translations, will be deleted. This cannot be undone!": "If checked, after the scan is done, any messages the scanner did not find, including their translations, will be deleted. This cannot be undone!",
     "Scanning for new messages...": "Scanning for new messages...",
     "Begin Scan": "Begin Scan",
     "Are you sure you want to delete all messages? This cannot be undone!": "Are you sure you want to delete all messages? This cannot be undone!",

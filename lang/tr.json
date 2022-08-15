@@ -14,8 +14,6 @@
     "This process will attempt to scan the active theme for messages that can be translated.": "Bu işlem tema dosyaları içerisindeki çevrilecek metinleri tarar.",
     "Purge all messages first": "Önce tüm eski çevirileri sil",
     "If checked, this will delete all messages, including their translations, before performing the scan.": "Eğer seçerseniz şimdiye kadar yaptığınız tüm çeviriler silinecek, tekrar çevirmeniz gerekecektir.",
-    "Purge missing messages after scan": "Tarama tamamlandıktan sonra eksik çevirileri temizle",
-    "If checked, after the scan is done, any messages the scanner did not find, including their translations, will be deleted. This cannot be undone!": "İşaretlerseniz, tarama tamamlandıktan sonra tarayıcının bulamadığı tüm metinler (diğer dil çevirileri de dahil olmak üzere) silinecektir. Bu işlem geri alınamaz!",
     "Scanning for new messages...": "Yeni metinler taranıyor...",
     "Begin Scan": "Taramaya başla",
     "Are you sure you want to delete all messages? This cannot be undone!": "Tüm çevirileri silmek istediğinize emin misiniz? Bu işlem geri alınamaz!",

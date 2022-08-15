@@ -14,8 +14,6 @@
     "This process will attempt to scan the active theme for messages that can be translated.": "A folyamat megkisérli beolvasni az aktív témában lévő lefordítandó szövegeket.",
     "Purge all messages first": "Szövegek törlése a művelet előtt",
     "If checked, this will delete all messages, including their translations, before performing the scan.": "Amennyiben bejelöli, úgy minden szöveg törlésre kerül a beolvasást megelőzően.",
-    "Purge missing messages after scan": "Törölje a hiányzó üzeneteket a vizsgálat után",
-    "If checked, after the scan is done, any messages the scanner did not find, including their translations, will be deleted. This cannot be undone!": "Ha be van jelölve, akkor a keresés befejezése után minden olyan üzenet törlődik, amelyet a keresés nem talált. A művelet nem visszavonható!",
     "Scanning for new messages...": "Új szövegek keresése...",
     "Begin Scan": "Keresés indítása",
     "Are you sure you want to delete all messages? This cannot be undone!": "Biztos, hogy töröljük az összes szöveget?",

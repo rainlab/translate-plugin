@@ -14,8 +14,6 @@
     "This process will attempt to scan the active theme for messages that can be translated.": "Ten proces podejmie próbę przeskanowania aktywnego motywu w poszukiwaniu wiadomości, które można przetłumaczyć.",
     "Purge all messages first": "Najpierw usuń wszystkie wiadomości",
     "If checked, this will delete all messages, including their translations, before performing the scan.": "Zaznaczenie tej opcji spowoduje usunięcie wszystkich wiadomości, w tym ich tłumaczeń, przed wykonaniem skanowania.",
-    "Purge missing messages after scan": "Usuń utracone wiadomości po zeskanowaniu",
-    "If checked, after the scan is done, any messages the scanner did not find, including their translations, will be deleted. This cannot be undone!": "Jeśli ta opcja jest zaznaczona, po zakończeniu skanowania wszystkie wiadomości, których skaner nie znalazł (w tym ich tłumaczenia) zostaną usunięte. Po zaznaczeniu tej opcji nie będzie możliwości przywrócenia zmian!",
     "Scanning for new messages...": "Szukanie nowych pozycji...",
     "Begin Scan": "Rozpocznij skanowanie",
     "Are you sure you want to delete all messages? This cannot be undone!": "Czy jesteś pewny że chcesz usunąć wszystkie wiadomości? Po usunięciu nie będzie można ich przywrócić",
