@@ -37,6 +37,11 @@ class Messages extends Controller
     protected $hideTranslated = false;
 
     /**
+     * @var mixed pruneMessages
+     */
+    protected $pruneMessages = false;
+
+    /**
      * __construct
      */
     public function __construct()
@@ -126,9 +131,11 @@ class Messages extends Controller
     {
         $toCode = $this->getActiveLocale();
         $this->hideTranslated = post('hide_translated', false);
+        $this->pruneMessages = post('prune_messages', false);
 
         // Page vars
         $this->vars['hideTranslated'] = $this->hideTranslated;
+        $this->vars['pruneMessages'] = $this->pruneMessages;
         $this->vars['defaultLocale'] = Locale::getDefault();
         $this->vars['locales'] = Locale::all();
         $this->vars['selectedTo'] = Locale::findByCode($toCode);
@@ -145,6 +152,7 @@ class Messages extends Controller
 
         $dataSource->bindEvent('data.getRecords', function($offset, $count) use ($toCode) {
             $messages = $this->listMessagesForDatasource($toCode, [
+                'withUsage' => $this->pruneMessages,
                 'withEmpty' => true,
                 'offset' => $offset,
                 'count' => $count
@@ -155,6 +163,7 @@ class Messages extends Controller
 
         $dataSource->bindEvent('data.searchRecords', function($search, $offset, $count) use ($toCode) {
             $messages = $this->listMessagesForDatasource($toCode, [
+                'withUsage' => $this->pruneMessages,
                 'withEmpty' => true,
                 'search' => $search,
                 'offset' => $offset,

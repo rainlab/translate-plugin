@@ -10,6 +10,7 @@
         this.tableToolbar = null;
         this.toInput = null;
         this.toHeader = null;
+        this.toPruneHeader = null;
         this.tableElement = null;
         this.hideTranslated = false;
         this.pruneMessages = false;
@@ -62,13 +63,17 @@
             $toolbar.prepend(Mustache.render(this.tableToolbar.html()));
         }
 
-        this.setTitleContents = function(fromEl, toEl) {
+        this.setTitleContents = function(fromEl, toEl, toPruneEl) {
             if (fromEl) {
                 this.fromHeader = $(fromEl);
             }
 
             if (toEl) {
                 this.toHeader = $(toEl);
+            }
+
+            if (toPruneEl) {
+                this.toPruneHeader = $(toPruneEl);
             }
 
             if (!this.tableElement) {
@@ -80,8 +85,10 @@
             }
 
             var $headers = $('table.headers th', this.tableElement);
-            $headers.eq(0).html(this.fromHeader.html());
-            $headers.eq(1).html(Mustache.render(this.toHeader.html(), { hideTranslated: this.hideTranslated } ));
+            $headers.eq(0).html(Mustache.render(this.fromHeader.html(), { pruneMessages: this.pruneMessages } ));
+            $headers.eq(1).html(Mustache.render(this.pruneMessages ? this.toPruneHeader.html() : this.toHeader.html(), {
+                hideTranslated: this.hideTranslated
+            }));
         }
 
         this.setTableElement = function(el) {

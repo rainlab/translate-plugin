@@ -26,5 +26,7 @@
     "default": "default",
     "Hide Translated": "Hide Translated",
     "There are no other languages set up.": "There are no other languages set up.",
-    "Prune Messages": "Prune Messages"
+    "Prune Messages": "Prune Messages",
+    "Last Seen": "Last Seen",
+    "Never": "Never"
 }

@@ -3,6 +3,7 @@
 use App;
 use Lang;
 use Event;
+use System;
 use Backend;
 use System\Classes\PluginBase;
 use System\Classes\CombineAssets;
@@ -55,6 +56,12 @@ class Plugin extends PluginBase
     {
         EventCoreRegistry::instance()->bootEvents();
         EventPluginRegistry::instance()->bootEvents();
+
+        if (System::checkDebugMode()) {
+            App::after(function () {
+                Message::saveObserver();
+            });
+        }
 
         // Append current locale to static page's cache keys
         $modifyKey = function (&$key) {

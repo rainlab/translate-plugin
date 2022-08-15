@@ -1,6 +1,7 @@
 <?php namespace RainLab\Translate\Models;
 
 use Model;
+use Carbon\Carbon;
 use RainLab\Translate\Classes\Locale;
 
 /**
@@ -22,6 +23,16 @@ class Message extends Model
      * @var array List of attribute names which are json encoded and decoded from the database.
      */
     protected $jsonable = ['data', 'usage'];
+
+    /**
+     * @var array cache for messages
+     */
+    public static $cache = [];
+
+    /**
+     * @var array observeCache for messages
+     */
+    public static $observeCache = [];
 
     /**
      * @var int lastFindCount
@@ -53,8 +64,14 @@ class Message extends Model
             $locale = Locale::getDefaultSiteLocale();
         }
 
-        // @todo cache
-        $msg = (new self)->findMessages($locale)[$messageId] ?? $messageId;
+        if (isset(self::$cache[$locale])) {
+            $messages = self::$cache[$locale];
+        }
+        else {
+            $messages = self::$cache[$locale] = (new self)->findMessages($locale);
+        }
+
+        $msg = $messages[$messageId] ?? $messageId;
 
         $params = array_build($params, function($key, $value) use ($raw) {
             return [':'.$key, $raw ? $value : e($value)];
@@ -62,7 +79,7 @@ class Message extends Model
 
         $msg = strtr($msg, $params);
 
-        // @todo store last seen
+        self::observeMessage($messageId);
 
         return $msg;
     }
@@ -88,6 +105,28 @@ class Message extends Model
     }
 
     /**
+     * saveObserver
+     */
+    public static function saveObserver()
+    {
+        $messageKeys = array_keys(self::$observeCache);
+
+        (new self)->updateMessages(
+            Locale::getDefaultSiteLocale(),
+            array_combine($messageKeys, $messageKeys),
+            self::$observeCache
+        );
+    }
+
+    /**
+     * observeMessage
+     */
+    public static function observeMessage($messageId)
+    {
+        self::$observeCache[$messageId] = time();
+    }
+
+    /**
      * updateMessage
      */
     public function updateMessage($locale, $key, $message)
@@ -98,17 +137,22 @@ class Message extends Model
     /**
      * updateMessage
      */
-    public function updateMessages($locale, $messages)
+    public function updateMessages($locale, $messages, $timestamps = null)
     {
         $messageData = $messages;
 
         if ($record = $this->newQuery()->where('locale', $locale)->first()) {
             $data = (array) $record->data;
-            $messageData = array_merge($data, $messageData);
+            $messageData = array_merge($data, (array) $messageData);
         }
         else {
             $record = new self;
             $record->locale = $locale;
+        }
+
+        if ($timestamps !== null && is_array($timestamps)) {
+            $usage = (array) $record->usage;
+            $record->usage = array_merge($usage, $timestamps);
         }
 
         $record->data = $messageData;
@@ -138,7 +182,8 @@ class Message extends Model
             'search' => null,
             'offset' => null,
             'count' => null,
-            'withEmpty' => false
+            'withEmpty' => false,
+            'withUsage' => false
         ], $options));
 
         $defaultLocale = Locale::getDefault()->code;
@@ -149,8 +194,10 @@ class Message extends Model
             : [$locale]
         )->get();
 
+        $usage = [];
         $messages = [];
         foreach ($collection as $message) {
+            $usage[$message->locale] = $message->usage;
             $messages[$message->locale] = $message->data;
         }
 
@@ -165,6 +212,20 @@ class Message extends Model
         }
         else {
             $result = $messages[$locale] ?? [];
+        }
+
+        // Usage stats
+        if ($withUsage) {
+            foreach ($result as $key => $message) {
+                $time = $usage[$locale][$key] ?? null;
+                if ($time) {
+                    $result[$key] = (new Carbon($time))->diffForHumans();
+                }
+                else {
+                    $result[$key] = __("Never");
+                }
+            }
+            arsort($result);
         }
 
         // Search

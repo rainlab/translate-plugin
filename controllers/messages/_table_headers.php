@@ -4,7 +4,7 @@
         <?= e($defaultLocale->name) ?> <span class="is-default">- <?= __("default") ?></span>
     </div>
     <div class="header-hide-translated custom-checkbox">
-        <input type="checkbox" id="pruneMessages" name="show_prune" value="1" {{#pruneMessages}}checked{{/pruneMessages}} />
+        <input type="checkbox" id="pruneMessages" name="prune_messages" value="1" {{#pruneMessages}}checked{{/pruneMessages}} />
         <label class="storm-icon-pseudo" for="pruneMessages"><?= __("Prune Messages") ?></label>
     </div>
 </script>
@@ -18,6 +18,12 @@
     <div class="header-hide-translated custom-checkbox">
         <input type="checkbox" id="hideTranslated" name="hide_translated" value="1" {{#hideTranslated}}checked{{/hideTranslated}} />
         <label class="storm-icon-pseudo" for="hideTranslated"><?= __("Hide Translated") ?></label>
+    </div>
+</script>
+
+<script type="text/template" id="<?= $this->getId('toTitlePrune') ?>">
+    <div class="header-language">
+        <?= __("Last Seen") ?>
     </div>
 </script>
 
