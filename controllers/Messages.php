@@ -60,6 +60,15 @@ class Messages extends Controller
     }
 
     /**
+     * importExportGetFileName
+     */
+    public function importExportGetFileName()
+    {
+        $locale = post('ExportOptions[locale]', post('ImportOptions[locale]'));
+        return 'messages-'.$locale;
+    }
+
+    /**
      * onRefresh
      */
     public function onRefresh()

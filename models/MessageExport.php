@@ -6,9 +6,6 @@ use ValidationException;
 
 class MessageExport extends ExportModel
 {
-    const CODE_COLUMN_NAME = 'code';
-    const DEFAULT_COLUMN_NAME = 'default';
-
     use \October\Rain\Database\Traits\Validation;
 
     /**
@@ -50,6 +47,11 @@ class MessageExport extends ExportModel
         }
 
         $messages = (new Message)->findMessages($this->locale, ['withEmpty' => true]);
+
+        // Raw JSON
+        if ($this->file_format === 'json') {
+            return $messages;
+        }
 
         $result = [];
         foreach ($messages as $key => $message){

@@ -33,25 +33,27 @@ class Message extends Model
      */
     public function updateMessage($locale, $key, $message)
     {
+        $this->updateMessages($locale, [$key => $message]);
+    }
+
+    /**
+     * updateMessage
+     */
+    public function updateMessages($locale, $messages)
+    {
+        $messageData = $messages;
+
         if ($record = $this->newQuery()->where('locale', $locale)->first()) {
-            $data = $record->data;
-
-            if ($message === null) {
-                unset($data[$key]);
-            }
-            else {
-                $data[$key] = $message;
-            }
-
-            $record->data = $data;
-            $record->save();
+            $data = (array) $record->data;
+            $messageData = array_merge($data, $messageData);
         }
         else {
             $record = new self;
             $record->locale = $locale;
-            $record->data = [$key => $message];
-            $record->save();
         }
+
+        $record->data = $messageData;
+        $record->save();
     }
 
     /**
