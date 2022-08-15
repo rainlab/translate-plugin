@@ -3,10 +3,12 @@
     <div class="header-language">
         <?= e($defaultLocale->name) ?> <span class="is-default">- <?= __("default") ?></span>
     </div>
-    <div class="header-hide-translated custom-checkbox">
-        <input type="checkbox" id="pruneMessages" name="prune_messages" value="1" {{#pruneMessages}}checked{{/pruneMessages}} />
-        <label class="storm-icon-pseudo" for="pruneMessages"><?= __("Prune Messages") ?></label>
-    </div>
+    <?php if (System::checkDebugMode()): ?>
+        <div class="header-hide-translated custom-checkbox">
+            <input type="checkbox" id="pruneMessages" name="prune_messages" value="1" {{#pruneMessages}}checked{{/pruneMessages}} />
+            <label class="storm-icon-pseudo" for="pruneMessages"><?= __("Prune Messages") ?></label>
+        </div>
+    <?php endif ?>
 </script>
 
 <!-- To Header -->

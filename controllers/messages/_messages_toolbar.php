@@ -1,15 +1,15 @@
 <div data-control="toolbar" class="loading-indicator-container">
     <a
         href="javascript:;"
-        data-request="onClearCache"
-        data-load-indicator="<?= __("Clearing application cache...") ?>"
-        class="btn btn-primary oc-icon-check-square"><?= __("Clear Cache") ?>
+        data-control="popup"
+        data-handler="onLoadScanMessagesForm"
+        class="btn btn-primary oc-icon-refresh"><?= __("Scan for Messages") ?>
     </a>
     <a
         href="javascript:;"
-        data-control="popup"
-        data-handler="onLoadScanMessagesForm"
-        class="btn btn-link oc-icon-refresh"><?= __("Scan for Messages") ?>
+        data-request="onClearCache"
+        data-load-indicator="<?= __("Clearing application cache...") ?>"
+        class="btn btn-link oc-icon-check-square"><?= __("Clear Cache") ?>
     </a>
     <a
         href="<?= Backend::url('rainlab/translate/messages/import') ?>"

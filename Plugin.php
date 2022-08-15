@@ -58,7 +58,7 @@ class Plugin extends PluginBase
         EventPluginRegistry::instance()->bootEvents();
 
         if (System::checkDebugMode()) {
-            App::after(function () {
+            App::after(function() {
                 Message::saveObserver();
             });
         }

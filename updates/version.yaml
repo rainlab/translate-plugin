@@ -16,3 +16,6 @@ v1.10.0: Adds new multilingual nested form widget. Adds withFallbackLocale metho
 v1.11.0: Update to latest Media Finder changes in October v2.2
 v1.12.0: Adds scopeTransWhereNoFallback method
 v2.0.0: Major upgrade and multisite integration
+v2.0.1:
+    - Create message data store
+    - create_message_data_table.php
