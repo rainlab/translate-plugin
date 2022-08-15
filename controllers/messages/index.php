@@ -22,11 +22,9 @@
 
 <!-- Set the Header values in the Grid -->
 <script>
-
-$(document).render(function(){
-    $.translateMessages.setTableElement('#<?= $table->getId() ?>')
-    $.translateMessages.setTitleContents('#<?= $this->getId('fromTitle') ?>', '#<?= $this->getId('toTitle') ?>', '#<?= $this->getId('foundTitle') ?>')
-    $.translateMessages.setToolbarContents('#<?= $this->getId('tableToolbar') ?>')
-})
-
+    $(document).render(function(){
+        $.translateMessages.setTableElement('#<?= $table->getId() ?>');
+        $.translateMessages.setTitleContents('#<?= $this->getId('fromTitle') ?>', '#<?= $this->getId('toTitle') ?>');
+        $.translateMessages.setToolbarContents('#<?= $this->getId('tableToolbar') ?>');
+    });
 </script>

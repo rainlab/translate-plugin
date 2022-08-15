@@ -1,6 +1,5 @@
 <?php namespace RainLab\Translate\Controllers;
 
-use Lang;
 use Flash;
 use BackendMenu;
 use Backend\Classes\Controller;

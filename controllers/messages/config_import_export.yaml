@@ -2,8 +2,26 @@ import:
     title: Import Messages
     modelClass: RainLab\Translate\Models\MessageImport
     redirect: rainlab/translate/messages
+    list:
+        columns:
+            key: Key
+            message: Message
+    form:
+        fields:
+            locale:
+                label: Language
+                type: dropdown
 
 export:
     title: Export Messages
     modelClass: RainLab\Translate\Models\MessageExport
     redirect: rainlab/translate/messages
+    list:
+        columns:
+            key: Key
+            message: Message
+    form:
+        fields:
+            locale:
+                label: Language
+                type: dropdown
