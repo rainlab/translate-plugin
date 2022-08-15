@@ -1,6 +1,6 @@
 
 <p>
-    <?= Lang::get('rainlab.translate::lang.messages.hint_translate') ?>
-    <?= Lang::get('rainlab.translate::lang.messages.clear_cache_hint') ?>
-    <?= Lang::get('rainlab.translate::lang.messages.scan_messages_hint') ?>
+    <?= e(__('Here you can translate messages used on the front-end, the fields will save automatically.')) ?>
+    <?= e(__('You may need to click <strong>Clear cache</strong> to see the changes on the front-end.')) ?>
+    <?= __('Clicking <strong>Scan for messages</strong> will check the active theme files for any new messages to translate.') ?>
 </p>

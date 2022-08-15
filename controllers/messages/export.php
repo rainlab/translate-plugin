@@ -19,7 +19,7 @@
             data-handler="onExportLoadForm"
             data-keyboard="false"
             class="btn btn-primary">
-            <?= e(trans('rainlab.translate::lang.messages.export_messages_link')) ?>
+            <?= __("Export Messages") ?>
         </button>
     </div>
 

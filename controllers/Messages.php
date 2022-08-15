@@ -76,7 +76,7 @@ class Messages extends Controller
     {
         CacheHelper::clear();
 
-        Flash::success(Lang::get('rainlab.translate::lang.messages.clear_cache_success'));
+        Flash::success(__("Cleared the application cache successfully!"));
     }
 
     /**
@@ -102,7 +102,7 @@ class Messages extends Controller
             Message::where('found', 0)->delete();
         }
 
-        Flash::success(Lang::get('rainlab.translate::lang.messages.scan_messages_success'));
+        Flash::success(__("Scanned theme template files successfully!"));
 
         return $this->onRefresh();
     }

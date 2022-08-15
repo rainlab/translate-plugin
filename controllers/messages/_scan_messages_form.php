@@ -2,13 +2,13 @@
     <?= Form::open(['id' => 'scanMessagesForm']) ?>
         <div class="modal-header flex-row-reverse">
             <button type="button" class="close" data-dismiss="popup">&times;</button>
-            <h4 class="modal-title"><?= e(trans('rainlab.translate::lang.messages.scan_messages_link')) ?></h4>
+            <h4 class="modal-title"><?= __("Scan for Messages") ?></h4>
         </div>
 
         <div class="modal-body">
             <p>
-                <?= e(trans('rainlab.translate::lang.messages.scan_messages_process')) ?>
-                <?= e(trans('rainlab.translate::lang.messages.scan_messages_process_limitations')) ?>
+                <?= __("This process will attempt to scan the active theme for messages that can be translated.") ?>
+                <?= __("Some messages may not be captured and will only appear after the first time they are used.") ?>
 
             </p>
             <div class="form-preview">
@@ -19,12 +19,12 @@
                             type="checkbox"
                             name="purge_messages"
                             value="1"
-                            id="purgeMessages">
+                            id="purgeMessages" />
                         <label for="purgeMessages" class="storm-icon-pseudo">
-                            <?= e(trans('rainlab.translate::lang.messages.scan_messages_purge_label')) ?>
+                            <?= __("Purge all messages first") ?>
                         </label>
                         <p class="help-block form-text">
-                            <?= e(trans('rainlab.translate::lang.messages.scan_messages_purge_help')) ?>
+                            <?= __("If checked, this will delete all messages, including their translations, before performing the scan.") ?>
                         </p>
                     </div>
 
@@ -35,10 +35,10 @@
                             value="1"
                             id="purgeDeletedMessages">
                         <label for="purgeDeletedMessages" class="storm-icon-pseudo">
-                            <?= e(trans('rainlab.translate::lang.messages.scan_messages_purge_deleted_label')) ?>
+                            <?= __("Purge missing messages after scan") ?>
                         </label>
                         <p class="help-block form-text">
-                            <?= e(trans('rainlab.translate::lang.messages.scan_messages_purge_deleted_help')) ?>
+                            <?= __("If checked, after the scan is done, any messages the scanner did not find, including their translations, will be deleted. This cannot be undone!") ?>
                         </p>
                     </div>
                 </div>
@@ -51,10 +51,10 @@
                     type="submit"
                     class="btn btn-success"
                     data-request="onScanMessages"
-                    data-load-indicator="<?= e(trans('rainlab.translate::lang.messages.scan_messages_loading')) ?>"
+                    data-load-indicator="<?= __("Scanning for new messages...") ?>"
                     data-request-success="$(this).trigger('close.oc.popup')"
                     id="scanMessagesButton">
-                    <?= e(trans('rainlab.translate::lang.messages.scan_messages_begin_scan')) ?>
+                    <?= __("Begin Scan") ?>
                 </button>
                 <button
                     type="button"
@@ -71,7 +71,7 @@
 <script>
     $('#purgeMessages').on('change', function() {
         if ($(this).is(':checked')) {
-            $('#scanMessagesButton').data('request-confirm', '<?= e(trans('rainlab.translate::lang.messages.scan_messages_purge_confirm')) ?>')
+            $('#scanMessagesButton').data('request-confirm', '<?= e(__("Are you sure you want to delete all messages? This cannot be undone!")) ?>')
         }
         else {
             $('#scanMessagesButton').removeData('request-confirm')

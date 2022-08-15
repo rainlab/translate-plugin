@@ -19,7 +19,7 @@
             data-handler="onImportLoadForm"
             data-keyboard="false"
             class="btn btn-primary">
-            <?= e(trans('rainlab.translate::lang.messages.import_messages_link')) ?>
+            <?= __("Import Messages") ?>
         </button>
     </div>
 
