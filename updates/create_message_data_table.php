@@ -12,6 +12,7 @@ class CreateMessageDataTable extends Migration
             $table->increments('id');
             $table->string('locale')->index()->nullable();
             $table->longText('data')->nullable();
+            $table->longText('usage')->nullable();
             $table->timestamps();
         });
     }

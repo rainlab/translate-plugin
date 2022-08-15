@@ -3,7 +3,6 @@
 use App;
 use Site;
 use Model;
-use Config;
 use October\Rain\Element\ElementBase;
 use October\Rain\Database\Collection;
 

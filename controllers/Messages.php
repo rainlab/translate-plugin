@@ -106,10 +106,6 @@ class Messages extends Controller
 
         ThemeScanner::scan();
 
-        if (post('purge_deleted_messages', false)) {
-            Message::where('found', 0)->delete();
-        }
-
         Flash::success(__("Scanned theme template files successfully!"));
 
         return $this->onRefresh();
@@ -120,7 +116,7 @@ class Messages extends Controller
      */
     public function getActiveLocale()
     {
-        return post('locale_to', Locale::getDefault()->code);
+        return post('locale_to', Locale::getSiteLocaleFromContext());
     }
 
     /**

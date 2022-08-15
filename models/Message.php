@@ -21,12 +21,71 @@ class Message extends Model
     /**
      * @var array List of attribute names which are json encoded and decoded from the database.
      */
-    protected $jsonable = ['data'];
+    protected $jsonable = ['data', 'usage'];
 
     /**
      * @var int lastFindCount
      */
     protected static $lastFindCount;
+
+    /**
+     * trans
+     */
+    public static function trans($messageId, $params = [], $locale = null)
+    {
+        return self::translateInternal($messageId, $params, $locale);
+    }
+
+    /**
+     * transRaw
+     */
+    public static function transRaw($messageId, $params = [], $locale = null)
+    {
+        return self::translateInternal($messageId, $params, $locale, true);
+    }
+
+    /**
+     * translateInternal
+     */
+    public static function translateInternal($messageId, $params = [], $locale = null, $raw = false)
+    {
+        if (!$locale) {
+            $locale = Locale::getDefaultSiteLocale();
+        }
+
+        // @todo cache
+        $msg = (new self)->findMessages($locale)[$messageId] ?? $messageId;
+
+        $params = array_build($params, function($key, $value) use ($raw) {
+            return [':'.$key, $raw ? $value : e($value)];
+        });
+
+        $msg = strtr($msg, $params);
+
+        // @todo store last seen
+
+        return $msg;
+    }
+
+    /**
+     * importMessages
+     */
+    public static function importMessages($messages, $locale = null)
+    {
+        self::importMessageCodes(array_combine($messages, $messages), $locale);
+    }
+
+    /**
+     * importMessageCodes
+     */
+    public static function importMessageCodes($messages, $locale = null)
+    {
+        if (!$locale) {
+            $locale = Locale::getDefaultSiteLocale();
+        }
+
+        (new self)->updateMessages($locale, $messages);
+    }
 
     /**
      * updateMessage

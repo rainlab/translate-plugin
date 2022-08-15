@@ -56,16 +56,6 @@ class Plugin extends PluginBase
         EventCoreRegistry::instance()->bootEvents();
         EventPluginRegistry::instance()->bootEvents();
 
-        // Set the page context for translation caching with high priority.
-        Event::listen('cms.page.init', function($controller, $page) {
-            EventCoreRegistry::instance()->setMessageContext($page);
-        }, 100);
-
-        // Import messages defined by the theme
-        Event::listen('cms.theme.setActiveTheme', function($code) {
-            EventCoreRegistry::instance()->importMessagesFromTheme($code);
-        });
-
         // Append current locale to static page's cache keys
         $modifyKey = function (&$key) {
             $key = $key . '-' . Lang::getLocale();

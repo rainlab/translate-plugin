@@ -5,7 +5,6 @@ use Cms\Classes\Theme;
 use Cms\Classes\Layout;
 use Cms\Classes\Partial;
 use RainLab\Translate\Models\Message;
-use RainLab\Translate\Classes\Translator;
 use System\Models\MailTemplate;
 use Exception;
 use Event;
@@ -46,10 +45,6 @@ class ThemeScanner
      */
     public function scanForMessages()
     {
-        // Set all messages initially as being not found. The scanner later
-        // sets the entries it finds as found.
-        Message::query()->update(['found' => false]);
-
         $this->scanThemeConfigForMessages();
         $this->scanThemeTemplatesForMessages();
         $this->scanMailTemplatesForMessages();
@@ -76,8 +71,8 @@ class ThemeScanner
             $theme = Theme::load($themeCode);
         }
 
-        // October v2.0
-        if (class_exists('System') && $theme->hasParentTheme()) {
+        // Parent theme support
+        if ($theme->hasParentTheme()) {
             $parentTheme = $theme->getParentTheme();
 
             try {
@@ -105,25 +100,13 @@ class ThemeScanner
             return false;
         }
 
-        $translator = Translator::instance();
-        $keys = [];
-
         foreach ($config as $locale => $messages) {
+            // Config references an external yaml file
             if (is_string($messages)) {
-                // $message is a yaml filename, load the yaml file
                 $messages = $theme->getConfigArray('translate.'.$locale);
             }
-            $keys = array_merge($keys, array_keys($messages));
-        }
 
-        Message::importMessages($keys);
-
-        foreach ($config as $locale => $messages) {
-            if (is_string($messages)) {
-                // $message is a yaml filename, load the yaml file
-                $messages = $theme->getConfigArray('translate.'.$locale);
-            }
-            Message::importMessageCodes($messages, $locale);
+            (new Message)->updateMessages($locale, $messages);
         }
     }
 

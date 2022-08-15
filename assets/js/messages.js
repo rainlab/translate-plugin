@@ -12,11 +12,17 @@
         this.toHeader = null;
         this.tableElement = null;
         this.hideTranslated = false;
+        this.pruneMessages = false;
         this.emptyDataSet = null
         this.dataSet = null
 
         $(document).on('change', '#hideTranslated', function(){
             self.toggleTranslated($(this).is(':checked'));
+            self.refreshTable();
+        });
+
+        $(document).on('change', '#pruneMessages', function(){
+            self.togglePruned($(this).is(':checked'));
             self.refreshTable();
         });
 
@@ -26,6 +32,11 @@
 
         this.toggleTranslated = function(isHide) {
             this.hideTranslated = isHide;
+            this.setTitleContents();
+        }
+
+        this.togglePruned = function(isHide) {
+            this.pruneMessages = isHide;
             this.setTitleContents();
         }
 

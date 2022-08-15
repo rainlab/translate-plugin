@@ -25,5 +25,6 @@
     "Clicking <strong>Scan for messages<\/strong> will check the active theme files for any new messages to translate.": "Clicking <strong>Scan for messages<\/strong> will check the active theme files for any new messages to translate.",
     "default": "default",
     "Hide Translated": "Hide Translated",
-    "There are no other languages set up.": "There are no other languages set up."
+    "There are no other languages set up.": "There are no other languages set up.",
+    "Prune Messages": "Prune Messages"
 }

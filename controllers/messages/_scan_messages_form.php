@@ -27,20 +27,6 @@
                             <?= __("If checked, this will delete all messages, including their translations, before performing the scan.") ?>
                         </p>
                     </div>
-
-                    <div class="checkbox custom-checkbox">
-                        <input
-                            type="checkbox"
-                            name="purge_deleted_messages"
-                            value="1"
-                            id="purgeDeletedMessages">
-                        <label for="purgeDeletedMessages" class="storm-icon-pseudo">
-                            <?= __("Purge missing messages after scan") ?>
-                        </label>
-                        <p class="help-block form-text">
-                            <?= __("If checked, after the scan is done, any messages the scanner did not find, including their translations, will be deleted. This cannot be undone!") ?>
-                        </p>
-                    </div>
                 </div>
             </div>
 

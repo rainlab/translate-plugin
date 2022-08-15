@@ -3,6 +3,10 @@
     <div class="header-language">
         <?= e($defaultLocale->name) ?> <span class="is-default">- <?= __("default") ?></span>
     </div>
+    <div class="header-hide-translated custom-checkbox">
+        <input type="checkbox" id="pruneMessages" name="show_prune" value="1" {{#pruneMessages}}checked{{/pruneMessages}} />
+        <label class="storm-icon-pseudo" for="pruneMessages"><?= __("Prune Messages") ?></label>
+    </div>
 </script>
 
 <!-- To Header -->
