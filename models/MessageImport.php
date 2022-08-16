@@ -84,6 +84,12 @@ class MessageImport extends ImportModel
             $options[$locale->code] = $locale->name;
         }
 
-        return ['' => '-- select --'] + $options;
+        // Make the active locale first and therefore default
+        $locale = Locale::getSiteLocaleFromContext();
+        if ($active = array_pull($options, $locale)) {
+            $options = [$locale => $active] + $options;
+        }
+
+        return $options;
     }
 }

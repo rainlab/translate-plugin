@@ -69,7 +69,7 @@ class Messages extends Controller
      */
     public function importExportGetFileName()
     {
-        $locale = post('ExportOptions[locale]', post('ImportOptions[locale]'));
+        $locale = post('ExportOptions[locale]', 'xx');
         return 'messages-'.$locale;
     }
 
