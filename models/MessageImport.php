@@ -81,7 +81,7 @@ class MessageImport extends ImportModel
         $options = [];
 
         foreach (Locale::listLocales() as $locale) {
-            $options[$locale->code] = $locale->name;
+            $options[$locale->code] = "{$locale->name} [$locale->code]";
         }
 
         // Make the active locale first and therefore default

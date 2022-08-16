@@ -1,29 +1,29 @@
 <div id="scanMessagesPopup">
     <?= Form::open(['id' => 'scanMessagesForm']) ?>
-        <div class="modal-header flex-row-reverse">
-            <button type="button" class="close" data-dismiss="popup">&times;</button>
+        <div class="modal-header">
             <h4 class="modal-title"><?= __("Scan for Messages") ?></h4>
+            <button type="button" class="btn-close" data-dismiss="popup"></button>
         </div>
 
         <div class="modal-body">
             <p>
                 <?= __("This process will attempt to scan the active theme for messages that can be translated.") ?>
                 <?= __("Some messages may not be captured and will only appear after the first time they are used.") ?>
-
             </p>
             <div class="form-preview">
                 <div class="form-group">
                     <!-- Checkbox -->
-                    <div class="checkbox custom-checkbox">
+                    <div class="form-check">
                         <input
                             type="checkbox"
+                            class="form-check-input"
                             name="purge_messages"
                             value="1"
                             id="purgeMessages" />
-                        <label for="purgeMessages" class="storm-icon-pseudo">
+                        <label for="purgeMessages" class="form-check-label">
                             <?= __("Purge all messages first") ?>
                         </label>
-                        <p class="help-block form-text">
+                        <p class="form-text">
                             <?= __("If checked, this will delete all messages, including their translations, before performing the scan.") ?>
                         </p>
                     </div>
@@ -57,10 +57,10 @@
 <script>
     $('#purgeMessages').on('change', function() {
         if ($(this).is(':checked')) {
-            $('#scanMessagesButton').data('request-confirm', '<?= e(__("Are you sure you want to delete all messages? This cannot be undone!")) ?>')
+            $('#scanMessagesButton').data('request-confirm', '<?= e(__("Are you sure you want to delete all messages? This cannot be undone!")) ?>');
         }
         else {
-            $('#scanMessagesButton').removeData('request-confirm')
+            $('#scanMessagesButton').removeData('request-confirm');
         }
     })
 </script>

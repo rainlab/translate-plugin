@@ -1,6 +1,7 @@
 <?php namespace Rainlab\Translate\Console;
 
 use Db;
+use Schema;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use RainLab\Translate\Classes\ThemeScanner;
@@ -31,6 +32,11 @@ class MigrateV1Command extends Command
      */
     public function handle()
     {
+        if (!Schema::hasTable('rainlab_translate_messages')) {
+            $this->info("Table [rainlab_translate_messages] is not found, nothing to migrate.");
+            return;
+        }
+
         $langOut = [];
         $messages = Db::table('rainlab_translate_messages')->pluck('message_data')->all();
 

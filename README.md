@@ -358,7 +358,7 @@ It is possible to conditionally extend a plugin's models to support translation 
 
 ```php
 /**
- * Blog Post Model
+ * Post Model for the blog
  */
 class Post extends Model
 {
@@ -366,12 +366,12 @@ class Post extends Model
     // [...]
 
     /**
-     * Softly implement the TranslatableModel behavior.
+     * @var array implement the TranslatableModel behavior softly.
      */
     public $implement = ['@'.\RainLab\Translate\Behaviors\TranslatableModel::class];
 
     /**
-     * @var array Attributes that support translation, if available.
+     * @var array translatable attributes, if available.
      */
     public $translatable = ['title'];
 
@@ -388,14 +388,15 @@ Since the Twig filter will not be available all the time, we can pipe them to th
 
 ```php
 /**
- * Register new Twig variables
+ * registerMarkupTags registers new Twig variables
  * @return array
  */
 public function registerMarkupTags()
 {
     // Check the translate plugin is installed
-    if (!class_exists('RainLab\Translate\Behaviors\TranslatableModel'))
+    if (!class_exists('RainLab\Translate\Behaviors\TranslatableModel')) {
         return;
+    }
 
     return [
         'filters' => [

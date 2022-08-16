@@ -1,6 +1,5 @@
 v1.0.1:
     - First version of Translate
-    - create_messages_table.php
     - create_attributes_table.php
     - create_indexes_table.php
 v1.1.0: Introduce compatibility with RainLab.Pages plugin.
