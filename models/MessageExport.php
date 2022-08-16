@@ -46,7 +46,7 @@ class MessageExport extends ExportModel
             throw new ValidationException(['locale' => 'Please select a locale to export']);
         }
 
-        $messages = (new Message)->findMessages($this->locale, ['withEmpty' => true]);
+        $messages = Message::getMessages($this->locale);
 
         // Raw JSON
         if ($this->file_format === 'json') {

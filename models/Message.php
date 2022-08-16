@@ -1,5 +1,6 @@
 <?php namespace RainLab\Translate\Models;
 
+use App;
 use Model;
 use Carbon\Carbon;
 use RainLab\Translate\Classes\Locale;
@@ -82,6 +83,18 @@ class Message extends Model
         self::observeMessage($messageId);
 
         return $msg;
+    }
+
+    /**
+     * getMessages
+     */
+    public static function getMessages($locale = null, $options = [])
+    {
+        if (!$locale) {
+            $locale = App::getLocale();
+        }
+
+        return (new self)->findMessages($locale, $options);
     }
 
     /**
@@ -182,7 +195,7 @@ class Message extends Model
             'search' => null,
             'offset' => null,
             'count' => null,
-            'withEmpty' => false,
+            'withEmpty' => true,
             'withUsage' => false
         ], $options));
 

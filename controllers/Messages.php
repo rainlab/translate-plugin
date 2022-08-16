@@ -153,7 +153,6 @@ class Messages extends Controller
         $dataSource->bindEvent('data.getRecords', function($offset, $count) use ($toCode) {
             $messages = $this->listMessagesForDatasource($toCode, [
                 'withUsage' => $this->pruneMessages,
-                'withEmpty' => true,
                 'offset' => $offset,
                 'count' => $count
             ]);
@@ -164,7 +163,6 @@ class Messages extends Controller
         $dataSource->bindEvent('data.searchRecords', function($search, $offset, $count) use ($toCode) {
             $messages = $this->listMessagesForDatasource($toCode, [
                 'withUsage' => $this->pruneMessages,
-                'withEmpty' => true,
                 'search' => $search,
                 'offset' => $offset,
                 'count' => $count
@@ -201,7 +199,7 @@ class Messages extends Controller
      */
     protected function listMessagesForDatasource($locale, $options = [])
     {
-        return (new Message)->findMessages($locale, $options);
+        return Message::getMessages($locale, $options);
     }
 
     /**

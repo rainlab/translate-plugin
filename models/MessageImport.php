@@ -40,7 +40,7 @@ class MessageImport extends ImportModel
             throw new ValidationException(['locale' => 'Please select a locale to export']);
         }
 
-        $knownMessages = (new Message)->findMessages($this->locale);
+        $knownMessages = Message::getMessages($this->locale, ['withEmpty' => false]);
         $messages = [];
         $count = 0;
         foreach ($results as $key => $result) {
