@@ -6,6 +6,9 @@
         'manage_locales' => 'Manage locales',
         'manage_messages' => 'Manage messages',
     ],
+    'settings' => [
+        'menu_label' => 'Settings'
+    ],
     'locale_picker' => [
         'component_name' => 'Locale Picker',
         'component_description' => 'Shows a dropdown to select a front-end language.',
