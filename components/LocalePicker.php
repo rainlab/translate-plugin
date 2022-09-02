@@ -113,7 +113,8 @@ class LocalePicker extends ComponentBase
                 $this->withPreservedQueryString(
                     $this->translator->getCurrentPathInLocale($locale),
                     $locale
-                )
+                ),
+                301
             );
         } elseif ( $locale == $this->translator->getDefaultLocale()) {
             return;
