@@ -61,9 +61,9 @@ Here is the sample code to replace the `alternateHrefLangElements` component:
 The `translate.localePicker.translateQuery` event has been replaced by the `cms.sitePicker.overrideQuery`. The arguments are the same except the site definition is passed instead of the locale code, use the `hard_locale` attribute of the site definition to obtain the locale.
 
 ```php
-Event::listen('cms.sitePicker.overrideParams', function($page, $params, $currentSite, $proposedSite) {
+Event::listen('cms.sitePicker.overrideQuery', function($page, $params, $currentSite, $proposedSite) {
     if ($page->baseFileName == 'your-page-filename') {
-        return YourModel::overrideParams($params, $currentSite->hard_locale, $proposedSite->hard_locale);
+        return YourModel::translateQuery($params, $currentSite->hard_locale, $proposedSite->hard_locale);
     }
 });
 ```
@@ -71,9 +71,9 @@ Event::listen('cms.sitePicker.overrideParams', function($page, $params, $current
 The `translate.localePicker.translateParams` event has been replaced by the `cms.sitePicker.overrideParams` event. The arguments are the same except the site definition is passed instead of the locale code, use the `hard_locale` attribute of the site definition to obtain the locale.
 
 ```php
-Event::listen('cms.sitePicker.overrideQuery', function($page, $params, $currentSite, $proposedSite) {
+Event::listen('cms.sitePicker.overrideParams', function($page, $params, $currentSite, $proposedSite) {
     if ($page->baseFileName == 'your-page-filename') {
-        return YourModel::translateQuery($params, $currentSite->hard_locale, $proposedSite->hard_locale);
+        return YourModel::overrideParams($params, $currentSite->hard_locale, $proposedSite->hard_locale);
     }
 });
 ```
