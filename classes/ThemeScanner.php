@@ -106,7 +106,9 @@ class ThemeScanner
                 $messages = $theme->getConfigArray('translate.'.$locale);
             }
 
-            (new Message)->updateMessages($locale, $messages);
+            if (is_array($messages)) {
+                (new Message)->updateMessages($locale, $messages);
+            }
         }
     }
 
