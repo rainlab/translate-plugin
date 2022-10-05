@@ -6,7 +6,7 @@ use October\Rain\Extension\ExtensionBase;
 use October\Rain\Html\Helper as HtmlHelper;
 
 /**
- * Base class for model behaviors.
+ * TranslatableBehavior base class for model behaviors.
  *
  * @package october\translate
  * @author Alexey Bobkov, Samuel Georges
@@ -49,7 +49,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     protected $requiredProperties = ['translatable'];
 
     /**
-     * Constructor
+     * __construct
      * @param \October\Rain\Database\Model $model The extended model.
      */
     public function __construct($model)
@@ -97,13 +97,21 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Checks if an attribute should be translated or not.
+     * shouldTranslate determines if the context is applying translated values
+     */
+    public function shouldTranslate()
+    {
+        return $this->translatableContext !== $this->translatableDefault;
+    }
+
+    /**
+     * isTranslatable checks if an attribute should be translated or not.
      * @param  string  $key
      * @return boolean
      */
     public function isTranslatable($key)
     {
-        if ($key === 'translatable' || $this->translatableDefault == $this->translatableContext) {
+        if ($key === 'translatable' || !$this->shouldTranslate()) {
             return false;
         }
 
@@ -204,25 +212,20 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Returns whether the attribute is translatable (has a translation) for the given locale.
+     * hasTranslation returns whether the attribute is translatable (has a translation) for the given locale.
      * @param  string $key
      * @param  string $locale
      * @return bool
      */
     public function hasTranslation($key, $locale)
     {
-        /*
-         * If the default locale is passed, the attributes are retreived from the model,
-         * otherwise fetch the attributes from the $translatableAttributes property
-         */
+        // If the default locale is passed, the attributes are retreived from the model,
+        // otherwise fetch the attributes from the $translatableAttributes property
         if ($locale == $this->translatableDefault) {
             $translatableAttributes = $this->model->attributes;
         }
         else {
-            /*
-             * Ensure that the translatableData has been loaded
-             * @see https://github.com/rainlab/translate-plugin/issues/302
-             */
+            // Ensure that the translatableData has been loaded
             if (!isset($this->translatableAttributes[$locale])) {
                 $this->loadTranslatableData($locale);
             }
@@ -234,7 +237,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Sets a translated attribute value.
+     * setAttributeTranslated sets a translated attribute value.
      * @param  string $key   Attribute
      * @param  string $value Value to translate
      * @return string        Translated value
@@ -263,9 +266,7 @@ abstract class TranslatableBehavior extends ExtensionBase
      */
     public function syncTranslatableAttributes()
     {
-        /*
-         * Spin through the known locales, store the translations if necessary
-         */
+        // Spin through the known locales, store the translations if necessary
         $knownLocales = array_keys($this->translatableAttributes);
         foreach ($knownLocales as $locale) {
             if (!$this->isTranslateDirty(null, $locale)) {
@@ -275,16 +276,12 @@ abstract class TranslatableBehavior extends ExtensionBase
             $this->storeTranslatableData($locale);
         }
 
-        /*
-         * Saving the default locale, no need to restore anything
-         */
-        if ($this->translatableContext == $this->translatableDefault) {
+        // Saving the default locale, no need to restore anything
+        if (!$this->shouldTranslate()) {
             return;
         }
 
-        /*
-         * Restore translatable values to models originals
-         */
+        // Restore translatable values to models originals
         $original = $this->model->getOriginal();
         $attributes = $this->model->getAttributes();
         $translatable = $this->model->getTranslatableAttributes();
@@ -293,7 +290,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Changes the active language for this model
+     * translateContext changes the active language for this model
      * @param  string $context
      * @return void
      */
@@ -307,7 +304,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Shorthand for translateContext method, and chainable.
+     * lang shorthand for translateContext method, and chainable.
      * @param  string $context
      * @return self
      */
@@ -319,7 +316,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Checks if this model has transatable attributes.
+     * hasTranslatableAttributes checks if this model has transatable attributes.
      * @return true
      */
     public function hasTranslatableAttributes()
@@ -329,7 +326,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Returns a collection of fields that will be hashed.
+     * getTranslatableAttributes returns a collection of fields that will be hashed.
      * @return array
      */
     public function getTranslatableAttributes()
@@ -348,7 +345,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Returns the defined options for a translatable attribute.
+     * getTranslatableAttributesWithOptions returns the defined options for a translatable attribute.
      * @return array
      */
     public function getTranslatableAttributesWithOptions()
@@ -369,7 +366,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Determine if the model or a given translated attribute has been modified.
+     * isTranslateDirty determines if the model or a given translated attribute has been modified.
      * @param  string|null  $attribute
      * @return bool
      */
@@ -386,7 +383,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Get the locales that have changed, if any
+     * getDirtyLocales that have changed, if any
      *
      * @return array
      */
@@ -404,7 +401,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Get the original values of the translated attributes.
+     * getTranslatableOriginals gets the original values of the translated attributes.
      * @param  string|null $locale If `null`, the method will get the original data for all locales.
      * @return array|null Returns locale data as an array, or `null` if an invalid locale is specified.
      */
@@ -418,7 +415,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Get the translated attributes that have been changed since last sync.
+     * getTranslateDirty gets the translated attributes that have been changed since last sync.
      * @return array
      */
     public function getTranslateDirty($locale = null)
@@ -451,7 +448,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Extracts a attribute from a model/array with nesting support.
+     * getAttributeFromData extracts a attribute from a model/array with nesting support.
      * @param  mixed  $data
      * @param  string $attribute
      * @return mixed
@@ -464,7 +461,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Sets an attribute from a model/array with nesting support.
+     * setAttributeFromData sets an attribute from a model/array with nesting support.
      * @param  mixed  $data
      * @param  string $attribute
      * @return mixed
@@ -479,14 +476,14 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Saves the translation data for the model.
+     * storeTranslatableData saves the translation data for the model.
      * @param  string $locale
      * @return void
      */
     abstract protected function storeTranslatableData($locale = null);
 
     /**
-     * Loads the translation data from the model.
+     * loadTranslatableData loads the translation data from the model.
      * @param  string $locale
      * @return array
      */

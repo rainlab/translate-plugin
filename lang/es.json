@@ -1,0 +1,19 @@
+{
+    "Translate": "Multilenguaje",
+    "Enables multi-lingual websites.": "Permite sitios web multilingües",
+    "Translate Messages": "Traducir mensajes",
+    "Update messages used by the theme": "Editar mensajes",
+    "Manage messages": "Manage messages",
+    "Clearing application cache...": "Borrado de la memoria caché de aplicaciones ...",
+    "Clear Cache": "Limpiar cache",
+    "Scan for Messages": "Escanear mensajes",
+    "Scanning for new messages...": "Escaneando nuevos mensajes...",
+    "Cleared the application cache successfully!": "Se ha borrado la memoria cache dela aplicación con éxito",
+    "Scanned theme template files successfully!": "Escaneado de los archivos del tema completado!",
+    "Here you can translate messages used on the front-end, the fields will save automatically.": "Aquí usted puede traducir los mensajes utilizados en el front-end, los campos se guardará automáticamente.",
+    "You may need to click <strong>Clear cache<\/strong> to see the changes on the front-end.": "Es posible que tenga que hacer clic en <strong> Borrar caché <\/ strong> para ver los cambios en el front-end.",
+    "Clicking <strong>Scan for messages<\/strong> will check the active theme files for any new messages to translate.": "Al hacer click en Escanear comprobaremos los mensajes de <\/ strong> los archivos de los temas activos <strong> para localizar nuevos mensajes a traducir.",
+    "default": "Defecto",
+    "Hide Translated": "Ocultar traducción",
+    "There are no other languages set up.": "No hay otros idiomas establecidos."
+}

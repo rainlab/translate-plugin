@@ -3,14 +3,14 @@
 use App;
 use Lang;
 use Event;
+use System;
 use Backend;
-use Cms\Classes\Page;
-use System\Models\File;
-use Cms\Models\ThemeData;
 use System\Classes\PluginBase;
 use System\Classes\CombineAssets;
+use System\Classes\SettingsManager;
 use RainLab\Translate\Models\Message;
-use RainLab\Translate\Classes\EventRegistry;
+use RainLab\Translate\Classes\EventCoreRegistry;
+use RainLab\Translate\Classes\EventPluginRegistry;
 use RainLab\Translate\Classes\Translator;
 
 /**
@@ -20,17 +20,16 @@ class Plugin extends PluginBase
 {
     /**
      * pluginDetails returns information about this plugin.
-     *
      * @return array
      */
     public function pluginDetails()
     {
         return [
-            'name'        => 'rainlab.translate::lang.plugin.name',
-            'description' => 'rainlab.translate::lang.plugin.description',
-            'author'      => 'Alexey Bobkov, Samuel Georges',
-            'icon'        => 'icon-language',
-            'homepage'    => 'https://github.com/rainlab/translate-plugin'
+            'name' => 'Translate',
+            'description' => 'Enables multi-lingual websites.',
+            'author' => 'Alexey Bobkov, Samuel Georges',
+            'icon' => 'icon-language',
+            'homepage' => 'https://github.com/rainlab/translate-plugin'
         ];
     }
 
@@ -39,94 +38,15 @@ class Plugin extends PluginBase
      */
     public function register()
     {
-        // Load localized version of mail templates (akin to localized CMS content files)
-        Event::listen('mailer.beforeAddContent', function ($mailer, $message, $view, $data, $raw, $plain) {
-            return EventRegistry::instance()->findLocalizedMailViewContent($mailer, $message, $view, $data, $raw, $plain);
-        }, 1);
-
-        // Defer event with low priority to let others contribute before this registers.
-        Event::listen('backend.form.extendFieldsBefore', function($widget) {
-            EventRegistry::instance()->registerFormFieldReplacements($widget);
-        }, -1);
-
-        // Handle translated page URLs
-        Page::extend(function($model) {
-            if (!$model->propertyExists('translatable')) {
-                $model->addDynamicProperty('translatable', []);
-            }
-            $model->translatable = array_merge($model->translatable, ['title', 'description', 'meta_title', 'meta_description']);
-            if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatablePageUrl::class)) {
-                $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatablePageUrl::class);
-            }
-            if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatablePage::class)) {
-                $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatablePage::class);
-            }
-        });
-
-        // Extension logic for October CMS v1.0
-        if (!class_exists('System')) {
-            $this->extendLegacyPlatform();
-        }
-        // Extension logic for October CMS v2.0
-        else {
-            Event::listen('cms.theme.createThemeDataModel', function($attributes) {
-                return new \RainLab\Translate\Models\MLThemeData($attributes);
-            });
-
-            Event::listen('cms.template.getTemplateToolbarSettingsButtons', function($extension, $dataHolder) {
-                if ($dataHolder->templateType === 'page') {
-                    EventRegistry::instance()->extendEditorPageToolbar($dataHolder);
-                }
-            });
-        }
+        EventCoreRegistry::instance()->registerEvents();
+        EventPluginRegistry::instance()->registerEvents();
 
         // Register console commands
         $this->registerConsoleCommand('translate.scan', \Rainlab\Translate\Console\ScanCommand::class);
+        $this->registerConsoleCommand('translate.migratev1', \Rainlab\Translate\Console\MigrateV1Command::class);
 
         // Register asset bundles
         $this->registerAssetBundles();
-    }
-
-    /**
-     * extendLegacyPlatform will add the legacy features expected in v1.0
-     */
-    protected function extendLegacyPlatform()
-    {
-        // Adds translation support to file models
-        File::extend(function ($model) {
-            if (!$model->propertyExists('translatable')) {
-                $model->addDynamicProperty('translatable', []);
-            }
-            $model->translatable = array_merge($model->translatable, ['title', 'description']);
-            if (!$model->isClassExtendedWith(\October\Rain\Database\Behaviors\Purgeable::class)) {
-                $model->extendClassWith(\October\Rain\Database\Behaviors\Purgeable::class);
-            }
-            if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatableModel::class)) {
-                $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatableModel::class);
-            }
-        });
-
-        // Adds translation support to theme settings
-        ThemeData::extend(static function ($model) {
-            if (!$model->propertyExists('translatable')) {
-                $model->addDynamicProperty('translatable', []);
-            }
-
-            if (!$model->isClassExtendedWith(\October\Rain\Database\Behaviors\Purgeable::class)) {
-                $model->extendClassWith(\October\Rain\Database\Behaviors\Purgeable::class);
-            }
-            if (!$model->isClassExtendedWith(\RainLab\Translate\Behaviors\TranslatableModel::class)) {
-                $model->extendClassWith(\RainLab\Translate\Behaviors\TranslatableModel::class);
-            }
-
-            $model->bindEvent('model.afterFetch', static function() use ($model) {
-                foreach ($model->getFormFields() as $id => $field) {
-                    if (!empty($field['translatable'])) {
-                        $model->translatable[] = $id;
-                    }
-                }
-            });
-        });
     }
 
     /**
@@ -134,56 +54,14 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
-        // Set the page context for translation caching with high priority.
-        Event::listen('cms.page.init', function($controller, $page) {
-            EventRegistry::instance()->setMessageContext($page);
-        }, 100);
+        EventCoreRegistry::instance()->bootEvents();
+        EventPluginRegistry::instance()->bootEvents();
 
-        // Populate MenuItem properties with localized values if available
-        Event::listen('pages.menu.referencesGenerated', function (&$items) {
-            $locale = App::getLocale();
-            $iterator = function ($menuItems) use (&$iterator, $locale) {
-                $result = [];
-                foreach ($menuItems as $item) {
-                    $localeFields = array_get($item->viewBag, "locale.$locale", []);
-                    foreach ($localeFields as $fieldName => $fieldValue) {
-                        if ($fieldValue) {
-                            $item->$fieldName = $fieldValue;
-                        }
-                    }
-                    if ($item->items) {
-                        $item->items = $iterator($item->items);
-                    }
-                    $result[] = $item;
-                }
-                return $result;
-            };
-            $items = $iterator($items);
-        });
-
-        // Import messages defined by the theme
-        Event::listen('cms.theme.setActiveTheme', function($code) {
-            EventRegistry::instance()->importMessagesFromTheme($code);
-        });
-
-        // Adds language suffixes to content files.
-        Event::listen('cms.page.beforeRenderContent', function($controller, $fileName) {
-            return EventRegistry::instance()
-                ->findTranslatedContentFile($controller, $fileName)
-            ;
-        });
-
-        // Prune localized content files from template list
-        Event::listen('pages.content.templateList', function($widget, $templates) {
-            return EventRegistry::instance()
-                ->pruneTranslatedContentTemplates($templates)
-            ;
-        });
-
-        // Look at session for locale using middleware
-        \Cms\Classes\CmsController::extend(function($controller) {
-            $controller->middleware(\RainLab\Translate\Classes\LocaleMiddleware::class);
-        });
+        if (System::checkDebugMode()) {
+            App::after(function() {
+                Message::saveObserver();
+            });
+        }
 
         // Append current locale to static page's cache keys
         $modifyKey = function (&$key) {
@@ -227,29 +105,14 @@ class Plugin extends PluginBase
     }
 
     /**
-     * registerComponents
-     */
-    public function registerComponents()
-    {
-        return [
-           \RainLab\Translate\Components\LocalePicker::class => 'localePicker',
-           \RainLab\Translate\Components\AlternateHrefLangElements::class => 'alternateHrefLangElements'
-        ];
-    }
-
-    /**
      * registerPermissions
      */
     public function registerPermissions()
     {
         return [
-            'rainlab.translate.manage_locales'  => [
-                'tab' => 'rainlab.translate::lang.plugin.tab',
-                'label' => 'rainlab.translate::lang.plugin.manage_locales'
-            ],
             'rainlab.translate.manage_messages' => [
-                'tab' => 'rainlab.translate::lang.plugin.tab',
-                'label' => 'rainlab.translate::lang.plugin.manage_messages'
+                'tab' => 'Translation',
+                'label' => 'Manage messages'
             ]
         ];
     }
@@ -260,23 +123,13 @@ class Plugin extends PluginBase
     public function registerSettings()
     {
         return [
-            'locales' => [
-                'label' => 'rainlab.translate::lang.locale.title',
-                'description' => 'rainlab.translate::lang.plugin.description',
-                'icon' => 'icon-language',
-                'url' => Backend::url('rainlab/translate/locales'),
-                'order' => 550,
-                'category' => 'rainlab.translate::lang.plugin.name',
-                'permissions' => ['rainlab.translate.manage_locales'],
-                'keywords' => 'translate',
-            ],
             'messages' => [
-                'label' => 'rainlab.translate::lang.messages.title',
-                'description' => 'rainlab.translate::lang.messages.description',
+                'label' => 'Translate Messages',
+                'description' => 'Update messages used by the theme',
                 'icon' => 'icon-list-alt',
                 'url' => Backend::url('rainlab/translate/messages'),
                 'order' => 551,
-                'category' => 'rainlab.translate::lang.plugin.name',
+                'category' => SettingsManager::CATEGORY_CMS,
                 'permissions' => ['rainlab.translate.manage_messages'],
                 'keywords' => 'translate',
             ]
@@ -301,33 +154,12 @@ class Plugin extends PluginBase
     }
 
     /**
-     * registerFormWidgets for multi-lingual
-     */
-    public function registerFormWidgets()
-    {
-        $mediaFinderClass = class_exists('System')
-            ? \RainLab\Translate\FormWidgets\MLMediaFinderv2::class
-            : \RainLab\Translate\FormWidgets\MLMediaFinder::class;
-
-        return [
-            \RainLab\Translate\FormWidgets\MLText::class => 'mltext',
-            \RainLab\Translate\FormWidgets\MLTextarea::class => 'mltextarea',
-            \RainLab\Translate\FormWidgets\MLRichEditor::class => 'mlricheditor',
-            \RainLab\Translate\FormWidgets\MLMarkdownEditor::class => 'mlmarkdowneditor',
-            \RainLab\Translate\FormWidgets\MLRepeater::class => 'mlrepeater',
-            \RainLab\Translate\FormWidgets\MLNestedForm::class => 'mlnestedform',
-            $mediaFinderClass => 'mlmediafinder',
-        ];
-    }
-
-    /**
      * registerAssetBundles for compilation
      */
     protected function registerAssetBundles()
     {
         CombineAssets::registerCallback(function ($combiner) {
             $combiner->registerBundle('$/rainlab/translate/assets/less/messages.less');
-            $combiner->registerBundle('$/rainlab/translate/assets/less/multilingual.less');
         });
     }
 

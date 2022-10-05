@@ -1,22 +1,19 @@
 <?php namespace RainLab\Translate\Models;
 
-use Str;
-use Lang;
+use App;
 use Model;
-use Cache;
-use Config;
+use Carbon\Carbon;
+use RainLab\Translate\Classes\Locale;
 
 /**
  * Message Model
  */
 class Message extends Model
 {
-    const DEFAULT_LOCALE = 'x';
-
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'rainlab_translate_messages';
+    public $table = 'rainlab_translate_message_data';
 
     /**
      * @var array Guarded fields
@@ -26,129 +23,82 @@ class Message extends Model
     /**
      * @var array List of attribute names which are json encoded and decoded from the database.
      */
-    protected $jsonable = ['message_data'];
+    protected $jsonable = ['data', 'usage'];
 
     /**
-     * @var bool Indicates if the model should be timestamped.
+     * @var array cache for messages
      */
-    public $timestamps = false;
-
-    public static $hasNew = false;
-
-    public static $url;
-
-    public static $locale;
-
     public static $cache = [];
 
     /**
-     * Returns the value for the active locale.
-     * @return string
+     * @var array observeCache for messages
      */
-    public function getContentAttribute()
+    public static $observeCache = [];
+
+    /**
+     * @var int lastFindCount
+     */
+    protected static $lastFindCount;
+
+    /**
+     * trans
+     */
+    public static function trans($messageId, $params = [], $locale = null)
     {
-        return $this->forLocale(Lang::getLocale());
+        return self::translateInternal($messageId, $params, $locale);
     }
 
     /**
-     * Gets a message for a given locale, or the default.
-     * @param  string $locale
-     * @return string
+     * transRaw
      */
-    public function forLocale($locale = null, $default = null)
+    public static function transRaw($messageId, $params = [], $locale = null)
     {
-        if ($locale === null) {
-            $locale = self::DEFAULT_LOCALE;
-        }
-
-        if (!array_key_exists($locale, $this->message_data)) {
-            // search parent locale (e.g. en-US -> en) before returning default
-            list($locale) = explode('-', $locale);
-        }
-
-        if (array_key_exists($locale, $this->message_data)) {
-            return $this->message_data[$locale];
-        }
-
-        return $default;
+        return self::translateInternal($messageId, $params, $locale, true);
     }
 
     /**
-     * Writes a translated message to a locale.
-     * @param  string $locale
-     * @param  string $message
-     * @return void
+     * translateInternal
      */
-    public function toLocale($locale = null, $message = null)
+    public static function translateInternal($messageId, $params = [], $locale = null, $raw = false)
     {
-        if ($locale === null) {
-            return;
-        }
-
-        $data = $this->message_data;
-        $data[$locale] = $message;
-
-        if (!$message) {
-            unset($data[$locale]);
-        }
-
-        $this->message_data = $data;
-        $this->save();
-    }
-
-    /**
-     * Creates or finds an untranslated message string.
-     * @param  string $messageId
-     * @param  string $locale
-     * @return string
-     */
-    public static function get($messageId, $locale = null)
-    {
-        $locale = $locale ?: self::$locale;
         if (!$locale) {
-            return $messageId;
+            $locale = Locale::getDefaultSiteLocale();
         }
 
-        $messageCode = static::makeMessageCode($messageId);
-
-        /*
-         * Found in cache
-         */
-        if (array_key_exists($locale . $messageCode, self::$cache)) {
-            return self::$cache[$locale . $messageCode];
+        if (isset(self::$cache[$locale])) {
+            $messages = self::$cache[$locale];
+        }
+        else {
+            $messages = self::$cache[$locale] = (new self)->findMessages($locale);
         }
 
-        /*
-         * Uncached item
-         */
-        $item = static::firstOrNew([
-            'code' => $messageCode
-        ]);
+        $msg = $messages[$messageId] ?? $messageId;
 
-        /*
-         * Create a default entry
-         */
-        if (!$item->exists) {
-            $data = [static::DEFAULT_LOCALE => $messageId];
-            $item->message_data = $item->message_data ?: $data;
-            $item->save();
-        }
+        $params = array_build($params, function($key, $value) use ($raw) {
+            return [':'.$key, $raw ? $value : e($value)];
+        });
 
-        /*
-         * Schedule new cache and go
-         */
-        $msg = $item->forLocale($locale, $messageId);
-        self::$cache[$locale . $messageCode] = $msg;
-        self::$hasNew = true;
+        $msg = strtr($msg, $params);
+
+        self::observeMessage($messageId);
 
         return $msg;
     }
 
     /**
-     * Import an array of messages. Only known messages are imported.
-     * @param  array $messages
-     * @param  string $locale
-     * @return void
+     * getMessages
+     */
+    public static function getMessages($locale = null, $options = [])
+    {
+        if (!$locale) {
+            $locale = App::getLocale();
+        }
+
+        return (new self)->findMessages($locale, $options);
+    }
+
+    /**
+     * importMessages
      */
     public static function importMessages($messages, $locale = null)
     {
@@ -156,156 +106,187 @@ class Message extends Model
     }
 
     /**
-     * Import an array of messages. Only known messages are imported.
-     * @param  array $messages
-     * @param  string $locale
-     * @return void
+     * importMessageCodes
      */
     public static function importMessageCodes($messages, $locale = null)
     {
-        if ($locale === null) {
-            $locale = static::DEFAULT_LOCALE;
+        if (!$locale) {
+            $locale = Locale::getDefaultSiteLocale();
         }
 
-        $existingIds = [];
+        (new self)->updateMessages($locale, $messages);
+    }
 
-        foreach ($messages as $code => $message) {
-            // Ignore empties
-            if (!strlen(trim($message))) {
-                continue;
+    /**
+     * saveObserver
+     */
+    public static function saveObserver()
+    {
+        $messageKeys = array_keys(self::$observeCache);
+
+        (new self)->updateMessages(
+            Locale::getDefaultSiteLocale(),
+            array_combine($messageKeys, $messageKeys),
+            self::$observeCache
+        );
+    }
+
+    /**
+     * observeMessage
+     */
+    public static function observeMessage($messageId)
+    {
+        self::$observeCache[$messageId] = time();
+    }
+
+    /**
+     * updateMessage
+     */
+    public function updateMessage($locale, $key, $message)
+    {
+        $this->updateMessages($locale, [$key => $message]);
+    }
+
+    /**
+     * updateMessage
+     */
+    public function updateMessages($locale, $messages, $timestamps = null)
+    {
+        $messageData = $messages;
+
+        if ($record = $this->newQuery()->where('locale', $locale)->first()) {
+            $data = (array) $record->data;
+            $messageData = array_merge($data, (array) $messageData);
+        }
+        else {
+            $record = new self;
+            $record->locale = $locale;
+        }
+
+        if ($timestamps !== null && is_array($timestamps)) {
+            $usage = (array) $record->usage;
+            $record->usage = array_merge($usage, $timestamps);
+        }
+
+        $record->data = $messageData;
+        $record->save();
+    }
+
+    /**
+     * deleteMessage
+     */
+    public function deleteMessage($key)
+    {
+        $messages = $this->newQuery()->get();
+        foreach ($messages as $record) {
+            $data = $record->data;
+            unset($data[$key]);
+            $record->data = $data;
+            $record->save();
+        }
+    }
+
+    /**
+     * findMessages
+     */
+    public function findMessages($locale, $options = [])
+    {
+        extract(array_merge([
+            'search' => null,
+            'offset' => null,
+            'count' => null,
+            'withEmpty' => true,
+            'withUsage' => false
+        ], $options));
+
+        $defaultLocale = Locale::getDefault()->code;
+
+        // Find messages
+        $collection = $this->newQuery()->whereIn('locale', $withEmpty
+            ? [$locale, $defaultLocale]
+            : [$locale]
+        )->get();
+
+        $usage = [];
+        $messages = [];
+        foreach ($collection as $message) {
+            $usage[$message->locale] = $message->usage;
+            $messages[$message->locale] = $message->data;
+        }
+
+        // Process
+        if ($withEmpty) {
+            $result = [];
+            $emptyMessages = $messages[$defaultLocale] ?? [];
+            $sourceMessages = $messages[$locale] ?? [];
+            foreach ($emptyMessages as $key => $message) {
+                $result[$key] = $sourceMessages[$key] ?? null;
             }
+        }
+        else {
+            $result = $messages[$locale] ?? [];
+        }
 
-            $code = static::makeMessageCode($code);
-
-            $item = static::firstOrNew([
-                'code' => $code
-            ]);
-
-            // Do not import non-default messages that do not exist
-            if (!$item->exists && $locale != static::DEFAULT_LOCALE) {
-                continue;
+        // Usage stats
+        if ($withUsage) {
+            foreach ($result as $key => $message) {
+                $time = $usage[$locale][$key] ?? null;
+                if ($time) {
+                    $result[$key] = (new Carbon($time))->diffForHumans();
+                }
+                else {
+                    $result[$key] = __("Never");
+                }
             }
+            arsort($result);
+        }
 
-            $messageData = $item->exists || $item->message_data ? $item->message_data : [];
+        // Search
+        if ($search) {
+            $result = $this->applySearchToResult($result, $search);
+        }
 
-            // Do not overwrite existing translations.
-            if (isset($messageData[$locale])) {
-                $existingIds[] = $item->id;
-                continue;
+        // Remember count
+        self::$lastFindCount = count($result);
+
+        // Count
+        if ($count) {
+            $result = $this->applyCountToResult($result, $count, $offset);
+        }
+
+        return $result;
+    }
+
+    /**
+     * getLastCount
+     */
+    public static function getLastCount(): int
+    {
+        return self::$lastFindCount;
+    }
+
+    /**
+     * applyCountToResult
+     */
+    public function applyCountToResult($result, $count, $offset)
+    {
+        return array_slice($result, $offset ?: 0, $count);
+    }
+
+    /**
+     * applySearchToResult
+     */
+    public function applySearchToResult($result, $search)
+    {
+        foreach ($result as $key => $message) {
+            if (
+                stripos($message, $search) === false &&
+                stripos($key, $search) === false
+            ) {
+                unset($result[$key]);
             }
-
-            $messageData[$locale] = $message;
-
-            $item->message_data = $messageData;
-            $item->found = true;
-
-            $item->save();
         }
 
-        // Set all messages found by the scanner as found
-        self::whereIn('id', $existingIds)->update(['found' => true]);
-    }
-
-    /**
-     * Looks up and translates a message by its string.
-     * @param  string $messageId
-     * @param  array  $params
-     * @param  string $locale
-     * @return string
-     */
-    public static function trans($messageId, $params = [], $locale = null)
-    {
-        $msg = static::get($messageId, $locale);
-
-        $params = array_build($params, function($key, $value){
-            return [':'.$key, e($value)];
-        });
-
-        $msg = strtr($msg, $params);
-
-        return $msg;
-    }
-
-    /**
-     * Looks up and translates a message by its string WITHOUT escaping params.
-     * @param  string $messageId
-     * @param  array  $params
-     * @param  string $locale
-     * @return string
-     */
-    public static function transRaw($messageId, $params = [], $locale = null)
-    {
-        $msg = static::get($messageId, $locale);
-
-        $params = array_build($params, function($key, $value){
-            return [':'.$key, $value];
-        });
-
-        $msg = strtr($msg, $params);
-
-        return $msg;
-    }
-
-    /**
-     * Set the caching context, the page url.
-     * @param string $locale
-     * @param string $url
-     */
-    public static function setContext($locale, $url = null)
-    {
-        if (!strlen($url)) {
-            $url = '/';
-        }
-
-        self::$url = $url;
-        self::$locale = $locale;
-
-        if ($cached = Cache::get(static::makeCacheKey())) {
-            self::$cache = (array) $cached;
-        }
-    }
-
-    /**
-     * Save context messages to cache.
-     * @return void
-     */
-    public static function saveToCache()
-    {
-        if (!self::$hasNew || !self::$url || !self::$locale) {
-            return;
-        }
-
-        $expiresAt = now()->addMinutes(Config::get('rainlab.translate::cacheTimeout', 1440));
-        Cache::put(static::makeCacheKey(), self::$cache, $expiresAt);
-    }
-
-    /**
-     * Creates a cache key for storing context messages.
-     * @return string
-     */
-    protected static function makeCacheKey()
-    {
-        return 'translation.'.self::$locale.self::$url;
-    }
-
-    /**
-     * Creates a sterile key for a message.
-     * @param  string $messageId
-     * @return string
-     */
-    protected static function makeMessageCode($messageId)
-    {
-        $separator = '.';
-
-        // Convert all dashes/underscores into separator
-        $messageId = preg_replace('!['.preg_quote('_').'|'.preg_quote('-').']+!u', $separator, $messageId);
-
-        // Remove all characters that are not the separator, letters, numbers, or whitespace.
-        $messageId = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', mb_strtolower($messageId));
-
-        // Replace all separator characters and whitespace by a single separator
-        $messageId = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $messageId);
-
-        return Str::limit(trim($messageId, $separator), 250);
+        return $result;
     }
 }

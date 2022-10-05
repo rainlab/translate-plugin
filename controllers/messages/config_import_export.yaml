@@ -1,9 +1,30 @@
+defaultFormatOptions:
+    customJson: true
+
 import:
-    title: 'rainlab.translate::lang.messages.import_messages_link'
+    title: Import Messages
     modelClass: RainLab\Translate\Models\MessageImport
     redirect: rainlab/translate/messages
+    list:
+        columns:
+            key: Key
+            message: Message
+    form:
+        fields:
+            locale:
+                label: Language
+                type: dropdown
 
 export:
-    title: 'rainlab.translate::lang.messages.export_messages_link'
+    title: Export Messages
     modelClass: RainLab\Translate\Models\MessageExport
     redirect: rainlab/translate/messages
+    list:
+        columns:
+            key: Key
+            message: Message
+    form:
+        fields:
+            locale:
+                label: Language
+                type: dropdown

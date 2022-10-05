@@ -3,7 +3,7 @@
 use PluginTestCase;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Models\MessageExport;
-use RainLab\Translate\Models\Locale;
+use RainLab\Translate\Classes\Locale;
 
 class ExportMessageTest extends PluginTestCase
 {

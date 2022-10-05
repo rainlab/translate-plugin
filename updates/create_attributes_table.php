@@ -5,12 +5,10 @@ use October\Rain\Database\Updates\Migration;
 
 class CreateAttributesTable extends Migration
 {
-
     public function up()
     {
         Schema::create('rainlab_translate_attributes', function($table)
         {
-            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('locale')->index();
             $table->string('model_id')->index()->nullable();
@@ -23,5 +21,4 @@ class CreateAttributesTable extends Migration
     {
         Schema::dropIfExists('rainlab_translate_attributes');
     }
-
 }

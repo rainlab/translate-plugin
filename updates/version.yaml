@@ -1,99 +1,20 @@
 v1.0.1:
     - First version of Translate
-    - create_messages_table.php
     - create_attributes_table.php
-    - create_locales_table.php
-v1.0.2: Languages and Messages can now be deleted.
-v1.0.3: Minor updates for latest October release.
-v1.0.4: Locale cache will clear when updating a language.
-v1.0.5: Add Spanish language and fix plugin config.
-v1.0.6: Minor improvements to the code.
-v1.0.7: Fixes major bug where translations are skipped entirely!
-v1.0.8: Minor bug fixes.
-v1.0.9: Fixes an issue where newly created models lose their translated values.
-v1.0.10: Minor fix for latest build.
-v1.0.11: Fix multilingual rich editor when used in stretch mode.
-v1.1.0: Introduce compatibility with RainLab.Pages plugin.
-v1.1.1: Minor UI fix to the language picker.
-v1.1.2: Add support for translating Static Content files.
-v1.1.3: Improved support for the multilingual rich editor.
-v1.1.4: Adds new multilingual markdown editor.
-v1.1.5: Minor update to the multilingual control API.
-v1.1.6: Minor improvements in the message editor.
-v1.1.7: Fixes bug not showing content when first loading multilingual textarea controls.
-v1.2.0: CMS pages now support translating the URL.
-v1.2.1: Minor update in the rich editor and code editor language control position.
-v1.2.2: Static Pages now support translating the URL.
-v1.2.3: Fixes Rich Editor when inserting a page link.
-v1.2.4:
-    - Translatable attributes can now be declared as indexes.
     - create_indexes_table.php
-v1.2.5: Adds new multilingual repeater form widget.
-v1.2.6: Fixes repeater usage with static pages plugin.
-v1.2.7: Fixes placeholder usage with static pages plugin.
-v1.2.8: Improvements to code for latest October build compatibility.
-v1.2.9: Fixes context for translated strings when used with Static Pages.
-v1.2.10: Minor UI fix to the multilingual repeater.
-v1.2.11: Fixes translation not working with partials loaded via AJAX.
-v1.2.12: Add support for translating the new grouped repeater feature.
+v1.1.0: Introduce compatibility with RainLab.Pages plugin.
+v1.2.0: CMS pages now support translating the URL.
 v1.3.0: Added search to the translate messages page.
-v1.3.1:
-    - Added reordering to languages
-    - builder_table_update_rainlab_translate_locales.php
-    - seed_all_tables.php
-v1.3.2: Improved compatibility with RainLab.Pages, added ability to scan Mail Messages for translatable variables.
-v1.3.3: Fix to the locale picker session handling in Build 420 onwards.
-v1.3.4: Add alternate hreflang elements and adds prefixDefaultLocale setting.
-v1.3.5: Fix MLRepeater bug when switching locales.
-v1.3.6: Fix Middleware to use the prefixDefaultLocale setting introduced in 1.3.4
-v1.3.7: Fix config reference in LocaleMiddleware
-v1.3.8: Keep query string when switching locales
 v1.4.0: Add importer and exporter for messages
-v1.4.1: Updated Hungarian translation. Added Arabic translation. Fixed issue where default texts are overwritten by import. Fixed issue where the language switcher for repeater fields would overlap with the first repeater row.
-v1.4.2: Add multilingual MediaFinder
-v1.4.3: "!!! Please update OctoberCMS to Build 444 before updating this plugin. Added ability to translate CMS Pages fields (e.g. title, description, meta-title, meta-description)"
-v1.4.4: Minor improvements to compatibility with Laravel framework.
-v1.4.5: Fixed issue when using the language switcher
 v1.5.0: Compatibility fix with Build 451
 v1.6.0: Make File Upload widget properties translatable. Merge Repeater core changes into MLRepeater widget. Add getter method to retrieve original translate data.
-v1.6.1: Add ability for models to provide translated computed data, add option to disable locale prefix routing
-v1.6.2: Implement localeUrl filter, add per-locale theme configuration support
-v1.6.3: Add eager loading for translations, restore support for accessors & mutators
-v1.6.4: Fixes PHP 7.4 compatibility
-v1.6.5: Fixes compatibility issue when other plugins use a custom model morph map
-v1.6.6:
-    - Introduce migration to patch existing translations using morph map
-    - migrate_morphed_attributes.php
-v1.6.7:
-    - Introduce migration to patch existing indexes using morph map
-    - migrate_morphed_indexes.php
-v1.6.8: Add support for transOrderBy; Add translation support for ThemeData; Update russian localization.
-v1.6.9: Clear Static Page menu cache after saving the model; CSS fix for Text/Textarea input fields language selector.
-v1.6.10:
-    - Add option to purge deleted messages when scanning messages, Add Scan error column on Messages page, Fix translations that were lost when clicking locale twice while holding ctrl key, Fix error with nested fields default locale value, Escape Message translate params value.
-    - update_messages_table.php
-v1.7.0: "!!! Breaking change for the Message::trans() method (params are now escaped), fix message translation documentation, fix string translation key for scan errors column header."
-v1.7.1: Fix YAML issue with previous tag/release.
-v1.7.2: Fix regex when "|_" filter is followed by another filter, Try locale without country before returning default translation, Allow exporting default locale, Fire 'rainlab.translate.themeScanner.afterScan' event in the theme scanner for extendability.
-v1.7.3: Make plugin ready for Laravel 6 update, Add support for translating RainLab.Pages MenuItem properties (requires RainLab.Pages v1.3.6), Restore multilingual button position for textarea, Fix translatableAttributes.
-v1.7.4: Faster version of transWhere, Mail templates/views can now be localized, Fix messages table layout on mobile, Fix scopeTransOrderBy duplicates, Polish localization updates, Turkish localization updates, Add Greek language localization.
+v1.7.0: Breaking change for the Message::trans() method (params are now escaped), fix message translation documentation, fix string translation key for scan errors column header.
 v1.8.0: Adds initial support for October v2.0
-v1.8.1: Minor bugfix
-v1.8.2: Fixes translated file models and theme data for v2.0. The parent model must implement translatable behavior for their related file models to be translated.
-v1.8.4: Fixes the multilingual mediafinder to work with the media module.
-v1.8.6: Fixes invisible checkboxes when scanning for messages.
-v1.8.7: Fixes Markdown editor translation.
-v1.8.8: Fixes Laravel compatibility in custom Repeater.
 v1.9.0: Restores ability to translate URLs with CMS Editor in October v2.0
-v1.9.1: Minor styling improvements
-v1.9.2: Fixes issue creating new content in CMS Editor
-v1.9.3: Improves support when using child themes
 v1.10.0: Adds new multilingual nested form widget. Adds withFallbackLocale method.
-v1.10.1: Improve support with October v2.0
-v1.10.2: Improve support with October v2.2
-v1.10.3: Multilingual control improvements
-v1.10.4: Improve media finder support with October v2.2
-v1.10.5: Fixes media finder when only 1 locale is available
 v1.11.0: Update to latest Media Finder changes in October v2.2
-v1.11.1: Improve support with October v3.0
 v1.12.0: Adds scopeTransWhereNoFallback method
+v2.0.0: Major upgrade and multisite integration
+v2.0.1:
+    - Create message data store
+    - create_message_data_table.php

@@ -1,0 +1,20 @@
+{
+    "Translate": "مترجم",
+    "Enables multi-lingual websites.": "فعال سازی وب سایت چند زبانه",
+    "Translate Messages": "ترجمه پیغام ها",
+    "Update messages used by the theme": "به روز رسانی پیغام ها",
+    "Translation": "ترجمه",
+    "Manage messages": "مدیریت پیغام ها",
+    "Clearing application cache...": "در حال پاکسازی حافظه کش برنامه...",
+    "Clear Cache": "پاکسازی حافظه کش",
+    "Scan for Messages": "جستجوی پیغام ها",
+    "Scanning for new messages...": "جستجوی پیغام های جدید...",
+    "Cleared the application cache successfully!": "عملیات پاکسازی حافظه کش به اتمام رسید.",
+    "Scanned theme template files successfully!": "جستجوی پیغام های جدید به اتمام رسید.",
+    "Here you can translate messages used on the front-end, the fields will save automatically.": "در این قسمت شما میتوانید پیغام ها را ترجمه نمایید. گزینه ها به صورت خودکار ذخیره میشوند.",
+    "You may need to click <strong>Clear cache<\/strong> to see the changes on the front-end.": "جهت نمایش تغیرات در سایت نیاز است که شما بر رور <strong> پاکسازی حافظه کش <\/strong> کلیک نمایید.",
+    "Clicking <strong>Scan for messages<\/strong> will check the active theme files for any new messages to translate.": "جهت جستجو و نمایش پیغامهای جدیدی که باید ترجمه شوند بر روی <strong> جستجوی پیغام های جدید <\/strong> کلیک نمایید.",
+    "default": "پیشفرض",
+    "Hide Translated": "مخفی سازی ترجمه شده ها",
+    "There are no other languages set up.": "زبان دیگری جهت نصب وجود ندارد."
+}

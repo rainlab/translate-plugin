@@ -1,7 +1,7 @@
 <?php namespace RainLab\Translate\Classes;
 
 /**
- * Represents a multi-lingual Static Page object.
+ * MLStaticPage represents a multi-lingual Static Page object used by the pages plugin.
  *
  * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
@@ -53,20 +53,12 @@ class MLStaticPage extends MLCmsObject
                 continue;
             }
 
-            // October CMS v2.2 and above
-            if (class_exists('System') && version_compare(\System::VERSION, '2.1') === 1) {
-                $names = $node->getNode('names');
-                $values = $node->getNode('values');
-                $isCapture = $node->getAttribute('capture');
-                if ($isCapture) {
-                    $name = $names->getNode(0);
-                    $result[$name->getAttribute('name')] = trim($values->getAttribute('data'));
-                }
-            }
-            // Legacy PutNode support
-            else {
-                $values = $node->getNode('body');
-                $result[$node->getAttribute('name')] = trim($values->getAttribute('data'));
+            $names = $node->getNode('names');
+            $values = $node->getNode('values');
+            $isCapture = $node->getAttribute('capture');
+            if ($isCapture) {
+                $name = $names->getNode(0);
+                $result[$name->getAttribute('name')] = trim($values->getAttribute('data'));
             }
         }
 

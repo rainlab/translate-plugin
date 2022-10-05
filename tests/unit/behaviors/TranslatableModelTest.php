@@ -5,7 +5,7 @@ use Schema;
 use PluginTestCase;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Tests\Fixtures\Models\Country as CountryModel;
-use RainLab\Translate\Models\Locale as LocaleModel;
+use RainLab\Translate\Classes\Locale as LocaleModel;
 use October\Rain\Database\Relations\Relation;
 
 class TranslatableModelTest extends PluginTestCase

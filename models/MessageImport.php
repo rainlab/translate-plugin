@@ -1,70 +1,95 @@
 <?php namespace RainLab\Translate\Models;
 
 use Backend\Models\ImportModel;
+use RainLab\Translate\Classes\Locale;
+use ValidationException;
+use Exception;
 
 class MessageImport extends ImportModel
 {
-
-    public $rules = [
-        'code' => 'required'
-    ];
+    /**
+     * @var array rules for validation
+     */
+    public $rules = [];
 
     /**
      * Import the message data from a csv with the following schema:
      *
-     * code  | en    | de    | fr
-     * -------------------------------
-     * title | Title | Titel | Titre
-     * name  | Name  | Name  | Prénom
+     * key    | message
+     * -----------------
+     * Title  | Titel
+     * Name   | Prénom
      * ...
+     *
+     * JSON uses a key/pair format:
+     *
+     * { "Title": "Titel", "Name": "Prénom" }
      *
      * The code column is required and must not be empty.
      *
      * Note: Messages with an existing code are not removed/touched if the import
      * doesn't contain this code. As a result you can incrementally update the
-     * messages by just adding the new codes and messages to the csv.
+     * messages by just adding the new codes and messages to the file.
      *
      * @param $results
      * @param null $sessionKey
      */
     public function importData($results, $sessionKey = null)
     {
-        $codeName = MessageExport::CODE_COLUMN_NAME;
-        $defaultName = Message::DEFAULT_LOCALE;
+        if (!$this->locale) {
+            throw new ValidationException(['locale' => 'Please select a locale to export']);
+        }
 
-        foreach ($results as $index => $result) {
+        $knownMessages = Message::getMessages($this->locale, ['withEmpty' => false]);
+        $messages = [];
+        $count = 0;
+        foreach ($results as $key => $result) {
+            $count++;
             try {
-                if (isset($result[$codeName]) && !empty($result[$codeName])) {
-                    $code = $result[$codeName];
-
-                    // Modify result to match the expected message_data schema
-                    unset($result[$codeName]);
-
-                    $message = Message::firstOrNew(['code' => $code]);
-
-                    // Create empty array, if $message is new
-                    $message->message_data = $message->message_data ?: [];
-
-                    if (!isset($message->message_data[$defaultName])) {
-                        $default = (isset($result[$defaultName]) && !empty($result[$defaultName])) ? $result[$defaultName] : $code;
-                        $result[$defaultName] = $default;
-                    }
-
-                    $message->message_data = array_merge($message->message_data, $result);
-
-                    if ($message->exists) {
-                        $this->logUpdated();
-                    } else {
-                        $this->logCreated();
-                    }
-
-                    $message->save();
-                } else {
-                    $this->logSkipped($index, 'No code provided');
+                $exists = false;
+                if ($this->file_format === 'json') {
+                    $messages[$key] = $result;
+                    $exists = isset($knownMessages[$key]);
                 }
-            } catch (\Exception $exception) {
-                $this->logError($index, $exception->getMessage());
+                else {
+                    $_key = $result['key'];
+                    $messages[$_key] = $result['message'];
+                    $exists = isset($knownMessages[$_key]);
+                }
+
+                if ($exists) {
+                    $this->logUpdated();
+                }
+                else {
+                    $this->logCreated();
+                }
+            }
+            catch (Exception $exception) {
+                $this->logError($count, $exception->getMessage());
             }
         }
+
+        (new Message)->updateMessages($this->locale, $messages);
+    }
+
+    /**
+     * getLocaleOptions returns available options for the "locale" attribute.
+     * @return array
+     */
+    public function getLocaleOptions()
+    {
+        $options = [];
+
+        foreach (Locale::listLocales() as $locale) {
+            $options[$locale->code] = "{$locale->name} [$locale->code]";
+        }
+
+        // Make the active locale first and therefore default
+        $locale = Locale::getSiteLocaleFromContext();
+        if ($active = array_pull($options, $locale)) {
+            $options = [$locale => $active] + $options;
+        }
+
+        return $options;
     }
 }

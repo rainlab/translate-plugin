@@ -1,0 +1,20 @@
+{
+    "Translate": "Превод",
+    "Enables multi-lingual websites.": "Активира функцията многоезични уебсайтове.",
+    "Translate Messages": "Преведени Съобщения",
+    "Update messages used by the theme": "Актуализарай Съобщения",
+    "Translation": "Преводи",
+    "Manage messages": "Настройка на съобщения",
+    "Clearing application cache...": "Изчистване кеша на приложението...",
+    "Clear Cache": "Изтрий кеш-паметта",
+    "Scan for Messages": "Сканирай за съобщения",
+    "Scanning for new messages...": "Сканиране за нови съобщения...",
+    "Cleared the application cache successfully!": "Кеш кеш-паметта успешно изтрита!",
+    "Scanned theme template files successfully!": "Темата е сканирана успешно!",
+    "Here you can translate messages used on the front-end, the fields will save automatically.": "Тук може да превеждате съобщенията (изреченията) на самият сайт, полетата ще се запазят автоматично.",
+    "You may need to click <strong>Clear cache<\/strong> to see the changes on the front-end.": "Може да е необходимо да кликнете на бутона <strong>Изтрий кеш-паметта<\/strong> за да видите промените на вашата страница.",
+    "Clicking <strong>Scan for messages<\/strong> will check the active theme files for any new messages to translate.": "Ако кликнете на <strong>Сканирай за съобщения<\/strong> това ще провери темата за нови съобщения (изречения) за превод.",
+    "default": "по подразбиране",
+    "Hide Translated": "Скрий преведените",
+    "There are no other languages set up.": "Не съществуват други езици за настройка."
+}

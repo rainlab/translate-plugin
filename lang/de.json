@@ -1,0 +1,21 @@
+{
+    "Translate": "Translate",
+    "Enables multi-lingual websites.": "Ermöglicht mehrsprachige Seiten.",
+    "Translate Messages": "Übersetzungen verwalten",
+    "Update messages used by the theme": "Inhalte verwalten und übersetzen",
+    "Manage messages": "Übersetzungen verwalten",
+    "Clearing application cache...": "Leere Application-Cache...",
+    "Clear Cache": "Cache leeren",
+    "Scan for Messages": "Nach Inhalten suchen",
+    "Import Messages": "Übersetzungen importieren",
+    "Export Messages": "Übersetzungen exportieren",
+    "Scanning for new messages...": "Suche nach neuen Inhalte...",
+    "Cleared the application cache successfully!": "Application-Cache erfolgreich geleert!",
+    "Scanned theme template files successfully!": "Suche nach neuen Inhalte erfolgreich abgeschlossen!",
+    "Here you can translate messages used on the front-end, the fields will save automatically.": "Hier können Inhalte aus dem Frontend übersetzt werden. Die Felder werden automatisch gespeichert.",
+    "You may need to click <strong>Clear cache<\/strong> to see the changes on the front-end.": "Möglicherweise muss der Cache geleert werden (Button <strong>Cache leeren<\/strong>), bevor Änderungen im Frontend sichtbar werden.",
+    "Clicking <strong>Scan for messages<\/strong> will check the active theme files for any new messages to translate.": "Ein Klick auf <strong>Nach Inhalten suchen<\/strong> sucht nach neuen Inhalten, die übersetzt werden können.",
+    "default": "Standard",
+    "Hide Translated": "Bereits übersetzte Inhalte ausblenden",
+    "There are no other languages set up.": "Es gibt keine anderen Sprachen."
+}

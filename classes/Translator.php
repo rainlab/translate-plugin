@@ -5,7 +5,7 @@ use Config;
 use Schema;
 use Session;
 use Request;
-use RainLab\Translate\Models\Locale;
+use RainLab\Translate\Classes\Locale;
 
 /**
  * Translator class
@@ -42,8 +42,8 @@ class Translator
      */
     public function init()
     {
-        $this->defaultLocale = $this->isConfigured() ? array_get(Locale::getDefault(), 'code', 'en') : 'en';
-        $this->activeLocale = $this->defaultLocale;
+        $this->defaultLocale = Locale::getDefaultSiteLocale();
+        $this->activeLocale = Locale::getSiteLocaleFromContext();
     }
 
     /**
@@ -120,53 +120,6 @@ class Translator
     //
     // Request handling
     //
-
-    /**
-     * handleLocaleRoute will check if the route contains a translated locale prefix (/en/)
-     * and return that locale to be registered with the router.
-     * @return string
-     */
-    public function handleLocaleRoute()
-    {
-        if (Config::get('rainlab.translate::disableLocalePrefixRoutes', false)) {
-            return '';
-        }
-
-        if (App::runningInBackend()) {
-            return '';
-        }
-
-        if (!$this->isConfigured()) {
-            return '';
-        }
-
-        if (!$this->loadLocaleFromRequest()) {
-            return '';
-        }
-
-        $locale = $this->getLocale();
-        if (!$locale) {
-            return '';
-        }
-
-        return $locale;
-    }
-
-    /**
-     * Sets the locale based on the first URI segment.
-     * @return bool
-     */
-    public function loadLocaleFromRequest()
-    {
-        $locale = Request::segment(1);
-
-        if (!Locale::isValid($locale)) {
-            return false;
-        }
-
-        $this->setLocale($locale);
-        return true;
-    }
 
     /**
      * Returns the current path prefixed with language code.

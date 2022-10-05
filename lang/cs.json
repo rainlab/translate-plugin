@@ -1,0 +1,20 @@
+{
+    "Translate": "Překlady",
+    "Enables multi-lingual websites.": "Aktivuje vícejazyčné stránky a překlady.",
+    "Translate Messages": "Překlad textů",
+    "Update messages used by the theme": "Upravit text",
+    "Translation": "Překlad",
+    "Manage messages": "Správa překladů",
+    "Clearing application cache...": "Mazání aplikační cache...",
+    "Clear Cache": "Vymazat cache",
+    "Scan for Messages": "Najít texty k překladu",
+    "Scanning for new messages...": "Hledání textů k překladu...",
+    "Cleared the application cache successfully!": "Aplikační cache úspěšně vymazána!",
+    "Scanned theme template files successfully!": "Prohledávání šablon pro získání textů k překladu úspěšně dokončeno!",
+    "Here you can translate messages used on the front-end, the fields will save automatically.": "Zde můžete přeložit texty použité na webových stránkách. Pole budou automaticky uložena.",
+    "You may need to click <strong>Clear cache<\/strong> to see the changes on the front-end.": "Možná bude potřeba kliknout na <strong>Vymazat cache<\/strong>, aby se změny projevily na webobých stránkách.",
+    "Clicking <strong>Scan for messages<\/strong> will check the active theme files for any new messages to translate.": "Kliknutím na <strong>Najít texty k překladu<\/strong> zkontroluje soubory aktivních témat a najde texty k překladu.",
+    "default": "výchozí",
+    "Hide Translated": "Schovat přeložené",
+    "There are no other languages set up.": "Nemáte nastavené žádné jiné jazyky."
+}
