@@ -143,10 +143,6 @@ class Messages extends Controller
         // Make table config, make default column read only
         $config = $this->makeConfig('config_table.yaml');
 
-        if ($this->pruneMessages) {
-            $config->columns['to']['readOnly'] = true;
-        }
-
         // Make table widget
         $widget = $this->makeWidget(\Backend\Widgets\Table::class, $config);
         $widget->bindToController();

@@ -36,9 +36,13 @@
             this.setTitleContents();
         }
 
-        this.togglePruned = function(isHide) {
-            this.pruneMessages = isHide;
+        this.togglePruned = function(isPrune) {
+            this.pruneMessages = isPrune;
             this.setTitleContents();
+
+            this.tableElement.table('setColumnConfiguration', 'to', {
+                readOnly: isPrune
+            });
         }
 
         this.setToolbarContents = function(tableToolbar) {
