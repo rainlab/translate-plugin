@@ -19,3 +19,4 @@ v2.0.1:
     - Create message data store
     - create_message_data_table.php
 v2.0.2: Fixes various bugs in message translation
+v2.0.3: Remove deprecated class
