@@ -156,7 +156,7 @@ class ThemeScanner
      * @param  string $content
      * @return array
      */
-    protected function parseContent($content)
+    public function parseContent($content)
     {
         $messages = [];
         $messages = array_merge($messages, $this->processStandardTags($content));
