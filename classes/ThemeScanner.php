@@ -107,7 +107,7 @@ class ThemeScanner
             }
 
             if (is_array($messages)) {
-                (new Message)->updateMessages($locale, $messages);
+                Message::importMessageCodes($messages, $locale);
             }
         }
     }

@@ -62,7 +62,7 @@ class Message extends Model
     public static function translateInternal($messageId, $params = [], $locale = null, $raw = false)
     {
         if (!$locale) {
-            $locale = Locale::getDefaultSiteLocale();
+            $locale = Locale::getSiteLocaleFromContext();
         }
 
         if (isset(self::$cache[$locale])) {
@@ -114,7 +114,7 @@ class Message extends Model
             $locale = Locale::getDefaultSiteLocale();
         }
 
-        (new self)->updateMessages($locale, $messages);
+        (new self)->updateObservedMessages($locale, $messages);
     }
 
     /**
@@ -124,7 +124,7 @@ class Message extends Model
     {
         $messageKeys = array_keys(self::$observeCache);
 
-        (new self)->updateMessages(
+        (new self)->updateObservedMessages(
             Locale::getDefaultSiteLocale(),
             array_combine($messageKeys, $messageKeys),
             self::$observeCache
@@ -150,13 +150,45 @@ class Message extends Model
     /**
      * updateMessage
      */
-    public function updateMessages($locale, $messages, $timestamps = null)
+    public function updateMessages($locale, $messages)
     {
+        $this->updateMessagesInternal($messages, ['locale' => $locale]);
+    }
+
+    /**
+     * updateObservedMessages
+     */
+    public function updateObservedMessages($locale, $messages, $timestamps = null)
+    {
+        $this->updateMessagesInternal($messages, [
+            'locale' => $locale,
+            'timestamps' => $timestamps,
+            'overwrite' => false
+        ]);
+    }
+
+    /**
+     * updateMessagesInternal
+     */
+    protected function updateMessagesInternal($messages, $options = [])
+    {
+        extract(array_merge([
+            'locale' => null,
+            'timestamps' => null,
+            'overwrite' => true
+        ], $options));
+
+        if (!$locale) {
+            $locale = Locale::getDefaultSiteLocale();
+        }
+
         $messageData = $messages;
 
         if ($record = $this->newQuery()->where('locale', $locale)->first()) {
             $data = (array) $record->data;
-            $messageData = array_merge($data, (array) $messageData);
+            $messageData = $overwrite
+                ? array_merge($data, (array) $messageData)
+                : array_merge((array) $messageData, $data);
         }
         else {
             $record = new self;

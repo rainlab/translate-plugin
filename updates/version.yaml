@@ -18,3 +18,4 @@ v2.0.0: Major upgrade and multisite integration
 v2.0.1:
     - Create message data store
     - create_message_data_table.php
+v2.0.2: Fixes various bugs in message translation

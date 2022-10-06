@@ -10,7 +10,7 @@ Beginning from October CMS v3.1, a multisite feature was introduced that superce
 
 1. Navigate to **System → Sites** and create a site for each locale used by the website.
 
-1. Replace the `localePicker` and `alternateHrefLangElements` components used in the front end.
+1. Replace the `localePicker` and `alternateHrefLangElements` components used in the front end (see below).
 
 1. Migrate theme messages using `php artisan translate:migratev1` (non destructive).
 
