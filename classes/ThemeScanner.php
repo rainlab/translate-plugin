@@ -4,6 +4,8 @@ use Cms\Classes\Page;
 use Cms\Classes\Theme;
 use Cms\Classes\Layout;
 use Cms\Classes\Partial;
+use Cms\Classes\ComponentManager;
+use Cms\Classes\ComponentPartial;
 use RainLab\Translate\Models\Message;
 use System\Models\MailTemplate;
 use Exception;
@@ -47,6 +49,7 @@ class ThemeScanner
     {
         $this->scanThemeConfigForMessages();
         $this->scanThemeTemplatesForMessages();
+        $this->scanCmsComponentsForMessages();
         $this->scanMailTemplatesForMessages();
     }
 
@@ -113,8 +116,7 @@ class ThemeScanner
     }
 
     /**
-     * Scans the theme templates for message references.
-     * @return void
+     * scanThemeTemplatesForMessages
      */
     public function scanThemeTemplatesForMessages()
     {
@@ -136,8 +138,28 @@ class ThemeScanner
     }
 
     /**
-     * Scans the mail templates for message references.
-     * @return void
+     * scanCmsComponentsForMessages
+     */
+    public function scanCmsComponentsForMessages()
+    {
+        $messages = [];
+
+        $manager = ComponentManager::instance();
+
+        foreach ($manager->listComponents() as $componentClass) {
+            $componentObj = $manager->makeComponent($componentClass);
+
+            $partial = ComponentPartial::load($componentObj, 'default');
+            if ($partial) {
+                $messages = array_merge($messages, $this->parseContent($partial->content));
+            }
+        }
+
+        Message::importMessages($messages);
+    }
+
+    /**
+     * scanMailTemplatesForMessages
      */
     public function scanMailTemplatesForMessages()
     {
