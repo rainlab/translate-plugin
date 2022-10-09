@@ -12,6 +12,24 @@ The visitor can select a language by prefixing the language code to the URL or u
 * `http://website.tld/ru/` will display the site in Russian
 * `http://website.tld/fr/` will display the site in French
 
+### License
+
+This plugin is an official extension of the October CMS platform and is free to use if you have a platform license. See [EULA license](LICENSE.md) for more details.
+
+### Installation
+
+To install using October CMS v3.1 or above:
+
+```
+php artisan plugin:install rainlab.translate
+```
+
+To install using October CMS v3.0 and below:
+
+```
+php artisan plugin:install rainlab.translate --want="^1.0"
+```
+
 ## Language Picker Component
 
 A visitor can select their chosen language using the native `SitePicker` component that is included in the October CMS core. This component will display a simple dropdown that changes the page language depending on the selection.
@@ -412,7 +430,3 @@ public function registerMarkupTags()
 #### Switching Locales
 
 Users can switch between locales by clicking on the site selection menu in the backend panel. This will add a `_site_id` query value to the URL, allowing for multiple browser tabs to be used.
-
-### License
-
-This plugin is an official extension of the October CMS platform and is free to use if you have a platform license. See [EULA license](LICENSE.md) for more details.
