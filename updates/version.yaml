@@ -21,3 +21,4 @@ v2.0.1:
 v2.0.2: Fixes various bugs in message translation
 v2.0.3: Remove deprecated class
 v2.0.4: Include component default partials in theme scanner
+v2.0.5: Reset locale when edit site changes programatically

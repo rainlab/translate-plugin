@@ -1,6 +1,7 @@
 <?php namespace RainLab\Translate\Classes;
 
 use App;
+use Event;
 use Config;
 use Schema;
 use Session;
@@ -44,6 +45,11 @@ class Translator
     {
         $this->defaultLocale = Locale::getDefaultSiteLocale();
         $this->activeLocale = Locale::getSiteLocaleFromContext();
+
+        // Reset locale when edit site changes
+        Event::listen('system.site.setEditSite', function() {
+            $this->activeLocale = Locale::getSiteLocaleFromContext();
+        });
     }
 
     /**
