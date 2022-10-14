@@ -46,8 +46,12 @@ class Translator
         $this->defaultLocale = Locale::getDefaultSiteLocale();
         $this->activeLocale = Locale::getSiteLocaleFromContext();
 
-        // Reset locale when edit site changes
+        // Reset locale when active and edit sites change
         Event::listen('system.site.setEditSite', function() {
+            $this->activeLocale = Locale::getSiteLocaleFromContext();
+        });
+
+        Event::listen('system.site.setActiveSite', function() {
             $this->activeLocale = Locale::getSiteLocaleFromContext();
         });
     }
