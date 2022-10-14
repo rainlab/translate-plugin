@@ -11,7 +11,7 @@
     "Some messages may not be captured and will only appear after the first time they are used.": "Algumas mensagens podem não ser capturadas e só aparecerão depois da primeira vez que forem usadas.",
     "This process will attempt to scan the active theme for messages that can be translated.": "Este processo tentará scanear o tema ativo para mensagens que podem ser traduzidas.",
     "Purge all messages first": "Limpar primeiro todas as mensagens",
-    "If checked, this will delete all messages, including their translations, before performing the scan.": "Se selecionado, isso excluirá todas as mensagens antes de executar a verificação.",
+    "If checked, this will delete all messages before performing the scan.": "Se selecionado, isso excluirá todas as mensagens antes de executar a verificação.",
     "Scanning for new messages...": "Buscando por novas mensagens...",
     "Begin Scan": "Inciar Busca",
     "Are you sure you want to delete all messages? This cannot be undone!": "Tem certeza de que deseja excluir todas as mensagens? Isto não pode ser desfeito!",

@@ -14,7 +14,7 @@
     "Some messages may not be captured and will only appear after the first time they are used.": "Some messages may not be captured and will only appear after the first time they are used.",
     "This process will attempt to scan the active theme for messages that can be translated.": "This process will attempt to scan the active theme for messages that can be translated.",
     "Purge all messages first": "Purge all messages first",
-    "If checked, this will delete all messages, including their translations, before performing the scan.": "If checked, this will delete all messages, including their translations, before performing the scan.",
+    "If checked, this will delete all messages before performing the scan.": "If checked, this will delete all messages before performing the scan.",
     "Scanning for new messages...": "Scanning for new messages...",
     "Begin Scan": "Begin Scan",
     "Are you sure you want to delete all messages? This cannot be undone!": "Are you sure you want to delete all messages? This cannot be undone!",
@@ -28,5 +28,7 @@
     "There are no other languages set up.": "There are no other languages set up.",
     "Prune Messages": "Prune Messages",
     "Last Seen": "Last Seen",
-    "Never": "Never"
+    "Never": "Never",
+    "Purge missing messages afterwards": "Purge missing messages afterwards",
+    "If checked, after the scan, delete any messages that the scanner did not find.": "If checked, after the scan, delete any messages that the scanner did not find."
 }

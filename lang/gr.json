@@ -13,7 +13,7 @@
     "Some messages may not be captured and will only appear after the first time they are used.": "Ορισμένα μηνύματα ενδέχεται να μην καταγράφονται και θα εμφανίζονται μόνο μετά την πρώτη φορά που χρησιμοποιούνται.",
     "This process will attempt to scan the active theme for messages that can be translated.": "Αυτή η διαδικασία θα προσπαθήσει να σαρώσει το ενεργό θέμα για μηνύματα που μπορούν να μεταφραστούν.",
     "Purge all messages first": "Εκκαθάριση πρώτα όλων των μηνυμάτων",
-    "If checked, this will delete all messages, including their translations, before performing the scan.": "Επιλέγοντας εδώ θα διαγραφούν όλα τα μηνύματα, συμπεριλαμβανομένων και των μεταφράσεών τους, πριν από τη σάρωση.",
+    "If checked, this will delete all messages before performing the scan.": "Επιλέγοντας εδώ θα διαγραφούν όλα τα μηνύματα, συμπεριλαμβανομένων και των μεταφράσεών τους, πριν από τη σάρωση.",
     "Scanning for new messages...": "Σάρωση για νέα μηνύματα ...",
     "Begin Scan": "Έναρξη σάρωσης",
     "Are you sure you want to delete all messages? This cannot be undone!": "Είστε βέβαιοι ότι θέλετε να διαγράψετε όλα τα μηνύματα; Αυτό δεν μπορεί να αναιρεθεί!",

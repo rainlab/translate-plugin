@@ -13,7 +13,7 @@
     "Some messages may not be captured and will only appear after the first time they are used.": "有些消息可能无法捕获,只有在第一次使用后才会出现。",
     "This process will attempt to scan the active theme for messages that can be translated.": "此进程将尝试扫描活动主题以查找可翻译的消息。",
     "Purge all messages first": "先清除所有消息",
-    "If checked, this will delete all messages, including their translations, before performing the scan.": "如果选中,这将在执行扫描之前删除所有消息,包括它们的翻译。",
+    "If checked, this will delete all messages before performing the scan.": "如果选中,这将在执行扫描之前删除所有消息,包括它们的翻译。",
     "Scanning for new messages...": "正在扫描新消息...",
     "Begin Scan": "开始扫描",
     "Are you sure you want to delete all messages? This cannot be undone!": "您确定要删除所有消息吗？这不能被撤消！",
