@@ -20,6 +20,11 @@ use Event;
 class ThemeScanner
 {
     /**
+     * @var array|null foundMessages keys by the scanner
+     */
+    protected $foundMessages;
+
+    /**
      * scan is a helper method for scanForMessages()
      */
     public static function scan()
@@ -40,6 +45,8 @@ class ThemeScanner
          *
          */
         Event::fire('rainlab.translate.themeScanner.afterScan', [$obj]);
+
+        return $obj;
     }
 
     /**
@@ -47,10 +54,33 @@ class ThemeScanner
      */
     public function scanForMessages()
     {
+        $this->foundMessages = [];
         $this->scanThemeConfigForMessages();
         $this->scanThemeTemplatesForMessages();
         $this->scanCmsComponentsForMessages();
         $this->scanMailTemplatesForMessages();
+    }
+
+    /**
+     * getFoundMessages
+     */
+    public function getFoundMessages()
+    {
+        return $this->foundMessages;
+    }
+
+    /**
+     * purgeMissingMessages is used after a scan to purge missing messages from the current array
+     */
+    public function purgeMissingMessages($currentMessages)
+    {
+        if (!is_array($this->foundMessages)) {
+            throw new Exception('Please run a scan first to avoid purging all messages.');
+        }
+
+        $missingMessages = array_diff_key($currentMessages, $this->foundMessages);
+
+        (new Message)->deleteMessages(array_keys($missingMessages));
     }
 
     /**
@@ -110,7 +140,7 @@ class ThemeScanner
             }
 
             if (is_array($messages)) {
-                Message::importMessageCodes($messages, $locale);
+                $this->importMessages($messages, $locale, true);
             }
         }
     }
@@ -134,7 +164,7 @@ class ThemeScanner
             $messages = array_merge($messages, $this->parseContent($partial->markup));
         }
 
-        Message::importMessages($messages);
+        $this->importMessages($messages);
     }
 
     /**
@@ -155,7 +185,7 @@ class ThemeScanner
             }
         }
 
-        Message::importMessages($messages);
+        $this->importMessages($messages);
     }
 
     /**
@@ -170,7 +200,7 @@ class ThemeScanner
             $messages = array_merge($messages, $this->parseContent($mailTemplate->content_html));
         }
 
-        Message::importMessages($messages);
+        $this->importMessages($messages);
     }
 
     /**
@@ -184,6 +214,21 @@ class ThemeScanner
         $messages = array_merge($messages, $this->processStandardTags($content));
 
         return $messages;
+    }
+
+    /**
+     * importMessages will import scanned messages, use withKeys if the messages
+     * also contain their translation key, e.g [my_code => My Code]
+     */
+    protected function importMessages($messages, $locale = null, $withKeys = false)
+    {
+        if (!$withKeys) {
+            $messages = array_combine($messages, $messages);
+        }
+
+        Message::importMessageCodes($messages, $locale);
+
+        $this->foundMessages += $messages;
     }
 
     /**

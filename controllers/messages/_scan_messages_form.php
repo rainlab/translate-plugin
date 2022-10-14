@@ -24,7 +24,24 @@
                             <?= __("Purge all messages first") ?>
                         </label>
                         <p class="form-text">
-                            <?= __("If checked, this will delete all messages, including their translations, before performing the scan.") ?>
+                            <?= __("If checked, this will delete all messages before performing the scan.") ?>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-check">
+                        <input
+                            type="checkbox"
+                            class="form-check-input"
+                            name="purge_deleted_messages"
+                            value="1"
+                            id="purgeDeletedMessages">
+                        <label for="purgeDeletedMessages" class="storm-icon-pseudo">
+                            <?= __("Purge missing messages afterwards") ?>
+                        </label>
+                        <p class="help-block form-text">
+                            <?= __("If checked, after the scan, delete any messages that the scanner did not find.") ?>
                         </p>
                     </div>
                 </div>

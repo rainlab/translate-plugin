@@ -109,7 +109,15 @@ class Messages extends Controller
             Message::truncate();
         }
 
-        ThemeScanner::scan();
+        if (post('purge_deleted_messages', false)) {
+            $currentMessages = Message::getMessages();
+        }
+
+        $scanner = ThemeScanner::scan();
+
+        if (post('purge_deleted_messages', false)) {
+            $scanner->purgeMissingMessages($currentMessages);
+        }
 
         Flash::success(__("Scanned theme template files successfully!"));
 

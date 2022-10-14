@@ -99,6 +99,7 @@ class Message extends Model
 
     /**
      * importMessages
+     * @deprecated use importMessageCodes with array_combine
      */
     public static function importMessages($messages, $locale = null)
     {
@@ -209,10 +210,20 @@ class Message extends Model
      */
     public function deleteMessage($key)
     {
+        $this->deleteMessages([$key]);
+    }
+
+    /**
+     * deleteMessages
+     */
+    public function deleteMessages(array $key)
+    {
         $messages = $this->newQuery()->get();
         foreach ($messages as $record) {
             $data = $record->data;
-            unset($data[$key]);
+            foreach ($key as $k) {
+                unset($data[$k]);
+            }
             $record->data = $data;
             $record->save();
         }
