@@ -32,9 +32,9 @@ Beginning from October CMS v3.1, a multisite feature was introduced that superce
 
 ## Breaking Changes
 
-### `Locale` model is replaced
+### Locale model is replaced
 
-Since there is no Languages settings page, there is no `RainLab\Translate\Models\Locale` model to match it. The model has been replaced by the `RainLab\Translate\Classes\Locale` class instead and offers equivalent functionality. It acts as an adapter to the global `Site` helper class.
+Since there is no Languages settings page, the `RainLab\Translate\Models\Locale` model is replaced by the `RainLab\Translate\Classes\Locale` class.
 
 ### Middleware class is replaced
 

@@ -62,6 +62,21 @@ class ThemeScanner
     }
 
     /**
+     * importMessages will import scanned messages, use withKeys if the messages
+     * also contain their translation key, e.g [my_code => My Code]
+     */
+    public function importMessages($messages, $locale = null, $withKeys = false)
+    {
+        if (!$withKeys) {
+            $messages = array_combine($messages, $messages);
+        }
+
+        Message::importMessageCodes($messages, $locale);
+
+        $this->foundMessages += $messages;
+    }
+
+    /**
      * getFoundMessages
      */
     public function getFoundMessages()
@@ -214,21 +229,6 @@ class ThemeScanner
         $messages = array_merge($messages, $this->processStandardTags($content));
 
         return $messages;
-    }
-
-    /**
-     * importMessages will import scanned messages, use withKeys if the messages
-     * also contain their translation key, e.g [my_code => My Code]
-     */
-    public function importMessages($messages, $locale = null, $withKeys = false)
-    {
-        if (!$withKeys) {
-            $messages = array_combine($messages, $messages);
-        }
-
-        Message::importMessageCodes($messages, $locale);
-
-        $this->foundMessages += $messages;
     }
 
     /**

@@ -98,8 +98,8 @@ class Message extends Model
     }
 
     /**
-     * importMessages
-     * @deprecated use importMessageCodes with array_combine
+     * @deprecated use importMessageCodes with array_combine or
+     * the ThemeScanner class with importMessages method.
      */
     public static function importMessages($messages, $locale = null)
     {
