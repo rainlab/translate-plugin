@@ -220,7 +220,7 @@ class ThemeScanner
      * importMessages will import scanned messages, use withKeys if the messages
      * also contain their translation key, e.g [my_code => My Code]
      */
-    protected function importMessages($messages, $locale = null, $withKeys = false)
+    public function importMessages($messages, $locale = null, $withKeys = false)
     {
         if (!$withKeys) {
             $messages = array_combine($messages, $messages);
