@@ -75,7 +75,7 @@ class Locale extends ElementBase
             }
 
             // Prevent duplicates
-            if (isset($foundLocales[$localeCode])) {
+            if (isset($foundLocales[$localeCode]) && !$site->is_primary) {
                 continue;
             }
 
