@@ -380,7 +380,6 @@ It is possible to conditionally extend a plugin's models to support translation 
  */
 class Post extends Model
 {
-
     // [...]
 
     /**
@@ -394,7 +393,6 @@ class Post extends Model
     public $translatable = ['title'];
 
     // [...]
-
 }
 ```
 

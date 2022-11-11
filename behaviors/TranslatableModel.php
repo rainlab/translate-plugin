@@ -18,6 +18,9 @@ use RainLab\Translate\Classes\TranslatableBehavior;
  */
 class TranslatableModel extends TranslatableBehavior
 {
+    /**
+     * __construct
+     */
     public function __construct($model)
     {
         parent::__construct($model);
@@ -27,7 +30,7 @@ class TranslatableModel extends TranslatableBehavior
             'name' => 'model'
         ];
 
-        // Replace attachments with translatable  ones
+        // Replace attachments with translatable ones
         $this->extendFileModels('attachOne');
         $this->extendFileModels('attachMany');
 
@@ -52,14 +55,29 @@ class TranslatableModel extends TranslatableBehavior
     {
         foreach ($this->model->$relationGroup as $relationName => $relationObj) {
             $relationClass = is_array($relationObj) ? $relationObj[0] : $relationObj;
-            if ($relationClass === \System\Models\File::class) {
-                if (is_array($relationObj)) {
-                    $this->model->$relationGroup[$relationName][0] = \RainLab\Translate\Models\MLFile::class;
-                }
-                else {
-                    $this->model->$relationGroup[$relationName] = \RainLab\Translate\Models\MLFile::class;
-                }
+
+            // Custom implementation
+            if ($relationClass !== \System\Models\File::class) {
+                continue;
             }
+
+            // Normalize definition
+            if (!is_array($relationObj)) {
+                $relationObj = (array) $relationObj;
+            }
+
+            // Translatable individual file models
+            if (in_array($relationName, $this->getTranslatableAttributes())) {
+                $relationObj['relationClass'] = $relationGroup === 'attachOne'
+                    ? \RainLab\Translate\Classes\Relations\MLAttachOne::class
+                    : \RainLab\Translate\Classes\Relations\MLAttachMany::class;
+            }
+            // Translate file models attributes only
+            else {
+                $relationObj[0] = \RainLab\Translate\Models\MLFile::class;
+            }
+
+            $this->model->$relationGroup[$relationName] = $relationObj;
         }
     }
 
@@ -88,7 +106,7 @@ class TranslatableModel extends TranslatableBehavior
     public function scopeTransWhereNoFallback($query, $index, $value, $locale = null, $operator = '=')
     {
         // Ignore translatable indexes in default locale context
-        if(($locale ?: $this->translatableContext) === $this->translatableDefault) {
+        if (($locale ?: $this->translatableContext) === $this->translatableDefault) {
             return $query->where($index, $operator, $value);
         }
 

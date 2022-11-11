@@ -23,3 +23,4 @@ v2.0.3: Remove deprecated class
 v2.0.4: Include component default partials in theme scanner
 v2.0.5: Reset locale when edit site changes programatically
 v2.0.6: Restores the post scan purge feature in messages
+v2.1.0: Adds support for translatable file attachments
