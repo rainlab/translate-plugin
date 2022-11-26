@@ -184,43 +184,67 @@ class EventPluginRegistry
 
         // Load Menu Fields
         Event::listen('pages.object.load', function($controller, $template, $type) use ($fieldsToTranslate) {
-            if ($type === 'menu' && ($locale = $this->objectShouldTranslate())) {
-                foreach ($template->attributes['items'] as &$item) {
-                    foreach ($fieldsToTranslate as $fieldName) {
-                        if (isset($item[$fieldName])) {
-                            $item[$fieldName] = array_get($item['viewBag'], "locale.$locale.$fieldName", $item[$fieldName]);
+            if ($type === 'menu' && ($locale = Translator::instance()->getLocale())) {
+
+                $iterator = function(&$items) use ($locale, $fieldsToTranslate, &$iterator) {
+                    foreach ($items as &$item) {
+                        foreach ($fieldsToTranslate as $fieldName) {
+                            if (isset($item[$fieldName])) {
+                                $item[$fieldName] = array_get($item['viewBag'], "locale.$locale.$fieldName", $item[$fieldName]);
+                            }
+                        }
+
+                        if (isset($item['items']) && is_array($item['items'])) {
+                            $iterator($item['items']);
                         }
                     }
+                };
+
+                if (isset($template->attributes['items'])) {
+                    $iterator($template->attributes['items']);
                 }
             }
         });
 
         // Save View Bag
         Event::listen('pages.object.fillObject', function($controller, $template, &$data, $type) use ($fieldsToTranslate) {
-            if ($type === 'menu' && ($locale = $this->objectShouldTranslate())) {
+            if ($type === 'menu' && ($locale = Translator::instance()->getLocale())) {
                 $originalData = $template->getOriginal()['items'] ?? [];
 
-                foreach ($data['itemData'] as $index => &$item) {
-                    $originalItem = $originalData[$index] ?? [];
+                $iterator = function($templateItem, &$postItem) use ($locale, $fieldsToTranslate, &$iterator) {
+                    $localeData = array_get($templateItem['viewBag'] ?? [], 'locale', []);
 
                     foreach ($fieldsToTranslate as $fieldName) {
                         // Locate translated value
-                        $value = array_get($item, $fieldName);
+                        $value = array_get($postItem, $fieldName);
                         if ($value === null) {
                             continue;
                         }
 
                         // Set the default locale value
-                        $originalValue = array_get($originalItem, $fieldName, $value);
-                        array_set($item, $fieldName, $originalValue);
+                        $originalValue = array_get($templateItem, $fieldName, $value);
 
-                        // Store in item's view bag, if its different
-                        if ($originalValue != $value) {
-                            $localeData = array_get($originalItem['viewBag'] ?? [], 'locale', []);
+                        if ($this->objectShouldTranslate()) {
+                            array_set($postItem, $fieldName, $originalValue);
                             $localeData[$locale][$fieldName] = $value;
-                            array_set($item['viewBag'], 'locale', $localeData);
                         }
                     }
+
+                    if ($localeData) {
+                        array_set($postItem['viewBag'], 'locale', $localeData);
+                    }
+
+                    if (isset($postItem['items']) && is_array($postItem['items'])) {
+                        foreach ($postItem['items'] as $childIndex => &$childItem) {
+                            $childTemplateItem = $templateItem['items'][$childIndex] ?? [];
+                            $iterator($childTemplateItem, $childItem);
+                        }
+                    }
+                };
+
+                foreach ($data['itemData'] as $index => &$item) {
+                    $originalItem = $originalData[$index] ?? [];
+                    $iterator($originalItem, $item);
                 }
             }
         });
