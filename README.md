@@ -30,6 +30,10 @@ To install using October CMS v3.0 and below:
 php artisan plugin:install rainlab.translate --want="^1.0"
 ```
 
+### Upgrading from v1 to v2
+
+If you are upgrading from version 1 of this plugin, [view the upgrade guide](https://github.com/rainlab/translate-plugin/blob/master/UPGRADE.md).
+
 ## Language Picker Component
 
 A visitor can select their chosen language using the native `SitePicker` component that is included in the October CMS core. This component will display a simple dropdown that changes the page language depending on the selection.
