@@ -25,3 +25,4 @@ v2.0.5: Reset locale when edit site changes programatically
 v2.0.6: Restores the post scan purge feature in messages
 v2.1.0: Adds support for translatable file attachments
 v2.1.1: Fixes child menu item translations for pages plugin
+v2.1.2: Fixes translatable integration with settings models
