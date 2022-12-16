@@ -8,7 +8,7 @@
  */
 class MLContent extends MLCmsObject
 {
-    protected $allowedExtensions = ['htm', 'txt', 'md'];
+    protected $allowedExtensions = ['html', 'htm', 'txt', 'md'];
 
     /**
      * findLocale for this ML object
