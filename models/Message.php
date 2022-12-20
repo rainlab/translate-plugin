@@ -4,6 +4,7 @@ use App;
 use Model;
 use Carbon\Carbon;
 use RainLab\Translate\Classes\Locale;
+use Exception;
 
 /**
  * Message Model
@@ -119,17 +120,22 @@ class Message extends Model
     }
 
     /**
-     * saveObserver
+     * saveObserver will save observed messages to the database, this is soft logic
+     * since the database table may not exist yet
      */
     public static function saveObserver()
     {
-        $messageKeys = array_keys(self::$observeCache);
+        try {
+            $messageKeys = array_keys(self::$observeCache);
 
-        (new self)->updateObservedMessages(
-            Locale::getDefaultSiteLocale(),
-            array_combine($messageKeys, $messageKeys),
-            self::$observeCache
-        );
+            (new self)->updateObservedMessages(
+                Locale::getDefaultSiteLocale(),
+                array_combine($messageKeys, $messageKeys),
+                self::$observeCache
+            );
+        }
+        catch (Exception $ex) {
+        }
     }
 
     /**
