@@ -149,6 +149,7 @@ class Plugin extends PluginBase
                 'transRaw'  => [$this, 'translateRawString'],
                 'transRawPlural' => [$this, 'translateRawPlural'],
                 'localeUrl' => [$this, 'localeUrl'],
+                'localePage' => [$this, 'localePage'],
             ]
         ];
     }
@@ -177,6 +178,14 @@ class Plugin extends PluginBase
         return http_build_url($parts, [
             'path' => '/' . $translator->getPathInLocale($path, $locale)
         ]);
+    }
+
+    /**
+     * localePage builds a page URL
+     */
+    public function localePage($name, $locale, $params = [])
+    {
+        return Translator::instance()->getPageInLocale($name, $locale, $params);
     }
 
     /**

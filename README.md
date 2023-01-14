@@ -313,6 +313,20 @@ The word "Contact" in French is the same so a translated URL is not given, or ne
 - /ru/контакт - Page in Russian
 - /ru/contact - 404
 
+### Translating URLs in Twig
+
+The `localeUrl` method will replace the route prefix on a URL from one locale to another. For example, converting the current request URL from `en` to `de`.
+
+```twig
+{{ this.request.url|localeUrl('de') }}
+```
+
+The `localePage` will return a translated URL for a CMS page. It takes a locale (first argument) and page parameters (second argument).
+
+```twig
+{{ 'blog/post'|localePage('de', { slug: 'foobar' }) }}
+```
+
 ## URL Parameter Translation
 
 It's possible to translate URL parameters by listening to the `cms.sitePicker.overrideParams` event, which is fired when discovering language URLs.
@@ -401,31 +415,6 @@ class Post extends Model
 ```
 
 The back-end forms will automatically detect the presence of translatable fields and replace their controls for multilingual equivalents.
-
-#### Messages
-
-Since the Twig filter will not be available all the time, we can pipe them to the native Laravel translation methods instead. This ensures translated messages will always work on the front end.
-
-```php
-/**
- * registerMarkupTags registers new Twig variables
- * @return array
- */
-public function registerMarkupTags()
-{
-    // Check the translate plugin is installed
-    if (!class_exists('RainLab\Translate\Behaviors\TranslatableModel')) {
-        return;
-    }
-
-    return [
-        'filters' => [
-            '_' => ['Lang', 'get'],
-            '__' => ['Lang', 'choice'],
-        ]
-    ];
-}
-```
 
 # User Interface
 
