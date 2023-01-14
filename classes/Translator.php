@@ -170,7 +170,11 @@ class Translator
     }
 
     /**
-     * getPageInLocale
+     * getPageInLocale returns a page URL for a given locale
+     *
+     * @param string $path
+     * @param string $locale
+     * @param array $params
      * @return string|null
      */
     public function getPageInLocale($name, $locale = null, $params = [])
