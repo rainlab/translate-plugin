@@ -256,6 +256,7 @@ class TranslatableModel extends TranslatableBehavior
 
         $this->storeTranslatableBasicData($locale);
         $this->storeTranslatableIndexData($locale);
+        $this->model->updateTimestamps();
     }
 
     /**
