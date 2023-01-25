@@ -256,7 +256,11 @@ class TranslatableModel extends TranslatableBehavior
 
         $this->storeTranslatableBasicData($locale);
         $this->storeTranslatableIndexData($locale);
-        $this->model->updateTimestamps();
+
+        // Trigger event workflow
+        if ($this->model->usesTimestamps()) {
+            $this->model->updateTimestamps();
+        }
     }
 
     /**
