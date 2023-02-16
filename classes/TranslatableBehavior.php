@@ -49,12 +49,6 @@ abstract class TranslatableBehavior extends ExtensionBase
     protected $requiredProperties = ['translatable'];
 
     /**
-     * @var int eventPriority should be high enough that translatable operations come first,
-     * not too high in case others need to contribute sooner. Assuming a range of 1 to 1000.
-     */
-    protected $eventPriority = 400;
-
-    /**
      * __construct
      * @param \October\Rain\Database\Model $model The extended model.
      */
@@ -64,7 +58,7 @@ abstract class TranslatableBehavior extends ExtensionBase
 
         $this->initTranslatableContext();
 
-        $this->model->bindEvent('model.saveInternal', [$this, 'syncTranslatableAttributes'], $this->eventPriority);
+        $this->model->bindEvent('model.saveInternal', [$this, 'syncTranslatableAttributes']);
 
         $this->model->bindEvent('model.beforeGetAttribute', function ($key) use ($model) {
             if ($this->isTranslatable($key)) {
@@ -75,7 +69,7 @@ abstract class TranslatableBehavior extends ExtensionBase
                 }
                 return $value;
             }
-        }, $this->eventPriority);
+        });
 
         $this->model->bindEvent('model.beforeSetAttribute', function ($key, $value) use ($model) {
             if ($this->isTranslatable($key)) {
@@ -86,7 +80,7 @@ abstract class TranslatableBehavior extends ExtensionBase
                 }
                 return $value;
             }
-        }, $this->eventPriority);
+        });
     }
 
     /**
