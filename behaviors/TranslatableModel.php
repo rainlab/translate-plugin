@@ -270,7 +270,12 @@ class TranslatableModel extends TranslatableBehavior
      */
     protected function storeTranslatableBasicData($locale = null)
     {
-        $data = json_encode($this->translatableAttributes[$locale], JSON_UNESCAPED_UNICODE);
+        $data = $this->translatableAttributes[$locale];
+
+        // Only store attributes where values differ from the parent
+        $data = array_intersect_key($data, $this->model->getDirty());
+
+        $data = json_encode($data, JSON_UNESCAPED_UNICODE);
 
         $obj = Db::table('rainlab_translate_attributes')
             ->where('locale', $locale)
