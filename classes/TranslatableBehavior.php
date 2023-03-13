@@ -231,7 +231,10 @@ abstract class TranslatableBehavior extends ExtensionBase
             $translatableAttributes = $this->translatableAttributes[$locale];
         }
 
-        return $this->getAttributeFromData($translatableAttributes, $key) !== null;
+        $value = $this->getAttributeFromData($translatableAttributes, $key);
+
+        // Checkboxes can use zero values
+        return !!$value || $value === 0 || $value === '0';
     }
 
     /**
