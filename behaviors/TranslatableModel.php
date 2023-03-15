@@ -280,13 +280,16 @@ class TranslatableModel extends TranslatableBehavior
             ->where('model_id', $this->model->getKey())
             ->where('model_type', $this->getClass());
 
-        if (empty($data) && $obj->count() > 0) {
-            // Remove database entry if data is empty
+        $hasRecord = $obj->count() > 0;
+
+        // Remove database entry if data is empty
+        if (empty($data) && $hasRecord) {
             $obj->delete();
-        } else {
+        }
+        else {
             $encodedData = json_encode($data, JSON_UNESCAPED_UNICODE);
 
-            if ($obj->count() > 0) {
+            if ($hasRecord) {
                 $obj->update(['attribute_data' => $encodedData]);
             }
             else {
