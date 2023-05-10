@@ -21,7 +21,7 @@ v2.0.1:
 v2.0.2: Fixes various bugs in message translation
 v2.0.3: Remove deprecated class
 v2.0.4: Include component default partials in theme scanner
-v2.0.5: Reset locale when edit site changes programatically
+v2.0.5: Reset locale when edit site changes programmatically
 v2.0.6: Restores the post scan purge feature in messages
 v2.1.0: Adds support for translatable file attachments
 v2.1.1: Fixes child menu item translations for pages plugin
@@ -31,3 +31,4 @@ v2.2.0: Adds localePage Twig filter for translating page URLs
 v2.2.1: Fixes translated checkboxes
 v2.2.2: Fixes translatable models without timestamps
 v2.2.3: Fixes translatable fields with fallback values
+v2.2.4: Fixes bug where translations are lost by unintentional cleanup
