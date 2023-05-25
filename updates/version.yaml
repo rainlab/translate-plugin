@@ -32,3 +32,4 @@ v2.2.1: Fixes translated checkboxes
 v2.2.2: Fixes translatable models without timestamps
 v2.2.3: Fixes translatable fields with fallback values
 v2.2.4: Fixes bug where translations are lost by unintentional cleanup
+v2.2.5: Fixes storing attributes via setAttributeTranslated
