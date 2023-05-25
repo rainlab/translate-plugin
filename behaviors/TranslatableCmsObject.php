@@ -185,7 +185,7 @@ class TranslatableCmsObject extends TranslatableBehavior
 
         $result = $obj ? $obj->getAttributes() : [];
 
-        $this->translatableViewBag[$locale] = $obj ? $obj->viewBag : [];
+        $this->translatableViewBag[$locale] = (array) ($obj ? $obj->viewBag : []);
 
         return $this->translatableOriginals[$locale] = $this->translatableAttributes[$locale] = $result;
     }

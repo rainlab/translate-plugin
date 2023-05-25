@@ -139,7 +139,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Returns a translated attribute value.
+     * getAttributeTranslated returns a translated attribute value.
      *
      * The base value must come from 'attributes' on the model otherwise the process
      * can possibly loop back to this event, then method triggered by __get() magic.
@@ -154,20 +154,14 @@ abstract class TranslatableBehavior extends ExtensionBase
             $locale = $this->translatableContext;
         }
 
-        /*
-         * Result should not return NULL to successfully hook beforeGetAttribute event
-         */
+        // Result should not return NULL to successfully hook beforeGetAttribute event
         $result = '';
 
-        /*
-         * Default locale
-         */
+        // Default locale
         if ($locale == $this->translatableDefault) {
             $result = $this->getAttributeFromData($this->model->attributes, $key);
         }
-        /*
-         * Other locale
-         */
+        // Other locale
         else {
             if (!array_key_exists($locale, $this->translatableAttributes)) {
                 $this->loadTranslatableData($locale);
@@ -181,9 +175,7 @@ abstract class TranslatableBehavior extends ExtensionBase
             }
         }
 
-        /*
-         * Handle jsonable attributes, default locale may return the value as a string
-         */
+        // Handle jsonable attributes, default locale may return the value as a string
         if (
             is_string($result) &&
             method_exists($this->model, 'isJsonable') &&
@@ -196,7 +188,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Returns all translated attribute values.
+     * getTranslateAttributes returns all translated attribute values.
      * @param  string $locale
      * @return array
      */
@@ -217,7 +209,7 @@ abstract class TranslatableBehavior extends ExtensionBase
      */
     public function hasTranslation($key, $locale)
     {
-        // If the default locale is passed, the attributes are retreived from the model,
+        // If the default locale is passed, the attributes are retrieved from the model,
         // otherwise fetch the attributes from the $translatableAttributes property
         if ($locale == $this->translatableDefault) {
             $translatableAttributes = $this->model->attributes;
@@ -261,7 +253,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * Restores the default language values on the model and
+     * syncTranslatableAttributes restores the default language values on the model and
      * stores the translated values in the attributes table.
      * @return void
      */
@@ -317,7 +309,7 @@ abstract class TranslatableBehavior extends ExtensionBase
     }
 
     /**
-     * hasTranslatableAttributes checks if this model has transatable attributes.
+     * hasTranslatableAttributes checks if this model has translatable attributes.
      * @return true
      */
     public function hasTranslatableAttributes()
@@ -385,7 +377,6 @@ abstract class TranslatableBehavior extends ExtensionBase
 
     /**
      * getDirtyLocales that have changed, if any
-     *
      * @return array
      */
     public function getDirtyLocales()
@@ -410,7 +401,8 @@ abstract class TranslatableBehavior extends ExtensionBase
     {
         if (!$locale) {
             return $this->translatableOriginals;
-        } else {
+        }
+        else {
             return $this->translatableOriginals[$locale] ?? null;
         }
     }
@@ -429,14 +421,13 @@ abstract class TranslatableBehavior extends ExtensionBase
             return [];
         }
 
+        // All dirty
         if (!array_key_exists($locale, $this->translatableOriginals)) {
-            return $this->translatableAttributes[$locale]; // All dirty
+            return $this->translatableAttributes[$locale];
         }
 
         $dirty = [];
-
         foreach ($this->translatableAttributes[$locale] as $key => $value) {
-
             if (!array_key_exists($key, $this->translatableOriginals[$locale])) {
                 $dirty[$key] = $value;
             }
