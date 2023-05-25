@@ -216,9 +216,7 @@ class TranslatableModel extends TranslatableBehavior
             $locale = $this->translatableContext;
         }
 
-        /*
-         * Model doesn't exist yet, defer this logic in memory
-         */
+        // Model doesn't exist yet, defer this logic in memory
         if (!$this->model->exists) {
             $this->model->bindEventOnce('model.afterCreate', function() use ($locale) {
                 $this->storeTranslatableData($locale);
@@ -270,10 +268,9 @@ class TranslatableModel extends TranslatableBehavior
      */
     protected function storeTranslatableBasicData($locale = null)
     {
-        $data = $this->translatableAttributes[$locale];
+        $data = (array) $this->translatableAttributes[$locale];
 
-        // Only store attributes where values differ from the parent
-        $data = array_intersect_key($data, $this->model->getDirty());
+        $data = $this->getUniqueTranslatableData($data);
 
         $data = json_encode($data, JSON_UNESCAPED_UNICODE);
 
@@ -296,7 +293,25 @@ class TranslatableModel extends TranslatableBehavior
     }
 
     /**
-     * Saves the indexed translation data in the join table.
+     * getUniqueTranslatableData returns data that differs with the default locale
+     * by leveraging originalIsEquivalent. It applies contextual values from
+     * setAttributeTranslated, in addition to attributes set on the model.
+     */
+    protected function getUniqueTranslatableData(array $data): array
+    {
+        $originalAttrs = $this->model->attributes;
+
+        $this->model->forceFill($data);
+
+        $data = array_intersect_key($data, $this->model->getDirty());
+
+        $this->model->attributes = $originalAttrs;
+
+        return $data;
+    }
+
+    /**
+     * storeTranslatableIndexData saves the indexed translation data in the join table.
      * @param  string $locale
      * @return void
      */
@@ -347,7 +362,7 @@ class TranslatableModel extends TranslatableBehavior
     }
 
     /**
-     * Loads the translation data from the join table.
+     * loadTranslatableData loads the translation data from the join table.
      * @param  string $locale
      * @return array
      */
@@ -365,7 +380,7 @@ class TranslatableModel extends TranslatableBehavior
             return $value->attributes['locale'] === $locale;
         });
 
-        $result = $obj ? json_decode($obj->attribute_data, true) : [];
+        $result = (array) ($obj ? json_decode($obj->attribute_data, true) : []);
 
         return $this->translatableOriginals[$locale] = $this->translatableAttributes[$locale] = $result;
     }
