@@ -303,7 +303,19 @@ class TranslatableModel extends TranslatableBehavior
 
         $this->model->forceFill($data);
 
-        $data = array_intersect_key($data, $this->model->getDirty());
+        // Only include attributes that are different from the parent
+        $includeAttrs = $this->model->getDirty();
+
+        // Or attributes that are requested via [fallback => false]
+        if ($optionedAttributes = $this->getTranslatableAttributesWithOptions()) {
+            foreach ($optionedAttributes as $attribute => $options) {
+                if (array_key_exists('fallback', $options) && $options['fallback'] === false) {
+                    $includeAttrs[$attribute] = array_get($data, $attribute);
+                }
+            }
+        }
+
+        $data = array_intersect_key($data, $includeAttrs);
 
         $this->model->attributes = $originalAttrs;
 
