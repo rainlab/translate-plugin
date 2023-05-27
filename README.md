@@ -253,7 +253,7 @@ tabs:
 
 ## Fallback Attribute Values
 
-By default, untranslated attributes will fall back to the default locale. This behavior can be disabled by calling the `noFallbackLocale` method.
+By default, untranslated attributes will fall back to the default locale. This behavior can be disabled by calling the `noFallbackLocale` method for reading the value.
 
 ```php
 $user = User::first();
@@ -263,6 +263,26 @@ $user->noFallbackLocale()->lang('fr');
 // Returns NULL if there is no French translation
 $user->name;
 ```
+
+When writing the value, the fallback value is determined when the translated value matches the default value. In these cases, the translated value is considered untranslated and not stored.
+
+Locale  | Attribute | Value         | Is Stored
+------- | --------- | ------------- | ----------
+en      |  title    | Hello World   | Yes (Default)
+fr      |  title    | Hello World   | No
+de      |  title    | Hallo Welt    | Yes
+
+For example, if the `en` default locale stores the message as "Hello World" and the `fr` locale value is also "Hello World", then the `fr` value is not stored. The `fr` value is accessed using the fallback value taken from `en`.
+
+You may disable this behavior by passing the `$transatable` attribute value as an array. The first value is the attribute name, the other values represent options, in this case setting the option `fallback` to `false`.
+
+```php
+public $translatable = [
+    ['title', 'fallback' => false]
+];
+```
+
+This above definition will force the `title` attribute value to be duplicated across all locales.
 
 ## Indexed Attributes
 
