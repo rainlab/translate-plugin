@@ -253,7 +253,7 @@ tabs:
 
 ## Fallback Attribute Values
 
-By default, untranslated attributes will fall back to the default locale. This behavior can be disabled by calling the `noFallbackLocale` method for reading the value.
+By default, untranslated attributes will fall back to the default locale. This behavior can be disabled by calling the `noFallbackLocale` method when reading the value.
 
 ```php
 $user = User::first();
@@ -282,7 +282,7 @@ public $translatable = [
 ];
 ```
 
-This above definition will force the `title` attribute value to be duplicated across all locales.
+This above definition will force the `title` attribute value to be duplicated and stored across all locales.
 
 ## Indexed Attributes
 
