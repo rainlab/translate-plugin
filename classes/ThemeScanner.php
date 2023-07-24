@@ -194,9 +194,16 @@ class ThemeScanner
         foreach ($manager->listComponents() as $componentClass) {
             $componentObj = $manager->makeComponent($componentClass);
 
-            $partial = ComponentPartial::load($componentObj, 'default');
-            if ($partial) {
-                $messages = array_merge($messages, $this->parseContent($partial->content));
+            if (method_exists(ComponentPartial::class, 'all')) {
+                foreach (ComponentPartial::all($componentObj) as $partial) {
+                    $messages = array_merge($messages, $this->parseContent($partial->content));
+                }
+            }
+            else {
+                $partial = ComponentPartial::load($componentObj, 'default');
+                if ($partial) {
+                    $messages = array_merge($messages, $this->parseContent($partial->content));
+                }
             }
         }
 
