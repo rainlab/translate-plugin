@@ -82,6 +82,35 @@ class TranslatableModel extends TranslatableBehavior
     }
 
     /**
+     * translateContext reloads relations when the context changes
+     */
+    public function translateContext($context = null)
+    {
+        if ($context !== null) {
+            $this->reloadTranslatableRelations();
+        }
+
+        return parent::translateContext($context);
+    }
+
+    /**
+     * reloadTranslatableRelations
+     */
+    public function reloadTranslatableRelations()
+    {
+        $loadedRelations = $this->model->getRelations();
+        if (!$loadedRelations) {
+            return;
+        }
+
+        foreach ($loadedRelations as $relationName => $value) {
+            if (in_array($relationName, $this->getTranslatableAttributes())) {
+                $this->model->reloadRelations($relationName);
+            }
+        }
+    }
+
+    /**
      * scopeTransWhere applies a translatable index to a basic query. This scope will join the
      * index table and can be executed neither more than once, nor with scopeTransOrder.
      * @param  Builder $query
@@ -398,7 +427,7 @@ class TranslatableModel extends TranslatableBehavior
     }
 
     /**
-     * Returns the class name of the model. Takes any
+     * getClass returns the class name of the model. Takes any
      * custom morphMap aliases into account.
      *
      * @return string

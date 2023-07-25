@@ -1,6 +1,5 @@
 <?php namespace RainLab\Translate\Classes\Relations;
 
-use RainLab\Translate\Classes\Translator;
 use October\Rain\Database\Relations\AttachMany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -18,8 +17,14 @@ class MLAttachMany extends AttachMany
      */
     public function __construct(Builder $query, Model $parent, $type, $id, $isPublic, $localKey, $relationName = null)
     {
+        $previous = static::$constraints;
+        static::$constraints = false;
         parent::__construct($query, $parent, $type, $id, $isPublic, $localKey, $relationName);
+        static::$constraints = $previous;
 
-        $this->morphClass .= ':' . Translator::instance()->getLocale();
+        $this->morphClass .= ':' . $parent->translateContext();
+
+        $this->addConstraints();
+        $this->addDefinedConstraints();
     }
 }
