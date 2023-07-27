@@ -2,6 +2,7 @@
 
 use Flash;
 use BackendMenu;
+use Cms\Classes\Theme;
 use Backend\Classes\Controller;
 use RainLab\Translate\Models\Message;
 use RainLab\Translate\Classes\Locale;
@@ -97,6 +98,8 @@ class Messages extends Controller
      */
     public function onLoadScanMessagesForm()
     {
+        $this->vars['activeTheme'] = Theme::getActiveTheme();
+
         return $this->makePartial('scan_messages_form');
     }
 

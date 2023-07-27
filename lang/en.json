@@ -30,5 +30,6 @@
     "Last Seen": "Last Seen",
     "Never": "Never",
     "Purge missing messages afterwards": "Purge missing messages afterwards",
-    "If checked, after the scan, delete any messages that the scanner did not find.": "If checked, after the scan, delete any messages that the scanner did not find."
+    "If checked, after the scan, delete any messages that the scanner did not find.": "If checked, after the scan, delete any messages that the scanner did not find.",
+    "Active Theme": "Active Theme"
 }

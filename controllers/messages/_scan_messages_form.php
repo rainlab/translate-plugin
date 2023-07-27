@@ -10,6 +10,19 @@
                 <?= __("This process will attempt to scan the active theme for messages that can be translated.") ?>
                 <?= __("Some messages may not be captured and will only appear after the first time they are used.") ?>
             </p>
+            <?php if ($activeTheme): ?>
+                <div class="callout callout-info no-icon no-subheader no-title is-flush">
+                    <div class="content">
+                        <p>
+                            <?= __("Active Theme") ?>:
+                            <strong>
+                                <?= e($activeTheme->getConfigValue('name')) ?>
+                                (<?= e($activeTheme->getDirName()) ?>)
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+            <?php endif ?>
             <div class="form-preview">
                 <div class="form-group">
                     <!-- Checkbox -->
@@ -46,7 +59,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="modal-footer">
             <div class="loading-indicator-container">
