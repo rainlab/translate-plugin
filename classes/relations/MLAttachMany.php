@@ -25,6 +25,5 @@ class MLAttachMany extends AttachMany
         $this->morphClass .= ':' . $parent->translateContext();
 
         $this->addConstraints();
-        $this->addDefinedConstraints();
     }
 }

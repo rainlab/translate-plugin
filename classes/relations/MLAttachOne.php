@@ -25,6 +25,5 @@ class MLAttachOne extends AttachOne
         $this->morphClass .= ':' . $parent->translateContext();
 
         $this->addConstraints();
-        $this->addDefinedConstraints();
     }
 }
