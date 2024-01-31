@@ -50,9 +50,7 @@ class Locale extends ElementBase
      */
     public static function getSiteLocaleFromContext()
     {
-        $site = App::runningInBackend()
-            ? Site::getEditSite()
-            : Site::getActiveSite();
+        $site = Site::getSiteFromContext();
 
         return $site ? $site->hard_locale : '';
     }
