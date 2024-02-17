@@ -35,3 +35,4 @@ v2.2.4: Fixes bug where translations are lost by unintentional cleanup
 v2.2.5: Fixes storing attributes via setAttributeTranslated
 v2.2.6: Adds option to disable fallback values when writing attributes
 v2.2.7: Improve theme scanner to show active theme and include component partials
+v2.2.8: Fixes issue sending mail with different site context
