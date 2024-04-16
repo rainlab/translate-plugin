@@ -1,4 +1,4 @@
-<?php namespace Rainlab\Translate\Console;
+<?php namespace RainLab\Translate\Console;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;

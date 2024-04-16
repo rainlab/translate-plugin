@@ -1,10 +1,8 @@
-<?php namespace Rainlab\Translate\Console;
+<?php namespace RainLab\Translate\Console;
 
 use Db;
 use Schema;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use RainLab\Translate\Classes\ThemeScanner;
 use RainLab\Translate\Models\Message;
 
 /**
