@@ -230,6 +230,13 @@ class EventPluginRegistry
                         }
                     }
 
+                    // Only translate url if type is url
+                    if (($postItem['type'] ?? 'url') !== 'url') {
+                        foreach ($localeData as &$targetData) {
+                            unset($targetData['url']);
+                        }
+                    }
+
                     if ($localeData) {
                         array_set($postItem['viewBag'], 'locale', $localeData);
                     }
