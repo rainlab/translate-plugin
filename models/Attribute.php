@@ -12,6 +12,11 @@ class Attribute extends Model
      */
     public $table = 'rainlab_translate_attributes';
 
+    /**
+     * @var bool Indicates if the model should be timestamped.
+     */
+    public $timestamps = false;
+
     public $morphTo = [
         'model' => []
     ];
