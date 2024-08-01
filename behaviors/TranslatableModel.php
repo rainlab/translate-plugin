@@ -297,9 +297,13 @@ class TranslatableModel extends TranslatableBehavior
      */
     protected function storeTranslatableBasicData($locale = null)
     {
+        if (!$locale) {
+            $locale = $this->translatableContext;
+        }
+
         $data = (array) $this->translatableAttributes[$locale];
 
-        $data = $this->getUniqueTranslatableData($data);
+        $data = $this->getUniqueTranslatableData($locale, $data);
 
         $data = json_encode($data, JSON_UNESCAPED_UNICODE);
 
@@ -326,9 +330,13 @@ class TranslatableModel extends TranslatableBehavior
      * by leveraging originalIsEquivalent. It applies contextual values from
      * setAttributeTranslated, in addition to attributes set on the model.
      */
-    protected function getUniqueTranslatableData(array $data): array
+    protected function getUniqueTranslatableData($locale, array $data): array
     {
+        $originalContext = $this->model->translateContext();
+
         $originalAttrs = $this->model->attributes;
+
+        $this->model->translateContext($locale);
 
         $this->model->forceFill($data);
 
@@ -345,6 +353,8 @@ class TranslatableModel extends TranslatableBehavior
         }
 
         $data = array_intersect_key($data, $includeAttrs);
+
+        $this->model->translateContext($originalContext);
 
         $this->model->attributes = $originalAttrs;
 
