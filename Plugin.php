@@ -144,12 +144,12 @@ class Plugin extends PluginBase
     {
         return [
             'filters' => [
-                '_'  => [$this, 'translateString'],
-                '__' => [$this, 'translatePlural'],
-                'transRaw'  => [$this, 'translateRawString'],
-                'transRawPlural' => [$this, 'translateRawPlural'],
-                'localeUrl' => [$this, 'localeUrl'],
-                'localePage' => [$this, 'localePage'],
+                '_'  => [$this, 'translateString', false],
+                '__' => [$this, 'translatePlural', false],
+                'transRaw'  => [$this, 'translateRawString', false],
+                'transRawPlural' => [$this, 'translateRawPlural', false],
+                'localeUrl' => [$this, 'localeUrl', false],
+                'localePage' => [$this, 'localePage', false],
             ]
         ];
     }
