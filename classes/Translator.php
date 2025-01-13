@@ -2,6 +2,7 @@
 
 use App;
 use Cms;
+use Url;
 use Site;
 use Event;
 use Schema;
@@ -199,7 +200,7 @@ class Translator
         $newPath = trim($router->urlFromPattern($urlPattern, $params), '/');
         $newPath = $site->attachRoutePrefix($newPath);
 
-        return Cms::url($newPath);
+        return Url::toRelative($newPath);
     }
 
     //
