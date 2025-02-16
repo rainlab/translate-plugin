@@ -164,7 +164,10 @@ class Translator
             return $path;
         }
 
-        $newPath = $site->removeRoutePrefix($path);
+        // Remove old prefix (current site)
+        $newPath = Site::getSiteFromContext()->removeRoutePrefix($path);
+
+        // Attach new prefix (proposed site)
         $newPath = $site->attachRoutePrefix($newPath);
 
         return $newPath;
