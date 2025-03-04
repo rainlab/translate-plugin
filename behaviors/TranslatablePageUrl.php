@@ -91,7 +91,7 @@ class TranslatablePageUrl extends ExtensionBase
     {
         $locale = $locale ?: $this->translatableContext;
 
-        return strlen($this->getSettingsUrlAttributeTranslated($locale)) > 0;
+        return strlen((string) $this->getSettingsUrlAttributeTranslated($locale)) > 0;
     }
 
     /**
