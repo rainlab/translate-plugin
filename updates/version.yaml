@@ -97,3 +97,6 @@ v1.10.5: Fixes media finder when only 1 locale is available
 v1.11.0: Update to latest Media Finder changes in October v2.2
 v1.11.1: Improve support with October v3.0
 v1.12.0: Adds scopeTransWhereNoFallback method
+v1.12.1:
+    - Performance. Change column 'model_id' to int. Change index, create combine index ['model_type', 'model_id'] for rainlab_translate_attributes
+    - update_attributes_change_index_model.php
