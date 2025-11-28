@@ -37,3 +37,4 @@ v2.2.6: Adds option to disable fallback values when writing attributes
 v2.2.7: Improve theme scanner to show active theme and include component partials
 v2.2.8: Fixes issue sending mail with different site context
 v2.2.10: Fixes timestamp SQL error on attributes table
+v2.2.14: Fixes multilingual file attachments associating to their morph models
