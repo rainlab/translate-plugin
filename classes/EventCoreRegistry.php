@@ -34,6 +34,7 @@ class EventCoreRegistry
         $this->extendCmsThemeDataModel();
         $this->extendBackendFormFields();
         $this->extendSystemMailerContent();
+        $this->extendSystemFileModel();
     }
 
     /**
@@ -267,6 +268,28 @@ class EventCoreRegistry
                 return false;
             }
         }, 1);
+    }
+
+    /**
+     * extendSystemFileModel extends the File model to support resolving translated file attachments.
+     */
+    protected function extendSystemFileModel()
+    {
+        \System\Models\File::extend(function($model) {
+            $model->bindEvent('model.beforeGetAttribute', function ($key) use (&$model) {
+                // Return the attachment_type without the added :locale part.
+                if ($key === 'attachment_type') {
+                    $value = $model->attributes[$key] ?? '';
+                    if (!str_contains($value, ':')) {
+                        return $value;
+                    }
+
+                    $parts = array_slice(explode(':', $value), 0, -1);
+
+                    return implode(':', $parts);
+                }
+            });
+        });
     }
 
     /**
