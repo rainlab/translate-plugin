@@ -277,7 +277,7 @@ class EventCoreRegistry
     {
         \System\Models\File::extend(function($model) {
             $model->bindEvent('model.beforeGetAttribute', function ($key) use (&$model) {
-                // Return the attachment_type without the added :locale part.
+                // Return the attachment_type without the added :locale suffix.
                 if ($key === 'attachment_type') {
                     $value = $model->attributes[$key] ?? '';
                     if (!str_contains($value, ':')) {
