@@ -256,29 +256,38 @@ class ThemeScanner
          * {{'AJAX framework'|_(variables)}}
          * {{\s*'([^'])+'\s*[|]\s*_\s*\([^\)]+\)\s*}}
          */
+        $patterns = [
+            "#{{\s*'([^']+)'\s*\|\s*(:?__?|trans(:?_choice)?)\s*(?:\|.+)?}}#",
+            "#{{\s*'([^']+)'\s*\|\s*(:?__?|trans(:?_choice)?)\s*\([^\)]+\)\s*}}#",
+            '#{{\s*"([^"]+)"\s*\|\s*(:?__?|trans(:?_choice)?)\s*(?:\|.+)?}}#',
+            '#{{\s*"([^"]+)"\s*\|\s*(:?__?|trans(:?_choice)?)\s*\([^\)]+\)\s*}}#',
+        ];
 
-        $quoteChar = preg_quote("'");
-
-        preg_match_all('#{{\s*'.$quoteChar.'([^'.$quoteChar.']+)'.$quoteChar.'\s*[|]\s*_\s*(?:[|].+)?}}#', $content, $match);
-        if (isset($match[1])) {
-            $messages = array_merge($messages, $match[1]);
+        foreach ($patterns as $pattern) {
+            preg_match_all($pattern, $content, $match);
+            if (!empty($match[1])) {
+                $messages = array_merge($messages, $match[1]);
+            }
         }
 
-        preg_match_all('#{{\s*'.$quoteChar.'([^'.$quoteChar.']+)'.$quoteChar.'\s*[|]\s*_\s*\([^\)]+\)\s*}}#', $content, $match);
-        if (isset($match[1])) {
-            $messages = array_merge($messages, $match[1]);
-        }
+        /**
+         * @event rainlab.translate.themeScanner.afterProcessStandardTags
+         * Fires after processing standard language filter tags.
+         *
+         * Example usage:
+         *
+         *     Event::listen('rainlab.translate.themeScanner.afterProcessStandardTags', function (string $content) {
+         *         // Return an array of additionally parsed messages from the content
+         *
+         */
+        $results = Event::fire('rainlab.translate.themeScanner.afterProcessStandardTags', [$content]);
 
-        $quoteChar = preg_quote('"');
-
-        preg_match_all('#{{\s*'.$quoteChar.'([^'.$quoteChar.']+)'.$quoteChar.'\s*[|]\s*_\s*(?:[|].+)?}}#', $content, $match);
-        if (isset($match[1])) {
-            $messages = array_merge($messages, $match[1]);
-        }
-
-        preg_match_all('#{{\s*'.$quoteChar.'([^'.$quoteChar.']+)'.$quoteChar.'\s*[|]\s*_\s*\([^\)]+\)\s*}}#', $content, $match);
-        if (isset($match[1])) {
-            $messages = array_merge($messages, $match[1]);
+        if (is_array($results)) {
+            foreach ($results as $result) {
+                if (is_array($result) && !empty($result)) {
+                    $messages = array_merge($messages, array_values($result));
+                }
+            }
         }
 
         return $messages;
