@@ -146,6 +146,8 @@ class Plugin extends PluginBase
             'filters' => [
                 '_'  => [$this, 'translateString', false],
                 '__' => [$this, 'translatePlural', false],
+                'trans'  => [$this, 'translateString', false],
+                'trans_choice' => [$this, 'translatePlural', false],
                 'transRaw'  => [$this, 'translateRawString', false],
                 'transRawPlural' => [$this, 'translateRawPlural', false],
                 'localeUrl' => [$this, 'localeUrl', false],
