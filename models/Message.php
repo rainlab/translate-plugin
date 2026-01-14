@@ -329,8 +329,8 @@ class Message extends Model
     {
         foreach ($result as $key => $message) {
             if (
-                stripos($message, $search) === false &&
-                stripos($key, $search) === false
+                mb_stripos($message, $search) === false &&
+                mb_stripos($key, $search) === false
             ) {
                 unset($result[$key]);
             }
