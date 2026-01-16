@@ -243,6 +243,11 @@ class EventCoreRegistry
                 return;
             }
 
+            // Closures cannot be localized as file-based views
+            if ((!empty($view) && !is_string($view)) || (!empty($plain) && !is_string($plain))) {
+                return;
+            }
+
             // Get the locale to use for this template
             $locale = !empty($data['_current_locale']) ? $data['_current_locale'] : App::getLocale();
 
