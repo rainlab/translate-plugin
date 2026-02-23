@@ -1,27 +1,24 @@
-<?php namespace RainLab\Translate\Classes;
+<?php namespace RainLab\Translate\Classes\EventRegistry;
 
 use Str;
 use App;
 use Event;
 use System\Classes\PluginManager;
-use RainLab\Translate\Classes\Locale as LocaleModel;
+use RainLab\Translate\Classes\Translator;
 use October\Rain\Html\Helper as HtmlHelper;
 
 /**
- * EventPluginRegistry for bootstrapping events related to plugins,
- * mostly the Static Pages plugin.
+ * StaticPageHandler for RainLab.Pages translation events
  *
- * @package october\system
+ * @package rainlab\translate
  * @author Alexey Bobkov, Samuel Georges
  */
-class EventPluginRegistry
+class StaticPageHandler
 {
-    use \October\Rain\Support\Traits\Singleton;
-
     /**
-     * registerEvents
+     * register events
      */
-    public function registerEvents()
+    public function register()
     {
         $this->extendStaticPagesCmsSitePicker();
         $this->extendStaticPagesBackendFormFields();
@@ -29,12 +26,11 @@ class EventPluginRegistry
     }
 
     /**
-     * bootEvents
+     * boot events
      */
-    public function bootEvents()
+    public function boot()
     {
         $this->extendStaticPagesMenuReferences();
-        $this->extendStaticPagesTemplateList();
     }
 
     /**
@@ -56,7 +52,7 @@ class EventPluginRegistry
     }
 
     /**
-     * registerFormFieldAdjustments for RainLab.Pages MenuItem data
+     * extendStaticPagesBackendFormFields for RainLab.Pages page data
      */
     protected function extendStaticPagesBackendFormFields()
     {
@@ -281,24 +277,6 @@ class EventPluginRegistry
                 return $result;
             };
             $items = $iterator($items);
-        });
-    }
-
-    /**
-     * extendStaticPagesTemplateList prunes localized content files from template list
-     */
-    protected function extendStaticPagesTemplateList()
-    {
-        Event::listen('pages.content.templateList', function($widget, $templates) {
-            $locales = LocaleModel::listAvailable();
-
-            $extensions = array_map(function($ext) {
-                return '.'.$ext;
-            }, array_keys($locales));
-
-            return $templates->filter(function($template) use ($extensions) {
-                return !Str::endsWith($template->getBaseFileName(), $extensions);
-            });
         });
     }
 

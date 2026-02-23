@@ -9,8 +9,7 @@ use System\Classes\PluginBase;
 use System\Classes\CombineAssets;
 use System\Classes\SettingsManager;
 use RainLab\Translate\Models\Message;
-use RainLab\Translate\Classes\EventCoreRegistry;
-use RainLab\Translate\Classes\EventPluginRegistry;
+use RainLab\Translate\Classes\EventRegistry;
 use RainLab\Translate\Classes\Translator;
 
 /**
@@ -38,8 +37,7 @@ class Plugin extends PluginBase
      */
     public function register()
     {
-        EventCoreRegistry::instance()->registerEvents();
-        EventPluginRegistry::instance()->registerEvents();
+        EventRegistry::instance()->registerEvents();
 
         // Register console commands
         $this->registerConsoleCommand('translate.scan', \Rainlab\Translate\Console\ScanCommand::class);
@@ -54,8 +52,7 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
-        EventCoreRegistry::instance()->bootEvents();
-        EventPluginRegistry::instance()->bootEvents();
+        EventRegistry::instance()->bootEvents();
 
         if (System::checkDebugMode()) {
             App::after(function() {
