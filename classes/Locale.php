@@ -184,5 +184,6 @@ class Locale extends ElementBase
         self::$cacheListEnabled = null;
         self::$cacheListAvailable = null;
         self::$cacheByCode = [];
+        self::$defaultLocale = null;
     }
 }

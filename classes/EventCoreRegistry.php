@@ -215,8 +215,8 @@ class EventCoreRegistry
     {
         $translatable = array_flip($model->getTranslatableAttributes());
 
-        // Special: A custom field "markup_html" is used for Content templates.
-        // @todo review if this is still needed -sg
+        // The CMS Content editor uses a form field named "markup_html" to render
+        // the markup content. Map it here so the ML indicator appears on the field.
         if ($model instanceof Content && array_key_exists('markup', $translatable)) {
             $translatable['markup_html'] = true;
         }

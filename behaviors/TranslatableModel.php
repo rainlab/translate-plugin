@@ -38,12 +38,12 @@ class TranslatableModel extends TranslatableBehavior
         $model->bindEvent('model.afterDelete', function() use ($model) {
             Db::table('rainlab_translate_attributes')
                 ->where('model_id', $model->getKey())
-                ->where('model_type', get_class($model))
+                ->where('model_type', $this->getClass())
                 ->delete();
 
             Db::table('rainlab_translate_indexes')
                 ->where('model_id', $model->getKey())
-                ->where('model_type', get_class($model))
+                ->where('model_type', $this->getClass())
                 ->delete();
         });
     }
