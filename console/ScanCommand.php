@@ -1,7 +1,6 @@
 <?php namespace RainLab\Translate\Console;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
 use RainLab\Translate\Classes\ThemeScanner;
 use RainLab\Translate\Models\Message;
 
@@ -11,12 +10,13 @@ use RainLab\Translate\Models\Message;
 class ScanCommand extends Command
 {
     /**
-     * @var string name
+     * @var string signature for the console command
      */
-    protected $name = 'translate:scan';
+    protected $signature = 'translate:scan
+        {--purge : First purge existing messages.}';
 
     /**
-     * @var string description
+     * @var string description of the console command
      */
     protected $description = 'Scan theme localization files for new messages.';
 
@@ -35,21 +35,4 @@ class ScanCommand extends Command
         $this->output->note('You may need to run cache:clear for updated messages to take effect.');
     }
 
-    /**
-     * getArguments
-     */
-    protected function getArguments()
-    {
-        return [];
-    }
-
-    /**
-     * getOptions
-     */
-    protected function getOptions()
-    {
-        return [
-            ['purge', 'null', InputOption::VALUE_NONE, 'First purge existing messages.', null],
-        ];
-    }
 }

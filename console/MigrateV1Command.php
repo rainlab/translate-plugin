@@ -11,12 +11,12 @@ use RainLab\Translate\Models\Message;
 class MigrateV1Command extends Command
 {
     /**
-     * @var string name
+     * @var string signature for the console command
      */
-    protected $name = 'translate:migratev1';
+    protected $signature = 'translate:migratev1';
 
     /**
-     * @var string description
+     * @var string description of the console command
      */
     protected $description = 'Migrates theme translations to newer format without any data destruction';
 
@@ -82,19 +82,4 @@ class MigrateV1Command extends Command
         $this->langData[$locale][$key] = $message;
     }
 
-    /**
-     * getArguments
-     */
-    protected function getArguments()
-    {
-        return [];
-    }
-
-    /**
-     * getOptions
-     */
-    protected function getOptions()
-    {
-        return [];
-    }
 }
