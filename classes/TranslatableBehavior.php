@@ -159,7 +159,15 @@ abstract class TranslatableBehavior extends ExtensionBase
 
         // Default locale
         if ($locale == $this->translatableDefault) {
-            $result = $this->getAttributeFromData($this->model->attributes, $key);
+            if (!array_key_exists($locale, $this->translatableAttributes)) {
+                $this->loadTranslatableData($locale);
+            }
+            if ($this->hasTranslation($key, $locale)) {
+                $result = $this->getAttributeFromData($this->translatableAttributes[$locale], $key);
+            }
+            else {
+                $result = $this->getAttributeFromData($this->model->attributes, $key);
+            }
         }
         // Other locale
         else {
@@ -209,10 +217,15 @@ abstract class TranslatableBehavior extends ExtensionBase
      */
     public function hasTranslation($key, $locale)
     {
-        // If the default locale is passed, the attributes are retrieved from the model,
-        // otherwise fetch the attributes from the $translatableAttributes property
+        // Check translatableAttributes first, falling back to model attributes
+        // for the default locale (backward compat with existing data)
         if ($locale == $this->translatableDefault) {
-            $translatableAttributes = $this->model->attributes;
+            if (isset($this->translatableAttributes[$locale])) {
+                $translatableAttributes = $this->translatableAttributes[$locale];
+            }
+            else {
+                $translatableAttributes = $this->model->attributes;
+            }
         }
         else {
             // Ensure that the translatableData has been loaded
@@ -242,7 +255,7 @@ abstract class TranslatableBehavior extends ExtensionBase
         }
 
         if ($locale == $this->translatableDefault) {
-            return $this->setAttributeFromData($this->model->attributes, $key, $value);
+            $this->setAttributeFromData($this->model->attributes, $key, $value);
         }
 
         if (!array_key_exists($locale, $this->translatableAttributes)) {

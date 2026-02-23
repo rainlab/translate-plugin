@@ -332,6 +332,12 @@ class TranslatableModel extends TranslatableBehavior
      */
     protected function getUniqueTranslatableData($locale, array $data): array
     {
+        // Default locale values must always be stored so they survive
+        // a change of default language
+        if ($locale === $this->translatableDefault) {
+            return $data;
+        }
+
         $originalContext = $this->model->translateContext();
 
         $originalAttrs = $this->model->attributes;
