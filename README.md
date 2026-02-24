@@ -421,9 +421,9 @@ class Post extends Model
     // [...]
 
     /**
-     * @var array implement the TranslatableModel behavior softly.
+     * @var array implement the TranslatableModel behavior.
      */
-    public $implement = ['@'.\RainLab\Translate\Behaviors\TranslatableModel::class];
+    public $implement = [\RainLab\Translate\Behaviors\TranslatableModel::class];
 
     /**
      * @var array translatable attributes, if available.
