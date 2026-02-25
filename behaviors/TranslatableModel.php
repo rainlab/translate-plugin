@@ -1,7 +1,6 @@
 <?php namespace RainLab\Translate\Behaviors;
 
 use Db;
-use DbDongle;
 use RainLab\Translate\Classes\TranslatableBehavior;
 
 /**
@@ -225,7 +224,7 @@ class TranslatableModel extends TranslatableBehavior
 
         $query->leftJoin($joinTableWithAlias, function($join) use ($locale, $index, $indexTableAlias) {
             $join
-                ->on(Db::raw(DbDongle::cast($this->model->getQualifiedKeyName(), 'TEXT')), '=', $indexTableAlias . '.model_id')
+                ->on($this->model->getQualifiedKeyName(), '=', $indexTableAlias . '.model_id')
                 ->where($indexTableAlias . '.model_type', '=', $this->getClass())
                 ->where($indexTableAlias . '.item', '=', $index)
                 ->where($indexTableAlias . '.locale', '=', $locale);
