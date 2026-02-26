@@ -38,3 +38,4 @@ v2.2.7: Improve theme scanner to show active theme and include component partial
 v2.2.8: Fixes issue sending mail with different site context
 v2.2.10: Fixes timestamp SQL error on attributes table
 v2.2.14: Fixes multilingual file attachments associating to their morph models
+v2.3.0: Adds translate:import-attributes command for migrating data to core Translatable trait
