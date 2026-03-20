@@ -190,7 +190,7 @@ class EventPluginRegistry
                     foreach ($items as &$item) {
                         foreach ($fieldsToTranslate as $fieldName) {
                             if (isset($item[$fieldName])) {
-                                $item[$fieldName] = array_get($item['viewBag'], "locale.$locale.$fieldName", $item[$fieldName]);
+                                $item[$fieldName] = array_get($item['viewBag'] ?? [], "locale.$locale.$fieldName", $item[$fieldName]);
                             }
                         }
 
