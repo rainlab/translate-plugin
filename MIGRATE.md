@@ -206,7 +206,7 @@ For reference, the two systems store data differently:
 
 This enables partial updates (change one attribute without rewriting the blob) and direct queries without a separate indexes table.
 
-## Migrating Theme Page Properties (October CMS v4.4+)
+## Migrating Theme Files (October CMS v4.4+)
 
 October CMS v4.4 translates CMS page properties (URL, title, description, meta fields) natively using the `[translatable]` component section, replacing the `[viewBag]` locale keys written by this plugin. When the core feature is detected, the plugin automatically stops attaching its page translation behaviors and the editor Translate popup, and the core takes over. Legacy `[viewBag]` keys keep working as a read fallback, so migration is optional but recommended.
 
@@ -229,3 +229,19 @@ localeTitle[fr] = "Contactez"
 locales[fr][url] = "/contactez"
 locales[fr][title] = "Contactez"
 ```
+
+### Content Files
+
+October CMS v4.4 also resolves translated content blocks from locale directories (`content/fr/welcome.htm`), replacing the file suffix convention used by this plugin (`welcome.fr.htm`). The same `translate:import-theme` command moves suffixed content files into their locale directory, preserving nested paths:
+
+```
+# Before
+content/welcome.fr.htm
+content/blog/intro.fr.htm
+
+# After
+content/fr/welcome.htm
+content/fr/blog/intro.htm
+```
+
+Files whose target already exists are skipped and reported. The plugin continues to serve suffixed files with precedence over the core resolution, so un-migrated themes keep working and this migration can be run at any time.

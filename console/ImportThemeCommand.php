@@ -2,16 +2,19 @@
 
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
+use Cms\Classes\Content;
+use RainLab\Translate\Classes\Locale;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
- * ImportThemeCommand migrates translated page properties from RainLab.Translate
- * viewBag keys to the core translatable component section.
+ * ImportThemeCommand migrates translated theme files from RainLab.Translate
+ * conventions to the core translation features.
  *
  * Converts [viewBag] localeUrl, localeTitle, localeDescription, localeMeta_title and
- * localeMeta_description keys into [translatable] locales entries, used by
- * October CMS v4.4 or above.
+ * localeMeta_description keys into [translatable] locales entries, and moves content
+ * files using the locale suffix (welcome.fr.htm) into locale directories (fr/welcome.htm),
+ * used by October CMS v4.4 or above.
  */
 class ImportThemeCommand extends Command
 {
@@ -23,7 +26,7 @@ class ImportThemeCommand extends Command
     /**
      * @var string description
      */
-    protected $description = 'Migrates translated page properties from viewBag keys to the core translatable component';
+    protected $description = 'Migrates translated pages and content files to the core translation features';
 
     /**
      * @var array propertyMap of viewBag keys to translatable fields.
@@ -62,31 +65,53 @@ class ImportThemeCommand extends Command
             return 1;
         }
 
-        $candidates = [];
+        $pages = [];
         foreach (Page::listInTheme($theme, true) as $page) {
             if ($this->pageHasLegacyKeys($page)) {
-                $candidates[] = $page;
+                $pages[] = $page;
             }
         }
 
-        if (!count($candidates)) {
-            $this->info("No pages with translated viewBag properties found in theme [{$theme->getDirName()}].");
+        $localeCodes = array_keys(Locale::listAvailable());
+        $contents = $this->findContentCandidates($theme, $localeCodes);
+
+        if (!count($pages) && !count($contents)) {
+            $this->info("No pages or content files to migrate in theme [{$theme->getDirName()}].");
             return 0;
         }
 
-        $this->info(sprintf('Found %d page(s) to migrate in theme [%s].', count($candidates), $theme->getDirName()));
+        if (count($pages)) {
+            $this->info(sprintf('Found %d page(s) to migrate in theme [%s].', count($pages), $theme->getDirName()));
 
-        foreach ($candidates as $page) {
-            $this->line(' - '.$page->getFileName());
+            foreach ($pages as $page) {
+                $this->line(' - '.$page->getFileName());
+            }
+        }
+
+        if (count($contents)) {
+            $this->info(sprintf('Found %d content file(s) to move in theme [%s].', count($contents), $theme->getDirName()));
+
+            foreach ($contents as $item) {
+                $this->line(sprintf(' - %s -> %s', $item['content']->getFileName(), $item['target']));
+            }
         }
 
         if (!$this->option('force') && !$this->confirm('Proceed with migration?')) {
             return 0;
         }
 
-        foreach ($candidates as $page) {
+        foreach ($pages as $page) {
             $this->migratePage($page);
             $this->info('Migrated: '.$page->getFileName());
+        }
+
+        foreach ($contents as $item) {
+            if ($this->migrateContent($item['content'], $item['target'])) {
+                $this->info('Moved: '.$item['target']);
+            }
+            else {
+                $this->warn('Skipped (target already exists): '.$item['target']);
+            }
         }
 
         $this->newLine();
@@ -139,6 +164,62 @@ class ImportThemeCommand extends Command
         }
 
         $page->save();
+    }
+
+    /**
+     * findContentCandidates locates content files using the locale suffix convention.
+     */
+    protected function findContentCandidates($theme, array $localeCodes): array
+    {
+        $result = [];
+
+        foreach (Content::listInTheme($theme, true) as $content) {
+            $target = $this->makeContentTargetName($content->getFileName(), $localeCodes);
+            if ($target !== null) {
+                $result[] = ['content' => $content, 'target' => $target];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * makeContentTargetName converts a suffixed file name (blog/intro.fr.htm) to a locale
+     * directory path (fr/blog/intro.htm), returning null when no locale suffix matches.
+     */
+    protected function makeContentTargetName(string $fileName, array $localeCodes): ?string
+    {
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+        if (!$extension) {
+            return null;
+        }
+
+        $baseName = substr($fileName, 0, -(strlen($extension) + 1));
+
+        foreach ($localeCodes as $locale) {
+            if (str_ends_with($baseName, '.'.$locale)) {
+                $stripped = substr($baseName, 0, -(strlen($locale) + 1));
+                return "{$locale}/{$stripped}.{$extension}";
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * migrateContent renames a content file into its locale directory, returning false
+     * when the target already exists.
+     */
+    protected function migrateContent($content, string $target): bool
+    {
+        if ($content->newQuery()->find($target)) {
+            return false;
+        }
+
+        $content->fileName = $target;
+        $content->save();
+
+        return true;
     }
 
     /**
