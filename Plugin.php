@@ -44,6 +44,7 @@ class Plugin extends PluginBase
         // Register console commands
         $this->registerConsoleCommand('translate.scan', \Rainlab\Translate\Console\ScanCommand::class);
         $this->registerConsoleCommand('translate.migratev1', \Rainlab\Translate\Console\MigrateV1Command::class);
+        $this->registerConsoleCommand('translate.importcore', \Rainlab\Translate\Console\ImportCoreCommand::class);
 
         // Register asset bundles
         $this->registerAssetBundles();
