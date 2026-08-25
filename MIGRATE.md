@@ -205,3 +205,27 @@ For reference, the two systems store data differently:
 ```
 
 This enables partial updates (change one attribute without rewriting the blob) and direct queries without a separate indexes table.
+
+## Migrating Theme Page Properties (October CMS v4.4+)
+
+October CMS v4.4 translates CMS page properties (URL, title, description, meta fields) natively using the `[translatable]` component section, replacing the `[viewBag]` locale keys written by this plugin. When the core feature is detected, the plugin automatically stops attaching its page translation behaviors and the editor Translate popup, and the core takes over. Legacy `[viewBag]` keys keep working as a read fallback, so migration is optional but recommended.
+
+Run the import command to rewrite the page files in the active theme:
+
+```bash
+php artisan translate:import-theme
+```
+
+Use `--theme=` to target a specific theme and `--force` to skip confirmation prompts. The command converts keys as follows, keeping any values already present in a `[translatable]` section:
+
+```ini
+# Before
+[viewBag]
+localeUrl[fr] = "/contactez"
+localeTitle[fr] = "Contactez"
+
+# After
+[translatable]
+locales[fr][url] = "/contactez"
+locales[fr][title] = "Contactez"
+```

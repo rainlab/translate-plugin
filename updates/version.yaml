@@ -41,3 +41,4 @@ v2.2.14: Fixes multilingual file attachments associating to their morph models
 v2.2.15: Compatibility with October CMS v4.2
 v2.2.16: Fixes localized mail templates from database and registered views
 v2.3.0: Adds translate:import-attributes command for migrating data to core Translatable trait
+v2.3.1: Adds translate:import-theme command and compatibility with core page translation in v4.4

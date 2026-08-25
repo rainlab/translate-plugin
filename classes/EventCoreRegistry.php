@@ -29,13 +29,25 @@ class EventCoreRegistry
      */
     public function registerEvents()
     {
-        $this->extendCmsSitePicker();
-        $this->extendCmsPageObject();
-        $this->extendEditorPageToolbar();
+        // Core v4.4+ handles translated page properties natively
+        if (!$this->coreHasTranslatablePages()) {
+            $this->extendCmsSitePicker();
+            $this->extendCmsPageObject();
+            $this->extendEditorPageToolbar();
+        }
+
         $this->extendCmsThemeDataModel();
         $this->extendBackendFormFields();
         $this->extendSystemMailerContent();
         $this->extendSystemFileModel();
+    }
+
+    /**
+     * coreHasTranslatablePages returns true when the core translates page properties natively.
+     */
+    protected function coreHasTranslatablePages(): bool
+    {
+        return class_exists(\Cms\Components\TranslatableBag::class);
     }
 
     /**
