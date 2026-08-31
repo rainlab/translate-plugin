@@ -1,21 +1,24 @@
 # Migrating to Core Translatable
 
-This guide is for plugin authors who want to switch from `RainLab.Translate` behaviors to the core `Translatable` trait shipped with October CMS v4.2+. **This migration is entirely opt-in** — the plugin continues to work as-is and both systems can coexist.
+This guide is for plugin authors and site owners who want to switch from `RainLab.Translate` to the core translation features. Model attribute translation moved into the core `Translatable` trait in October CMS v4.2, and v4.4 completes the picture with native page, content, and mail template translation. **This migration is entirely opt-in** — the plugin continues to work as-is and both systems can coexist.
+
+By v4.4, the core covers every area this plugin provides: model attributes (`Translatable` trait), page properties and URLs (`[translatable]` component), theme content files (locale directories), mail templates, and theme strings (`lang/*.json` files, editable in the CMS editor's Localization area). The steps below migrate each area in turn.
 
 ## When to Switch
 
 - You want zero plugin dependencies for translation support
 - You want per-row storage benefits (partial updates, direct queries, no separate indexes table)
-- You're building a new plugin and want to use the core API from the start
+- You're building a new project and want to use the core API from the start
 
 ## When NOT to Switch
 
-- You depend on plugin-specific features (theme string translation, message management UI, CMS content translation)
 - Other plugins in your ecosystem depend on `RainLab.Translate` being present
+- You rely on the plugin's database-backed message store, where the `|_` and `|__` filters resolve ad-hoc strings scanned from templates and edited in the backend. The core `|_` and `|__` filters use the same syntax but resolve from file-based `lang/*.json` (via Laravel's `__()`), so there is no scan-and-edit database workflow
 
 ## Prerequisites
 
-- October CMS v4.2 or later
+- October CMS v4.2 or later for model attribute migration (Steps 1-6)
+- October CMS v4.4 or later for theme, content, and mail template migration
 - Back up your database before migrating
 
 ## Step 1: Update Model Declaration
@@ -208,7 +211,7 @@ This enables partial updates (change one attribute without rewriting the blob) a
 
 ## Migrating Theme Files (October CMS v4.4+)
 
-October CMS v4.4 translates CMS page properties (URL, title, description, meta fields) natively using the `[translatable]` component section, replacing the `[viewBag]` locale keys written by this plugin. When the core feature is detected, the plugin automatically stops attaching its page translation behaviors and the editor Translate popup, and the core takes over. Legacy `[viewBag]` keys keep working as a read fallback, so migration is optional but recommended.
+October CMS v4.4 translates CMS page properties (URL, title, description, meta fields) natively using the `[translatable]` component section, replacing the `[viewBag]` locale keys written by this plugin. When the core feature is detected, the plugin automatically stops attaching its page translation behaviors and the editor Translate popup, and the core takes over. Existing `[viewBag]` keys keep working as a read fallback, so migration is optional but recommended.
 
 Run the import command to rewrite the page files in the active theme:
 
@@ -256,4 +259,4 @@ Run the mail import command to migrate suffixed database templates:
 php artisan translate:import-mail
 ```
 
-The command copies the subject and content from each `welcome-fr` style record onto the base `welcome` template as translated attributes, keeping any translations already stored, then removes the suffix record so the core resolution takes over. Registered view templates using a suffix code live in plugin code and are reported instead; move the view file into a locale directory (`welcome-fr` becomes `fr/welcome`).
+The command copies the subject, HTML content and text content from each `welcome-fr` style record onto the base `welcome` template as translated attributes, keeping any translations already stored, then removes the suffix record so the core resolution takes over. If the base template does not exist yet, it is created first. Registered view templates using a suffix code live in plugin code and are reported instead; move the view file into a locale directory (`welcome-fr` becomes `fr/welcome`).
