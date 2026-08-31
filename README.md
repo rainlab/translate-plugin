@@ -1,6 +1,6 @@
 # Translation plugin
 
-> **Note:** Since October CMS v4.2, model translation is available in the core via the `Translatable` trait — no plugin required. This plugin is still useful if you need CMS content translation, theme string/message management, URL translation, or theme data translation. If you only need model attribute translation, consider using the [core Translatable trait](https://docs.octobercms.com/4.x/extend/multisite/translatable.html) instead. See [MIGRATE.md](MIGRATE.md) for a step-by-step migration guide.
+> **Note:** As of October CMS v4.4, the core handles translation natively and no plugin is required. Model attributes translate via the [`Translatable` trait](https://docs.octobercms.com/4.x/extend/multisite/translatable.html), CMS page properties and URLs via the `[translatable]` component section, content files via locale directories (`content/fr/welcome.htm`), and mail templates natively. Theme strings are managed as `lang/*.json` files (editable directly in the CMS editor's Localization area) and read with the `|trans` filter. If you are starting a new project, prefer the core features. This plugin is maintained for existing sites and for its message parameter/choice syntax; see [MIGRATE.md](MIGRATE.md) for a step-by-step migration guide.
 
 Enables multi-lingual sites.
 
