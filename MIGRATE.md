@@ -205,3 +205,55 @@ For reference, the two systems store data differently:
 ```
 
 This enables partial updates (change one attribute without rewriting the blob) and direct queries without a separate indexes table.
+
+## Migrating Theme Files (October CMS v4.4+)
+
+October CMS v4.4 translates CMS page properties (URL, title, description, meta fields) natively using the `[translatable]` component section, replacing the `[viewBag]` locale keys written by this plugin. When the core feature is detected, the plugin automatically stops attaching its page translation behaviors and the editor Translate popup, and the core takes over. Legacy `[viewBag]` keys keep working as a read fallback, so migration is optional but recommended.
+
+Run the import command to rewrite the page files in the active theme:
+
+```bash
+php artisan translate:import-theme
+```
+
+Use `--theme=` to target a specific theme and `--force` to skip confirmation prompts. The command converts keys as follows, keeping any values already present in a `[translatable]` section:
+
+```ini
+# Before
+[viewBag]
+localeUrl[fr] = "/contactez"
+localeTitle[fr] = "Contactez"
+
+# After
+[translatable]
+locales[fr][url] = "/contactez"
+locales[fr][title] = "Contactez"
+```
+
+### Content Files
+
+October CMS v4.4 also resolves translated content blocks from locale directories (`content/fr/welcome.htm`), replacing the file suffix convention used by this plugin (`welcome.fr.htm`). The same `translate:import-theme` command moves suffixed content files into their locale directory, preserving nested paths:
+
+```
+# Before
+content/welcome.fr.htm
+content/blog/intro.fr.htm
+
+# After
+content/fr/welcome.htm
+content/fr/blog/intro.htm
+```
+
+Files whose target already exists are skipped and reported. The plugin continues to serve suffixed files with precedence over the core resolution, so un-migrated themes keep working and this migration can be run at any time.
+
+### Mail Templates
+
+October CMS v4.4 translates mail templates natively: database templates store translated attributes through the core `Translatable` trait, and registered view templates resolve from locale directories (`views/mail/fr/welcome.htm`), replacing the `{code}-{locale}` suffix convention used by this plugin.
+
+Run the mail import command to migrate suffixed database templates:
+
+```bash
+php artisan translate:import-mail
+```
+
+The command copies the subject and content from each `welcome-fr` style record onto the base `welcome` template as translated attributes, keeping any translations already stored, then removes the suffix record so the core resolution takes over. Registered view templates using a suffix code live in plugin code and are reported instead; move the view file into a locale directory (`welcome-fr` becomes `fr/welcome`).
