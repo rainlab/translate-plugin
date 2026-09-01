@@ -128,9 +128,12 @@ The retained `getTranslateAttributes($locale)` alias returns every translatable 
 | Old Scope | New Scope | Notes |
 |---|---|---|
 | `transWhere($key, $value, $locale)` | *(unchanged)* | Retained with original signature, no changes needed |
-| `transOrderBy($key, $direction, $locale)` | `orderByTranslation($key, $locale, $direction)` | Arg order changed |
+| `transOrderBy($key, $direction, $locale)` | *(unchanged)* | Retained with original signature, no changes needed |
 
-`transWhere` matches either the base value or the translated value for the locale (defaulting to the active locale), and short-circuits to a plain `where` on the default locale. Use `whereTranslation($key, $locale, $value)` when you want to match only a stored translation row.
+Both plugin scopes were kept in the core trait with their original signatures, so calls to them need no changes. They exist alongside the stricter core scopes rather than replacing them:
+
+- `transWhere` matches either the base value or the translated value for the locale (defaulting to the active locale), and short-circuits to a plain `where` on the default locale. Use `whereTranslation($key, $locale, $value)` when you want to match only a stored translation row.
+- `transOrderBy` sorts by the translated value, falling back to the base column value for untranslated records (defaulting to the active locale). Use `orderByTranslation($key, $locale, $direction)` when you want untranslated records to sort as `NULL` instead of by their default-locale value.
 
 ### Unchanged Methods
 
