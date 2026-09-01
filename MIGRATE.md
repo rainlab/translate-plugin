@@ -105,19 +105,23 @@ The command is idempotent — safe to run multiple times. It uses `upsert` so re
 
 Search your codebase for the old method names and replace them. The table below covers every method.
 
+Most of the renamed methods are retained in the core trait as deprecated aliases that delegate to the new API, so existing calls keep working during migration. Update them at your own pace; the aliases are marked `@deprecated` and may be removed in a future release.
+
 ### Changed Methods
 
 | Old Method | New Method | Notes |
 |---|---|---|
-| `getAttributeTranslated($key, $locale)` | `getTranslation($key, $locale)` | Adds optional `$useFallback` param |
-| `setAttributeTranslated($key, $value, $locale)` | `setTranslation($key, $locale, $value)` | Arg order changed |
-| `getTranslateAttributes($locale)` | `getTranslations($key)` | Returns all locales for one attribute |
-| `translateContext($locale)` | `setLocale($locale)` | Setter only |
-| `translateContext()` | `getLocale()` | Getter is now separate |
-| `lang($locale)` | `setLocale($locale)` | Chainable in both |
-| `noFallbackLocale()` | `getTranslation($key, $locale, useFallback: false)` | Per-call instead of per-instance |
+| `getAttributeTranslated($key, $locale)` | `getTranslation($key, $locale)` | Deprecated alias retained; adds optional `$useFallback` param |
+| `setAttributeTranslated($key, $value, $locale)` | `setTranslation($key, $locale, $value)` | Deprecated alias retained; arg order changed |
+| `getTranslateAttributes($locale)` | `getTranslations($key)` | Deprecated alias retained; note the semantic difference below |
+| `translateContext($locale)` | `setLocale($locale)` | Deprecated alias retained; combined getter/setter |
+| `translateContext()` | `getLocale()` | Deprecated alias retained; getter is now separate |
+| `lang($locale)` | `setLocale($locale)` | Deprecated alias retained; chainable in both |
+| `noFallbackLocale()` | `getTranslation($key, $locale, useFallback: false)` | Removed; fallback is now per-call |
 | `withFallbackLocale()` | *(removed)* | Fallback is the default |
-| `isTranslatable($key)` | `isTranslatableAttribute($key)` | Renamed |
+| `isTranslatable($key)` | `isTranslatableAttribute($key)` | Deprecated alias retained; renamed |
+
+The retained `getTranslateAttributes($locale)` alias returns every translatable attribute for one locale (its original behavior), so it is not a straight rename of `getTranslations($key)`, which returns all locales for one attribute. See Step 5 for the distinction.
 
 ### Query Scopes
 
