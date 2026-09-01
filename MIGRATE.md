@@ -1,8 +1,14 @@
 # Migrating to Core Translatable
 
-This guide is for plugin authors and site owners who want to switch from `RainLab.Translate` to the core translation features. Model attribute translation moved into the core `Translatable` trait in October CMS v4.2, and v4.4 completes the picture with native page, content, and mail template translation. **This migration is entirely opt-in** — the plugin continues to work as-is and both systems can coexist.
+This guide is for plugin authors and site owners who want to switch from `RainLab.Translate` to the core translation features. Model attribute translation moved into the core `Translatable` trait in October CMS v4.2, and v4.4 completes the picture with native page, content, and mail template translation. **This migration is entirely opt-in** - the plugin continues to work as-is and both systems can coexist.
 
 By v4.4, the core covers every area this plugin provides: model attributes (`Translatable` trait), page properties and URLs (`[translatable]` component), theme content files (locale directories), mail templates, and theme strings (`lang/*.json` files, editable in the CMS editor's Localization area). The steps below migrate each area in turn.
+
+## Why Translation Is Now a Core Feature
+
+In the early designs of October CMS, translation was treated as a secondary feature, something a site could bolt on through a plugin when needed. As the platform has grown and reached a global audience, that assumption no longer holds. Many sites now require translation from day one, so it belongs alongside the ability to host multiple themes with multisite as a first-class capability rather than an optional add-on.
+
+Beyond reach, there is a concrete engineering reason. October is a highly extensible platform, and implementing translation in the core simplifies the code and improves site performance significantly. Model behaviors are something that should be applied sparingly: each model instance carries a meaningful memory footprint, and behaviors compound the classic N+1 problem. Because the `Translatable` behavior was used almost everywhere, it made the whole application run slower than it should. Moving translation into the core `Translatable` trait removes that per-instance overhead and lets the feature work with the framework instead of layering on top of it. Sites migrating from the plugin should see a significant performance boost in their applications.
 
 ## When to Switch
 
