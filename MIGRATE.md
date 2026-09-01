@@ -2,7 +2,7 @@
 
 This guide is for plugin authors and site owners who want to switch from `RainLab.Translate` to the core translation features. Model attribute translation moved into the core `Translatable` trait in October CMS v4.2, and v4.4 completes the picture with native page, content, and mail template translation. **This migration is entirely opt-in** - the plugin continues to work as-is and both systems can coexist.
 
-By v4.4, the core covers every area this plugin provides: model attributes (`Translatable` trait), page properties and URLs (`[translatable]` component), theme content files (locale directories), mail templates, and theme strings (`lang/*.json` files, editable in the CMS editor's Localization area). The steps below migrate each area in turn.
+By v4.4, the core covers every area this plugin provides: model attributes (`Translatable` trait), page properties and URLs (`[translatable]` component), theme content files (locale directories), mail templates, and theme strings (scanned with `theme:scan` into `lang/*.json` files, editable in the backend Editor). The steps below migrate each area in turn.
 
 ## Why Translation Is Now a Core Feature
 
@@ -12,14 +12,14 @@ Beyond reach, there is a concrete engineering reason. October is a highly extens
 
 ## When to Switch
 
-- You want zero plugin dependencies for translation support
-- You want per-row storage benefits (partial updates, direct queries, no separate indexes table)
 - You're building a new project and want to use the core API from the start
+- You want zero plugin dependencies for translation support
+- You want the per-row storage benefits: partial updates, direct queries, and no separate indexes table
+- You want the performance benefit of the core `Translatable` trait over a per-model behavior
 
 ## When NOT to Switch
 
 - Other plugins in your ecosystem depend on `RainLab.Translate` being present
-- You rely on the plugin's database-backed message store, where the `|_` and `|__` filters resolve ad-hoc strings scanned from templates and edited in the backend. The core `|_` and `|__` filters use the same syntax but resolve from file-based `lang/*.json` (via Laravel's `__()`), so there is no scan-and-edit database workflow
 
 ## Prerequisites
 
@@ -263,6 +263,22 @@ content/fr/blog/intro.htm
 ```
 
 Files whose target already exists are skipped and reported. The plugin continues to serve suffixed files with precedence over the core resolution, so un-migrated themes keep working and this migration can be run at any time.
+
+### Theme Strings
+
+October CMS v4.4 scans theme templates for translatable strings natively, replacing the plugin's **Settings → Translate messages → Scan for messages** workflow and its `translate:scan` command. The core scans layouts, pages, and partials for the same `|_`, `|__`, `__()`, `trans()`, and `trans_choice()` filters and functions, and adds any missing keys to the theme language file.
+
+Run the scan against a theme:
+
+```bash
+php artisan theme:scan {theme}
+```
+
+Pass `--locale=` to target a specific locale file (defaults to the primary site locale) and `--dry-run` to list found strings without writing anything. Found keys are added to `lang/{locale}.json` in the theme with empty values, ready to be filled in.
+
+Unlike the plugin, which stored scanned strings in the `rainlab_translate_message_data` database table, the core writes them to theme `lang/{locale}.json` files. If you need those strings kept in the database rather than on the filesystem, that is now covered by the database templates feature (`database_templates` in `config/cms.php`).
+
+The language files can be edited directly in the backend **Editor**: open a `lang/{locale}.json` file to translate each key, the same way pages and partials are edited. There is no separate **Translate messages** settings area to visit.
 
 ### Mail Templates
 

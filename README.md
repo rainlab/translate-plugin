@@ -1,6 +1,6 @@
 # Translation plugin
 
-> **Note:** As of October CMS v4.4, the core handles translation natively via the [`Translatable` trait](https://docs.octobercms.com/4.x/extend/multisite/translatable.html) and no plugin is required. Prefer the core features for new projects; this plugin is maintained for existing sites and for its database-backed message store (the **Scan for messages** workflow), which the core does not replicate. See [MIGRATE.md](MIGRATE.md) for the migration guide.
+> **Note:** As of October CMS v4.4, the core also handles translation natively via the [`Translatable` trait](https://docs.octobercms.com/4.x/extend/multisite/translatable.html), so on newer versions you have a choice, but **upgrading to the core features is entirely optional**. There is no deprecation and no forced migration, and existing sites can keep using this plugin indefinitely. If and when you do want to move to the core features, [MIGRATE.md](MIGRATE.md) walks through it at your own pace.
 
 Enables multi-lingual sites.
 
