@@ -123,8 +123,9 @@ Search your codebase for the old method names and replace them. The table below 
 
 | Old Scope | New Scope | Notes |
 |---|---|---|
-| `transWhere($key, $value, $locale)` | `whereTranslation($key, $locale, $value)` | Arg order changed |
 | `transOrderBy($key, $direction, $locale)` | `orderByTranslation($key, $locale, $direction)` | Arg order changed |
+
+`transWhere($key, $value, $locale)` was retained in the core trait with its original signature, so calls to it need no changes. It matches either the base value or the translated value for the locale (defaulting to the active locale), and short-circuits to a plain `where` on the default locale. Use `whereTranslation($key, $locale, $value)` when you want to match only a stored translation row.
 
 ### Unchanged Methods
 
