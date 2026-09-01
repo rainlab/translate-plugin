@@ -265,6 +265,14 @@ Files whose target already exists are skipped and reported. The plugin continues
 
 October CMS v4.4 translates mail templates natively: database templates store translated attributes through the core `Translatable` trait, and registered view templates resolve from locale directories (`views/mail/fr/welcome.htm`), replacing the `{code}-{locale}` suffix convention used by this plugin.
 
+This feature is disabled by default and must be enabled through the `backend_mail_template` multisite feature in `config/multisite.php`:
+
+```php
+'features' => [
+    'backend_mail_template' => true,
+],
+```
+
 Run the mail import command to migrate suffixed database templates:
 
 ```bash
