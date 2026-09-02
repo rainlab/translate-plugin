@@ -6,9 +6,13 @@ By v4.4, the core covers every area this plugin provides: model attributes (`Tra
 
 ## Why Translation Is Now a Core Feature
 
-In the early designs of October CMS, translation was treated as a secondary feature, something a site could bolt on through a plugin when needed. As the platform has grown and reached a global audience, that assumption no longer holds. Many sites now require translation from day one, so it belongs alongside the ability to host multiple themes with multisite as a first-class capability rather than an optional add-on.
+In the early designs of October CMS, translation was a secondary feature, something a site bolted on through a plugin when needed. As the platform has grown, we find most sites use translation from day one.
 
-Beyond reach, there is a concrete engineering reason. October is a highly extensible platform, and implementing translation in the core simplifies the code and improves site performance significantly. Model behaviors are something that should be applied sparingly: each model instance carries a meaningful memory footprint, and behaviors compound the classic N+1 problem. Because the `Translatable` behavior was used almost everywhere, it made the whole application run slower than it should. Moving translation into the core `Translatable` trait removes that per-instance overhead and lets the feature work with the framework instead of layering on top of it. Sites migrating from the plugin should see a significant performance boost in their applications.
+Multisite, introduced in v3.1, answered the question "_why have themes if I only ever use one?_". Core translation in v4.2 answers the next one: "_why is translation split across the core and a plugin?_".
+
+There is also a concrete engineering reason. The plugin applies translation as a model _behavior_, and behaviors are an anti-pattern at scale. Each one constructs a sidecar object for every model instance, so a page that loads a thousand records also builds a thousand behavior objects to go with them. That is fine for something applied to a handful of models, but translation applies to most content models, so that object is paid for across the whole application.
+
+Baking it into a core `Translatable` trait does the same work on the model itself, with no sidecar object, and on a single-locale site it short-circuits on a locale check and adds nothing at all. Sites upgrading can expect performance gains from the lower memory footprint.
 
 ## When to Switch
 
