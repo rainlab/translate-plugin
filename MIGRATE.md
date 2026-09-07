@@ -6,7 +6,7 @@ By v4.4, the core covers every area this plugin provides: model attributes (`Tra
 
 ## Why Translation Is Now a Core Feature
 
-In the early designs of October CMS, translation was a secondary feature, something a site bolted on through a plugin when needed. As the platform has grown, we find most sites use translation from day one.
+In the early designs of October CMS, translation was a secondary feature, something a site bolted on through a plugin when needed. As the platform has grown, we find more and more sites use translation from day one.
 
 Multisite, introduced in v3.1, answered the question "_why have themes if I only ever use one?_". Core translation in v4.2 answers the next one: "_why is translation split across the core and a plugin?_".
 

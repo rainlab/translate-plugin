@@ -23,6 +23,10 @@ class EventPluginRegistry
      */
     public function registerEvents()
     {
+        if ($this->pagesHasNativeTranslation()) {
+            return;
+        }
+
         $this->extendStaticPagesCmsSitePicker();
         $this->extendStaticPagesBackendFormFields();
         $this->extendStaticMenusBackendFormFields();
@@ -33,8 +37,21 @@ class EventPluginRegistry
      */
     public function bootEvents()
     {
+        if ($this->pagesHasNativeTranslation()) {
+            return;
+        }
+
         $this->extendStaticPagesMenuReferences();
         $this->extendStaticPagesTemplateList();
+    }
+
+    /**
+     * pagesHasNativeTranslation returns true when the Pages plugin (v3.0+) translates
+     * its pages, menus and URLs natively using the core multisite features.
+     */
+    public function pagesHasNativeTranslation(): bool
+    {
+        return class_exists(\RainLab\Pages\Classes\PageLocale::class);
     }
 
     /**
@@ -74,7 +91,9 @@ class EventPluginRegistry
                 return;
             }
 
-            $widget->fields['viewBag[url]']['translatable'] = true;
+            if (isset($widget->fields['viewBag[url]'])) {
+                $widget->fields['viewBag[url]']['translatable'] = true;
+            }
         }, -1);
 
         // Load Page URL
