@@ -53,7 +53,19 @@ class Product extends Model
 }
 ```
 
-The `$translatable` property stays the same. The trait automatically uses the `system_translate_attributes` table via a container binding — no additional configuration needed.
+The `$translatable` property stays the same. The trait automatically uses the `system_translate_attributes` table via a container binding, so no additional configuration is needed.
+
+If `$translatable` lists any `$attachOne` or `$attachMany` relations, also apply the `TranslatableAttachments` trait so each locale keeps its own files. Without it, those relations are shared by every locale.
+
+```php
+class Product extends Model
+{
+    use \October\Rain\Database\Traits\Translatable;
+    use \October\Rain\Database\Traits\TranslatableAttachments;
+
+    public $translatable = ['name', 'description', 'image'];
+}
+```
 
 ## Step 2: Simplify Translatable Property
 
@@ -71,7 +83,7 @@ public $translatable = [
 public $translatable = ['name', 'slug', 'title'];
 ```
 
-**Why `index` is no longer needed:** The plugin stored all attributes as a single JSON blob, so searchable attributes had to be duplicated into a separate `rainlab_translate_indexes` table. The core trait uses per-row storage — every attribute is directly queryable by default.
+**Why `index` is no longer needed:** The plugin stored all attributes as a single JSON blob, so searchable attributes had to be duplicated into a separate `rainlab_translate_indexes` table. The core trait uses per-row storage, so every attribute is directly queryable by default.
 
 **Why `fallback` is no longer needed:** The `fallback => false` option forced storage of values identical to the default locale, typically used as a workaround to make `hasTranslation()` reliable. The core trait provides `hasTranslations($locale)` for record-level checks and `getTranslatedLocales()` for listing translated locales, eliminating the need for this workaround.
 
@@ -83,7 +95,7 @@ Run the migration command to copy translation data from the plugin tables to the
 php artisan translate:import-attributes
 ```
 
-Without any options, this migrates **all model types** from the plugin tables to the core table. It does **not** delete source data — your plugin tables are left intact.
+Without any options, this migrates **all model types** from the plugin tables to the core table. It does **not** delete source data, so your plugin tables are left intact.
 
 This command:
 
@@ -103,7 +115,57 @@ php artisan translate:import-attributes --model="Acme\Shop\Models\Product"
 php artisan translate:import-attributes --cleanup
 ```
 
-The command is idempotent — safe to run multiple times. It uses `upsert` so re-running overwrites with the latest source data rather than creating duplicates.
+The command is idempotent and safe to run multiple times. It uses `upsert` so re-running overwrites with the latest source data rather than creating duplicates.
+
+### File Attachments
+
+If a model lists `$attachOne` or `$attachMany` relations in `$translatable`, its translated files need converting as well. The plugin stores the locale on the attachment type of each file:
+
+```
+| attachment_type | field |
+|-----------------|-------|
+| Product:en      | image |
+| Product:fr      | image |
+```
+
+The core trait stores the locale on the field instead, and files for the default locale have no suffix:
+
+```
+| attachment_type | field    |
+|-----------------|----------|
+| Product         | image    |
+| Product         | image:fr |
+```
+
+Run the attachments command to convert the files.
+
+```bash
+php artisan translate:import-attachments
+```
+
+Unlike `translate:import-attributes`, this command updates the `system_files` table in place rather than copying data to a new table. After it runs, the plugin can no longer see the translated files, so update the model declaration at the same time, including the `TranslatableAttachments` trait (Step 1).
+
+The plugin never displayed files that were uploaded to a relation before it was made translatable. The command detaches these files so they do not suddenly appear after the migration, and reports how many it will detach before making any changes.
+
+**Options:**
+
+```bash
+# Skip confirmation prompt
+php artisan translate:import-attachments --force
+
+# Only convert a specific model type
+php artisan translate:import-attachments --model="Acme\Shop\Models\Product"
+
+# Set the default locale, which is stored without a suffix
+php artisan translate:import-attachments --default=en
+
+# Convert the files back to the plugin format
+php artisan translate:import-attachments --rollback
+```
+
+The default locale is read from the plugin when the `--default` option is omitted. The `--rollback` option finds the translatable attachment relations by inspecting each model, so it works with the core trait or the plugin behavior in place. Files detached during the import are not restored by a rollback.
+
+The plugin also translated the title and description of files shared by every locale. The core trait does not, so add the relation to `$translatable` and upload the file for each locale when its title or description needs translating.
 
 ## Step 4: Update Method Calls
 
@@ -141,7 +203,7 @@ Both plugin scopes were kept in the core trait with their original signatures, s
 
 ### Unchanged Methods
 
-These work identically — no code changes needed:
+These work identically, with no code changes needed:
 
 | Method | Description |
 |---|---|
@@ -168,7 +230,7 @@ These work identically — no code changes needed:
 Implicit attribute access works identically in both systems:
 
 ```php
-// These work the same in both — no changes needed
+// These work the same in both, no changes needed
 $product->name;           // Returns translated value for active locale
 $product->name = 'Foo';   // Sets translated value for active locale
 $product->save();
@@ -200,10 +262,11 @@ foreach ($product->getTranslatableAttributes() as $key) {
 
 After completing the migration for a model:
 
-1. **Read translations** — visit the backend form for a record and confirm translated values display correctly
-2. **Write translations** — switch to a non-default locale, edit values, save, and confirm they persist
-3. **Query scopes** — test any `whereTranslation` or `orderByTranslation` calls return expected results
-4. **Fallback behavior** — confirm that untranslated attributes fall back to the default locale value
+1. **Read translations**: visit the backend form for a record and confirm translated values display correctly
+2. **Write translations**: switch to a non-default locale, edit values, save, and confirm they persist
+3. **Query scopes**: test any `whereTranslation` or `orderByTranslation` calls return expected results
+4. **Fallback behavior**: confirm that untranslated attributes fall back to the default locale value
+5. **File attachments**: switch the backend to a non-default site and confirm translated files display, and that untranslated relations fall back to the default files
 
 ## Storage Differences
 
