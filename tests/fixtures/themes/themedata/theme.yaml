@@ -1,0 +1,23 @@
+name: Theme Data
+description: Used to test translatable theme data.
+author: RainLab
+
+form:
+    fields:
+        title:
+            label: Title
+            translatable: true
+
+        notes:
+            label: Notes
+            type: repeater
+            translatable: true
+            form:
+                fields:
+                    note:
+                        label: Note
+
+        logo:
+            label: Logo
+            type: fileupload
+            mode: image

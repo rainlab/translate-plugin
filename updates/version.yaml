@@ -44,3 +44,4 @@ v2.3.0: Adds translate:import-attributes command for migrating data to core Tran
 v2.3.1: Adds translate:import-theme and translate:import-mail commands for core translation features in v4.4
 v2.3.2: Compatibility with RainLab.Pages 3.0
 v2.3.3: Adds translate:import-attachments command for migrating translated file attachments to core TranslatableAttachments trait
+v2.3.4: Adds translate:import-theme-data command for moving translated theme data to the core theme data model

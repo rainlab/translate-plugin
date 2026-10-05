@@ -101,6 +101,7 @@ This command:
 
 1. Reads each row from `rainlab_translate_attributes`, decodes the JSON blob, and creates one row per attribute in `system_translate_attributes`
 2. Reads `rainlab_translate_indexes` and imports any indexed values not already covered by the attributes table
+3. Leaves theme data translations in place, since they move with their files using a separate command (see [Theme Data](#theme-data))
 
 **Options:**
 
@@ -330,6 +331,35 @@ content/fr/blog/intro.htm
 ```
 
 Files whose target already exists are skipped and reported. The plugin continues to serve suffixed files with precedence over the core resolution, so un-migrated themes keep working and this migration can be run at any time.
+
+### Theme Data
+
+October CMS v4.4 translates theme customization values natively. Fields marked with `translatable: true` in the theme's `form` definition work the same way with either, so the theme itself needs no changes.
+
+While the plugin holds theme data, it keeps handling theme data exactly as before, so existing translations and theme files stay where they are until you choose to move them. The plugin stores both under its own `RainLab\Translate\Models\MLThemeData` model. Sites without any plugin theme data, such as new installs, use the core feature straight away.
+
+Run the import command to move the theme data to the core `Cms\Models\ThemeData` model:
+
+```bash
+php artisan translate:import-theme-data
+```
+
+This command:
+
+1. Moves each translation from `rainlab_translate_attributes` to `system_translate_attributes`, one row per attribute
+2. Relabels the theme files in `system_files` for the core model, keeping the files themselves untouched
+
+Once the plugin holds no theme data, the core takes over. Unlike `translate:import-attributes`, this command moves the data rather than copying it, so it can be reversed with the `--rollback` option:
+
+```bash
+# Skip confirmation prompt
+php artisan translate:import-theme-data --force
+
+# Move the theme data back to the plugin
+php artisan translate:import-theme-data --rollback
+```
+
+The core also supports translatable file upload fields in theme data, giving each locale its own file. The plugin shares theme files across every locale, so a rollback keeps any translated files but shows the default file for every locale.
 
 ### Theme Strings
 

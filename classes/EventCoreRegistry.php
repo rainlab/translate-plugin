@@ -9,6 +9,7 @@ use Cms\Classes\Content;
 use System\Classes\MailManager;
 use System\Models\MailTemplate;
 use RainLab\Translate\Models\Message;
+use RainLab\Translate\Models\MLThemeData;
 use RainLab\Translate\Classes\Locale as LocaleModel;
 use RainLab\Translate\Classes\Translator;
 use RainLab\Translate\Classes\ThemeScanner;
@@ -48,6 +49,14 @@ class EventCoreRegistry
     protected function coreHasTranslatablePages(): bool
     {
         return class_exists(\Cms\Components\TranslatableBag::class);
+    }
+
+    /**
+     * coreHasTranslatableThemeData returns true when the core translates theme data natively.
+     */
+    protected function coreHasTranslatableThemeData(): bool
+    {
+        return method_exists(\Cms\Models\ThemeData::class, 'getTranslatableAttributes');
     }
 
     /**
@@ -173,7 +182,12 @@ class EventCoreRegistry
     protected function extendCmsThemeDataModel()
     {
         Event::listen('cms.theme.createThemeDataModel', function($attributes) {
-            return new \RainLab\Translate\Models\MLThemeData($attributes);
+            // Core v4.4+ takes over once the plugin holds no theme data
+            if ($this->coreHasTranslatableThemeData() && !MLThemeData::hasStoredData()) {
+                return;
+            }
+
+            return new MLThemeData($attributes);
         });
     }
 

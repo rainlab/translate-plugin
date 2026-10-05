@@ -3,6 +3,7 @@
 use Db;
 use Schema;
 use Illuminate\Console\Command;
+use RainLab\Translate\Models\MLThemeData;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
@@ -38,6 +39,11 @@ class ImportCoreCommand extends Command
      * @var int failedCount
      */
     protected $failedCount = 0;
+
+    /**
+     * @var int themeDataCount
+     */
+    protected $themeDataCount = 0;
 
     /**
      * handle
@@ -97,6 +103,10 @@ class ImportCoreCommand extends Command
             $this->warn('Some records failed to migrate. Check the output above for details.');
         }
 
+        if ($this->themeDataCount > 0) {
+            $this->warn("Left {$this->themeDataCount} theme data record(s) in place, run translate:import-theme-data to move them.");
+        }
+
         // Cleanup
         if ($this->option('cleanup')) {
             if (!$this->option('force') && !$this->confirm('Truncate source tables? This cannot be undone.')) {
@@ -131,6 +141,12 @@ class ImportCoreCommand extends Command
             $upsertRows = [];
 
             foreach ($rows as $row) {
+                // Theme data moves with the translate:import-theme-data command
+                if ($row->model_type === MLThemeData::class) {
+                    $this->themeDataCount++;
+                    continue;
+                }
+
                 if (empty($row->model_id) || !is_numeric($row->model_id)) {
                     $this->skippedCount++;
                     continue;
