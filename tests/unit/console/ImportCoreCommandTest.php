@@ -22,6 +22,21 @@ class ImportCoreCommandTest extends PluginTestCase
     }
 
     /**
+     * testImportMovesFileCaptionsToCoreFileModel confirms translated file captions are read by the core file model
+     */
+    public function testImportMovesFileCaptionsToCoreFileModel()
+    {
+        $this->insertAttributes('RainLab\Translate\Models\MLFile', 'fr', ['title' => 'Guide', 'description' => 'Le guide']);
+
+        $this->assertSame(0, Artisan::call('translate:import-attributes', ['--force' => true]));
+
+        $this->assertSame('Guide', $this->findValue('System\Models\TranslatableFile', 'title'));
+        $this->assertSame('Le guide', $this->findValue('System\Models\TranslatableFile', 'description'));
+        $this->assertSame(0, Db::table('system_translate_attributes')->where('model_type', 'RainLab\Translate\Models\MLFile')->count());
+        $this->assertSame(1, Db::table('rainlab_translate_attributes')->count());
+    }
+
+    /**
      * testImportLeavesThemeData confirms theme data is left for the theme data import
      */
     public function testImportLeavesThemeData()

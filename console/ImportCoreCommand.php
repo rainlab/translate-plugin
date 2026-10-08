@@ -3,6 +3,7 @@
 use Db;
 use Schema;
 use Illuminate\Console\Command;
+use RainLab\Translate\Models\MLFile;
 use RainLab\Translate\Models\MLThemeData;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -166,7 +167,7 @@ class ImportCoreCommand extends Command
                     $storeValue = is_array($value) ? json_encode($value) : (string) $value;
 
                     $upsertRows[] = [
-                        'model_type' => $row->model_type,
+                        'model_type' => $this->getCoreModelType($row->model_type),
                         'model_id' => (int) $row->model_id,
                         'locale' => $row->locale,
                         'attribute' => $attribute,
@@ -224,7 +225,7 @@ class ImportCoreCommand extends Command
                 }
 
                 $upsertRows[] = [
-                    'model_type' => $row->model_type,
+                    'model_type' => $this->getCoreModelType($row->model_type),
                     'model_id' => (int) $row->model_id,
                     'locale' => $row->locale,
                     'attribute' => $row->item,
@@ -248,6 +249,18 @@ class ImportCoreCommand extends Command
                 }
             }
         });
+    }
+
+    /**
+     * getCoreModelType returns the model type the core reads the translations of a plugin model type from.
+     */
+    protected function getCoreModelType(string $modelType): string
+    {
+        if ($modelType === MLFile::class) {
+            return \System\Models\TranslatableFile::class;
+        }
+
+        return $modelType;
     }
 
     /**

@@ -67,6 +67,19 @@ class Product extends Model
 }
 ```
 
+The plugin also translated the title and description of the attachments not listed in `$translatable`. To keep these translations, declare those relations with the `System\Models\TranslatableFile` model instead of `System\Models\File`.
+
+```php
+class Product extends Model
+{
+    use \October\Rain\Database\Traits\Translatable;
+
+    public $attachOne = [
+        'manual' => \System\Models\TranslatableFile::class
+    ];
+}
+```
+
 ## Step 2: Simplify Translatable Property
 
 The core trait does not use per-attribute options like `index` or `fallback`. Remove these options from your `$translatable` array.
@@ -101,7 +114,8 @@ This command:
 
 1. Reads each row from `rainlab_translate_attributes`, decodes the JSON blob, and creates one row per attribute in `system_translate_attributes`
 2. Reads `rainlab_translate_indexes` and imports any indexed values not already covered by the attributes table
-3. Leaves theme data translations in place, since they move with their files using a separate command (see [Theme Data](#theme-data))
+3. Copies the title and description translations of files to the `System\Models\TranslatableFile` model (see [Step 1](#step-1-update-model-declaration))
+4. Leaves theme data translations in place, since they move with their files using a separate command (see [Theme Data](#theme-data))
 
 **Options:**
 
@@ -115,6 +129,8 @@ php artisan translate:import-attributes --model="Acme\Shop\Models\Product"
 # Clean up source tables after successful migration
 php artisan translate:import-attributes --cleanup
 ```
+
+The plugin stores the file title and description translations of every model under its own `RainLab\Translate\Models\MLFile` model type, so the `--model` option for a single model does not include them. Pass `--model="RainLab\Translate\Models\MLFile"` to copy them on their own.
 
 The command is idempotent and safe to run multiple times. It uses `upsert` so re-running overwrites with the latest source data rather than creating duplicates.
 
@@ -166,7 +182,7 @@ php artisan translate:import-attachments --rollback
 
 The default locale is read from the plugin when the `--default` option is omitted. The `--rollback` option finds the translatable attachment relations by inspecting each model, so it works with the core trait or the plugin behavior in place. Files detached during the import are not restored by a rollback.
 
-The plugin also translated the title and description of files shared by every locale. The core trait does not, so add the relation to `$translatable` and upload the file for each locale when its title or description needs translating.
+The plugin also translated the title and description of files shared by every locale. The `translate:import-attributes` command copies these translations to the `System\Models\TranslatableFile` model, so declare those relations with that model to keep them (Step 1).
 
 ## Step 4: Update Method Calls
 
@@ -267,7 +283,7 @@ After completing the migration for a model:
 2. **Write translations**: switch to a non-default locale, edit values, save, and confirm they persist
 3. **Query scopes**: test any `whereTranslation` or `orderByTranslation` calls return expected results
 4. **Fallback behavior**: confirm that untranslated attributes fall back to the default locale value
-5. **File attachments**: switch the backend to a non-default site and confirm translated files display, and that untranslated relations fall back to the default files
+5. **File attachments**: switch the backend to a non-default site and confirm translated files display, that untranslated relations fall back to the default files, and that `TranslatableFile` relations show the translated title and description
 
 ## Storage Differences
 
